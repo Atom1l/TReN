@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/contexts/LanguageContext.tsx
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, useContext, type ReactNode } from 'react';
@@ -997,11 +998,11 @@ const translations = {
 
 type Language = 'th' | 'en';
 
-// กำหนด Type ให้ Context
+// 🟢 กำหนด Type ให้ Context ยืดหยุ่นขึ้น (รับค่าเป็น any หรือ string ได้)
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: keyof typeof translations.th) => string; // ฟังก์ชันแปลภาษา
+  t: (key: any) => string; 
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -1018,9 +1019,10 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('app_language', lang);
   };
 
-  // ฟังก์ชัน t (Translate) สำหรับดึงคำแปลไปแสดงผล
-  const t = (key: keyof typeof translations.th) => {
-    return translations[language][key] || key;
+  // 🟢 ฟังก์ชัน t (Translate) ปรับให้อนุโลมการรับค่า
+  const t = (key: any) => {
+    const dict = translations[language] as Record<string, string>;
+    return dict[key] || key;
   };
 
   return (
@@ -1030,10 +1032,9 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Hook สำหรับเรียกใช้ได้จากทุกที่ในแอป
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useLanguage must be used within a LanguageProvider');
   }
   return context;
