@@ -29,7 +29,7 @@ const EventPreviewModal: React.FC<EventPreviewModalProps> = ({ isOpen, onClose, 
     if (times.length !== 2) return timeRange; 
 
     const formatSingleTime = (time: string) => {
-      const [h, m] = time.split(':');
+      const [h] = time.split(':');
       const hour = parseInt(h, 10);
       
       // เช็คว่าเป็นช่วงเช้าหรือบ่าย
