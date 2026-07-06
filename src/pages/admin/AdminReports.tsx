@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -412,8 +413,20 @@ const AdminReports = () => {
             <div className="pt-4 border-t border-slate-100 flex gap-3">
               <button 
                 onClick={() => {
-                  if (viewModal.ticket?.target_url) window.open(viewModal.ticket.target_url, '_blank');
-                  else showAlert('error', 'ไม่พบลิงก์ต้นทางของเนื้อหานี้');
+                  if (viewModal.ticket?.target_url) {
+                    try {
+                      // แยกส่วนประกอบของ URL
+                      const parsedUrl = new URL(viewModal.ticket.target_url);
+                      // เปลี่ยน localhost เป็น Domain ของ Vercel อัตโนมัติ
+                      const correctUrl = window.location.origin + parsedUrl.pathname + parsedUrl.search;
+                      window.open(correctUrl, '_blank');
+                    } catch (error) {
+                      // Fallback เผื่อ URL ไม่สมบูรณ์
+                      window.open(viewModal.ticket.target_url, '_blank');
+                    }
+                  } else {
+                    showAlert('error', 'ไม่พบลิงก์ต้นทางของเนื้อหานี้');
+                  }
                 }}
                 className="flex-1 bg-[#1e3a8a] text-white font-bold py-3 rounded-xl hover:bg-blue-900 transition-colors shadow-sm cursor-pointer flex items-center justify-center gap-2"
               >

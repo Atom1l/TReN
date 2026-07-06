@@ -27,11 +27,13 @@ export default function SearchPage() {
     event: null 
   });
 
+  // 1. เพิ่ม resources ลงใน State
   const [results, setResults] = useState({
     blogs: [] as any[],
     showcases: [] as any[],
     events: [] as any[],
-    users: [] as any[]
+    users: [] as any[],
+    resources: [] as any[]
   });
 
   const getPositionName = (val: string) => {
@@ -64,16 +66,21 @@ export default function SearchPage() {
     const isIntentShowcase = ['ผลงาน', 'ผลงานเด่น', 'showcase', 'showcases', 'แฟ้มผลงาน'].includes(searchLower);
     const isIntentEvent = ['กิจกรรม', 'event', 'events', 'งาน'].includes(searchLower);
     const isIntentUser = ['ครู', 'ผู้ใช้งาน', 'คุณครู', 'user', 'users', 'สมาชิก'].includes(searchLower);
+    // 2. เพิ่ม Intent สำหรับ Resources
+    const isIntentResource = ['สื่อ', 'ทรัพยากร', 'เอกสาร', 'resource', 'resources'].includes(searchLower);
 
     try {
       let blogsQuery = supabase.from('blogs').select('id, title, thumbnail_url, created_at').eq('status', 'published').limit(15);
       let showcasesQuery = supabase.from('showcases').select('*').eq('status', 'published').limit(15);
       let eventsQuery = supabase.from('events').select('*').eq('event_state', 'published').limit(15);
       let usersQuery = supabase.from('user').select('id, first_name, last_name, profilepic, role, position').limit(15);
+      // 3. เพิ่ม Query สำหรับ Resource (ค้นหาจาก title และ description)
+      let resourcesQuery = supabase.from('resources').select('id, title, description, thumbnail_url, created_at').eq('status', 'published').limit(15);
 
       if (!isIntentBlog) blogsQuery = blogsQuery.ilike('title', `%${safeSearch}%`);
       if (!isIntentShowcase) showcasesQuery = showcasesQuery.or(`title.ilike.${orSearchFormat},author_name.ilike.${orSearchFormat}`);
       if (!isIntentEvent) eventsQuery = eventsQuery.ilike('title', `%${safeSearch}%`);
+      if (!isIntentResource) resourcesQuery = resourcesQuery.or(`title.ilike.${orSearchFormat},description.ilike.${orSearchFormat}`);
       
       if (!isIntentUser) {
         const nameParts = safeSearch.split(' ');
@@ -86,18 +93,24 @@ export default function SearchPage() {
         }
       }
 
+      // ดึงข้อมูลพร้อมกันทั้งหมด รวม Resource เข้าไปด้วย
       const [
-        { data: blogsData },
-        { data: showcasesData },
-        { data: eventsData },
-        { data: usersData }
-      ] = await Promise.all([blogsQuery, showcasesQuery, eventsQuery, usersQuery]);
+        { data: blogsData, error: blogsError },
+        { data: showcasesData, error: showcasesError },
+        { data: eventsData, error: eventsError },
+        { data: usersData, error: usersError },
+        { data: resourcesData, error: resourcesError }
+      ] = await Promise.all([blogsQuery, showcasesQuery, eventsQuery, usersQuery, resourcesQuery]);
+
+      console.log("👉 ข้อมูล Resource ที่ค้นเจอ:", resourcesData);
+      if (resourcesError) console.error("🚨 Error Resource:", resourcesError);
 
       setResults({
         blogs: blogsData || [],
         showcases: showcasesData || [],
         events: eventsData || [],
-        users: usersData || []
+        users: usersData || [],
+        resources: resourcesData || [] // อัปเดต State
       });
 
     } catch (error) {
@@ -128,7 +141,8 @@ export default function SearchPage() {
     return new Date(dateString).toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' });
   };
 
-  const totalResults = results.blogs.length + results.showcases.length + results.events.length + results.users.length;
+  // คำนวณจำนวนผลลัพธ์ทั้งหมด
+  const totalResults = results.blogs.length + results.showcases.length + results.events.length + results.users.length + results.resources.length;
 
   return (
     <div className="min-h-screen bg-white relative">
@@ -144,7 +158,7 @@ export default function SearchPage() {
               type="text"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              placeholder={t('search') || 'ค้นหาที่นี่.. (เช่น บล็อก, กิจกรรม, ผลงาน)'}
+              placeholder={t('search') || 'ค้นหาที่นี่.. (เช่น บล็อก, กิจกรรม, สื่อ)'}
               className="w-full py-4 pl-6 pr-16 text-lg rounded-xl border border-transparent focus:outline-none focus:ring-2 focus:ring-[#1e3a8a] text-slate-700 bg-white"
             />
             <button 
@@ -178,6 +192,14 @@ export default function SearchPage() {
                 className="w-[calc(50%-0.5rem)] sm:w-auto px-4 py-1.5 bg-white border border-slate-200 text-[#1e3a8a] text-sm font-medium rounded-full hover:bg-blue-50 transition-colors shadow-sm cursor-pointer"
             >
                 {t('events') || 'กิจกรรม'}
+            </button>
+
+            {/* 4. เพิ่มปุ่ม Quick Search หมวดหมู่สื่อ/ทรัพยากร */}
+            <button
+                onClick={() => handleQuickSearch('สื่อ')}
+                className="w-[calc(50%-0.5rem)] sm:w-auto px-4 py-1.5 bg-white border border-slate-200 text-[#1e3a8a] text-sm font-medium rounded-full hover:bg-blue-50 transition-colors shadow-sm cursor-pointer"
+            >
+                {t('resources') || 'สื่อ/ทรัพยากร'}
             </button>
 
             <button
@@ -278,7 +300,7 @@ export default function SearchPage() {
               </section>
             )}
 
-            {/* หมวดหมู่: Events (อัปเดตเป็น Grid Layout แล้ว) */}
+            {/* หมวดหมู่: Events */}
             {results.events.length > 0 && (
               <section>
                 <h2 className="text-xl font-bold text-[#1e3a8a] mb-4 border-l-4 border-[#1e3a8a] pl-3">{t('events') || 'กิจกรรม'} ({results.events.length})</h2>
@@ -309,6 +331,30 @@ export default function SearchPage() {
                       <div className="p-4">
                         <h3 className="font-bold text-[#1e3a8a] line-clamp-2 mb-1 group-hover:underline">{e.title}</h3>
                         <p className="text-xs text-slate-500">{t('date') || 'จัดวันที่'}: {formatDate(e.event_date)}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* 5. หมวดหมู่ใหม่: Resources */}
+            {results.resources.length > 0 && (
+              <section>
+                <h2 className="text-xl font-bold text-[#1e3a8a] mb-4 border-l-4 border-[#1e3a8a] pl-3">{t('resources') || 'สื่อ/ทรัพยากร'} ({results.resources.length})</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {results.resources.map(r => (
+                    <div key={r.id} onClick={() => navigate(`/resource/${r.id}`)} className="bg-white border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow cursor-pointer group">
+                      <div className="h-40 bg-slate-100 overflow-hidden">
+                        {r.thumbnail_url ? (
+                          <img src={r.thumbnail_url} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="thumb"/>
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-400">No Image</div>
+                        )}
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-bold text-[#1e3a8a] line-clamp-2 mb-1 group-hover:underline">{r.title}</h3>
+                        <p className="text-xs text-slate-500">{formatDate(r.created_at)}</p>
                       </div>
                     </div>
                   ))}

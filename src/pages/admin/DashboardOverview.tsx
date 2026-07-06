@@ -464,8 +464,20 @@ const DashboardOverview = () => {
             <div className="pt-4 border-t border-slate-100 flex gap-3">
               <button 
                 onClick={() => {
-                  if (viewReportModal.ticket?.target_url) window.open(viewReportModal.ticket.target_url, '_blank');
-                  else showAlert('error', 'ไม่พบลิงก์ต้นทางของเนื้อหานี้');
+                  if (viewReportModal.ticket?.target_url) {
+                    try {
+                      // แยกส่วนประกอบของ URL ที่มาจาก Database
+                      const parsedUrl = new URL(viewReportModal.ticket.target_url);
+                      // เอาแค่ Path (เช่น /blog/123) มาต่อกับ Domain ปัจจุบันแบบไดนามิก
+                      const correctUrl = window.location.origin + parsedUrl.pathname + parsedUrl.search;
+                      window.open(correctUrl, '_blank');
+                    } catch (error) {
+                      // Fallback: กรณีบันทึกมาเป็น Relative Path (เช่น /blog/123) อยู่แล้ว
+                      window.open(viewReportModal.ticket.target_url, '_blank');
+                    }
+                  } else {
+                    showAlert('error', 'ไม่พบลิงก์ต้นทางของเนื้อหานี้');
+                  }
                 }}
                 className="flex-1 bg-[#1e3a8a] text-white font-bold py-3 rounded-xl hover:bg-blue-900 transition-colors shadow-sm cursor-pointer flex items-center justify-center gap-2"
               >
