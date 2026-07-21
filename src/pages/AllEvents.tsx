@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
@@ -17,97 +19,80 @@ interface EventData {
   event_state: string;
 }
 
-const AllEvents = () => {
-  const { t, language } = useLanguage();
-  const navigate = useNavigate();
+// 🟢 1. ฟังก์ชันแปลภาษาอัจฉริยะแบบนับสัดส่วนตัวอักษร (Proportion Detection)
+const translateText = async (text: string, targetLang: string) => {
+  if (!text || !text.trim() || text === '-') return text;
   
-  // 🟢 1. ดึงพารามิเตอร์จาก URL (เช่น ?filter=upcoming)
-  const [searchParams, setSearchParams] = useSearchParams();
-  const initialFilter = searchParams.get('filter') || 'all';
-
-  const [activeFilter, setActiveFilter] = useState(initialFilter);
-  const [searchTerm, setSearchTerm] = useState('');
+  const cleanText = text.replace(/<[^>]*>?/gm, '');
+  const thaiCharsCount = (cleanText.match(/[\u0E00-\u0E7F]/g) || []).length;
+  const engCharsCount = (cleanText.match(/[a-zA-Z]/g) || []).length;
+  const isThaiArticle = thaiCharsCount > engCharsCount;
   
-  const [events, setEvents] = useState<EventData[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  if (targetLang === 'th' && isThaiArticle) return text;
+  if (targetLang === 'en' && !isThaiArticle) return text;
 
-  // 🟢 2. Pagination State (แบบยืดหยุ่น)
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6);
-
-  const [previewModal, setPreviewModal] = useState<{ isOpen: boolean; event: EventData | null }>({
-    isOpen: false,
-    event: null
-  });
-
-  // 🟢 3. ดักจับขนาดหน้าจอเพื่อปรับจำนวนไอเทมที่แสดงผลต่อหน้า
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width >= 1024) {
-        setItemsPerPage(6); // จอคอมใหญ่ (Desktop) แสดง 6 อัน
-      } else if (width >= 768) {
-        setItemsPerPage(4); // จอไอแพด (Tablet) แสดง 4 อัน
-      } else {
-        setItemsPerPage(3); // จอมือถือ (Mobile) แสดง 3 อัน
+  const sourceLang = isThaiArticle ? 'th' : 'en';
+  
+  try {
+    const response = await fetch(
+      `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `q=${encodeURIComponent(text)}`,
       }
-    };
-
-    // เซ็ตค่าครั้งแรกตอนโหลดเว็บ
-    handleResize();
-
-    // ดักฟังเหตุการณ์เมื่อมีการย่อขยายหน้าจอ
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
-    const fetchPublishedEvents = async () => {
-      setIsLoading(true);
-      try {
-        const today = new Date().toISOString();
-        await supabase
-          .from('events')
-          .update({ status: 'past' })
-          .eq('status', 'upcoming')
-          .lt('event_date', today);
-
-        const { data, error } = await supabase
-          .from('events')
-          .select('*')
-          .eq('event_state', 'published')
-          .order('event_date', { ascending: false }); // เรียงจากล่าสุด
-
-        if (error) throw error;
-        if (data) setEvents(data as EventData[]);
-
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPublishedEvents();
-  }, []);
-
-  // อัปเดต Filter พร้อมเปลี่ยน URL ให้ตรงกัน
-  const handleFilterClick = (filter: string) => {
-    setActiveFilter(filter);
-    setSearchParams({ filter });
-    setCurrentPage(1); // รีเซ็ตกลับไปหน้า 1 เสมอเวลาเปลี่ยนแท็ก
-  };
-
-  const handleEventClick = (event: EventData) => {
-    const status = (event.status || '').toLowerCase();
-    if (status === 'past' || status === 'done') {
-      navigate(`/event/${event.id}`);
-    } else {
-      setPreviewModal({ isOpen: true, event });
+    );
+    const data = await response.json();
+    
+    if (data && data[0]) {
+      return data[0].map((item: any) => item[0]).join('');
     }
-  };
+    return text;
+  } catch (error) {
+    console.error('Translation Error:', error);
+    return text; 
+  }
+};
+
+// 🟢 2. แยก EventCard ออกมาเป็น Component เดี่ยว เพื่อให้จัดการเปลี่ยนภาษาและ State ได้เอง 100%
+const EventCard: React.FC<{ event: EventData; onClick: () => void; getStatusLabel: (status: string) => string; }> = ({ event, onClick, getStatusLabel }) => {
+  // ดึง t และ language เข้ามาใช้ในการ์ดโดยตรง ทำให้ตอบสนองต่อการเปลี่ยนภาษาทันที
+  const { t, language } = useLanguage();
+
+  const [translatedTitle, setTranslatedTitle] = useState(event.title);
+  const [translatedLocation, setTranslatedLocation] = useState(event.location || '-');
+  const [translatedDesc, setTranslatedDesc] = useState(event.brief_description || '');
+  const [isTranslating, setIsTranslating] = useState(false);
+
+  // 🟢 3. useEffect สำหรับแปลภาษาเนื้อหาภายในการ์ด
+  useEffect(() => {
+    const autoTranslateCard = async () => {
+      setTranslatedTitle(event.title);
+      setTranslatedLocation(event.location || '-');
+      setTranslatedDesc(event.brief_description || '');
+      setIsTranslating(true);
+
+      try {
+        const [newTitle, newLoc, newDesc] = await Promise.all([
+          translateText(event.title, language),
+          translateText(event.location || '-', language),
+          translateText(event.brief_description || '', language)
+        ]);
+
+        setTranslatedTitle(newTitle);
+        setTranslatedLocation(newLoc);
+        setTranslatedDesc(newDesc);
+      } catch (err) {
+        console.error("Card translate error:", err);
+      } finally {
+        setIsTranslating(false);
+      }
+    };
+
+    autoTranslateCard();
+  }, [language, event]);
 
   const formatDate = (dateString: string) => {
     if (!dateString) return '-';
@@ -130,45 +115,8 @@ const AllEvents = () => {
     return language === 'th' ? `${timeRange} น.` : `${formatSingleTime(times[0])} - ${formatSingleTime(times[1])}`;
   };
 
-  // ฟังก์ชันแปลภาษาสถานะบนการ์ด
-  const getStatusLabel = (status: string) => {
-    const s = (status || '').toLowerCase();
-    if (s === 'upcoming') return t('status_upcoming') || 'กำลังมาถึง';
-    if (s === 'past') return t('status_past') || 'ผ่านมาแล้ว';
-    if (s === 'done') return t('status_done') || 'เสร็จสิ้น';
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  };
-
-  // ฟังก์ชันกรองข้อมูล (Search + Tags)
-  const filteredEvents = events.filter((event) => {
-    const matchesSearch = (event.title || '').toLowerCase().includes(searchTerm.toLowerCase());
-    const status = (event.status || '').toLowerCase();
-    
-    let matchesFilter = true;
-    if (activeFilter === 'upcoming') {
-      matchesFilter = status === 'upcoming';
-    } else if (activeFilter === 'past') {
-      matchesFilter = status === 'past' || status === 'done';
-    }
-
-    return matchesSearch && matchesFilter;
-  });
-
-  // 🟢 4. คำนวณหน้า Pagination 
-  const indexOfLastEvent = currentPage * itemsPerPage;
-  const indexOfFirstEvent = indexOfLastEvent - itemsPerPage;
-  const currentEvents = filteredEvents.slice(indexOfFirstEvent, indexOfLastEvent);
-  const totalPages = Math.max(1, Math.ceil(filteredEvents.length / itemsPerPage));
-
-  // 🟢 5. ดักจับกรณีที่เปลี่ยนหน้าจอแล้วหน้าปัจจุบันเกินจำนวนหน้าที่มีอยู่จริง
-  useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages);
-    }
-  }, [totalPages, currentPage]);
-
-  const EventCard = ({ event }: { event: EventData }) => (
-    <div onClick={() => handleEventClick(event)} className="bg-white rounded-2xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] border border-slate-100 overflow-hidden flex flex-col h-full cursor-pointer group hover:-translate-y-1 transition-all duration-300">
+  return (
+    <div onClick={onClick} className="bg-white rounded-2xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] border border-slate-100 overflow-hidden flex flex-col h-full cursor-pointer group hover:-translate-y-1 transition-all duration-300">
       <div className="h-48 sm:h-56 bg-slate-200 overflow-hidden relative">
         {event.thumbnail_url ? (
           <img src={event.thumbnail_url} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -187,20 +135,152 @@ const AllEvents = () => {
           {getStatusLabel(event.status)}
         </div>
       </div>
+      
       <div className="p-6 flex flex-col flex-1">
-        <h3 className="text-[#1e3a8a] text-xl font-bold mb-2 line-clamp-2">{event.title}</h3>
-        <div className="space-y-1 mb-3 text-sm text-slate-700 flex-1">
-          <p><span className="font-bold">{t('all_event_date') || 'วันที่'}:</span> {formatDate(event.event_date)}</p>
-          <p><span className="font-bold">{t('all_event_time') || 'เวลา'}:</span> {formatTimeAMPM(event.event_time)}</p>
-          <p className="truncate"><span className="font-bold">{t('all_event_place') || 'สถานที่'}:</span> {event.location || '-'}</p>
+        {/* แสดงชื่อกิจกรรมที่แปลแล้ว พร้อม Badge Loading เล็กๆ ด้านบน */}
+        <div className="mb-2">
+          {isTranslating && (
+            <span className="inline-block text-[10px] bg-blue-50 text-[#1e3a8a] px-2 py-0.5 rounded font-semibold animate-pulse mb-1">
+              {t('translating') || 'Translating...'}
+            </span>
+          )}
+          <h3 className="text-[#1e3a8a] text-xl font-bold line-clamp-2">{translatedTitle || event.title}</h3>
         </div>
-        <p className="text-slate-500 text-sm line-clamp-2 mb-6">{event.brief_description || t('all_event_no_brief_description') || 'ไม่มีคำอธิบายโดยย่อ'}</p>
+
+        {/* 🟢 4. ป้ายกำกับ (วันที่, เวลา, สถานที่) เปลี่ยนตามภาษา Footer 100% */}
+        <div className="space-y-1 mb-3 text-sm text-slate-700 flex-1 mt-1">
+          <p><span className="font-bold text-[#1e3a8a]">{t('all_event_date') || 'วันที่'}:</span> {formatDate(event.event_date)}</p>
+          <p><span className="font-bold text-[#1e3a8a]">{t('all_event_time') || 'เวลา'}:</span> {formatTimeAMPM(event.event_time)}</p>
+          <p className="truncate"><span className="font-bold text-[#1e3a8a]">{t('all_event_place') || 'สถานที่'}:</span> {translatedLocation || event.location || '-'}</p>
+        </div>
+        
+        <p className="text-slate-500 text-sm line-clamp-2 mb-6">{translatedDesc || event.brief_description || t('all_event_no_brief_description') || 'ไม่มีคำอธิบายโดยย่อ'}</p>
+        
         <button className="mt-auto bg-[#1e3a8a] text-white px-5 py-2.5 rounded-lg font-medium hover:bg-blue-900 transition-colors w-fit text-sm cursor-pointer">
           {t('read_more') || 'อ่านเพิ่มเติม'} &rarr;
         </button>
       </div>
     </div>
   );
+};
+
+const AllEvents = () => {
+  const { t, language } = useLanguage();
+  const navigate = useNavigate();
+  
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialFilter = searchParams.get('filter') || 'all';
+
+  const [activeFilter, setActiveFilter] = useState(initialFilter);
+  const [searchTerm, setSearchTerm] = useState('');
+  
+  const [events, setEvents] = useState<EventData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
+
+  const [previewModal, setPreviewModal] = useState<{ isOpen: boolean; event: EventData | null }>({
+    isOpen: false,
+    event: null
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= 1024) {
+        setItemsPerPage(6); 
+      } else if (width >= 768) {
+        setItemsPerPage(4); 
+      } else {
+        setItemsPerPage(3); 
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const fetchPublishedEvents = async () => {
+      setIsLoading(true);
+      try {
+        const today = new Date().toISOString();
+        await supabase
+          .from('events')
+          .update({ status: 'past' })
+          .eq('status', 'upcoming')
+          .lt('event_date', today);
+
+        const { data, error } = await supabase
+          .from('events')
+          .select('*')
+          .eq('event_state', 'published')
+          .order('event_date', { ascending: false }); 
+
+        if (error) throw error;
+        if (data) setEvents(data as EventData[]);
+
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPublishedEvents();
+  }, []);
+
+  const handleFilterClick = (filter: string) => {
+    setActiveFilter(filter);
+    setSearchParams({ filter });
+    setCurrentPage(1); 
+  };
+
+  const handleEventClick = (event: EventData) => {
+    const status = (event.status || '').toLowerCase();
+    if (status === 'past' || status === 'done') {
+      navigate(`/event/${event.id}`);
+    } else {
+      setPreviewModal({ isOpen: true, event });
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    const s = (status || '').toLowerCase();
+    if (s === 'upcoming') return t('status_upcoming') || 'กำลังมาถึง';
+    if (s === 'past') return t('status_past') || 'ผ่านมาแล้ว';
+    if (s === 'done') return t('status_done') || 'เสร็จสิ้น';
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
+  const filteredEvents = events.filter((event) => {
+    const matchesSearch = (event.title || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const status = (event.status || '').toLowerCase();
+    
+    let matchesFilter = true;
+    if (activeFilter === 'upcoming') {
+      matchesFilter = status === 'upcoming';
+    } else if (activeFilter === 'past') {
+      matchesFilter = status === 'past' || status === 'done';
+    }
+
+    return matchesSearch && matchesFilter;
+  });
+
+  const indexOfLastEvent = currentPage * itemsPerPage;
+  const indexOfFirstEvent = indexOfLastEvent - itemsPerPage;
+  const currentEvents = filteredEvents.slice(indexOfFirstEvent, indexOfLastEvent);
+  const totalPages = Math.max(1, Math.ceil(filteredEvents.length / itemsPerPage));
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [totalPages, currentPage]);
 
   return (
     <div className="min-h-screen pb-24">
@@ -257,7 +337,7 @@ const AllEvents = () => {
             <button
               key={filter.id}
               onClick={() => handleFilterClick(filter.id)}
-              className={`capitalize px-6 py-2.5 rounded-full text-sm sm:text-base font-medium capitalize transition-all duration-200 border cursor-pointer ${
+              className={`capitalize px-6 py-2.5 rounded-full text-sm sm:text-base font-medium transition-all duration-200 border cursor-pointer ${
                 activeFilter === filter.id 
                   ? 'bg-[#1e3a8a] text-white border-[#1e3a8a] shadow-md' 
                   : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'
@@ -274,10 +354,17 @@ const AllEvents = () => {
         ) : currentEvents.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {currentEvents.map(event => <EventCard key={event.id} event={event} />)}
+              {currentEvents.map(event => (
+                <EventCard 
+                  key={event.id} 
+                  event={event} 
+                  onClick={() => handleEventClick(event)} 
+                  getStatusLabel={getStatusLabel} 
+                />
+              ))}
             </div>
 
-            {/* 🟢 6. Pagination Controls แบบยืดหยุ่น */}
+            {/* Pagination Controls */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-2 mt-12 mb-8">
                 <button

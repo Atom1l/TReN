@@ -53,13 +53,7 @@ const CreateBlog = () => {
 
   const modules = {
     toolbar: [
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'color': [] }, { 'background': [] }],
-      ['link', 'image', 'video'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['blockquote', 'code-block'],
-      [{ 'align': [] }],
-      ['clean']
+      ['bold', 'italic', 'underline', 'strike', { 'color': [] }, 'link', { 'list': 'ordered'}, { 'list': 'bullet' }],
     ],
   };
 

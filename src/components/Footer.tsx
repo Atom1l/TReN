@@ -24,8 +24,8 @@ const Footer = () => {
               onChange={(e) => setLanguage(e.target.value as 'th' | 'en')}
               className="appearance-none border border-slate-800 rounded-lg px-4 py-2.5 pr-10 text-primary font-bold text-lg bg-white outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
             >
-              <option value="th">ภาษาไทย(TH)</option>
-              <option value="en">English(EN)</option>
+              <option className='cursor-pointer' value="th">ภาษาไทย(TH)</option>
+              <option className='cursor-pointer' value="en">English(EN)</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-primary">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-6 h-6">

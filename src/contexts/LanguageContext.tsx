@@ -6,6 +6,8 @@ import { createContext, useState, useContext, type ReactNode } from 'react';
 // 1. สร้าง Dictionary เก็บคำแปลทั้งหมดในเว็บ
 const translations = {
   th: {
+    translating: 'กำลังแปล...',
+
     // Login Modal
     login_tab: 'เข้าสู่ระบบ',
     register_tab: 'สมัครสมาชิก',
@@ -500,6 +502,8 @@ const translations = {
 
   },
   en: {
+    translating: 'Translating...',
+    
     // Login Modal
     login_tab: 'Log In',
     register_tab: 'Register',
