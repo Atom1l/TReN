@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
@@ -24,6 +25,93 @@ interface CommentData {
   };
 }
 
+// 🟢 1. ฟังก์ชันแปลภาษาอัจฉริยะ (Proportion Detection + Retry Trick)
+const translateText = async (text: string, targetLang: string) => {
+  if (!text || !text.trim() || text === '-') return text;
+  
+  const cleanText = text.replace(/<[^>]*>?/gm, '');
+  const thaiCharsCount = (cleanText.match(/[\u0E00-\u0E7F]/g) || []).length;
+  const engCharsCount = (cleanText.match(/[a-zA-Z]/g) || []).length;
+  const isThaiArticle = thaiCharsCount > engCharsCount;
+  
+  if (targetLang === 'th' && isThaiArticle) return text;
+  if (targetLang === 'en' && !isThaiArticle) return text;
+
+  const sourceLang = isThaiArticle ? 'th' : 'en';
+  
+  const fetchTranslate = async (queryText: string) => {
+    try {
+      const response = await fetch(
+        `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `q=${encodeURIComponent(queryText)}`,
+        }
+      );
+      const data = await response.json();
+      if (data && data[0]) {
+        return data[0].map((item: any) => item[0]).join('');
+      }
+      return queryText;
+    } catch (error) {
+      console.error('Translation Error:', error);
+      return queryText; 
+    }
+  };
+
+  let result = await fetchTranslate(text);
+
+  if (result === text && targetLang === 'th' && !isThaiArticle && text.length <= 15) {
+    const lowerResult = await fetchTranslate(text.toLowerCase());
+    if (lowerResult !== text.toLowerCase()) {
+      return lowerResult;
+    }
+  }
+
+  return result;
+};
+
+// 🟢 2. Component ย่อยสำหรับแปลเฉพาะ "ข้อความคอมเมนต์" (ชื่อคนจะไม่ยุ่ง)
+const TranslatedCommentText = ({ content }: { content: string }) => {
+  const { language, t } = useLanguage();
+  const [translatedContent, setTranslatedContent] = useState(content);
+  const [isTranslating, setIsTranslating] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const autoTranslate = async () => {
+      setTranslatedContent(content);
+      setIsTranslating(true);
+      try {
+        const res = await translateText(content, language);
+        if (isMounted) setTranslatedContent(res);
+      } catch (err) {
+        console.error("Comment translate error:", err);
+      } finally {
+        if (isMounted) setIsTranslating(false);
+      }
+    };
+    autoTranslate();
+    return () => { isMounted = false; };
+  }, [content, language]);
+
+  return (
+    <div>
+      {isTranslating && (
+        <span className="inline-block text-[9px] bg-blue-50 text-[#1e3a8a] px-1.5 py-0.5 rounded font-semibold animate-pulse mb-1">
+          {t('translating') || 'Translating...'}
+        </span>
+      )}
+      <p className="text-slate-600 text-sm sm:text-base whitespace-pre-wrap break-words">
+        {translatedContent}
+      </p>
+    </div>
+  );
+};
+
 const CommentSection = ({ postId, postType }: CommentSectionProps) => {
   const [comments, setComments] = useState<CommentData[]>([]);
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -34,7 +122,6 @@ const CommentSection = ({ postId, postType }: CommentSectionProps) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  // 🟢 State สำหรับ Modal ลบคอมเมนต์
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, commentId: '' });
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -152,12 +239,10 @@ const CommentSection = ({ postId, postType }: CommentSectionProps) => {
     }
   };
 
-  // 🟢 เปลี่ยนมาเรียก Modal แทน window.confirm
   const handleDeleteClick = (commentId: string) => {
     setDeleteModal({ isOpen: true, commentId });
   };
 
-  // 🟢 ฟังก์ชันยืนยันการลบที่เชื่อมกับ Modal
   const confirmDeleteComment = async () => {
     if (!deleteModal.commentId) return;
     
@@ -199,6 +284,7 @@ const CommentSection = ({ postId, postType }: CommentSectionProps) => {
           
           <div className="flex-1">
             <div className="flex justify-between items-start mb-1">
+              {/* 🟢 ชื่อผู้ใช้แสดงตามเดิม ไม่มีการแปลภาษา */}
               <h4 className="font-bold text-slate-800 text-sm sm:text-base">
                 {comment.userProfile?.first_name} {comment.userProfile?.last_name}
               </h4>
@@ -211,7 +297,6 @@ const CommentSection = ({ postId, postType }: CommentSectionProps) => {
                   </button>
                 )}
                 {currentUser?.id === comment.user_id && (
-                  // 🟢 กดลบเรียก Modal ขึ้นมาแทน
                   <button onClick={() => handleDeleteClick(comment.id)} className="cursor-pointer hover:text-red-500 font-medium transition-colors text-red-400">
                     {t('comment_delete') || 'ลบความคิดเห็น'}
                   </button>
@@ -231,7 +316,8 @@ const CommentSection = ({ postId, postType }: CommentSectionProps) => {
               {formatTime(comment.created_at)}
             </div>
 
-            <p className="text-slate-600 text-sm sm:text-base whitespace-pre-wrap break-words">{comment.content}</p>
+            {/* 🟢 3. แทนที่การแสดงผลข้อความเดิม ด้วย Component แปลภาษาของเรา */}
+            <TranslatedCommentText content={comment.content} />
 
             {replyingTo === comment.id && (
               <div className="mt-4 flex gap-2 sm:gap-3 animate-fade-in-up">
@@ -270,7 +356,6 @@ const CommentSection = ({ postId, postType }: CommentSectionProps) => {
   return (
     <div className="border-t border-slate-200 pt-10 relative">
       
-      {/* 🟢 Modal ยืนยันการลบคอมเมนต์ */}
       {deleteModal.isOpen && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 animate-fade-in">
           <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 flex flex-col w-full max-w-sm animate-scale-in text-center">
