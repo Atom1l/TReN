@@ -19,7 +19,7 @@ const CreateNews = () => {
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState(''); // 🟢 State สำหรับหมวดหมู่ข่าว
+  const [category, setCategory] = useState(''); 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   
@@ -69,7 +69,6 @@ const CreateNews = () => {
           const { data: userData } = await supabase.from('user').select('role').eq('id', user.id).single();
           const userRole = userData?.role?.toLowerCase() || 'user';
 
-          // 🟢 ดึงข้อมูลจากตาราง news
           const { data, error } = await supabase
             .from('news')
             .select('*')
@@ -80,14 +79,14 @@ const CreateNews = () => {
           
           if (data) {
             const isOwner = data.author_id === user.id;
-            const isPrivileged = ['admin', 'co_admin', 'developer'].includes(userRole);
+            // 🟢 อัปเดตให้รองรับทั้ง co_admin และ co-admin
+            const isPrivileged = ['admin', 'developer', 'co_admin', 'co-admin'].includes(userRole);
 
             if (!isOwner && !isPrivileged) {
               showAlert('error', t('no_permission') || 'คุณไม่มีสิทธิ์เข้าถึงหรือแก้ไขข่าวนี้', () => navigate('/news'));
               return;
             }
 
-            // นำข้อมูลมาใส่ฟอร์ม
             setTitle(data.title || '');
             setContent(data.content || '');
             setCategory(data.category || '');
@@ -137,7 +136,6 @@ const CreateNews = () => {
       return;
     }
     
-    // 🟢 บังคับให้ต้องเลือกหมวดหมู่ข่าวก่อน
     if (!category.trim()) {
       showAlert('error', "กรุณาเลือกหมวดหมู่ข่าวสาร");
       return;
@@ -166,21 +164,25 @@ const CreateNews = () => {
         thumbnailUrl = publicUrl;
       }
 
+      // ==========================================
+      // 🟢 จัดการเงื่อนไข Status ตาม Role (Admin vs Co-Admin)
+      // ==========================================
       let newsStatus = 'draft'; 
       if (!isDraft) {
         if (userRole === 'admin' || userRole === 'developer') {
+          // 🚀 Admin / Developer อนุมัติเผยแพร่ทันที
           newsStatus = 'published'; 
         } else {
+          // ⏳ Co-Admin และ User ทั่วไป ต้องรอตรวจสอบ
           newsStatus = 'pending'; 
         }
       }
 
-      // 🟢 บันทึกข้อมูลลงตาราง news
       const newsDataToSave = {
         title: title,
         content: content,
         thumbnail_url: thumbnailUrl,
-        category: category, // เก็บค่าหมวดหมู่ข่าว
+        category: category, 
         author_id: user.id,
         status: newsStatus,
       };
@@ -189,9 +191,11 @@ const CreateNews = () => {
         const { error } = await supabase.from('news').update(newsDataToSave).eq('id', id);
         if (error) throw error;
         
-        let msg = t('msg_edit_pending') || "ส่งข้อมูลที่แก้ไขเรียบร้อยแล้ว!";
-        if (isDraft) msg = t('msg_edit_draft') || "อัปเดตแบบร่างสำเร็จ!";
-        else if (newsStatus === 'published') msg = t('msg_edit_published') || "บันทึกและเผยแพร่เรียบร้อยแล้ว!";
+        // 🟢 ข้อความแจ้งเตือนที่ชัดเจนขึ้น
+        let msg = "ส่งข้อมูลที่แก้ไขเรียบร้อยแล้ว!";
+        if (isDraft) msg = "อัปเดตแบบร่างสำเร็จ!";
+        else if (newsStatus === 'published') msg = "บันทึกและเผยแพร่เรียบร้อยแล้ว!";
+        else if (newsStatus === 'pending') msg = "ส่งข่าวสารเรียบร้อย! โปรดรอ Admin อนุมัติการเผยแพร่";
         
         showAlert('success', msg, () => {
           navigate('/profile');
@@ -201,9 +205,10 @@ const CreateNews = () => {
         const { error } = await supabase.from('news').insert([newsDataToSave]);
         if (error) throw error;
         
-        let msg = t('msg_create_pending') || "ส่งข่าวสารเรียบร้อยแล้ว รอการอนุมัติ!";
-        if (isDraft) msg = t('msg_create_draft') || "บันทึกแบบร่างสำเร็จ!";
-        else if (newsStatus === 'published') msg = t('msg_create_published') || "เผยแพร่ข่าวสารเรียบร้อยแล้ว!";
+        let msg = "ส่งข่าวสารเรียบร้อยแล้ว รอการอนุมัติ!";
+        if (isDraft) msg = "บันทึกแบบร่างสำเร็จ!";
+        else if (newsStatus === 'published') msg = "เผยแพร่ข่าวสารเรียบร้อยแล้ว!";
+        else if (newsStatus === 'pending') msg = "ส่งข่าวสารเรียบร้อย! โปรดรอ Admin อนุมัติการเผยแพร่";
         
         showAlert('success', msg, () => {
           navigate('/profile');
@@ -273,7 +278,7 @@ const CreateNews = () => {
             >
               {loadingAction === 'publish' 
                 ? (t('processing') || 'กำลังดำเนินการ...') 
-                : (isEditMode ? t('publish') || 'เผยแพร่' : t('publish') || 'เผยแพร่')}
+                : (isEditMode ? t('publish') || 'ยื่นเผยแพร่' : t('publish') || 'ยื่นเผยแพร่')}
             </button>
           </div>
         </div>

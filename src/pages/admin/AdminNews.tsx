@@ -28,8 +28,9 @@ const AdminNews = () => {
   
   const [currentUserRole, setCurrentUserRole] = useState<string>('');
   const [alertInfo, setAlertInfo] = useState({ show: false, type: 'success', message: '' });
-  const [confirmDialog, setConfirmDialog] = useState({ show: false, newsId: '', actionType: '' });
-
+  
+  const [approveModal, setApproveModal] = useState({ isOpen: false, id: '', title: '' });
+  const [rejectModal, setRejectModal] = useState({ isOpen: false, newsId: '', title: '', reason: '' });
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: '', title: '', thumbnail_url: '' });
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -48,7 +49,8 @@ const AdminNews = () => {
         const { data: { user: authUser } } = await supabase.auth.getUser();
         if (authUser) {
           const { data: userData } = await supabase.from('user').select('role').eq('id', authUser.id).single();
-          setCurrentUserRole((userData?.role || 'user').toLowerCase());
+          // จัดการแปลง - เป็น _ เพื่อป้องกันปัญหาการตรวจสอบ role
+          setCurrentUserRole((userData?.role || 'user').toLowerCase().replace('-', '_'));
         }
 
         const { data: newsData, error: newsError } = await supabase
@@ -95,13 +97,6 @@ const AdminNews = () => {
 
     fetchInitialData();
   }, []);
-
-  const canApprove = (creatorRole: string | undefined) => {
-    const cRole = (creatorRole || 'user').toLowerCase();
-    if (currentUserRole === 'admin' || currentUserRole === 'developer') return true;
-    if (currentUserRole === 'co-admin' && cRole === 'user') return true;
-    return false;
-  };
 
   const renderStateBadge = (state: string) => {
     const s = (state || '').toLowerCase();
@@ -191,53 +186,62 @@ const AdminNews = () => {
     }, type === 'success' ? 1500 : 3000);
   };
 
-  const handleConfirmClick = (id: string, actionType: 'approve') => {
-    setConfirmDialog({ show: true, newsId: id, actionType });
+  const handleApproveClick = (id: string, title: string) => {
+    setApproveModal({ isOpen: true, id, title });
+  };
+
+  const openRejectModal = (id: string, title: string) => {
+    setRejectModal({ isOpen: true, newsId: id, title, reason: '' });
   };
 
   const handleViewClick = (item: NewsData) => {
     navigate(`/news/${item.id}`);
   };
 
-  const executeAction = async () => {
-    const { newsId, actionType } = confirmDialog;
-    setConfirmDialog({ show: false, newsId: '', actionType: '' });
-
-    if (!newsId) return;
-
+  const confirmApprove = async () => {
+    if (!approveModal.id) return;
     try {
-      let updateData = {};
-      let successMessage = '';
-
-      if (actionType === 'approve') {
-        updateData = { status: 'published' };
-        successMessage = 'อนุมัติข่าวสารให้เผยแพร่เรียบร้อยแล้ว';
-        successMessage = t('admin_approve_success') || successMessage;
-      }
-
       const { data, error } = await supabase
         .from('news')
-        .update(updateData)
-        .eq('id', newsId)
+        .update({ status: 'published', rejection_reason: null })
+        .eq('id', approveModal.id)
         .select();
 
       if (error) throw error;
-      
       if (!data || data.length === 0) {
         throw new Error("ไม่มีสิทธิ์ในการอนุมัติ/แก้ไขข้อมูล (ติดสิทธิ์ RLS)");
       }
 
-      showCustomAlert('success', successMessage);
-
+      showCustomAlert('success', t('admin_approve_news_success') || 'อนุมัติข่าวสารให้เผยแพร่เรียบร้อยแล้ว');
       setNews((prevNews) => 
         prevNews.map((item) => 
-          item.id === newsId ? { ...item, ...updateData } : item
+          item.id === approveModal.id ? { ...item, status: 'published' } : item
         )
       );
-
+      setApproveModal({ isOpen: false, id: '', title: '' });
     } catch (error: any) {
       console.error(`Error updating news:`, error);
-      showCustomAlert('error', t('error_updating_occurred') || 'เกิดข้อผิดพลาดในการอัปเดตข้อมูล');
+      showCustomAlert('error', t('error_updating_occurred') || 'เกิดข้อผิดพลาดในการอนุมัติข่าวสาร');
+    }
+  };
+
+  const handleConfirmReject = async () => {
+    if (!rejectModal.reason.trim()) {
+      showCustomAlert('error', 'กรุณาระบุเหตุผลที่ปฏิเสธข่าวสารนี้');
+      return;
+    }
+    try {
+      const { error } = await supabase
+        .from('news')
+        .update({ status: 'rejected', rejection_reason: rejectModal.reason })
+        .eq('id', rejectModal.newsId);
+      if (error) throw error;
+      showCustomAlert('success', 'ปฏิเสธข่าวสารและส่งเหตุผลเรียบร้อยแล้ว');
+      setNews(news.map(n => n.id === rejectModal.newsId ? { ...n, status: 'rejected' } : n));
+      setRejectModal({ isOpen: false, newsId: '', title: '', reason: '' });
+    } catch (error: any) {
+      console.error(error);
+      showCustomAlert('error', error.message || 'เกิดข้อผิดพลาดในการปฏิเสธข่าวสาร');
     }
   };
 
@@ -245,43 +249,21 @@ const AdminNews = () => {
     setIsDeleting(true);
     try {
       const { id, thumbnail_url } = deleteModal;
-
-      // 🟢 1. ลบรูปภาพออกจาก Storage (Clean Delete รูป)
       if (thumbnail_url && thumbnail_url.includes('thumbnails/')) {
         const fileName = thumbnail_url.split('/').pop();
         if (fileName) {
-          const { error: storageError } = await supabase.storage
-            .from('thumbnails')
-            .remove([fileName]);
-            
-          if (storageError) {
-            console.warn("Could not delete image from storage:", storageError);
-          }
+          const { error: storageError } = await supabase.storage.from('thumbnails').remove([fileName]);
+          if (storageError) console.warn("Could not delete image from storage:", storageError);
         }
       }
-
-      // 🟢 2. ลบคอมเมนต์ทั้งหมดที่เชื่อมโยงกับข่าวนี้ก่อน (แก้ปัญหา Foreign Key Error)
-      const { error: commentsError } = await supabase
-        .from('comments')
-        .delete()
-        .eq('news_id', id);
-
+      const { error: commentsError } = await supabase.from('comments').delete().eq('news_id', id);
       if (commentsError) throw commentsError;
-
-      // 🟢 3. ลบข้อมูลตัวข่าวสารหลัก
-      const { error: dbError } = await supabase
-        .from('news')
-        .delete()
-        .eq('id', id);
-        
+      const { error: dbError } = await supabase.from('news').delete().eq('id', id);
       if (dbError) throw dbError;
       
       showCustomAlert('success', t('delete_success') || 'ลบข้อมูลข่าวสาร รวมถึงคอมเมนต์และรูปภาพเรียบร้อยแล้ว');
-      
-      // อัปเดต UI ให้ข่าวหายไปจากตาราง
       setNews(prev => prev.filter(n => n.id !== id));
       setDeleteModal({ isOpen: false, id: '', title: '', thumbnail_url: '' });
-
     } catch (e: any) {
       console.error("Delete error", e);
       showCustomAlert('error', e.message || 'เกิดข้อผิดพลาดในการลบ');
@@ -308,7 +290,6 @@ const AdminNews = () => {
       </svg>
     );
   };
-
 
   return (
     <div className="flex-1 bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 lg:p-8 relative w-full min-w-0">
@@ -337,32 +318,52 @@ const AdminNews = () => {
         </div>
       )}
 
-      {/* Modal ยืนยันการอนุมัติ */}
-      {confirmDialog.show && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center text-center max-w-sm w-full animate-scale-in">
-            <div className="w-20 h-20 rounded-full flex items-center justify-center mb-5 shadow-inner bg-emerald-100 text-emerald-600">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-10 h-10">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12" />
-              </svg>
+      {/* Modal ยืนยันการอนุมัติ (Approve Modal) */}
+      {approveModal.isOpen && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 flex flex-col w-full max-w-sm animate-scale-in text-center">
+            <div className="w-16 h-16 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8"><path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" /></svg>
             </div>
-            
-            <p className="break-words whitespace-pre-wrap w-[200px] text-slate-600 text-md mb-8 ">
-              {t('admin_confirm_approve') || 'ยืนยันการอนุมัติให้เผยแพร่เนื้อหานี้ ใช่หรือไม่?'}
+            <p className="text-slate-500 text-md mb-6">
+              {t('confirm_approve_message') || 'คุณแน่ใจหรือไม่ที่จะอนุมัติข่าวสารนี้'} <br/> <strong>"{approveModal.title}"</strong>? <br/> {t('content_will_be_published') || 'เนื้อหานี้จะถูกเผยแพร่สู่สาธารณะทันที'}
             </p>
-
-            <div className="flex w-full gap-4">
-              <button 
-                onClick={executeAction}
-                className="flex-1 py-3 text-white font-bold rounded-xl transition-colors cursor-pointer bg-emerald-500 hover:bg-emerald-600"
-              >
-                {t('confirm') || 'Confirm'}
+            <div className="flex gap-3 w-full">
+              <button onClick={confirmApprove} className="flex-1 bg-emerald-500 text-white font-bold py-3 rounded-xl hover:bg-emerald-600 transition-colors shadow-sm cursor-pointer">
+                {t('confirm') || 'ยืนยัน'}
               </button>
-              <button 
-                onClick={() => setConfirmDialog({ show: false, newsId: '', actionType: '' })}
-                className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors cursor-pointer"
-              >
-                {t('cancel') || 'Cancel'}
+              <button onClick={() => setApproveModal({ isOpen: false, id: '', title: '' })} className="flex-1 bg-slate-100 text-slate-700 font-bold py-3 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
+                {t('cancel') || 'ยกเลิก'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal ปฏิเสธข่าวสาร (Reject Modal) */}
+      {rejectModal.isOpen && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 flex flex-col w-full max-w-md animate-scale-in">
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="text-2xl font-bold text-red-600">{t('reject_blog_title') || 'ปฏิเสธเนื้อหาข่าว'}</h3>
+              <button onClick={() => setRejectModal({ isOpen: false, newsId: '', title: '', reason: '' })} className="text-slate-400 hover:text-slate-600 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <p className="text-slate-700 text-sm mb-4">คุณกำลังปฏิเสธข่าวสาร: <br/><strong>"{rejectModal.title}"</strong></p>
+            <p className="text-slate-600 mb-3">{t('reject_blog_reason') || 'กรุณาระบุเหตุผล:'}</p>
+            <textarea
+              value={rejectModal.reason}
+              onChange={(e) => setRejectModal({ ...rejectModal, reason: e.target.value })}
+              placeholder={t('reject_blog_placeholder') || 'เช่น เนื้อหาไม่เหมาะสม, ข้อมูลไม่ครบถ้วน...'}
+              className="w-full p-4 border border-slate-300 rounded-xl mb-6 min-h-[120px] focus:outline-none focus:ring-2 focus:ring-red-500 resize-none text-slate-700"
+            ></textarea>
+            <div className="flex gap-3">
+              <button onClick={handleConfirmReject} className="flex-1 bg-red-600 text-white font-bold py-3 rounded-xl hover:bg-red-700 transition-colors cursor-pointer shadow-sm">
+                {t('confirm_reject') || 'ยืนยันปฏิเสธ'}
+              </button>
+              <button onClick={() => setRejectModal({ isOpen: false, newsId: '', title: '', reason: '' })} className="flex-1 bg-slate-100 text-slate-700 font-bold py-3 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
+                {t('cancel') || 'ยกเลิก'}
               </button>
             </div>
           </div>
@@ -443,62 +444,90 @@ const AdminNews = () => {
               {isLoading ? (
                 <tr><td colSpan={5} className="px-4 py-6 sm:px-6 sm:py-8 text-center text-slate-500 font-medium">{t('loading') || 'กำลังโหลดข้อมูล...'}</td></tr>
               ) : currentItems.length > 0 ? (
-                currentItems.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50 transition-colors text-slate-800 font-medium">
-                    
-                    <td className="px-4 py-3 sm:px-6 sm:py-4">{renderStateBadge(item.status)}</td>
-                    <td className="px-4 py-3 sm:px-6 sm:py-4 text-[#1e3a8a] font-semibold">{truncateText(item.title, 35)}</td>
-                    <td className="px-4 py-3 sm:px-6 sm:py-4 text-slate-600">
-                      {item.user?.first_name} {item.user?.last_name}
-                    </td>
-                    <td className="px-4 py-3 sm:px-6 sm:py-4 font-semibold text-slate-500">{formatShortDate(item.created_at)}</td>
-                    
-                    <td className="px-4 py-3 sm:px-6 sm:py-4">
-                      <div className="flex items-center justify-center gap-2">
-                        
-                        <button 
-                          onClick={() => handleViewClick(item)}
-                          className="bg-[#DBEAFE] p-1.5 sm:p-2 rounded-md text-[#1E3A8A] hover:bg-blue-200 transition-colors cursor-pointer" 
-                          title={t('view') || 'ดูรายละเอียด'}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 sm:w-6 sm:h-6">
-                            <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-                            <path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                          </svg>
-                        </button>
+                currentItems.map((item) => {
+                  // แยกสิทธิ์ของผู้ใช้งานแต่ละประเภท
+                  const isViewerAdmin = currentUserRole === 'admin' || currentUserRole === 'developer';
+                  const isViewerCoAdmin = currentUserRole === 'co_admin';
+                  
+                  // 1. สิทธิ์ในการอนุมัติ/ปฏิเสธ (เฉพาะ admin/dev เท่านั้น)
+                  const canApproveReject = isViewerAdmin;
+                  
+                  // 2. สิทธิ์ในการลบ (Admin, Developer และ Co-admin สามารถลบได้ทุกโพสต์)
+                  const canDelete = isViewerAdmin || isViewerCoAdmin;
 
-                        <button 
-                          onClick={() => navigate(`/edit/news/${item.id}`)}
-                          className="bg-[#1e3a8a] px-4 py-1.5 sm:py-2 rounded-lg text-white hover:bg-blue-900 transition-colors cursor-pointer text-sm sm:text-base font-medium"
-                          title={t('edit') || 'แก้ไข'}
-                        >
-                          {t('edit') || 'แก้ไข'}
-                        </button>
-
-                        {item.status === 'pending' && canApprove(item.user?.role) && (
+                  return (
+                    <tr key={item.id} className="hover:bg-slate-50 transition-colors text-slate-800 font-medium">
+                      
+                      <td className="px-4 py-3 sm:px-6 sm:py-4">{renderStateBadge(item.status)}</td>
+                      <td className="px-4 py-3 sm:px-6 sm:py-4 text-[#1e3a8a] font-semibold">{truncateText(item.title, 35)}</td>
+                      <td className="px-4 py-3 sm:px-6 sm:py-4 text-slate-600">
+                        {item.user?.first_name} {item.user?.last_name}
+                      </td>
+                      <td className="px-4 py-3 sm:px-6 sm:py-4 font-semibold text-slate-500">{formatShortDate(item.created_at)}</td>
+                      
+                      <td className="px-4 py-3 sm:px-6 sm:py-4">
+                        <div className="flex items-center justify-center gap-2">
+                          
                           <button 
-                            onClick={() => handleConfirmClick(item.id, 'approve')}
-                            className="bg-emerald-500 px-4 py-1.5 sm:py-2 rounded-lg text-white hover:bg-emerald-600 transition-colors cursor-pointer text-sm sm:text-base font-medium shadow-sm flex items-center gap-1"
-                            title={t('approve') || 'อนุมัติ'}
+                            onClick={() => handleViewClick(item)}
+                            className="bg-[#DBEAFE] p-1.5 sm:p-2 rounded-md text-[#1E3A8A] hover:bg-blue-200 transition-colors cursor-pointer" 
+                            title={t('view') || 'ดูรายละเอียด'}
                           >
-                            {t('approve') || 'อนุมัติ'}
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 sm:w-6 sm:h-6">
+                              <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+                              <path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                            </svg>
                           </button>
-                        )}
-                        
-                        <button 
-                          onClick={() => setDeleteModal({ isOpen: true, id: item.id, title: item.title, thumbnail_url: item.thumbnail_url || '' })}
-                          className="bg-slate-200 p-1.5 sm:p-2 rounded-md text-slate-500 hover:bg-red-500 hover:text-white transition-colors cursor-pointer"
-                          title={t('delete') || 'ลบ'}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-5 sm:h-5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                          </svg>
-                        </button>
 
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                          <button 
+                            onClick={() => navigate(`/edit/news/${item.id}`)}
+                            className="bg-[#1e3a8a] px-4 py-1.5 sm:py-2 rounded-lg text-white hover:bg-blue-900 transition-colors cursor-pointer text-sm sm:text-base font-medium"
+                            title={t('edit') || 'แก้ไข'}
+                          >
+                            {t('edit') || 'แก้ไข'}
+                          </button>
+
+                          {/* แสดงปุ่มอนุมัติ/ปฏิเสธ เฉพาะสถานะ pending และผู้ใช้ที่มีสิทธิ์ (Admin/Developer เท่านั้น) */}
+                          {item.status.toLowerCase() === 'pending' && canApproveReject && (
+                            <>
+                              <button 
+                                onClick={() => handleApproveClick(item.id, item.title)}
+                                className="bg-emerald-500 p-1.5 sm:p-2 rounded-md text-white hover:bg-emerald-600 transition-colors cursor-pointer"
+                                title={t('approve') || 'อนุมัติ'}
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
+                                  <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
+                                </svg>
+                              </button>
+                              <button 
+                                onClick={() => openRejectModal(item.id, item.title)}
+                                className="bg-red-500 p-1.5 sm:p-2 rounded-md text-white hover:bg-red-600 transition-colors cursor-pointer"
+                                title={t('reject') || 'ปฏิเสธ'}
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
+                                  <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                                </svg>
+                              </button>
+                            </>
+                          )}
+                          
+                          {/* ปุ่มลบ จะแสดงให้ Admin/Developer/Co-Admin เห็นเสมอ สำหรับทุกโพสต์ */}
+                          {canDelete && (
+                            <button 
+                              onClick={() => setDeleteModal({ isOpen: true, id: item.id, title: item.title, thumbnail_url: item.thumbnail_url || '' })}
+                              className="bg-slate-200 p-1.5 sm:p-2 rounded-md text-slate-500 hover:bg-red-500 hover:text-white transition-colors cursor-pointer ml-1"
+                              title={t('delete') || 'ลบ'}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-5 sm:h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                              </svg>
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr><td colSpan={5} className="px-4 py-6 sm:px-6 sm:py-8 text-center text-slate-500 font-medium">{t('no_news') || 'ไม่พบข่าวสาร'}</td></tr>
               )}

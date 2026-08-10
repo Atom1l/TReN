@@ -549,6 +549,8 @@ const translations = {
     start_writing_news: 'กรอกรายละเอียดข่าวสารของคุณที่นี่...',
     add_news_cover: 'เพิ่มรูปหน้าปกข่าวสารที่นี่.',
     related_news: 'ข่าวสารที่เกี่ยวข้อง',
+    admin_approve_news_success: 'อนุมัติข่าวสารเรียบร้อยแล้ว',
+    error_updating_occurred: 'เกิดข้อผิดพลาดในการอนุมัติข่าวสาร',
 
   },
   en: {
@@ -1088,6 +1090,8 @@ const translations = {
     view_all_activities: 'View All Activity News',
     loading_news: 'Loading news...',
     related_news: 'Related News',
+    admin_approve_news_success: 'News approved successfully',
+    error_updating_occurred: 'An error occurred while approving the news',
     
   }
 };
