@@ -110,6 +110,7 @@ const translations = {
     create_blog: 'สร้างบล็อก',
     create_event: 'สร้างกิจกรรม',
     create_showcase: 'สร้างผลงานเด่น',
+    create_news: 'สร้างข่าวสาร',
     delete_success: 'ลบข้อมูลเรียบร้อยแล้ว',
 
     // Create Event Page
@@ -500,6 +501,54 @@ const translations = {
     open_document: 'เปิดเอกสาร',
     open_link: 'เปิดลิงก์',
 
+    // Home Page
+    home_title: 'Teacher-research Network (TReN)',
+    home_subtitle: 'เครือข่ายวิจัยในชั้นเรียนเพื่อการเปลี่ยนแปลงที่ยั่งยืน',
+    home_description: 'TReN ทำหน้าที่เป็นศูนย์กลางขับเคลื่อนการพัฒนาทักษะการวิจัยเชิงปฏิบัติการแบบสำรวจ (Exploratory Action Research: EAR) ผ่านรูปแบบชุมชนนักปฏิบัติ (Community of Practice: CoP) โดยเชื่อมโยงเครือข่ายครูพี่เลี้ยงและครูทั่วไป ครอบคลุม 8 ภูมิภาคทั่วประเทศ เพื่อยกระดับการจัดการเรียนรู้และเสริมศักยภาพให้ครูสามารถแก้ปัญหาในชั้นเรียนได้ด้วยตนเอง',
+    
+    our_mission: 'ผลงานตลอด 5 ปีที่ผ่านมา',
+    three_hundred_plus: '300+',
+    registered_teachers: 'ครูผู้เข้าร่วมโครงการ',
+    over_provinces: 'ครอบคลุม 40 \nจังหวัดทั่วประเทศ',
+    one_hundred_fifty_plus: '150+',
+    research_projects: 'ผลงานวิจัยในชั้นเรียน',
+    already_published: 'ได้รับการตีพิมพ์เผยแพร่แล้วกว่า',
+    fifty_research_articles: '50 เรื่อง',
+    fifty_teachers: '50',
+    mentors: 'ครูพี่เลี้ยงวิจัย (Mentor)',
+    already_trained: 'ที่ผ่านการพัฒนาศักยภาพและพร้อมทำหน้าที่หนุนเสริมเพื่อนครูในพื้นที่',
+
+    calendar_events: 'ปฏิทินกิจกรรม',
+    events_on: 'กิจกรรมในวันที่',
+    target_audience: 'กลุ่มเป้าหมาย',
+    target_teacher:'ครูทั่วไป',
+    target_mentor:'ครูพี่เลี้ยงวิจัย',
+    target_everyone:'บุคคลทั่วไป',
+    register_join: 'ลงทะเบียนเข้าร่วมกิจกรรม',
+    no_events_today: 'ไม่มีการจัดกิจกรรมในวันนี้',
+    click_other_dates: 'คลิกเพื่อดูวันที่อื่น ๆ ',
+
+    news: 'ข่าวสาร',
+    all_news: 'ข่าวสารทั้งหมด',
+    search_explore_news: 'ค้นหาและสำรวจข่าวสารทั้งหมดได้ที่นี่',
+    search_news_placeholder: 'ค้นหาโดยชื่อข่าวสารหรือคีย์เวิร์ด..',
+    news_announcements: 'ข่าวสารสำคัญ',
+    news_earc: 'เรื่องเล่าจากเครือข่ายภูมิภาค',
+    news_activity: 'ข่าวสารกิจกรรม',
+    no_news: 'ไม่พบข้อมูล',
+    view_all_announcements: 'ดูข่าวสารสำคัญทั้งหมด',
+    view_all_stories: 'ดูเรื่องเล่าจากเครือข่ายภูมิภาคทั้งหมด',
+    view_all_activities: 'ดูข่าวสารกิจกรรมทั้งหมด',
+    loading_news: 'กำลังโหลดข่าวสาร...',
+    news_category: 'หมวดหมู่ข่าวสาร',
+    select_category: 'เลือกหมวดหมู่ข่าวสาร',
+    news_category_announcement: 'ข่าวสารสำคัญ',
+    news_category_earc: 'เรื่องเล่าจากเครือข่ายภูมิภาค',
+    news_category_activity: 'ข่าวสารกิจกรรม',
+    enter_news_title: 'กรอกชื่อข่าวสารของคุณ...',
+    start_writing_news: 'กรอกรายละเอียดข่าวสารของคุณที่นี่...',
+    add_news_cover: 'เพิ่มรูปหน้าปกข่าวสารที่นี่.',
+
   },
   en: {
     translating: 'Translating...',
@@ -605,6 +654,7 @@ const translations = {
     create_blog: 'Create Blog',
     create_event: 'Create Event',
     create_showcase: 'Create Showcase',
+    create_news: 'Create News',
 
     delete_success: 'Deleted successfully!',
 
@@ -996,6 +1046,46 @@ const translations = {
     view_media: 'View Media',
     open_document: 'Open Document',
     open_link: 'Open Link',
+
+    // Home Page
+    home_title: 'Teacher-research Network (TReN)',
+    home_subtitle: 'Classroom Research Network for Sustainable Change',
+    home_description: 'TReN serves as a hub for driving the development of Exploratory Action Research (EAR) skills through a Community of Practice (CoP) model. It connects networks of mentor teachers and general teachers across eight regions nationwide, aiming to enhance instructional practices and empower teachers to independently resolve classroom challenges.',
+    
+    our_mission: 'Achievements over the past 5 years',
+    three_hundred_plus: '300+',
+    registered_teachers: 'Teachers participated',
+    over_provinces: 'covers 40 \nprovinces nationwide',
+    one_hundred_fifty_plus: '150+',
+    research_projects: 'Classroom Research Projects',
+    already_published: 'Already published over',
+    fifty_research_articles: '50 articles',
+    fifty_teachers: '50',
+    mentors: 'Research Mentor',
+    already_trained: 'who have undergone capacity building and are ready to support fellow teachers in the area.',
+
+    calendar_events: 'Event Calendar',
+    events_on: 'Events on',
+    target_audience: 'Target Audience',
+    target_teacher:'General Teachers',
+    target_mentor:'Research Mentors',
+    target_everyone:'General Public',
+    register_join: 'Register to Join Event',
+    no_events_today: 'No events scheduled for today',
+    click_other_dates: 'Click to view other dates',
+
+    news: 'News',
+    all_news: 'All News',
+    search_explore_news: 'Search and explore all news here',
+    search_news_placeholder: 'Search by title, author, or keyword...',
+    news_announcements: 'Announcements',
+    news_earc: 'EARC Spotlight',
+    news_activity: 'Activity News',
+    no_news: 'No data found',
+    view_all_announcements: 'View All Announcements',
+    view_all_stories: 'View All Stories',
+    view_all_activities: 'View All Activity News',
+    loading_news: 'Loading news...',
     
   }
 };

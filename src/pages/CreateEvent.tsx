@@ -21,13 +21,15 @@ const CreateEvent = () => {
 
   const [alertInfo, setAlertInfo] = useState({ show: false, type: 'success', message: '' });
 
-  // 🟢 1. กำหนดค่าเริ่มต้นของเวลาเป็น 08:00 และ 16:00
+  // 🟢 1. เพิ่ม target_audience และ registration_url ลงใน State เริ่มต้น
   const [formData, setFormData] = useState({
     title: '',
     event_date: '',
     start_time: '08:00', 
     end_time: '16:00',   
     location: '',
+    target_audience: '', // ฟิลด์ใหม่
+    registration_url: '', // ฟิลด์ใหม่
     brief_description: '',
     about_event: '',
   });
@@ -90,7 +92,6 @@ const CreateEvent = () => {
               return; 
             }
 
-            // 🟢 2. ดึงเวลามาจากฐานข้อมูลมาแยกใส่ฟอร์ม
             let start = '08:00', end = '16:00';
             if (data.event_time) {
               const timeParts = data.event_time.split(' - ');
@@ -98,12 +99,15 @@ const CreateEvent = () => {
               end = timeParts[1] || '16:00';
             }
 
+            // 🟢 2. ดึงข้อมูล 2 ฟิลด์ใหม่มาใส่ฟอร์มตอน Edit
             setFormData({
               title: data.title || '',
               event_date: data.event_date ? data.event_date.split('T')[0] : '', 
               start_time: start,
               end_time: end,
               location: data.location || '',
+              target_audience: data.target_audience || '', // รับค่าจาก DB
+              registration_url: data.registration_url || '', // รับค่าจาก DB
               brief_description: data.brief_description || '',
               about_event: data.full_recap_content || '',
             });
@@ -136,7 +140,7 @@ const CreateEvent = () => {
     }
   }, [id, isEditMode]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -197,11 +201,14 @@ const CreateEvent = () => {
       const combinedTime = `${formData.start_time} - ${formData.end_time}`;
       const validLinks = links.filter(link => link.url.trim() !== '');
 
+      // 🟢 3. เพิ่ม 2 ฟิลด์ใหม่เข้าไปใน Object ที่จะบันทึกลง Database
       const eventDataToSave: any = {
         title: formData.title,
         event_date: formData.event_date ? new Date(formData.event_date).toISOString() : null,
         event_time: combinedTime,
         location: formData.location,
+        target_audience: formData.target_audience || null, // บันทึก Target Audience
+        registration_url: formData.registration_url || null, // บันทึก Registration URL
         brief_description: formData.brief_description,
         full_recap_content: formData.about_event, 
         thumbnail_url: thumbnailUrl,
@@ -287,7 +294,6 @@ const CreateEvent = () => {
               <input type="date" name="event_date" value={formData.event_date} onChange={handleChange} required className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white" />
             </div>
 
-            {/* 🟢 3. เปลี่ยนจาก <input type="time"> เป็น Dropdown Custom 24H */}
             <div>
               <label className="block text-slate-600 font-semibold mb-2 text-lg">{t('event_time') || 'Time'}<span className='text-red-500 ml-1'>*</span></label>
               <div className="flex items-center gap-2">
@@ -338,6 +344,40 @@ const CreateEvent = () => {
             <div className='md:col-span-2'>
               <label className="block text-slate-600 font-semibold mb-2 text-lg">{t('event_location') || 'Location'}<span className='text-red-500 ml-1'>*</span></label>
               <input type="text" name="location" value={formData.location} onChange={handleChange} required className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white" />
+            </div>
+
+            {/* 🟢 4. เพิ่มฟิลด์ Target Audience */}
+            <div>
+              <label className="block text-slate-600 font-semibold mb-2 text-lg">
+                {t('target_audience') || 'กลุ่มเป้าหมาย'}
+              </label>
+              <select
+                name="target_audience"
+                value={formData.target_audience}
+                onChange={handleChange}
+                className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white cursor-pointer outline-none"
+              >
+                <option value="">-- เลือกกลุ่มเป้าหมาย --</option>
+                {/* ⚠️ คำเตือน: ค่า value ด้านล่างนี้จะต้องตั้งให้ตรงกับ Enum 'target_type' ใน Database ของคุณเป๊ะๆ นะครับ */}
+                <option value="teacher">สำหรับครูทั่วไป</option>
+                <option value="assistant_teacher">สำหรับครูพี่เลี้ยง</option>
+                <option value="everyone">สำหรับบุคคลทั่วไป</option>
+              </select>
+            </div>
+
+            {/* 🟢 5. เพิ่มฟิลด์ Registration URL */}
+            <div>
+              <label className="block text-slate-600 font-semibold mb-2 text-lg">
+                {t('registration_url') || 'ลิงก์ลงทะเบียนเข้าร่วม'}
+              </label>
+              <input 
+                type="url" 
+                name="registration_url" 
+                value={formData.registration_url} 
+                onChange={handleChange} 
+                placeholder="เช่น https://forms.gle/..."
+                className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white" 
+              />
             </div>
           </div>
 

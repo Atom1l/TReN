@@ -8,7 +8,7 @@ import { supabase } from '../lib/supabaseClient';
 import EditProfileModal from '../components/EditProfileModal';
 import ShowcasePreviewModal from '../components/ShowcasePreviewModal';
 import EventPreviewModal from '../components/EventPreviewModal';
-import ResourcePreviewModal from '../components/ResourcePreviewModal'; // 🟢 เพิ่มการ Import Modal ของ Resource
+import ResourcePreviewModal from '../components/ResourcePreviewModal'; 
 
 interface UserProfile {
   id: string;
@@ -29,7 +29,7 @@ interface ContentItem {
   title: string;
   created_at: string;
   status: string;
-  type: 'blog' | 'showcase' | 'event' | 'resource'; // 🟢 เพิ่ม type resource
+  type: 'blog' | 'showcase' | 'event' | 'resource' | 'news'; // 🟢 เพิ่ม type news
   rejection_reason?: string;
   thumbnail_url?: string;
   schedule_status?: string; 
@@ -54,9 +54,10 @@ const Profile = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const [isBlogsOpen, setIsBlogsOpen] = useState(true);
+  const [isNewsOpen, setIsNewsOpen] = useState(true); // 🟢 เพิ่ม State สำหรับเปิดปิดแถบ News
   const [isEventsOpen, setIsEventsOpen] = useState(true);
   const [isShowcasesOpen, setIsShowcasesOpen] = useState(true);
-  const [isResourcesOpen, setIsResourcesOpen] = useState(true); // 🟢 เพิ่ม State สำหรับเปิดปิดแถบ Resource
+  const [isResourcesOpen, setIsResourcesOpen] = useState(true); 
 
   const [reasonModal, setReasonModal] = useState({ isOpen: false, text: '' });
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: '', type: '', title: '' });
@@ -73,7 +74,6 @@ const Profile = () => {
     event: null 
   });
 
-  // 🟢 เพิ่ม State สำหรับ Preview Resource
   const [previewResource, setPreviewResource] = useState<{ isOpen: boolean; resource: any }>({ 
     isOpen: false, 
     resource: null 
@@ -120,13 +120,13 @@ const Profile = () => {
       let showcasesQuery2 = supabase.from('showcases').select('*').contains('author_data', JSON.stringify([{ id: targetUserId }]));
       
       let blogsQuery = supabase.from('blogs').select('id, title, created_at, status, rejection_reason, thumbnail_url').eq('author_id', targetUserId);
+      let newsQuery = supabase.from('news').select('id, title, created_at, status, rejection_reason, thumbnail_url').eq('author_id', targetUserId); // 🟢 Query ของ News
       let eventsQuery = supabase.from('events').select('*').eq('created_by', targetUserId);
-      
-      // 🟢 เพิ่ม Query สำหรับดึง Resource
       let resourcesQuery = supabase.from('resources').select('*').eq('author_id', targetUserId);
 
       if (!isOwn) {
         blogsQuery = blogsQuery.eq('status', 'published');
+        newsQuery = newsQuery.eq('status', 'published'); // 🟢 เช็ค published สำหรับ news
         showcasesQuery1 = showcasesQuery1.eq('status', 'published');
         showcasesQuery2 = showcasesQuery2.eq('status', 'published');
         eventsQuery = eventsQuery.eq('event_state', 'published');
@@ -135,13 +135,15 @@ const Profile = () => {
 
       const [
         { data: blogsData, error: blogsError },
+        { data: newsData, error: newsError }, // 🟢 รับค่า News Data
         { data: showcasesData1, error: showcasesError1 },
         { data: showcasesData2, error: showcasesError2 },
         { data: eventsData, error: eventsError },
-        { data: resourcesData, error: resourcesError } // 🟢 รับค่า Resource Data
-      ] = await Promise.all([blogsQuery, showcasesQuery1, showcasesQuery2, eventsQuery, resourcesQuery]);
+        { data: resourcesData, error: resourcesError } 
+      ] = await Promise.all([blogsQuery, newsQuery, showcasesQuery1, showcasesQuery2, eventsQuery, resourcesQuery]);
 
       if (blogsError) console.error("Error fetching blogs:", blogsError);
+      if (newsError) console.error("Error fetching news:", newsError);
       if (showcasesError1) console.error("Error fetching showcases 1:", showcasesError1);
       if (showcasesError2) console.error("Error fetching showcases 2:", showcasesError2);
       if (eventsError) console.error("Error fetching events:", eventsError);
@@ -150,6 +152,9 @@ const Profile = () => {
       const combinedContents: ContentItem[] = [];
       
       if (blogsData) combinedContents.push(...blogsData.map((b: any) => ({ ...b, type: 'blog' as const })));
+      
+      // 🟢 นำข้อมูล News ใส่เข้า combinedContents
+      if (newsData) combinedContents.push(...newsData.map((n: any) => ({ ...n, type: 'news' as const })));
       
       const rawShowcases = [...(showcasesData1 || []), ...(showcasesData2 || [])];
       const uniqueShowcases = Array.from(new Map(rawShowcases.map(item => [item.id, item])).values());
@@ -170,7 +175,6 @@ const Profile = () => {
         })));
       }
 
-      // 🟢 เพิ่มข้อมูล Resource ลงใน combinedContents (เฉพาะเจ้าของเท่านั้นที่จะถูกนำมาแสดง)
       if (isOwn && resourcesData) {
         combinedContents.push(...resourcesData.map((r: any) => ({
             ...r,
@@ -227,25 +231,29 @@ const Profile = () => {
   }) : contents;
 
   const blogs = filteredContents.filter(c => c.type === 'blog');
+  const newsList = filteredContents.filter(c => c.type === 'news'); // 🟢 จัดกลุ่ม News
   const showcases = filteredContents.filter(c => c.type === 'showcase');
   const eventsList = filteredContents.filter(c => c.type === 'event'); 
-  const resourcesList = filteredContents.filter(c => c.type === 'resource'); // 🟢 จัดกลุ่ม Resources
+  const resourcesList = filteredContents.filter(c => c.type === 'resource');
 
   const allowedRoles = ['admin', 'co_admin', 'developer'];
   const canCreateSpecialContent = isOwnProfile && user && allowedRoles.includes((user.role || '').toLowerCase());
+
+  // สิทธิ์เฉพาะสำหรับปุ่มสร้างข่าวสาร (อนุญาตเฉพาะ admin และ co_admin)
+  const canCreateNews = isOwnProfile && user && ['admin', 'co_admin', 'developer'].includes((user.role || '').toLowerCase());
 
   const handleConfirmDelete = async () => {
     setIsLoading(true);
     try {
       let tableName = '';
       if (deleteModal.type === 'blog') tableName = 'blogs';
+      if (deleteModal.type === 'news') tableName = 'news'; // 🟢 เพิ่มเคสลบตาราง news
       if (deleteModal.type === 'event') tableName = 'events';
       if (deleteModal.type === 'showcase') tableName = 'showcases';
-      if (deleteModal.type === 'resource') tableName = 'resources'; // 🟢 เพิ่มเคสลบตาราง resource
+      if (deleteModal.type === 'resource') tableName = 'resources'; 
 
       const itemToDelete = contents.find(item => item.id === deleteModal.id);
 
-      // โค้ดส่วนนี้จะจัดการลบรูปใน storage thumbnails ให้เลย ครอบคลุมทั้ง blog, event, showcase และ resource
       if (itemToDelete?.thumbnail_url) {
         const urlParts = itemToDelete.thumbnail_url.split('/public/thumbnails/');
         if (urlParts.length > 1) {
@@ -487,6 +495,71 @@ const Profile = () => {
             </div>
           )}
 
+          {/* 🟢 ================= Section: News ================= */}
+          {newsList.length > 0 && (
+            <div>
+              <div 
+                className="flex items-center gap-4 mb-4 cursor-pointer group"
+                onClick={() => setIsNewsOpen(!isNewsOpen)}
+              >
+                <h2 className="text-[#1e3a8a] font-bold text-xl group-hover:text-blue-900 transition-colors">{t('news') || 'News'} ({newsList.length})</h2>
+                <hr className="flex-1 border-slate-200" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isNewsOpen ? 'rotate-180' : ''}`}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+              </div>
+              
+              <div className={`grid transition-all duration-500 ease-in-out ${isNewsOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                <div className="overflow-hidden">
+                  <div className="space-y-4 pb-2 pt-1">
+                    {newsList.map(newsItem => (
+                      <div key={newsItem.id} className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+                        <div 
+                          className="flex items-start gap-4 cursor-pointer flex-1"
+                          onClick={() => navigate(`/news/${newsItem.id}`)}
+                        >
+                          <div className={`w-3 h-3 rounded-full mt-2 flex-shrink-0 ${newsItem.status === 'published' ? 'bg-emerald-500' : newsItem.status === 'rejected' ? 'bg-red-500' : newsItem.status === 'draft' ? 'bg-slate-400' : 'bg-yellow-500'}`}></div>
+                          <div>
+                            <h3 className="text-[#1e3a8a] font-bold text-lg hover:underline line-clamp-2">{newsItem.title}</h3>
+                            <p className="text-slate-500 text-sm mt-0.5">
+                              {formatDate(newsItem.created_at)} 
+                              {isOwnProfile && ` | ${translateStatus(newsItem.status)}`}
+                            </p>
+                          </div>
+                        </div>
+
+                        {isOwnProfile && (
+                          <div className="flex items-center justify-end gap-2 border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-100">
+                            {newsItem.status === 'rejected' && (
+                              <button 
+                                onClick={() => setReasonModal({ isOpen: true, text: newsItem.rejection_reason || 'ไม่มีการระบุเหตุผล' })}
+                                className="text-red-600 bg-red-50 font-semibold px-4 py-2 hover:bg-red-100 rounded-lg transition-colors text-sm whitespace-nowrap cursor-pointer"
+                              >
+                                {t('view_rejection_reason') || 'ดูเหตุผล'}
+                              </button>
+                            )}
+                            <button 
+                              onClick={() => navigate(`/edit/news/${newsItem.id}`)}
+                              className="text-[#1e3a8a] bg-blue-50 font-semibold px-4 py-2 hover:bg-blue-100 rounded-lg transition-colors text-sm whitespace-nowrap cursor-pointer"
+                            >
+                              {t('edit') || 'แก้ไข'}
+                            </button>
+                            <button 
+                              onClick={() => setDeleteModal({ isOpen: true, id: newsItem.id, type: 'news', title: newsItem.title })}
+                              className="text-slate-500 bg-slate-50 font-semibold px-4 py-2 hover:bg-red-100 hover:text-red-600 rounded-lg transition-colors text-sm whitespace-nowrap cursor-pointer"
+                            >
+                              {t('delete') || 'ลบ'}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* ================= Section: Events ================= */}
           {isOwnProfile && eventsList.length > 0 && (
             <div>
@@ -618,7 +691,7 @@ const Profile = () => {
             </div>
           )}
 
-          {/* 🟢 ================= Section: Resources ================= */}
+          {/* ================= Section: Resources ================= */}
           {isOwnProfile && resourcesList.length > 0 && (
             <div>
               <div 
@@ -711,6 +784,18 @@ const Profile = () => {
                 </span>
                 {t('create_blog') || 'สร้างบล็อก'}
               </button>
+
+              {canCreateNews && (
+                <button onClick={() => { setIsFabOpen(false); navigate('/create/news'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl text-left text-slate-700 font-medium transition-colors cursor-pointer">
+                  <span className="w-8 h-8 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
+                    </svg>
+                  </span>
+                  {t('create_news') || 'สร้างข่าวสาร'}
+                </button>
+              )}
+
               {canCreateSpecialContent && (
                 <>
                   <button onClick={() => { setIsFabOpen(false); navigate('/create/showcase'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl text-left text-slate-700 font-medium transition-colors cursor-pointer">
@@ -754,7 +839,6 @@ const Profile = () => {
         onClose={() => setPreviewEvent({ isOpen: false, event: null })} 
       />
 
-      {/* 🟢 ฝัง ResourcePreviewModal */}
       <ResourcePreviewModal 
         isOpen={previewResource.isOpen} 
         resource={previewResource.resource} 

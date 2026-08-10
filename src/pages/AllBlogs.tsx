@@ -668,10 +668,10 @@ const AllBlogs = () => {
     <div className="min-h-screen bg-white pb-24 border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
-        <div className="text-slate-500 text-sm md:text-base mb-4 flex items-center gap-2">
+        <div className="text-[#555555] text-sm md:text-lg mt-4 mb-4">
           <span className="hover:text-[#1e3a8a] transition-colors cursor-pointer" onClick={() => navigate('/')}>{t('home') || 'หน้าแรก'}</span> 
-          <span>/</span>
-          <span className="text-[#1e3a8a] font-semibold">{t('teacher_blogs') || 'บล็อกของครู'}</span> 
+          <span className='mx-2'>/</span>
+          <span className="text-[#1e3a8a] font-semibold">{t('blogs') || 'บล็อกของครู'}</span> 
         </div>
 
         <div className="mb-8">
@@ -681,7 +681,7 @@ const AllBlogs = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
               </svg>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-[#1e3a8a] pt-2">{t('all_teachers_blogs') || 'บล็อกของครูทั้งหมด'}</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-[#1e3a8a] pt-2">{t('blogs') || 'บล็อกของครูทั้งหมด'}</h1>
           </div>
           <p className="text-slate-600 mb-6 text-lg">{t('search_explore_blogs') || 'ค้นหาและสำรวจบล็อกทั้งหมดได้ที่นี่'}</p>
           

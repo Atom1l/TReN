@@ -4,58 +4,64 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useLanguage } from '../contexts/LanguageContext';
 import CommentSection from '../components/CommentSection'; 
-
 import ReportModal from '../components/ReportModal';
 
+// 🟢 1. ฟังก์ชันแปลภาษาอัจฉริยะ (Proportion Detection + Retry Trick)
 const translateText = async (text: string, targetLang: string) => {
-  if (!text || !text.trim()) return text;
+  if (!text || !text.trim() || text === '-') return text;
   
-  // 1. เช็คว่าในข้อความเดิมมี "ตัวอักษรภาษาไทย" อยู่หรือไม่
-  const hasThai = /[\u0E00-\u0E7F]/.test(text);
+  // นับสัดส่วนภาษาเพื่อล็อคภาษาต้นทาง ป้องกัน Google เดามั่ว
+  const cleanText = text.replace(/<[^>]*>?/gm, '');
+  const thaiCharsCount = (cleanText.match(/[\u0E00-\u0E7F]/g) || []).length;
+  const engCharsCount = (cleanText.match(/[a-zA-Z]/g) || []).length;
+  const isThaiArticle = thaiCharsCount > engCharsCount;
   
-  // 2. ดักทางป้องกันการแปลมั่ว!
-  // - ถ้าเว็บเลือกเป็น 'th' และบทความเป็นภาษาไทยอยู่แล้ว -> ไม่ต้องแปล
-  if (targetLang === 'th' && hasThai) return text;
-  // - ถ้าเว็บเลือกเป็น 'en' และบทความไม่มีภาษาไทยเลย (เป็นอังกฤษอยู่แล้ว) -> ไม่ต้องแปล
-  if (targetLang === 'en' && !hasThai) return text;
+  if (targetLang === 'th' && isThaiArticle) return text;
+  if (targetLang === 'en' && !isThaiArticle) return text;
 
-  // 3. บังคับล็อคภาษาต้นทาง (sl) ไปเลย ไม่ให้ Google ใช้ auto เดามั่ว
-  const sourceLang = hasThai ? 'th' : 'en';
+  const sourceLang = isThaiArticle ? 'th' : 'en';
   
-  try {
-    const response = await fetch(
-      `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `q=${encodeURIComponent(text)}`,
-      }
-    );
-    const data = await response.json();
-    
-    if (data && data[0]) {
-      return data[0].map((item: any) => item[0]).join('');
+  const fetchTranslate = async (queryText: string) => {
+    try {
+      const response = await fetch(
+        `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `q=${encodeURIComponent(queryText)}`,
+        }
+      );
+      const data = await response.json();
+      if (data && data[0]) return data[0].map((item: any) => item[0]).join('');
+      return queryText;
+    } catch (error) {
+      console.error('Translation Error:', error);
+      return queryText; 
     }
-    return text;
-  } catch (error) {
-    console.error('Translation Error:', error);
-    return text; 
+  };
+
+  let result = await fetchTranslate(text);
+
+  // ระบบแปลซ้ำสำหรับคำสั้นๆ
+  if (result === text && targetLang === 'th' && !isThaiArticle && text.length <= 15) {
+    const lowerResult = await fetchTranslate(text.toLowerCase());
+    if (lowerResult !== text.toLowerCase()) return lowerResult;
   }
+
+  return result;
 };
 
-const BlogDetail = () => {
+const NewsDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { language, t } = useLanguage();
   
-  const [blog, setBlog] = useState<any>(null);
+  const [newsItem, setNewsItem] = useState<any>(null);
   const [author, setAuthor] = useState<any>(null);
-  const [relatedBlogs, setRelatedBlogs] = useState<any[]>([]);
+  const [relatedNews, setRelatedNews] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 🟢 2. เพิ่ม State สำหรับจัดเก็บเนื้อหาที่แปลภาษาแล้ว
+  // 🟢 2. State สำหรับแปลภาษา
   const [translatedTitle, setTranslatedTitle] = useState('');
   const [translatedContent, setTranslatedContent] = useState('');
   const [isTranslating, setIsTranslating] = useState(false);
@@ -78,10 +84,24 @@ const BlogDetail = () => {
     });
   };
 
+  const getCategoryTranslation = (category: string) => {
+    if (!category) return '';
+    const catLower = category.toLowerCase();
+    
+    if (catLower.includes('announcement')) {
+      return t('news_announcements') || 'ประกาศสำคัญ (Announcements)';
+    } else if (catLower.includes('earc') || catLower.includes('success')) {
+      return t('news_earc') || 'เรื่องเล่าความสำเร็จ (EARC Spotlight)';
+    } else if (catLower.includes('activity')) {
+      return t('news_activity') || 'ภาพบรรยายกิจกรรมล่าสุด (Activity Snapshot)';
+    }
+    return category;
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0); 
     
-    const fetchBlogData = async () => {
+    const fetchNewsData = async () => {
       try {
         setIsLoading(true);
 
@@ -92,100 +112,96 @@ const BlogDetail = () => {
           currentUserRole = userData?.role?.toLowerCase() || 'user';
         }
 
-        const { data: blogData, error: blogError } = await supabase
-          .from('blogs')
+        const { data: newsData, error: newsError } = await supabase
+          .from('news')
           .select('*')
           .eq('id', id)
           .single();
 
-        if (blogError) throw blogError;
+        if (newsError) throw newsError;
 
-        if (blogData.status !== 'published') {
+        if (newsData.status !== 'published') {
           const isAdmin = ['admin', 'developer', 'co_admin', 'co-admin'].includes(currentUserRole);
-          const isAuthor = user && user.id === blogData.author_id;
+          const isAuthor = user && user.id === newsData.author_id;
 
           if (!isAdmin && !isAuthor) {
             setIsLoading(false); 
             showAlert(
               'error',
-              t('no_permission_blog') || 'คุณไม่มีสิทธิ์เข้าถึงเนื้อหานี้ หรือบล็อกนี้ยังไม่ได้รับการเผยแพร่',
+              t('no_permission_news') || 'คุณไม่มีสิทธิ์เข้าถึงเนื้อหานี้ หรือข่าวนี้ยังไม่ได้รับการเผยแพร่',
               () => {
                 setAlertModal(prev => ({ ...prev, isOpen: false }));
-                navigate('/blogs', { replace: true });
+                navigate('/news', { replace: true });
               }
             );
             return; 
           }
         }
 
-        setBlog(blogData);
+        setNewsItem(newsData);
 
-        if (blogData?.author_id) {
+        if (newsData?.author_id) {
           const { data: authorData } = await supabase
             .from('user')
             .select('id, first_name, last_name, bio, profilepic')
-            .eq('id', blogData.author_id)
+            .eq('id', newsData.author_id)
             .single();
           setAuthor(authorData);
         }
 
-        if (blogData?.tag) {
-          const mainTag = blogData.tag.split(',')[0].trim();
+        if (newsData?.category) {
           const { data: relatedData } = await supabase
-            .from('blogs')
-            .select('id, title, thumbnail_url, created_at, tag, author_id, content')
+            .from('news')
+            .select('id, title, thumbnail_url, created_at, category, author_id, content')
             .eq('status', 'published')
-            .ilike('tag', `%${mainTag}%`)
+            .eq('category', newsData.category)
             .neq('id', id)
             .limit(3);
             
           if (relatedData && relatedData.length > 0) {
-            const authorIds = [...new Set(relatedData.map(b => b.author_id).filter(Boolean))];
+            const authorIds = [...new Set(relatedData.map(n => n.author_id).filter(Boolean))];
             
             const { data: authorsData } = await supabase
               .from('user')
               .select('id, first_name, last_name')
               .in('id', authorIds);
 
-            const enrichedRelatedBlogs = relatedData.map(b => {
-              const relAuthor = authorsData?.find(a => a.id === b.author_id);
+            const enrichedRelatedNews = relatedData.map(n => {
+              const relAuthor = authorsData?.find(a => a.id === n.author_id);
               return { 
-                ...b, 
+                ...n, 
                 author_name: relAuthor ? `${relAuthor.first_name} ${relAuthor.last_name}` : 'Unknown' 
               };
             });
-            setRelatedBlogs(enrichedRelatedBlogs);
+            setRelatedNews(enrichedRelatedNews);
           } else {
-            setRelatedBlogs([]);
+            setRelatedNews([]);
           }
         }
 
       } catch (error) {
-        console.error("Error fetching blog details:", error);
+        console.error("Error fetching news details:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (id) fetchBlogData();
+    if (id) fetchNewsData();
   }, [id, navigate, t]);
 
-  // 🟢 3. useEffect สำหรับดักจับการเปลี่ยนภาษา เมื่อผู้ใช้กดเปลี่ยนที่ Footer
+  // 🟢 3. เรียกใช้งานการแปลเนื้อหาข่าว (Trigger on language switch)
   useEffect(() => {
     const autoTranslate = async () => {
-      if (!blog) return;
+      if (!newsItem) return;
 
-      // ตั้งค่าเริ่มต้นให้แสดงเนื้อหาเดิมไปก่อน
-      setTranslatedTitle(blog.title);
-      setTranslatedContent(blog.content);
-
+      setTranslatedTitle(newsItem.title);
+      setTranslatedContent(newsItem.content);
       setIsTranslating(true);
 
       try {
-        // สั่งแปลพร้อมกันทั้ง Title และ Content เพื่อความรวดเร็ว
         const [newTitle, newContent] = await Promise.all([
-          translateText(blog.title, language),
-          translateText(blog.content, language)
+          translateText(newsItem.title, language),
+          translateText(newsItem.content, language)
         ]);
 
         setTranslatedTitle(newTitle);
@@ -198,14 +214,12 @@ const BlogDetail = () => {
     };
 
     autoTranslate();
-  }, [language, blog]);
+  }, [language, newsItem]);
 
-  const formattedDate = blog ? new Date(blog.created_at).toLocaleDateString(
+  const formattedDate = newsItem ? new Date(newsItem.created_at).toLocaleDateString(
     language === 'th' ? 'th-TH' : 'en-GB', 
     { day: 'numeric', month: 'long', year: 'numeric' }
   ) : '';
-
-  const tags = blog?.tag ? blog.tag.split(',').map((t: string) => t.trim()).filter(Boolean) : [];
 
   const shareToFacebook = () => {
     const currentUrl = encodeURIComponent(window.location.href);
@@ -214,8 +228,8 @@ const BlogDetail = () => {
 
   const shareToX = () => {
     const currentUrl = encodeURIComponent(window.location.href);
-    const blogTitle = encodeURIComponent(blog?.title || 'TReN Blog');
-    window.open(`https://twitter.com/intent/tweet?url=${currentUrl}&text=${blogTitle}`, '_blank', 'width=600,height=400');
+    const newsTitle = encodeURIComponent(newsItem?.title || 'TReN News');
+    window.open(`https://twitter.com/intent/tweet?url=${currentUrl}&text=${newsTitle}`, '_blank', 'width=600,height=400');
   };
 
   const shareToLine = () => {
@@ -228,8 +242,8 @@ const BlogDetail = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: blog?.title || 'TReN Blog',
-          text: `อ่านบทความ: ${blog?.title}\nบน TReN ได้ที่นี่\n`,
+          title: newsItem?.title || 'TReN News',
+          text: `อ่านข่าวสาร: ${newsItem?.title}\nบน TReN ได้ที่นี่\n`,
           url: currentUrl,
         });
       } catch (error) {
@@ -283,16 +297,16 @@ const BlogDetail = () => {
     return (
       <>
         {renderAlertModal()}
-        <div className="min-h-screen flex items-center justify-center text-[#1e3a8a] font-bold text-xl animate-pulse">{t('loading_blogs') || 'กำลังโหลดบล็อก...'}</div>
+        <div className="min-h-screen flex items-center justify-center text-[#1e3a8a] font-bold text-xl animate-pulse">{t('loading_news') || 'กำลังโหลดข่าวสาร...'}</div>
       </>
     );
   }
 
-  if (!blog) {
+  if (!newsItem) {
     return (
       <>
         {renderAlertModal()}
-        <div className="min-h-screen flex items-center justify-center text-red-500 font-bold text-xl">{t('blog_not_found') || 'ไม่พบบล็อกบทความ'}</div>
+        <div className="min-h-screen flex items-center justify-center text-red-500 font-bold text-xl">{t('news_not_found') || 'ไม่พบเนื้อหาข่าวสาร'}</div>
       </>
     );
   }
@@ -302,7 +316,7 @@ const BlogDetail = () => {
     if (s === 'pending') return t('state_pending') || 'รอตรวจสอบ (Pending)';
     if (s === 'published') return t('state_published') || 'เผยแพร่แล้ว (Published)';
     if (s === 'rejected') return t('state_rejected') || 'ไม่อนุมัติ (Rejected)';
-    if (s === 'in_progress') return t('status_in_progress') || 'แบบร่าง (In Progress)';
+    if (s === 'draft') return t('save_draft') || 'แบบร่าง (Draft)';
     return status;
   };
 
@@ -313,69 +327,61 @@ const BlogDetail = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
         <div className="text-[#555555] text-sm md:text-lg mt-4 mb-4">
-          <Link to="/blogs" className="hover:text-[#1e3a8a] transition-colors">{t('blogs') || 'Blogs'}</Link> / <span className="text-slate-800">{translatedTitle || blog.title}</span>
+          <Link to="/" className="hover:text-[#1e3a8a] transition-colors">{t('home') || 'Home'}</Link> / <Link to="/news" className="hover:text-[#1e3a8a] transition-colors">{t('news') || 'News'}</Link> / <span className="text-slate-800">{translatedTitle || newsItem.title}</span>
         </div>
 
-        {blog.status !== 'published' && (
+        {newsItem.status !== 'published' && (
           <div className={`px-4 py-3 rounded-xl mt-5 mb-6 flex items-center gap-3 border ${
-            blog.status === 'rejected' 
+            newsItem.status === 'rejected' 
               ? 'bg-red-50 border-red-400 text-red-800'
               : 'bg-yellow-50 border-yellow-400 text-yellow-800' 
           }`}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={`w-6 h-6 flex-shrink-0 ${blog.status === 'rejected' ? 'text-red-600' : 'text-yellow-600'}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={`w-6 h-6 flex-shrink-0 ${newsItem.status === 'rejected' ? 'text-red-600' : 'text-yellow-600'}`}>
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
             </svg>
             
             <div className="flex flex-col">
               <span className="font-medium">
-                {t('preview_warning') || 'คุณกำลังดูตัวอย่าง (Preview) สถานะปัจจุบัน:'} <strong className="capitalize">{translateStatus(blog.status)}</strong> 
+                {t('preview_warning') || 'คุณกำลังดูตัวอย่าง (Preview) สถานะปัจจุบัน:'} <strong className="capitalize">{translateStatus(newsItem.status)}</strong> 
               </span>
-              {blog.status === 'rejected' && blog.rejection_reason && (
+              {newsItem.status === 'rejected' && newsItem.rejection_reason && (
                 <span className="text-sm mt-1 text-red-700 font-semibold opacity-90">
-                  เหตุผล: {blog.rejection_reason}
+                  เหตุผล: {newsItem.rejection_reason}
                 </span>
               )}
             </div>
           </div>
         )}
 
-        {/* 🟢 4. แสดงผลหัวข้อที่ผ่านการแปลภาษาแล้ว พร้อมป้ายสถานะกำลังแปล */}
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a8a] leading-tight mt-4 break-words">
-          {translatedTitle || blog.title}
+          {translatedTitle || newsItem.title}
         </h1>
         
         {isTranslating && (
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-[#1e3a8a] text-xs font-semibold rounded-full mt-2 animate-pulse">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-50 text-orange-600 text-xs font-semibold rounded-full mt-2 animate-pulse">
             <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
             {t('translating') || 'กำลังแปลเนื้อหาอัตโนมัติ...'}
           </div>
         )}
 
-        <p className="text-slate-500 mb-6 text-base sm:text-lg mt-2">
-          {formattedDate}
+        <p className="text-slate-500 mb-6 text-base sm:text-lg mt-2 flex items-center gap-3">
+          <span>{formattedDate}</span>
+          <span className="text-slate-300">|</span>
+          <span className="bg-[#EBF1FA] text-[#1e3a8a] text-xs sm:text-sm px-3 py-1 rounded-full font-medium shadow-sm">
+            {getCategoryTranslation(newsItem.category)}
+          </span>
         </p>
 
-        {tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-8">
-            {tags.map((tag: string, index: number) => (
-              <span key={index} className="bg-[#1e3a8a] text-white text-xs sm:text-sm px-4 py-1.5 rounded-full font-medium shadow-sm">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {blog.thumbnail_url && (
+        {newsItem.thumbnail_url && (
           <div className="w-full h-[250px] sm:h-[400px] lg:h-[450px] rounded-xl overflow-hidden mb-10 shadow-sm border border-slate-100">
             <img 
-              src={blog.thumbnail_url} 
-              alt={blog.title} 
+              src={newsItem.thumbnail_url} 
+              alt={newsItem.title} 
               className="w-full h-full object-cover"
             />
           </div>
         )}
 
-        {/* 🟢 5. แสดงผลเนื้อหาบทความที่ผ่านการแปลภาษาแล้ว */}
         <div 
           className="prose prose-lg max-w-none text-slate-700 leading-relaxed mb-12 
                      whitespace-pre-wrap break-words overflow-hidden
@@ -384,7 +390,7 @@ const BlogDetail = () => {
                      [&>img]:rounded-xl [&>img]:shadow-sm [&>img]:my-6 [&>img]:max-w-full [&>img]:h-auto
                      [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:mb-4
                      [&>pre]:overflow-x-auto [&>pre]:bg-slate-100 [&>pre]:p-4 [&>pre]:rounded-lg"
-          dangerouslySetInnerHTML={{ __html: translatedContent || blog.content || '' }}
+          dangerouslySetInnerHTML={{ __html: translatedContent || newsItem.content || '' }}
         />
 
         <div className='mb-12'>
@@ -440,44 +446,45 @@ const BlogDetail = () => {
               </p>
               <Link to={`/profile/${author.id}`} className="text-[#1e3a8a] hover:underline font-semibold">
                 <button className="text-[#1e3a8a] text-sm font-bold underline underline-offset-4 hover:text-blue-900 transition-colors cursor-pointer">
-                  {t('more_posts') || 'More Posts'}
+                  {t('more_posts') || 'ดูผลงานทั้งหมดของผู้เขียน'}
                 </button>
               </Link>
             </div>
           </div>
         )}
 
-        {relatedBlogs.length > 0 && (
+        {/* 🟢 ข่าวสารที่เกี่ยวข้อง (Related News) */}
+        {relatedNews.length > 0 && (
           <div className="mb-16 border-t border-slate-200 pt-12">
             <div className="flex justify-between items-end mb-6">
-              <h2 className="text-2xl font-bold text-[#1e3a8a]">{t('related_blogs') || 'Related Blogs:'}</h2>
-              <button className="text-[#1e3a8a] text-sm font-bold underline underline-offset-4 hover:text-blue-900 transition-colors cursor-pointer">
+              <h2 className="text-2xl font-bold text-[#1e3a8a]">{t('related_news') || 'ข่าวสารที่เกี่ยวข้อง:'}</h2>
+              <Link to={`/news?category=${newsItem?.category}`} className="text-[#1e3a8a] text-sm font-bold underline underline-offset-4 hover:text-blue-900 transition-colors cursor-pointer">
                 {t('view_all') || 'View all'}
-              </button>
+              </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedBlogs.map((relBlog) => (
-                <div key={relBlog.id} className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col group cursor-pointer" onClick={() => navigate(`/blog/${relBlog.id}`)}>
+              {relatedNews.map((relNews) => (
+                <div key={relNews.id} className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col group cursor-pointer" onClick={() => navigate(`/news/${relNews.id}`)}>
                   <div className="h-40 bg-slate-200 relative overflow-hidden">
-                    {relBlog.thumbnail_url ? (
-                      <img src={relBlog.thumbnail_url} alt={relBlog.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    {relNews.thumbnail_url ? (
+                      <img src={relNews.thumbnail_url} alt={relNews.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-slate-400">No Image</div>
                     )}
-                    {relBlog.tag && (
-                      <span className="absolute bottom-3 left-3 bg-[#1e3a8a] text-white text-[10px] font-bold px-3 py-1 rounded-md shadow-sm">
-                        {relBlog.tag.split(',')[0].trim()}
+                    {relNews.category && (
+                      <span className="absolute bottom-3 left-3 bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-md shadow-sm">
+                        {getCategoryTranslation(relNews.category)}
                       </span>
                     )}
                   </div>
                   <div className="p-5 flex flex-col flex-1">
-                    <h3 className="text-[#1e3a8a] font-bold mb-2 line-clamp-1">{relBlog.title}</h3>
+                    <h3 className="text-[#1e3a8a] font-bold mb-2 line-clamp-1">{relNews.title}</h3>
                     <div className="text-xs text-slate-400 mb-3 space-y-1">
-                      <p>{t('by_author') || 'โดย'} <span className="">{relBlog.author_name}</span></p>
-                      <p>{new Date(relBlog.created_at).toLocaleDateString()}</p>
+                      <p>{t('by_author') || 'โดย'} <span className="">{relNews.author_name}</span></p>
+                      <p>{new Date(relNews.created_at).toLocaleDateString()}</p>
                     </div>
                     <p className="text-slate-500 text-xs line-clamp-3 mb-4 flex-1">
-                      {stripHtml(relBlog.content)}
+                      {stripHtml(relNews.content)}
                     </p>
                     <button className="text-slate-500 text-xs font-medium border border-slate-300 rounded-full px-4 py-1.5 w-fit hover:bg-slate-50 transition-colors cursor-pointer mt-auto">
                       {t('read_more') || 'อ่านเพิ่มเติม'} &rarr;
@@ -489,14 +496,14 @@ const BlogDetail = () => {
           </div>
         )}
 
-        <CommentSection postId={blog.id} postType="blog" />
+        <CommentSection postId={newsItem.id} postType="news" />
 
         <ReportModal 
           isOpen={isReportOpen} 
           onClose={() => setIsReportOpen(false)} 
-          targetId={blog.id} 
-          targetType="blog" 
-          targetTitle={blog.title} 
+          targetId={newsItem.id} 
+          targetType="news" 
+          targetTitle={newsItem.title} 
         />
 
       </div>
@@ -504,4 +511,4 @@ const BlogDetail = () => {
   );
 };
 
-export default BlogDetail;
+export default NewsDetail;

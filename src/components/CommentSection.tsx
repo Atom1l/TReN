@@ -7,9 +7,10 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 import ReportModal from '../components/ReportModal';
 
+// 🟢 1. อัปเดต Props ให้รองรับ postType 'news'
 interface CommentSectionProps {
   postId: string;
-  postType: 'event' | 'blog';
+  postType: 'event' | 'blog' | 'news'; 
 }
 
 interface CommentData {
@@ -25,7 +26,7 @@ interface CommentData {
   };
 }
 
-// 🟢 1. ฟังก์ชันแปลภาษาอัจฉริยะ (Proportion Detection + Retry Trick)
+// ฟังก์ชันแปลภาษาอัจฉริยะ (Proportion Detection + Retry Trick)
 const translateText = async (text: string, targetLang: string) => {
   if (!text || !text.trim() || text === '-') return text;
   
@@ -74,7 +75,7 @@ const translateText = async (text: string, targetLang: string) => {
   return result;
 };
 
-// 🟢 2. Component ย่อยสำหรับแปลเฉพาะ "ข้อความคอมเมนต์" (ชื่อคนจะไม่ยุ่ง)
+// Component ย่อยสำหรับแปลเฉพาะ "ข้อความคอมเมนต์"
 const TranslatedCommentText = ({ content }: { content: string }) => {
   const { language, t } = useLanguage();
   const [translatedContent, setTranslatedContent] = useState(content);
@@ -131,7 +132,8 @@ const CommentSection = ({ postId, postType }: CommentSectionProps) => {
 
   const fetchComments = async () => {
     try {
-      const targetColumn = postType === 'event' ? 'event_id' : 'blog_id';
+      // 🟢 2. เพิ่มเงื่อนไขตรวจสอบ postType เพื่อเลือกคอลัมน์เป้าหมาย
+      const targetColumn = postType === 'event' ? 'event_id' : postType === 'news' ? 'news_id' : 'blog_id';
       
       const { data: commentsData, error: commentsError } = await supabase
         .from('comments')
@@ -209,7 +211,8 @@ const CommentSection = ({ postId, postType }: CommentSectionProps) => {
 
     setIsLoading(true);
     try {
-      const targetColumn = postType === 'event' ? 'event_id' : 'blog_id';
+      // 🟢 3. เพิ่มเงื่อนไขตรวจสอบ postType ตอน Insert ข้อมูล
+      const targetColumn = postType === 'event' ? 'event_id' : postType === 'news' ? 'news_id' : 'blog_id';
       const insertData: any = {
         content: content.trim(),
         user_id: currentUser.id,
@@ -284,7 +287,6 @@ const CommentSection = ({ postId, postType }: CommentSectionProps) => {
           
           <div className="flex-1">
             <div className="flex justify-between items-start mb-1">
-              {/* 🟢 ชื่อผู้ใช้แสดงตามเดิม ไม่มีการแปลภาษา */}
               <h4 className="font-bold text-slate-800 text-sm sm:text-base">
                 {comment.userProfile?.first_name} {comment.userProfile?.last_name}
               </h4>
@@ -316,7 +318,6 @@ const CommentSection = ({ postId, postType }: CommentSectionProps) => {
               {formatTime(comment.created_at)}
             </div>
 
-            {/* 🟢 3. แทนที่การแสดงผลข้อความเดิม ด้วย Component แปลภาษาของเรา */}
             <TranslatedCommentText content={comment.content} />
 
             {replyingTo === comment.id && (
@@ -426,7 +427,7 @@ const CommentSection = ({ postId, postType }: CommentSectionProps) => {
         onClose={() => setIsReportOpen(false)} 
         targetId={comments.length > 0 ? comments[0].id : postId} 
         targetType="comment" 
-        targetTitle={comments.length > 0 ? comments[0].content : (postType === 'event' ? `Event ID: ${postId}` : `Blog ID: ${postId}`)}
+        targetTitle={comments.length > 0 ? comments[0].content : (postType === 'event' ? `Event ID: ${postId}` : postType === 'news' ? `News ID: ${postId}` : `Blog ID: ${postId}`)}
       />
     </div>
   );

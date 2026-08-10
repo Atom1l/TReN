@@ -28,6 +28,10 @@ import UpdatePassword from './pages/UpdatePassword'
 import CreateResource from './pages/CreateResource'
 import Resources from './pages/AllResource'
 import AdminResources from './pages/admin/AdminResources'
+import CreateNews from './pages/CreateNews'
+import NewsDetail from './pages/NewsDetail'
+import AllNews from './pages/AllNews'
+import AdminNews from './pages/admin/AdminNews'
 
 function App() {
   return (
@@ -57,6 +61,12 @@ function App() {
               <Route path="/create/showcase" element={<CreateShowcase />} />
               <Route path="/edit/showcase/:id" element={<CreateShowcase />} />
 
+              <Route path="/create/news" element={<CreateNews />} />
+              <Route path="/edit/news/:id" element={<CreateNews />} />
+              <Route path="/news" element={<AllNews />} />
+
+              <Route path="/news/:id" element={<NewsDetail />} />
+
               <Route path="/blog/:id" element={<BlogDetail />} />
               <Route path="/event/:id" element={<EventDetail />} />
               <Route path="/events/all" element={<AllEvents />} />
@@ -76,6 +86,7 @@ function App() {
               <Route path="/admin-dashboard" element={<AdminLayout />}>
                 <Route index element={<DashboardOverview />} />
                 <Route path='blogs' element={<AdminBlogs />} />
+                <Route path='news' element={<AdminNews />} />
                 <Route path='events' element={<AdminEvents />} />
                 <Route path='showcases' element={<AdminShowcases />} />
                 <Route path='resources' element={<AdminResources />} />

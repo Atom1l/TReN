@@ -17,9 +17,11 @@ interface EventData {
   thumbnail_url: string;
   status: string; 
   event_state: string;
+  target_audience?: string; 
+  registration_url?: string;
 }
 
-// 🟢 1. ฟังก์ชันแปลภาษาอัจฉริยะแบบนับสัดส่วนตัวอักษร (Proportion Detection)
+// 🟢 1. ฟังก์ชันแปลภาษาอัจฉริยะแบบนับสัดส่วนตัวอักษร
 const translateText = async (text: string, targetLang: string) => {
   if (!text || !text.trim() || text === '-') return text;
   
@@ -56,7 +58,7 @@ const translateText = async (text: string, targetLang: string) => {
   }
 };
 
-// 🟢 2. แยก EventCard ออกมาเป็น Component เดี่ยว เพื่อให้ตอบสนองต่อการเปลี่ยนภาษา 100%
+// 🟢 2. EventCard Component
 const EventCard: React.FC<{ event: EventData; onClick: () => void; }> = ({ event, onClick }) => {
   const { t, language } = useLanguage();
 
@@ -65,7 +67,30 @@ const EventCard: React.FC<{ event: EventData; onClick: () => void; }> = ({ event
   const [translatedDesc, setTranslatedDesc] = useState(event.brief_description || '');
   const [isTranslating, setIsTranslating] = useState(false);
 
-  // 🟢 3. useEffect สำหรับแปลภาษาเนื้อหาในการ์ด
+  // 🟢 3. เพิ่มฟังก์ชัน getTargetTranslation ไว้ใน EventCard
+  const getTargetTranslation = (targetValue: string | undefined) => {
+    if (!targetValue) return '-';
+    
+    switch (targetValue) {
+      case 'สำหรับครูทั่วไปและบุคคลทั่วไป':
+      case 'teacher': 
+      case 'public': // เผื่อกรณีใช้ public ด้วย
+        return t('target_teacher') || 'สำหรับครูทั่วไป';
+        
+      case 'สำหรับครูพี่เลี้ยง (Mentor)':
+      case 'assistant_teacher':
+      case 'mentor':
+        return t('target_mentor') || 'สำหรับครูพี่เลี้ยง';
+      
+      case 'สำหรับบุคคลทั่วไป':
+      case 'everyone':
+        return t('target_everyone') || 'สำหรับบุคคลทั่วไป';
+        
+      default:
+        return targetValue; 
+    }
+  };
+
   useEffect(() => {
     const autoTranslateCard = async () => {
       setTranslatedTitle(event.title);
@@ -122,7 +147,6 @@ const EventCard: React.FC<{ event: EventData; onClick: () => void; }> = ({ event
         ) : (
           <div className="w-full h-full flex items-center justify-center text-slate-400">No Image</div>
         )}
-        {/* ป้ายกำกับสถานะ */}
         <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm ${
           ['past', 'done'].includes((event.status || '').toLowerCase()) ? 'bg-slate-800/80' : 'bg-[#1e3a8a]/90'
         }`}>
@@ -130,7 +154,6 @@ const EventCard: React.FC<{ event: EventData; onClick: () => void; }> = ({ event
         </div>
       </div>
       <div className="p-6 flex flex-col flex-1">
-        {/* แสดงชื่อกิจกรรมที่แปลแล้ว พร้อม Badge Loading */}
         <div className="mb-4">
           {isTranslating && (
             <span className="inline-block text-[10px] bg-blue-50 text-[#1e3a8a] px-2 py-0.5 rounded font-semibold animate-pulse mb-1">
@@ -140,11 +163,15 @@ const EventCard: React.FC<{ event: EventData; onClick: () => void; }> = ({ event
           <h3 className="text-[#1e3a8a] text-xl font-bold line-clamp-2">{translatedTitle || event.title}</h3>
         </div>
 
-        {/* 🟢 4. ป้ายกำกับวันที่ เวลา และสถานที่ที่แปลภาษาแล้ว */}
+        {/* 🟢 4. เพิ่มการแสดงผลกลุ่มเป้าหมายต่อท้ายสถานที่ */}
         <div className="space-y-1 mb-4 text-sm text-slate-700 flex-1">
           <p><span className="font-bold text-[#1e3a8a]">{t('all_event_date') || 'วันที่'}:</span> {formatDate(event.event_date)}</p>
           <p><span className="font-bold text-[#1e3a8a]">{t('all_event_time') || 'เวลา'}:</span> {formatTimeAMPM(event.event_time)}</p>
           <p className="truncate"><span className="font-bold text-[#1e3a8a]">{t('all_event_place') || 'สถานที่'}:</span> {translatedLocation || event.location || '-'}</p>
+          
+          {event.target_audience && (
+             <p className="truncate"><span className="font-bold text-[#1e3a8a]">{t('target_audience') || 'กลุ่มเป้าหมาย'}:</span> {getTargetTranslation(event.target_audience)}</p>
+          )}
         </div>
         
         <p className="text-slate-500 text-sm line-clamp-2 mb-6">{translatedDesc || event.brief_description || 'ไม่มีคำอธิบายโดยย่อ'}</p>

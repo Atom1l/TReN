@@ -181,8 +181,10 @@ const Navbar = () => {
     );
   };
 
+  // 🟢 เพิ่ม News เข้ามาเป็นลำดับที่ 2 เพื่อการเข้าถึงที่ง่ายที่สุด
   const menuItems = [
     { name: t('home') || 'Home', path: '/' },
+    { name: t('news') || 'News', path: '/news' },
     { 
       name: t('events') || 'Events', 
       path: '#',
@@ -203,10 +205,8 @@ const Navbar = () => {
         { name: t('mission_about_us') || 'ภารกิจของเรา', path: '/about/mission' },
         { name: t('ear_team_about_us') || 'ทีม EAR', path: '/about/earteam' },
         { name: t('history_of_tren_about_us') || 'ประวัติ TReN', path: '/about/historytren' },
-
         { name: t('history_of_ear_about_us') || 'ประวัติ EAR', path: '/about/historyear' },
         { name: t('organization_about_us') || 'องค์กรของเรา', path: '/about/organization' },
-
         { name: t('supporter_about_us') || 'ผู้สนับสนุน', path: '/about/supporter' },
         { name: t('constitution_about_us') || 'รัฐธรรมนูญ', path: '/about/constitution' },
         { name: t('timeline_about_us') || 'ไทมไลน์', path: '/about/timeline' },
@@ -371,7 +371,6 @@ const Navbar = () => {
             </button>
 
             {user && userData ? (
-              // 🟢 เปลี่ยนจาก div ธรรมดา เป็น Link ให้กดเข้าไปหน้าโปรไฟล์ได้
               <Link 
                 to="/profile"
                 onClick={() => setIsMobileMenuOpen(false)}
