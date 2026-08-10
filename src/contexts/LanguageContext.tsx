@@ -548,6 +548,7 @@ const translations = {
     enter_news_title: 'กรอกชื่อข่าวสารของคุณ...',
     start_writing_news: 'กรอกรายละเอียดข่าวสารของคุณที่นี่...',
     add_news_cover: 'เพิ่มรูปหน้าปกข่าวสารที่นี่.',
+    related_news: 'ข่าวสารที่เกี่ยวข้อง',
 
   },
   en: {
@@ -1086,6 +1087,7 @@ const translations = {
     view_all_stories: 'View All Stories',
     view_all_activities: 'View All Activity News',
     loading_news: 'Loading news...',
+    related_news: 'Related News',
     
   }
 };
