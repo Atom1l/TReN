@@ -32,6 +32,12 @@ import CreateNews from './pages/CreateNews'
 import NewsDetail from './pages/NewsDetail'
 import AllNews from './pages/AllNews'
 import AdminNews from './pages/admin/AdminNews'
+import AboutVisionMission from './pages/aboutus/AboutVisionMission'
+import AboutCorePrinciples from './pages/aboutus/AboutCorePrinciples'
+import AboutTrenJourney from './pages/aboutus/AboutTrenJourney'
+import AboutCoreRoles from './pages/aboutus/AboutCoreRoles'
+import AboutGovernance from './pages/aboutus/AboutGovernance'
+import AboutSupporters from './pages/aboutus/AboutSupporters'
 
 function App() {
   return (
@@ -80,7 +86,13 @@ function App() {
               <Route path="/edit/resource/:id" element={<CreateResource />} />
               
 
-              
+              {/* Route สำหรับหน้า About Us */}
+              <Route path="/about/vision-mission-objectives" element={<AboutVisionMission />} />
+              <Route path="/about/core-principles" element={<AboutCorePrinciples />} />
+              <Route path="/about/tren-journey" element={<AboutTrenJourney />} />
+              <Route path="/about/core-role" element={<AboutCoreRoles />} />
+              <Route path="/about/governance" element={<AboutGovernance />} />
+              <Route path="/about/supporter" element={<AboutSupporters />} />
               
               {/* Route สำหรับ Admin Dashboard */}
               <Route path="/admin-dashboard" element={<AdminLayout />}>

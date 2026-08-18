@@ -148,6 +148,10 @@ const Navbar = () => {
   }, [user?.id]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+  
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
@@ -181,7 +185,6 @@ const Navbar = () => {
     );
   };
 
-  // 🟢 เพิ่ม News เข้ามาเป็นลำดับที่ 2 เพื่อการเข้าถึงที่ง่ายที่สุด
   const menuItems = [
     { name: t('home') || 'Home', path: '/' },
     { name: t('news') || 'News', path: '/news' },
@@ -201,15 +204,13 @@ const Navbar = () => {
       name: t('about') || 'About us', 
       path: '#', 
       dropdown: [
-        { name: t('what_is_tren_about_us') || 'TReN คืออะไร', path: '/about/whatistren' },
-        { name: t('mission_about_us') || 'ภารกิจของเรา', path: '/about/mission' },
-        { name: t('ear_team_about_us') || 'ทีม EAR', path: '/about/earteam' },
-        { name: t('history_of_tren_about_us') || 'ประวัติ TReN', path: '/about/historytren' },
-        { name: t('history_of_ear_about_us') || 'ประวัติ EAR', path: '/about/historyear' },
-        { name: t('organization_about_us') || 'องค์กรของเรา', path: '/about/organization' },
-        { name: t('supporter_about_us') || 'ผู้สนับสนุน', path: '/about/supporter' },
-        { name: t('constitution_about_us') || 'รัฐธรรมนูญ', path: '/about/constitution' },
-        { name: t('timeline_about_us') || 'ไทมไลน์', path: '/about/timeline' },
+        { name: t('vision_mission_objectives_about_us') || 'วิสัยทัศน์ พันธกิจและเป้าหมายหลัก', path: '/about/vision-mission-objectives' },
+        { name: t('core_principles_about_us') || 'หลักการดำเนินงาน 5 ข้อ', path: '/about/core-principles' },
+        { name: t('tren_journey_about_us') || 'เส้นทางการเติบโตของ TReN', path: '/about/tren-journey' },
+        { name: t('core_role_about_us') || 'บทบาทและภารกิจหลักของ TReN', path: '/about/core-role' },
+        { name: t('organization_about_us') || 'โครงสร้างเครือข่าย', path: '/about/organization' },
+        { name: t('governance_about_us') || 'กรอบการทำงาน', path: '/about/governance' },
+        { name: t('supporter_about_us') || 'องค์กรพันธมิตรและผู้สนับสนุน', path: '/about/supporter' },
       ]
     },
   ];
@@ -416,20 +417,37 @@ const Navbar = () => {
                 return (
                   <div key={menu.name} className="flex flex-col">
                     <div className="flex justify-between items-center relative pr-4">
-                      <Link
-                        to={menu.path}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={`flex-1 px-8 py-3.5 text-xl transition-colors ${
-                          isActive 
-                            ? 'text-[#0a2558] font-semibold' 
-                            : 'text-slate-800 font-medium hover:bg-slate-50'
-                        }`}
-                      >
-                        {isActive && (
-                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-[#1e3a8a] rounded-r-md"></div>
-                        )}
-                        {menu.name}
-                      </Link>
+                      {/* แก้ไขตรงนี้: ถัามี dropdown ให้ปุ่มหลักทำหน้าที่ toggle ด้วย */}
+                      {menu.dropdown ? (
+                        <button
+                          onClick={(e) => toggleMobileMenu(menu.name, e)}
+                          className={`flex-1 text-left px-8 py-3.5 text-xl transition-colors cursor-pointer ${
+                            isActive || isExpanded
+                              ? 'text-[#0a2558] font-semibold' 
+                              : 'text-slate-800 font-medium hover:bg-slate-50'
+                          }`}
+                        >
+                          {isActive && (
+                            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-[#1e3a8a] rounded-r-md"></div>
+                          )}
+                          {menu.name}
+                        </button>
+                      ) : (
+                        <Link
+                          to={menu.path}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={`flex-1 px-8 py-3.5 text-xl transition-colors ${
+                            isActive 
+                              ? 'text-[#0a2558] font-semibold' 
+                              : 'text-slate-800 font-medium hover:bg-slate-50'
+                          }`}
+                        >
+                          {isActive && (
+                            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-[#1e3a8a] rounded-r-md"></div>
+                          )}
+                          {menu.name}
+                        </Link>
+                      )}
                       
                       {menu.dropdown && (
                         <button 

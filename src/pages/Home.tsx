@@ -271,7 +271,7 @@ const Home = () => {
           <h2 className="text-xl lg:text-2xl font-bold text-slate-800 leading-snug">
             {t('home_subtitle') || 'เครือข่ายวิจัยในชั้นเรียนเพื่อการเปลี่ยนแปลงที่ยั่งยืน'}
           </h2>
-          <p className="mt-6 text-slate-500 text-lg leading-relaxed max-w-lg">
+          <p className="mt-6 text-slate-500 text-lg leading-relaxed max-w-lg tracking-wide">
             {t('home_description') || 'TReN ทำหน้าที่เป็นศูนย์กลางขับเคลื่อนการพัฒนาทักษะการวิจัยเชิงปฏิบัติการแบบสำรวจ (Exploratory Action Research: EAR) ผ่านรูปแบบชุมชนนักปฏิบัติ (Community of Practice: CoP) โดยเชื่อมโยงเครือข่ายครูพี่เลี้ยงและครูทั่วไป ครอบคลุม 8 ภูมิภาคทั่วประเทศ เพื่อยกระดับการจัดการเรียนรู้และเสริมศักยภาพให้ครูสามารถแก้ปัญหาในชั้นเรียนได้ด้วยตนเอง'}
           </p>
         </div>
@@ -287,10 +287,10 @@ const Home = () => {
       </section>
 
       {/* ================= 2. Achievements Section ================= */}
-      <section className="bg-[#E6F0FA] py-16 lg:py-24">
+      <section className="bg-[#1e3a8a] py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-5xl font-black text-[#1e3a8a]">{t('our_mission') || 'ผลงานตลอด 5 ปีที่ผ่านมา'}</h2>
+            <h2 className="text-3xl lg:text-5xl font-black text-white">{t('our_mission') || 'ผลงานตลอด 5 ปีที่ผ่านมา'}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col items-center text-center group transform hover:-translate-y-2">
