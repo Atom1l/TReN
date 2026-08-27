@@ -180,7 +180,7 @@ const AboutCorePrinciples: React.FC = () => {
             >
               {/* ฝั่งซ้าย: ตัวเลข หัวข้อภาษาไทย และภาษาอังกฤษ */}
               <div className="md:w-4/12 lg:w-4/12 shrink-0">
-                <h3 className="text-3xl font-bold text-[#1e3a8a] tracking-tight leading-snug">
+                <h3 className="text-2xl font-bold text-[#1e3a8a] tracking-tight leading-snug">
                   <span className="mr-3">{item.num}.</span>
                   {item.title}
                   <span className="block text-xl text-slate-500 font-medium uppercase tracking-widest mt-2">
