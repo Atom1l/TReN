@@ -113,7 +113,7 @@ const AboutGovernance: React.FC = () => {
               เพื่อให้ผู้ใช้เลื่อนอ่านในกรอบได้ 
             */}
             <object 
-              data="/public/pdf/tst1.pdf" 
+              data="/pdf/tst1.pdf" 
               type="application/pdf" 
               className="w-full h-[60vh] md:h-[800px]"
             >
@@ -128,7 +128,7 @@ const AboutGovernance: React.FC = () => {
             {/* แถบด้านล่าง (Footer) ของกรอบ PDF สำหรับปุ่มดาวน์โหลด */}
             <div className="bg-slate-50 border-t border-slate-200 p-4 md:px-8 flex justify-end items-center">
               <a 
-                href="/public/pdf/tst1.pdf" 
+                href="/pdf/tst1.pdf" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 bg-[#1e3a8a] hover:bg-blue-800 text-white font-medium text-xl px-6 py-3 rounded-xl transition-all hover:-translate-y-0.5 shadow-md hover:shadow-blue-900/20 active:scale-95"
