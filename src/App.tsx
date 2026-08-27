@@ -38,6 +38,7 @@ import AboutTrenJourney from './pages/aboutus/AboutTrenJourney'
 import AboutCoreRoles from './pages/aboutus/AboutCoreRoles'
 import AboutGovernance from './pages/aboutus/AboutGovernance'
 import AboutSupporters from './pages/aboutus/AboutSupporters'
+import AboutPage from './pages/aboutus/AboutPage'
 
 function App() {
   return (
@@ -87,6 +88,7 @@ function App() {
               
 
               {/* Route สำหรับหน้า About Us */}
+              <Route path="/about/" element={<AboutPage/>}/>
               <Route path="/about/vision-mission-objectives" element={<AboutVisionMission />} />
               <Route path="/about/core-principles" element={<AboutCorePrinciples />} />
               <Route path="/about/tren-journey" element={<AboutTrenJourney />} />

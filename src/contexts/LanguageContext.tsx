@@ -30,9 +30,10 @@ const translations = {
     home: 'หน้าหลัก',
     events: 'กิจกรรม',
     blogs: 'บล็อกบทความ',
-    resources: 'คลังความรู้',
+    resources: 'คลังความรู้ EAR',
     showcases: 'ผลงานเด่น',
     about: 'เกี่ยวกับเรา',
+    about_us_tab_placeholder: 'เกี่ยวกับ TReN',
 
     // Password Update Page //
     back_to_home: 'กลับสู่หน้าหลัก',
@@ -563,10 +564,10 @@ const translations = {
     vision_about_tren_en_title: 'Teacher-research Network',
     vision_about_tren_desc: 'เราคือ TReN (Teacher-Research Network) เครือข่ายวิจัยที่ขับเคลื่อนโดยพลังของครู เพื่อแก้ปัญหาในชั้นเรียนด้วยตัวเอง เรามุ่งมั่นพัฒนาทักษะการวิจัยผ่านกระบวนการ Exploratory Action Research (EAR) สร้างชุมชนนักปฏิบัติ (CoP) หรือ EAR Community (EARC) ทั้ง 4 ภูมิภาคทั่วประเทศ และพัฒนาระบบพี่เลี้ยง (Mentorship) เพื่อสร้างระบบนิเวศการเรียนรู้ที่ยั่งยืน เปลี่ยนการแก้ปัญหาในห้องเรียนให้เป็นการวิจัยที่ตอบโจทย์ และยกระดับผลสัมฤทธิ์ของผู้เรียนอย่างแท้จริง',
 
-    vision_about_vision: 'วิสัยทัศน์ (Vision)',
-    vision_about_vision_desc: '"เครือข่ายวิจัยครูระดับประเทศ ขับเคลื่อนด้วยชุมชนนักปฏิบัติ เพื่อแก้ปัญหาในชั้นเรียนและยกระดับการเรียนรู้ของผู้เรียนอย่างยั่งยืน"',
+    vision_about_vision: 'วิสัยทัศน์',
+    vision_about_vision_desc: '"มุ่งเป็นเครือข่ายวิจัยในชั้นเรียนระดับชาติ ที่ขับเคลื่อนให้ครูไทยใช้กระบวนการวิจัย Exploratory Action Research (EAR) พัฒนาการเรียนการสอนได้ด้วยตนเองอย่างยั่งยืน และเติบโตไปด้วยกันอย่างเข้มแข็ง"',
 
-    vision_about_mission: 'พันธกิจ (Mission)',
+    vision_about_mission: 'พันธกิจ',
     vision_about_mission_subtitle: 'สิ่งที่เรามุ่งมั่นลงมือทำเพื่อขับเคลื่อนการศึกษา',
     vision_about_empowerment: 'พัฒนาทักษะ',
     vision_about_empowerment_en: 'Empowerment',
@@ -578,7 +579,7 @@ const translations = {
     vision_about_sustainability_en: 'Sustainability',
     vision_about_sustainability_desc: 'พัฒนาระบบพี่เลี้ยงและยกระดับศักยภาพของครู เพื่อให้การจัดการเรียนรู้และการทำวิจัยในห้องเรียนขับเคลื่อนได้อย่างต่อเนื่องและยั่งยืน',
 
-    vision_about_core_objectives: 'ภารกิจหลัก (Core Objectives)',
+    vision_about_core_objectives: 'ภารกิจหลัก',
     vision_about_goal_01: 'เป้าหมายที่ 01',
     vision_about_goal_02: 'เป้าหมายที่ 02',
     vision_about_goal_03: 'เป้าหมายที่ 03',
@@ -591,6 +592,22 @@ const translations = {
     vision_about_obj3_en: 'Sustainability & Impact',
     vision_about_obj3_th: 'ขับเคลื่อนความยั่งยืนและการนำไปใช้',
     vision_about_obj3_desc: 'จัดทำคลังความรู้จาก Best Practices และผลักดันให้เกิดวัฒนธรรมวิจัยในสถานศึกษาอย่างแท้จริง',
+
+    vision_about_vision_headline: 'วิสัยทัศน์',
+    vision_about_mission_headline: 'พันธกิจ',
+    vision_about_core_objectives_headline: 'ภารกิจหลัก',
+
+    vision_about_tren_desc_1: 'คือ เครือข่ายวิจัยที่ขับเคลื่อนโดยพลังของครู มุ่งมั่นยกระดับศักยภาพครูไทยให้สามารถแก้ปัญหาในชั้นเรียนได้ด้วยตัวเองอย่างตรงจุด ผ่านการทำวิจัยในชั้นเรียนที่เรียกว่า Exploratory Action Research (EAR) หรือการวิจัยเชิงปฏิบัติการเชิงสำรวจ ที่เน้นการนำข้อมูลและหลักฐานจริงจากห้องเรียนมาใช้พัฒนาการเรียนการสอน',
+    vision_about_channels_title: 'ช่องทางการเรียนรู้และการเข้าร่วม',
+    vision_about_target_general: 'ครูทั่วไป:',
+    vision_about_target_general_desc: 'สามารถศึกษาแนวคิด และกระบวนการทำวิจัย EAR ได้ด้วยตนเองผ่านคลังความรู้บนเว็บไซต์นี้',
+    vision_about_target_selected: 'ครูที่ได้รับคัดเลือกเข้าร่วมการอบรม:',
+    vision_about_target_selected_desc:'จะได้เรียนรู้กระบวนการทำวิจัยอย่างเป็นขั้นตอนแบบเข้มข้น โดยมี "ครูพี่เลี้ยงวิจัย" คอยให้คำแนะนำและดูแลอย่างใกล้ชิดตลอดการทำวิจัย',
+    vision_about_tren_desc_2: 'TReN เป็นชุมชนนักปฏิบัติ (CoP) ที่เชื่อมโยงครูผู้สอนใน 4 ภูมิภาคทั่วประเทศเข้าด้วยกัน พร้อมสนับสนุนและเปิดพื้นที่ให้คุณครูได้พัฒนาวิชาชีพ แลกเปลี่ยนประสบการณ์ สร้างมิตรภาพกับเพื่อนครู และจับมือร่วมกันพัฒนาการศึกษาไทยในอนาคต',
+    vision_about_vision_subhead: 'Vision',
+    vision_about_mission_subhead: 'Mission',
+    vision_about_core_objectives_subhead: 'Objectives',
+
 
     // Core Principles Page //
     principle_1_title: 'ขับเคลื่อนโดยครู เพื่อครูอย่างแท้จริง',
@@ -645,6 +662,68 @@ const translations = {
     journey_future_title: 'พ.ศ. 2571 เป็นต้นไป',
     journey_phase_future: 'ขยายผลสู่ความยั่งยืนระดับประเทศ',
     journey_desc_5_1: 'ขยายผลกระบวนการวิจัย EAR สู่ครูทั่วประเทศผ่านเครือข่าย TReN พร้อมทั้งประเมินผลกระทบเชิงลึก (Impact Analysis) เพื่อวัดการเปลี่ยนแปลงที่เกิดขึ้นต่อตัวครู ห้องเรียน นักเรียน และชุมชนอย่างเป็นรูปธรรม',
+
+    journey_intro_desc_new: 'จากจุดเริ่มต้นสู่เครือข่ายวิจัยระดับประเทศ (พ.ศ. 2565 - ปัจจุบัน)',
+    // Phase 1: จุดกำเนิด (พ.ศ. 2565)
+    journey_year_1_title_new: 'พ.ศ. 2565',
+    journey_phase_1_new: 'จุดกำเนิด',
+    journey_tren_brand: 'TReN',
+    journey_desc_1_1_new: 'เกิดจากความร่วมมือระหว่าง British Council Thailand และ คณะศิลปศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี (มจธ.) ที่มุ่งติดอาวุธให้ครูประจำการสามารถวิเคราะห์และแก้ปัญหาในชั้นเรียนได้ด้วยตนเอง เพราะบริบทของแต่ละห้องเรียนมีความแตกต่างกัน การรอคอยความช่วยเหลือจากภายนอกหรือการตัดสินใจแก้ปัญหาด้วยความรู้สึกส่วนตัวจึงไม่ยั่งยืน',
+    journey_key_takeaway_new: 'Evidence-based decision',
+    journey_desc_1_2_new: 'โครงการจึงส่งเสริมหลักคิดการตัดสินใจบนพื้นฐานของประจักษ์พยาน ผ่านกระบวนการ Exploratory Action Research (EAR) เพื่อให้ครูแก้ปัญหาได้ตรงจุดและสอดคล้องกับเกณฑ์พัฒนาวิชาชีพของ ก.ค.ศ.',
+
+    // Phase 2: ปีที่ 1 (พ.ศ. 2565)
+    journey_year_2_title_new: 'ปีที่ 1: พ.ศ. 2565',
+    journey_phase_2_new: 'จุดประกายและวางรากฐาน',
+    journey_desc_2_1_new: 'นำโมเดลการวิจัย EAR ระดับโลกของ Prof. Dr. Richard Smith (University of Warwick) และ Dr. Paula Rebolledo มาใช้อบรมครูภาษาอังกฤษรุ่นแรก 21 คน โดยมีผู้เชี่ยวชาญและครูพี่เลี้ยงนานาชาติคอยประกบดูแลอย่างใกล้ชิด ซึ่งการมีครูพี่เลี้ยงหนุนเสริมนี้ถือเป็นหัวใจสำคัญของความสำเร็จ ดังที่ ดร.สุวิมล ว่องวาณิช ได้สะท้อนไว้อย่างน่าสนใจว่า:',
+    journey_quote_new: '"กระบวนการต่างๆ ที่ใช้ในการทำวิจัย เป็นเรื่องที่ครูไม่คุ้นเคย เข้าใจยาก และต้องอาศัยการฝึกปฏิบัติภายใต้พี่เลี้ยงที่เข้าใจในวิธีการวิจัยอย่างสม่ำเสมอ..."',
+    journey_quote_author_new: '— (สุวิมล ว่องวาณิช, 2550, น. 6)',
+    journey_desc_2_2_new: 'เมื่อจบโครงการ ครูไม่เพียงมีทัศนคติที่ดีขึ้นต่อการทำวิจัย แต่ยังสามารถแก้ปัญหาในห้องเรียนได้ตรงจุด พร้อมทั้งสร้างความสัมพันธ์ที่แน่นแฟ้นยิ่งขึ้นกับนักเรียน (Dersingh & Vuong, 2023)',
+
+    // Phase 3: ปีที่ 2 - 4 (พ.ศ. 2566 – 2568)
+    journey_year_3_title_new: 'ปีที่ 2 – 4: พ.ศ. 2566 – 2568',
+    journey_phase_3_new: 'บ่มเพาะแกนนำสู่ 40 จังหวัด',
+    journey_desc_3_1_new: 'เพื่อสร้างความยั่งยืนและลดการพึ่งพาผู้เชี่ยวชาญต่างชาติ โครงการจึงคัดเลือกครูรุ่นแรกมาพัฒนาต่อยอดเป็น ',
+    journey_mentor_role: '"ครูพี่เลี้ยงวิจัย (Teacher-Research Mentor)"',
+    journey_desc_3_2_new: ' โดยได้รับเกียรติจาก Prof. Dr. Richard Smith มาถ่ายทอดองค์ความรู้โดยตรง จนกลุ่มครูพี่เลี้ยงแกนนำนี้สามารถขยายผลให้คำปรึกษาแก่เพื่อนครู ครอบคลุมถึง 40 จังหวัดทั่วประเทศ',
+
+    // Phase 4: ปีที่ 5 - 6 (พ.ศ. 2569 เป็นต้นไป)
+    journey_year_4_title_new: 'ปีที่ 5 - 6 เป็นต้นไป: พ.ศ. 2569 เป็นต้นไป',
+    journey_phase_4_new: 'ก่อตั้ง TReN และขยายผลทั่วประเทศ',
+    journey_desc_4_1_new: 'จากความแข็งแกร่งของกลุ่มครูวิจัยและครูพี่เลี้ยงทั่วประเทศ จึงนำไปสู่การก่อตั้ง ',
+    journey_tren_network: 'เครือข่าย TReN (Teacher-Research Network)',
+    journey_desc_4_2_new: ' อย่างเป็นทางการ โดยขับเคลื่อนผ่านชุมชนนักปฏิบัติระดับภูมิภาค (EART Communities: EARC) แบ่งเป็น 8 โซนทั่วประเทศ ควบคู่กับการยกระดับครูพี่เลี้ยงสู่ระดับสูง (Advanced Level) เพื่อให้แต่ละพื้นที่สามารถพึ่งพาตนเองได้ในระยะยาว พร้อมมุ่งขยายผลกระบวนการ EAR สู่ครูทั่วประเทศและประเมินผลกระทบเชิงลึกอย่างยั่งยืน',
+
+    // สรุปตัวเลขการเติบโต (Table)
+    journey_table_main_title: 'สรุปตัวเลขการเติบโตของเครือข่าย',
+    journey_table_col1: 'ดัชนีชี้วัด',
+    journey_table_col1_en: '(Key Indicator)',
+    journey_table_col2: 'ตัวเลขความสำเร็จ',
+    journey_table_col3: 'รายละเอียดการขยายผล',
+
+    // สถิติตาราง
+    journey_stat_1_name: 'ครูประจำการที่ได้รับการพัฒนา',
+    journey_stat_1_val: '280 คน',
+    journey_stat_1_desc: 'จากรุ่นนำร่อง 21 คน สู่การแก้ปัญหาในชั้นเรียนด้วย EAR ทั่วประเทศ',
+
+    journey_stat_2_name: 'ครูพี่เลี้ยงวิจัย',
+    journey_stat_2_en: '(Mentors)',
+    journey_stat_2_val: '50 คน',
+    journey_stat_2_desc: 'บ่มเพาะจากครูแกนนำรุ่นแรก สู่ผู้เชี่ยวชาญที่คอยหนุนเสริมเพื่อนครู',
+
+    journey_stat_3_name: 'พื้นที่การทำงาน',
+    journey_stat_3_val: '40 จังหวัด',
+    journey_stat_3_desc: 'กระจายเครือข่ายการเรียนรู้และการดูแลอย่างทั่วถึงทุกภูมิภาค',
+
+    journey_stat_4_name: 'ชุมชนนักปฏิบัติ',
+    journey_stat_4_en: '(EARCs)',
+    journey_stat_4_val: '8 โซน',
+    journey_stat_4_desc: 'ยกระดับเครือข่ายเชิงพื้นที่ให้พึ่งพาตนเองได้อย่างยั่งยืน',
+
+    // อ้างอิงท้ายตาราง
+    journey_ref_author: '* สุวิมล ว่องวาณิช. (2550).',
+    journey_ref_book: 'การวิจัยปฏิบัติการในชั้นเรียน',
+    journey_ref_pub: '(พิมพ์ครั้งที่ X). สำนักพิมพ์แห่งจุฬาลงกรณ์มหาวิทยาลัย.',
 
     // Core Role & Missions Page //
     role_main_title: 'บทบาทและภารกิจหลัก',
@@ -745,7 +824,7 @@ const translations = {
     home: 'Home',
     events: 'Events',
     blogs: 'Blogs',
-    resources: 'Resources',
+    resources: 'EAR Resources',
     showcases: 'Showcases',
     about: 'About Us',
 
@@ -1250,38 +1329,53 @@ const translations = {
 
     // Vision Mission Objectives Page //
     vision_about_tren_title: 'TReN',
-    vision_about_tren_subtitle:'Teacher-research Network',
-    vision_about_tren_en_title: 'Teacher-research Network',
-    vision_about_tren_desc: 'We are TReN (Teacher-Research Network), a research network driven by teachers to independently address classroom challenges. We are committed to enhancing research skills through the Exploratory Action Research (EAR) process, establishing Communities of Practice (CoP)—or EAR Communities (EARC)—across all four regions of the country, and developing mentorship systems to create a sustainable learning ecosystem. Our goal is to transform classroom problem-solving into impactful research that genuinely elevates student achievement.',
+    vision_about_tren_subtitle: 'Teacher Research Network',
+    vision_about_tren_en_title: 'Teacher-Research Network',
+    vision_about_tren_desc: 'We are TReN (Teacher-Research Network), a research network driven by the power of teachers to solve classroom problems on their own. We are committed to developing research skills through the Exploratory Action Research (EAR) process, building Communities of Practice (CoP) or EAR Communities (EARC) across all 4 regions nationwide, and developing a mentorship system to create a sustainable learning ecosystem. We transform classroom problem-solving into impactful research and truly elevate student achievement.',
 
     vision_about_vision: 'Vision',
-    vision_about_vision_desc: '"A national teacher research network driven by communities of practice to address classroom challenges and sustainably enhance student learning."',
+    vision_about_vision_desc: '"To be a national classroom research network that drives Thai teachers to use Exploratory Action Research (EAR) to sustainably develop their own teaching and learning, and grow strongly together."',
 
     vision_about_mission: 'Mission',
-    vision_about_mission_subtitle: 'Our commitment to driving education forward',
-    vision_about_empowerment: 'Develop skills',
+    vision_about_mission_subtitle: 'What we are committed to doing to drive education forward',
+    vision_about_empowerment: 'Develop Skills',
     vision_about_empowerment_en: 'Empowerment',
-    vision_about_empowerment_desc: 'Promote knowledge, understanding, and skills regarding Exploratory Action Research (EAR) so that teachers can effectively apply them to solve classroom problems.',
-    vision_about_community: 'Build a Community',
+    vision_about_empowerment_desc: 'Promote knowledge, understanding, and skills in conducting Exploratory Action Research (EAR) so that teachers can practically apply them to solve problems in the classroom.',
+    vision_about_community: 'Build a Network',
     vision_about_community_en: 'Community',
-    vision_about_community_desc: 'Expand the Community of Practice (CoP)—or EAR Community (EARC)—nationwide to serve as a platform for mutual learning and knowledge exchange.',
-    vision_about_sustainability: 'Build sustainability',
+    vision_about_community_desc: 'Expand Communities of Practice (CoP) or EAR Communities (EARC) nationwide as a space for shared learning and exchange.',
+    vision_about_sustainability: 'Create Sustainability',
     vision_about_sustainability_en: 'Sustainability',
-    vision_about_sustainability_desc: 'Develop a mentoring system and enhance teacher capabilities to ensure the continuous and sustainable advancement of classroom instruction and research.',
+    vision_about_sustainability_desc: 'Develop a mentorship system and elevate teachers\' potential to ensure that learning management and classroom research can be driven continuously and sustainably.',
 
     vision_about_core_objectives: 'Core Objectives',
-    vision_about_goal_01: 'Objective 01',
-    vision_about_goal_02: 'Objective 02',
-    vision_about_goal_03: 'Objective 03',
+    vision_about_goal_01: 'Goal 01',
+    vision_about_goal_02: 'Goal 02',
+    vision_about_goal_03: 'Goal 03',
     vision_about_obj1_en: 'Ecosystem & Support',
-    vision_about_obj1_th: 'Create a learning ecosystem and support teachers.',
-    vision_about_obj1_desc: 'Design the curriculum and establish a mentorship system to provide in-depth guidance.',
+    vision_about_obj1_th: 'Create a Learning Ecosystem and Support Teachers',
+    vision_about_obj1_desc: 'Design curricula and establish a Mentorship system to provide in-depth consultation.',
     vision_about_obj2_en: 'Network & Community',
-    vision_about_obj2_th: 'Expand networks and spaces for knowledge exchange and learning.',
-    vision_about_obj2_desc: 'Establish Communities of Practice (EAR Community – EARC) nationwide and organize knowledge-sharing forums to foster inspiration.',
+    vision_about_obj2_th: 'Expand Networks and Learning Exchange Spaces',
+    vision_about_obj2_desc: 'Establish CoP (EAR Community - EARC) spaces nationwide and organize learning exchange forums to inspire.',
     vision_about_obj3_en: 'Sustainability & Impact',
-    vision_about_obj3_th: 'Driving Sustainability and Adoption',
-    vision_about_obj3_desc: 'Develop a knowledge repository based on best practices and genuinely foster a research culture within the educational institution.',
+    vision_about_obj3_th: 'Drive Sustainability and Implementation',
+    vision_about_obj3_desc: 'Create a knowledge repository from Best Practices and push for a genuine research culture in educational institutions.',
+
+    vision_about_vision_headline: 'Vision',
+    vision_about_mission_headline: 'Mission',
+    vision_about_core_objectives_headline: 'Core Objectives',
+
+    vision_about_tren_desc_1: 'is a research network driven by the power of teachers. We are committed to elevating the potential of Thai teachers to solve classroom problems directly and independently through classroom research called Exploratory Action Research (EAR), which emphasizes using actual data and evidence from the classroom to improve teaching and learning.',
+    vision_about_channels_title: 'Learning Channels and Participation',
+    vision_about_target_general: 'General Teachers:',
+    vision_about_target_general_desc: 'Can independently study the concepts and processes of EAR research through the knowledge repository on this website.',
+    vision_about_target_selected: 'Selected Teachers for Training:',
+    vision_about_target_selected_desc: 'Will learn the research process step-by-step intensively, with a "Research Mentor" providing guidance and close supervision throughout the research.',
+    vision_about_tren_desc_2: 'TReN is a Community of Practice (CoP) that connects teachers across all 4 regions nationwide. We are ready to support and open spaces for teachers to develop professionally, exchange experiences, build friendships with fellow teachers, and join hands to develop Thai education in the future.',
+    vision_about_vision_subhead: ' ',
+    vision_about_mission_subhead: ' ',
+    vision_about_core_objectives_subhead: ' ',
     
     // Core Principles Page //
     principle_1_title: 'Truly driven by teachers, for teachers.',
@@ -1336,6 +1430,69 @@ const translations = {
     journey_phase_future: 'Expanding Outcomes for National Sustainability',
     journey_desc_5_1: 'Expanding the EAR research process to teachers nationwide through the TReN network, while conducting an Impact Analysis to concretely measure the changes that occur in teachers, classrooms, students, and communities.',
   
+    journey_intro_desc_new: 'From the Beginning to a National Research Network (2022 - Present)',
+    
+    // Phase 1: The Origin (2022)
+    journey_year_1_title_new: '2022',
+    journey_phase_1_new: 'The Origin',
+    journey_tren_brand: 'TReN',
+    journey_desc_1_1_new: 'Originated from the collaboration between British Council Thailand and the School of Liberal Arts, King Mongkut\'s University of Technology Thonburi (KMUTT), aimed at equipping in-service teachers with the ability to analyze and solve classroom problems on their own. Because the context of each classroom is different, waiting for external assistance or making problem-solving decisions based on personal feelings is unsustainable.',
+    journey_key_takeaway_new: 'Evidence-based decision',
+    journey_desc_1_2_new: 'The project therefore promotes the principle of making decisions based on evidence through the Exploratory Action Research (EAR) process, so that teachers can solve problems precisely and in accordance with the professional development criteria of the OTEPC.',
+
+    // Phase 2: Year 1 (2022)
+    journey_year_2_title_new: 'Year 1: 2022',
+    journey_phase_2_new: 'Igniting and Laying the Foundation',
+    journey_desc_2_1_new: 'Bringing the global EAR research model of Prof. Dr. Richard Smith (University of Warwick) and Dr. Paula Rebolledo to train the first cohort of 21 English teachers, with international experts and mentors providing close supervision. Having these supporting mentors is considered the heart of success, as Dr. Suwimon Wongwanich interestingly reflected:',
+    journey_quote_new: '"The various processes used in conducting research are unfamiliar to teachers, difficult to understand, and require practice under the guidance of mentors who consistently understand research methodologies..."',
+    journey_quote_author_new: '— (Suwimon Wongwanich, 2007, p. 6)',
+    journey_desc_2_2_new: 'Upon completing the project, teachers not only had a better attitude towards conducting research, but they were also able to solve classroom problems directly, while building stronger relationships with their students (Dersingh & Vuong, 2023).',
+
+    // Phase 3: Year 2 - 4 (2023 – 2025)
+    journey_year_3_title_new: 'Year 2 – 4: 2023 – 2025',
+    journey_phase_3_new: 'Incubating Leaders to 40 Provinces',
+    journey_desc_3_1_new: 'To build sustainability and reduce reliance on foreign experts, the project selected teachers from the first cohort to be further developed into ',
+    journey_mentor_role: '"Teacher-Research Mentors"',
+    journey_desc_3_2_new: ' and was honored by Prof. Dr. Richard Smith who directly transferred the body of knowledge, until this group of core mentors could expand their results by providing consultation to fellow teachers, covering up to 40 provinces nationwide.',
+
+    // Phase 4: Year 5 - 6 (2026 Onwards)
+    journey_year_4_title_new: 'Year 5 - 6 Onwards: 2026 Onwards',
+    journey_phase_4_new: 'Founding TReN and Expanding Nationwide',
+    journey_desc_4_1_new: 'The strength of the group of research teachers and mentors nationwide led to the founding of ',
+    journey_tren_network: 'the TReN (Teacher-Research Network)',
+    journey_desc_4_2_new: ' officially, driven through regional Communities of Practice (EART Communities: EARC) divided into 8 zones nationwide, alongside elevating mentors to the Advanced Level so that each area can be self-reliant in the long term. This is accompanied by an aim to expand the EAR process to teachers nationwide and assess the in-depth impact sustainably.',
+
+    // Summary of Growth Figures (Table)
+    journey_table_main_title: 'Summary of the Network\'s Growth Figures',
+    journey_table_col1: 'Indicator',
+    journey_table_col1_en: '(Key Indicator)',
+    journey_table_col2: 'Success Figures',
+    journey_table_col3: 'Expansion Details',
+
+    // Table Stats
+    journey_stat_1_name: 'Developed In-service Teachers',
+    journey_stat_1_val: '280 Teachers',
+    journey_stat_1_desc: 'From the pilot cohort of 21 teachers to solving classroom problems with EAR nationwide',
+
+    journey_stat_2_name: 'Research Mentors',
+    journey_stat_2_en: '(Mentors)',
+    journey_stat_2_val: '50 Mentors',
+    journey_stat_2_desc: 'Incubated from the first cohort of core teachers to experts who continually support fellow teachers',
+
+    journey_stat_3_name: 'Working Areas',
+    journey_stat_3_val: '40 Provinces',
+    journey_stat_3_desc: 'Distributing learning and care networks thoroughly across all regions',
+
+    journey_stat_4_name: 'Communities of Practice',
+    journey_stat_4_en: '(EARCs)',
+    journey_stat_4_val: '8 Zones',
+    journey_stat_4_desc: 'Elevating area-based networks to be sustainably self-reliant',
+
+    // Table References
+    journey_ref_author: '* Suwimon Wongwanich. (2007).',
+    journey_ref_book: 'Classroom Action Research',
+    journey_ref_pub: '(Xth Edition). Chulalongkorn University Press.',
+
     // Core Role & Missions Page //
     role_main_title: 'Core Roles and Missions',
     role_subtitle: 'TReN Core Roles & Missions',

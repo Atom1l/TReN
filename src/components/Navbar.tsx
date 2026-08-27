@@ -185,6 +185,8 @@ const Navbar = () => {
     );
   };
 
+  // ภายในไฟล์ Navbar.tsx ตรงบรรทัดที่ประกาศ menuItems
+
   const menuItems = [
     { name: t('home') || 'Home', path: '/' },
     { name: t('news') || 'News', path: '/news' },
@@ -202,15 +204,16 @@ const Navbar = () => {
     { name: t('showcases') || 'Showcases', path: '/showcases' },
     { 
       name: t('about') || 'About us', 
-      path: '#', 
+      path: '/about', // ลิงก์หลักไปที่หน้า AboutPage
       dropdown: [
-        { name: t('vision_mission_objectives_about_us') || 'วิสัยทัศน์ พันธกิจและเป้าหมายหลัก', path: '/about/vision-mission-objectives' },
-        { name: t('core_principles_about_us') || 'หลักการดำเนินงาน 5 ข้อ', path: '/about/core-principles' },
-        { name: t('tren_journey_about_us') || 'เส้นทางการเติบโตของ TReN', path: '/about/tren-journey' },
-        { name: t('core_role_about_us') || 'บทบาทและภารกิจหลักของ TReN', path: '/about/core-role' },
-        { name: t('organization_about_us') || 'โครงสร้างเครือข่าย', path: '/about/organization' },
-        { name: t('governance_about_us') || 'กรอบการทำงาน', path: '/about/governance' },
-        { name: t('supporter_about_us') || 'องค์กรพันธมิตรและผู้สนับสนุน', path: '/about/supporter' },
+        // เปลี่ยน Path ให้เป็น Hash (#)
+        { name: t('vision_mission_objectives_about_us') || 'วิสัยทัศน์ พันธกิจและเป้าหมายหลัก', path: '/about#about-intro' },
+        { name: t('core_principles_about_us') || 'หลักการดำเนินงาน 5 ข้อ', path: '/about#about-core-principles' },
+        { name: t('tren_journey_about_us') || 'เส้นทางการเติบโตของ TReN', path: '/about#about-journey' },
+        { name: t('core_role_about_us') || 'บทบาทและภารกิจหลักของ TReN', path: '/about#about-core-role' },
+        { name: t('organization_about_us') || 'โครงสร้างเครือข่าย', path: '/about#about-organization' }, // สมมติว่ามีหน้านี้
+        { name: t('governance_about_us') || 'กรอบการทำงาน', path: '/about#about-governance' },
+        { name: t('supporter_about_us') || 'องค์กรพันธมิตรและผู้สนับสนุน', path: '/about#about-supporters' },
       ]
     },
   ];
