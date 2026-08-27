@@ -32,7 +32,7 @@ const translations = {
     blogs: 'บล็อกบทความ',
     resources: 'คลังความรู้ EAR',
     showcases: 'ผลงานเด่น',
-    about: 'เกี่ยวกับเรา',
+    about: 'เกี่ยวกับ TReN',
     about_us_tab_placeholder: 'เกี่ยวกับ TReN',
 
     // Password Update Page //
@@ -61,7 +61,7 @@ const translations = {
     timeline_about_us: 'ไทมไลน์ TReN',
 
     history_of_ear_about_us: 'ประวัติ EAR',
-    organization_about_us: 'องค์กรของเรา',
+    organization_about_us: 'โครงสร้างองค์กร',
     mission_about_us: 'ภารกิจของเรา',
     what_is_tren_about_us: 'TReN คืออะไร',
     ear_team_about_us: 'ทีม EAR',
@@ -826,7 +826,7 @@ const translations = {
     blogs: 'Blogs',
     resources: 'EAR Resources',
     showcases: 'Showcases',
-    about: 'About Us',
+    about: 'About TReN',
 
     // Navbar Dropdown 
     profile: 'Profile',

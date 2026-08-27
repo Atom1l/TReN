@@ -144,7 +144,6 @@ const Navbar = () => {
       clearTimeout(fallbackTimeout);
       window.removeEventListener('profileUpdated', handleProfileUpdate);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
   useEffect(() => {
@@ -185,8 +184,6 @@ const Navbar = () => {
     );
   };
 
-  // ภายในไฟล์ Navbar.tsx ตรงบรรทัดที่ประกาศ menuItems
-
   const menuItems = [
     { name: t('home') || 'Home', path: '/' },
     { name: t('news') || 'News', path: '/news' },
@@ -204,14 +201,13 @@ const Navbar = () => {
     { name: t('showcases') || 'Showcases', path: '/showcases' },
     { 
       name: t('about') || 'About us', 
-      path: '/about', // ลิงก์หลักไปที่หน้า AboutPage
+      path: '/about',
       dropdown: [
-        // เปลี่ยน Path ให้เป็น Hash (#)
         { name: t('vision_mission_objectives_about_us') || 'วิสัยทัศน์ พันธกิจและเป้าหมายหลัก', path: '/about#about-intro' },
         { name: t('core_principles_about_us') || 'หลักการดำเนินงาน 5 ข้อ', path: '/about#about-core-principles' },
         { name: t('tren_journey_about_us') || 'เส้นทางการเติบโตของ TReN', path: '/about#about-journey' },
         { name: t('core_role_about_us') || 'บทบาทและภารกิจหลักของ TReN', path: '/about#about-core-role' },
-        { name: t('organization_about_us') || 'โครงสร้างเครือข่าย', path: '/about#about-organization' }, // สมมติว่ามีหน้านี้
+        { name: t('organization_about_us') || 'โครงสร้างเครือข่าย', path: '/about#about-organization' },
         { name: t('governance_about_us') || 'กรอบการทำงาน', path: '/about#about-governance' },
         { name: t('supporter_about_us') || 'องค์กรพันธมิตรและผู้สนับสนุน', path: '/about#about-supporters' },
       ]
@@ -221,24 +217,25 @@ const Navbar = () => {
   return (
     <>
       <nav className="z-50 font-sans top-0 left-0 w-full bg-white backdrop-blur-md border-b border-slate-200 drop-shadow-sm sticky">
-        <div className="w-full px-4 lg:px-10 xl:px-14 h-20 flex items-center justify-between">
+        <div className="w-full px-4 lg:px-6 xl:px-14 h-20 flex items-center justify-between">
           
           <div className="flex items-center gap-2 cursor-pointer flex-shrink-0">
-            <Link to="/" className="pt-1.5 lg:pt-0 text-4xl font-black text-primary tracking-tighter hover:opacity-80 transition-opacity">
+            <Link to="/" className="pt-1.5 lg:pt-0 text-3xl xl:text-4xl font-black text-primary tracking-tighter hover:opacity-80 transition-opacity">
               TReN
             </Link>
           </div>
 
-          <div className="flex items-center ml-auto lg:gap-8 xl:gap-12 gap-2">
+          <div className="flex items-center ml-auto xl:gap-8 2xl:gap-12 gap-2">
             
-            <div className="hidden lg:flex items-center gap-2 xl:gap-6 pt-2">
+            {/* เปลี่ยนจุดซ่อนเมนูจาก lg:flex เป็น xl:flex */}
+            <div className="hidden xl:flex items-center gap-2 2xl:gap-6 pt-2">
               {menuItems.map((menu) => {
                 const isActive = location.pathname === menu.path;
                 return (
-                  <div key={menu.name} className="relative group py-6 px-2">
+                  <div key={menu.name} className="relative group py-6 px-1 xl:px-2">
                     <Link 
                       to={menu.path}
-                      className={`text-lg xl:text-xl transition-colors whitespace-nowrap flex items-center gap-1 ${
+                      className={`text-[1.05rem] xl:text-[1.15rem] 2xl:text-xl transition-colors whitespace-nowrap flex items-center gap-1 ${
                         isActive ? 'text-primary font-bold' : 'text-dark font-medium hover:text-primary'
                       }`}
                     >
@@ -272,20 +269,21 @@ const Navbar = () => {
               
               <Link to="/search" className="cursor-pointer">
                 <button className={`p-2 text-primary hover:bg-slate-100 rounded-full transition-all active:scale-90 group cursor-pointer`} title="Search">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-7 h-7">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 xl:w-7 xl:h-7">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                   </svg>
                 </button>
               </Link>
 
-              <div className="hidden lg:flex items-center">
+              {/* เปลี่ยนจุดซ่อนปุ่ม User/Login จาก lg:flex เป็น xl:flex */}
+              <div className="hidden xl:flex items-center">
                 {isAuthLoading ? (
                   <div className="w-[115px] h-[40px] bg-slate-100 animate-pulse rounded-lg"></div>
                 ) : user && userData ? (
                   <div className="relative ml-4 xl:ml-8" ref={dropdownRef}>
                     <button 
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                      className="w-11 h-11 bg-primary hover:bg-secondary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md transition-transform active:scale-95 flex-shrink-0 overflow-hidden cursor-pointer"
+                      className="w-10 h-10 xl:w-11 xl:h-11 bg-primary hover:bg-secondary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md transition-transform active:scale-95 flex-shrink-0 overflow-hidden cursor-pointer"
                     >
                       {userData.profilepic ? (
                         <img src={userData.profilepic} alt="Profile" className="w-full h-full object-cover" />
@@ -329,15 +327,15 @@ const Navbar = () => {
                 ) : (
                   <button
                     onClick={() => setIsLoginModalOpen(true)}
-                    className="ml-4 xl:ml-8 bg-primary hover:bg-secondary text-white px-6 py-2 font-medium transition-all active:scale-95 shadow-md shadow-primary/10 rounded-lg flex-shrink-0 cursor-pointer">
+                    className="ml-4 xl:ml-8 bg-primary hover:bg-secondary text-white px-5 py-2 xl:px-6 xl:py-2 text-sm xl:text-base font-medium transition-all active:scale-95 shadow-md shadow-primary/10 rounded-lg flex-shrink-0 cursor-pointer">
                     Join TReN
                   </button>
                 )}
               </div>
 
-              {/* Mobile Hamburger Button */}
+              {/* Mobile Hamburger Button: เปลี่ยนจุดแสดงเป็น xl:hidden แทน lg:hidden */}
               <button 
-                className="lg:hidden p-2 text-primary hover:bg-slate-100 rounded-lg transition-colors ml-2 flex-shrink-0 cursor-pointer"
+                className="xl:hidden p-2 text-primary hover:bg-slate-100 rounded-lg transition-colors ml-2 flex-shrink-0 cursor-pointer"
                 onClick={() => setIsMobileMenuOpen(true)}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
@@ -355,9 +353,9 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Sidebar Overlay*/}
+      {/* Mobile Sidebar Overlay: เปลี่ยนเป็น xl:hidden ด้วย */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[100] flex lg:hidden">
+        <div className="fixed inset-0 z-[100] flex xl:hidden">
           <div 
             className="w-1/3 bg-black/40 backdrop-blur-sm relative"
             onClick={() => setIsMobileMenuOpen(false)}
@@ -420,7 +418,6 @@ const Navbar = () => {
                 return (
                   <div key={menu.name} className="flex flex-col">
                     <div className="flex justify-between items-center relative pr-4">
-                      {/* แก้ไขตรงนี้: ถัามี dropdown ให้ปุ่มหลักทำหน้าที่ toggle ด้วย */}
                       {menu.dropdown ? (
                         <button
                           onClick={(e) => toggleMobileMenu(menu.name, e)}
