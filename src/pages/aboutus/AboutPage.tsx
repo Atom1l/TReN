@@ -5,8 +5,7 @@ import { useLocation } from 'react-router-dom';
 import AboutVisionMission from './AboutVisionMission';
 import AboutCorePrinciples from './AboutCorePrinciples';
 import AboutMembership from './AboutMembership';
-import AboutGovernance from './AboutGovernance'; // สำหรับหมวด 3 โครงสร้างเครือข่าย
-import AboutOperations from './AboutOperation'; // สำหรับหมวด 4 ขอบเขตการดำเนินงาน
+import AboutOperations from './AboutOperation';
 import AboutMeetings from './AboutMeeting';
 import AboutFinancesAndRules from './AboutFinancesandRules';
 import AboutTrenJourney from './AboutTrenJourney';

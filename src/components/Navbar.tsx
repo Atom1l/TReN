@@ -24,7 +24,12 @@ const Navbar = () => {
   
   const [expandedMobileMenus, setExpandedMobileMenus] = useState<string[]>([]);
   
+  // สถานะสำหรับดักจับ Touch Device บนจอ Desktop
+  const [forceOpenDropdown, setForceOpenDropdown] = useState<string | null>(null);
+  const [forceOpenSubDropdown, setForceOpenSubDropdown] = useState<string | null>(null);
+  
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const desktopNavRef = useRef<HTMLDivElement>(null); // สำหรับดักการคลิกนอกเมนู Desktop
 
   const location = useLocation(); 
   const navigate = useNavigate(); 
@@ -150,14 +155,25 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
   
+  // จัดการการคลิกหรือสัมผัสนอกพื้นที่เมนู
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      // ปิดเมนู Profile
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
       }
+      // ปิดเมนู Desktop Dropdown
+      if (desktopNavRef.current && !desktopNavRef.current.contains(event.target as Node)) {
+        setForceOpenDropdown(null);
+        setForceOpenSubDropdown(null);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside); // ดักจับ Touch บน iPad ด้วย
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, []);
 
   useEffect(() => {
@@ -182,6 +198,34 @@ const Navbar = () => {
     setExpandedMobileMenus(prev => 
       prev.includes(menuName) ? prev.filter(n => n !== menuName) : [...prev, menuName]
     );
+  };
+
+  // ฟังก์ชันดักจับการแตะสำหรับหน้าจอ Desktop (Touch Devices)
+  const handleDesktopMenuClick = (e: React.MouseEvent, menuName: string, hasDropdown: boolean) => {
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (hasDropdown && isTouchDevice) {
+      if (forceOpenDropdown !== menuName) {
+        e.preventDefault(); // หยุดการเปลี่ยนหน้า
+        setForceOpenDropdown(menuName); // กางเมนู
+        setForceOpenSubDropdown(null); // รีเซ็ตเมนูย่อย
+      }
+    } else {
+      setForceOpenDropdown(null);
+      setForceOpenSubDropdown(null);
+    }
+  };
+
+  const handleDesktopSubMenuClick = (e: React.MouseEvent, subName: string, hasSubDropdown: boolean) => {
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (hasSubDropdown && isTouchDevice) {
+      if (forceOpenSubDropdown !== subName) {
+        e.preventDefault();
+        setForceOpenSubDropdown(subName);
+      }
+    } else {
+      setForceOpenDropdown(null);
+      setForceOpenSubDropdown(null);
+    }
   };
 
   const menuItems = [
@@ -212,7 +256,7 @@ const Navbar = () => {
             { name: t('nav_about_1_3') || 'หมวดที่ 3: ขอบเขตการดำเนินงานและโครงการหลัก', path: '/about#operations' },
             { name: t('nav_about_1_4') || 'หมวดที่ 4: โครงสร้างเครือข่ายและการบริหารงาน', path: '/about#governance-structure' },
             { name: t('nav_about_1_5') || 'หมวดที่ 5: การประชุมและการดำเนินงาน (Meetings)', path: '/about#meetings' },
-            { name: t('nav_about_1_6') || 'หมวดที่ 6: การเงิน ทรัพย์สิน และการแก้ไขข้อตกลง (Finances, Intellectual Property & Amendments)', path: '/about#finances' },
+            { name: t('nav_about_1_6') || 'หมวดที่ 6: การเงิน ทรัพย์สิน และการแก้ไขข้อตกลง', path: '/about#finances' },
           ]
         },
         { name: t('nav_about_2') || '2. เส้นทางการเจริญเติบโต / TReN Journey', path: '/about#journey' },
@@ -225,46 +269,53 @@ const Navbar = () => {
   return (
     <>
       <nav className="z-50 font-sans top-0 left-0 w-full bg-white backdrop-blur-md border-b border-slate-200 drop-shadow-sm sticky">
-        <div className="w-full px-4 lg:px-6 xl:px-14 h-20 flex items-center justify-between">
+        <div className="w-full px-4 lg:px-4 xl:px-10 2xl:px-14 h-20 flex items-center justify-between">
           
           <div className="flex items-center gap-2 cursor-pointer flex-shrink-0">
-            <Link to="/" className="pt-1.5 lg:pt-0 text-3xl xl:text-4xl font-black text-primary tracking-tighter hover:opacity-80 transition-opacity">
+            <Link to="/" className="pt-1.5 lg:pt-0 text-3xl lg:text-3xl xl:text-4xl font-black text-primary tracking-tighter hover:opacity-80 transition-opacity">
               TReN
             </Link>
           </div>
 
-          <div className="flex items-center ml-auto xl:gap-8 2xl:gap-12 gap-2">
+          <div className="flex items-center ml-auto lg:gap-2 xl:gap-8 2xl:gap-12 gap-2">
             
-            <div className="hidden xl:flex items-center gap-2 2xl:gap-6 pt-2">
+            {/* Desktop Menu */}
+            <div className="hidden lg:flex items-center gap-0 lg:gap-1 xl:gap-6 pt-2" ref={desktopNavRef}>
               {menuItems.map((menu) => {
                 const isActive = location.pathname === menu.path;
                 return (
-                  <div key={menu.name} className="relative group py-6 px-1 xl:px-2">
+                  <div key={menu.name} className="relative group py-6 px-1 lg:px-1.5 xl:px-2">
                     <Link 
                       to={menu.path}
-                      className={`text-[1.05rem] xl:text-[1.15rem] 2xl:text-xl transition-colors whitespace-nowrap flex items-center gap-1 ${
+                      onClick={(e) => handleDesktopMenuClick(e, menu.name, !!menu.dropdown)}
+                      className={`text-[0.95rem] lg:text-[0.9rem] xl:text-[1.1rem] 2xl:text-xl transition-colors whitespace-nowrap flex items-center gap-0.5 lg:gap-1 ${
                         isActive ? 'text-primary font-bold' : 'text-dark font-medium hover:text-primary'
                       }`}
                     >
                       {menu.name}
                       {menu.dropdown && (
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 mt-0.5 transition-transform group-hover:rotate-180">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 lg:w-4 lg:h-4 mt-0.5 transition-transform lg:group-hover:rotate-180">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                         </svg>
                       )}
                     </Link>
 
                     {menu.dropdown && (
-                      <div className="absolute top-[80%] left-1/2 -translate-x-1/2 mt-2 w-[24rem] bg-white border border-slate-100 shadow-xl rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform group-hover:translate-y-0 translate-y-2 py-2">
+                      <div className={`absolute top-[80%] left-1/2 -translate-x-1/2 mt-2 w-[24rem] bg-white border border-slate-100 shadow-xl rounded-2xl transition-all duration-300 z-50 transform py-2 ${
+                        forceOpenDropdown === menu.name
+                          ? 'opacity-100 visible translate-y-0'
+                          : 'opacity-0 invisible translate-y-2 lg:group-hover:opacity-100 lg:group-hover:visible lg:group-hover:translate-y-0'
+                      }`}>
                         {menu.dropdown.map(sub => (
                           <div key={sub.name} className="relative group/sub">
                             <Link 
                               to={sub.path} 
+                              onClick={(e) => handleDesktopSubMenuClick(e, sub.name, !!sub.subDropdown)}
                               className="w-full text-left flex items-center justify-between px-5 py-3.5 text-[1rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium border-b border-slate-50 last:border-0 whitespace-normal leading-relaxed"
                             >
                               <span>{sub.name}</span>
                               {sub.subDropdown && (
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-3 flex-shrink-0 text-slate-400 group-hover/sub:text-[#1e3a8a]" viewBox="0 0 20 20" fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-3 flex-shrink-0 text-slate-400 lg:group-hover/sub:text-[#1e3a8a]" viewBox="0 0 20 20" fill="currentColor">
                                   <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                                 </svg>
                               )}
@@ -272,11 +323,16 @@ const Navbar = () => {
 
                             {/* Nested Sub Dropdown */}
                             {sub.subDropdown && (
-                              <div className="absolute top-0 right-full mr-1 w-[26rem] bg-white border border-slate-100 shadow-xl rounded-2xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 z-50 transform group-hover/sub:-translate-x-0 translate-x-2 py-2">
+                              <div className={`absolute top-0 right-full mr-1 w-[26rem] bg-white border border-slate-100 shadow-xl rounded-2xl transition-all duration-300 z-50 transform py-2 ${
+                                forceOpenSubDropdown === sub.name
+                                  ? 'opacity-100 visible translate-x-0'
+                                  : 'opacity-0 invisible translate-x-2 lg:group-hover/sub:opacity-100 lg:group-hover/sub:visible lg:group-hover/sub:translate-x-0'
+                              }`}>
                                 {sub.subDropdown.map(nested => (
                                   <Link 
                                     key={nested.name} 
                                     to={nested.path} 
+                                    onClick={() => { setForceOpenDropdown(null); setForceOpenSubDropdown(null); }}
                                     className="block px-5 py-3 text-[0.95rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium border-b border-slate-50 last:border-0 whitespace-normal leading-relaxed"
                                   >
                                     {nested.name}
@@ -297,20 +353,20 @@ const Navbar = () => {
               
               <Link to="/search" className="cursor-pointer">
                 <button className={`p-2 text-primary hover:bg-slate-100 rounded-full transition-all active:scale-90 group cursor-pointer`} title="Search">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 xl:w-7 xl:h-7">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 lg:w-5 lg:h-5 xl:w-7 xl:h-7">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                   </svg>
                 </button>
               </Link>
 
-              <div className="hidden xl:flex items-center">
+              <div className="hidden lg:flex items-center">
                 {isAuthLoading ? (
-                  <div className="w-[115px] h-[40px] bg-slate-100 animate-pulse rounded-lg"></div>
+                  <div className="w-[85px] lg:w-[95px] xl:w-[115px] h-[36px] lg:h-[38px] xl:h-[40px] bg-slate-100 animate-pulse rounded-lg"></div>
                 ) : user && userData ? (
-                  <div className="relative ml-4 xl:ml-8" ref={dropdownRef}>
+                  <div className="relative ml-2 lg:ml-2 xl:ml-8" ref={dropdownRef}>
                     <button 
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                      className="w-10 h-10 xl:w-11 xl:h-11 bg-primary hover:bg-secondary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md transition-transform active:scale-95 flex-shrink-0 overflow-hidden cursor-pointer"
+                      className="w-9 h-9 lg:w-10 lg:h-10 xl:w-11 xl:h-11 bg-primary hover:bg-secondary text-white rounded-full flex items-center justify-center font-bold text-base lg:text-lg shadow-md transition-transform active:scale-95 flex-shrink-0 overflow-hidden cursor-pointer"
                     >
                       {userData.profilepic ? (
                         <img src={userData.profilepic} alt="Profile" className="w-full h-full object-cover" />
@@ -354,14 +410,14 @@ const Navbar = () => {
                 ) : (
                   <button
                     onClick={() => setIsLoginModalOpen(true)}
-                    className="ml-4 xl:ml-8 bg-primary hover:bg-secondary text-white px-5 py-2 xl:px-6 xl:py-2 text-sm xl:text-base font-medium transition-all active:scale-95 shadow-md shadow-primary/10 rounded-lg flex-shrink-0 cursor-pointer">
+                    className="ml-2 lg:ml-2 xl:ml-8 bg-primary hover:bg-secondary text-white px-3 py-1.5 lg:px-4 lg:py-1.5 xl:px-6 xl:py-2 text-sm lg:text-[0.85rem] xl:text-base font-medium transition-all active:scale-95 shadow-md shadow-primary/10 rounded-lg flex-shrink-0 cursor-pointer">
                     Join TReN
                   </button>
                 )}
               </div>
 
               <button 
-                className="xl:hidden p-2 text-primary hover:bg-slate-100 rounded-lg transition-colors ml-2 flex-shrink-0 cursor-pointer"
+                className="lg:hidden p-2 text-primary hover:bg-slate-100 rounded-lg transition-colors ml-2 flex-shrink-0 cursor-pointer"
                 onClick={() => setIsMobileMenuOpen(true)}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
@@ -381,7 +437,7 @@ const Navbar = () => {
 
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[100] flex xl:hidden">
+        <div className="fixed inset-0 z-[100] flex lg:hidden">
           <div 
             className="w-1/3 bg-black/40 backdrop-blur-sm relative"
             onClick={() => setIsMobileMenuOpen(false)}
