@@ -7,6 +7,7 @@ import { createContext, useState, useContext, type ReactNode } from 'react';
 const translations = {
   th: {
     translating: 'กำลังแปล...',
+    and:'และ',
 
     // Login Modal
     login_tab: 'เข้าสู่ระบบ',
@@ -565,19 +566,19 @@ const translations = {
     vision_about_tren_desc: 'เราคือ TReN (Teacher-Research Network) เครือข่ายวิจัยที่ขับเคลื่อนโดยพลังของครู เพื่อแก้ปัญหาในชั้นเรียนด้วยตัวเอง เรามุ่งมั่นพัฒนาทักษะการวิจัยผ่านกระบวนการ Exploratory Action Research (EAR) สร้างชุมชนนักปฏิบัติ (CoP) หรือ EAR Community (EARC) ทั้ง 4 ภูมิภาคทั่วประเทศ และพัฒนาระบบพี่เลี้ยง (Mentorship) เพื่อสร้างระบบนิเวศการเรียนรู้ที่ยั่งยืน เปลี่ยนการแก้ปัญหาในห้องเรียนให้เป็นการวิจัยที่ตอบโจทย์ และยกระดับผลสัมฤทธิ์ของผู้เรียนอย่างแท้จริง',
 
     vision_about_vision: 'วิสัยทัศน์',
-    vision_about_vision_desc: '"มุ่งเป็นเครือข่ายวิจัยในชั้นเรียนระดับชาติ ที่ขับเคลื่อนให้ครูไทยใช้กระบวนการวิจัย Exploratory Action Research (EAR) พัฒนาการเรียนการสอนได้ด้วยตนเองอย่างยั่งยืน และเติบโตไปด้วยกันอย่างเข้มแข็ง"',
+    vision_about_vision_desc: 'มุ่งเป็นพื้นที่เรียนรู้ร่วมกันของครูไทยทั่วประเทศ ที่สนับสนุนให้ครูใช้การวิจัยปฏิบัติการเชิงสำรวจ (Exploratory Action Research: EAR) เป็นเครื่องมือพัฒนาการเรียนการสอนได้ด้วยตนเองอย่างยั่งยืน',
 
     vision_about_mission: 'พันธกิจ',
     vision_about_mission_subtitle: 'สิ่งที่เรามุ่งมั่นลงมือทำเพื่อขับเคลื่อนการศึกษา',
     vision_about_empowerment: 'พัฒนาทักษะ',
     vision_about_empowerment_en: 'Empowerment',
-    vision_about_empowerment_desc: 'ส่งเสริมความรู้ความเข้าใจและทักษะการทำ Exploratory Action Research (EAR) เพื่อให้ครูสามารถนำไปใช้แก้ปัญหาในห้องเรียนได้จริง',
+    vision_about_empowerment_desc: 'ส่งเสริมความรู้ ทักษะ และเจตคติเชิงบวกในการทำวิจัย EAR ให้ครูแก้ปัญหาในห้องเรียนได้ตรงจุดด้วยตนเอง พร้อมส่งเสริมครูรุ่นพี่ให้เติบโตเป็น "ครูพี่เลี้ยงวิจัย" ให้คำปรึกษาเพื่อนครูร่วมวิชาชีพได้อย่างมีประสิทธิภาพ',
     vision_about_community: 'สร้างเครือข่าย',
     vision_about_community_en: 'Community',
-    vision_about_community_desc: 'ขยายชุมชนนักปฏิบัติ (CoP) หรือ EAR Community (EARC) ทั่วประเทศ เพื่อเป็นพื้นที่แลกเปลี่ยนเรียนรู้ร่วมกัน',
+    vision_about_community_desc: 'ขับเคลื่อนศูนย์ EAR Community (EARC) ทั่วประเทศ ให้เป็นฐานการพัฒนาและพื้นที่ปลอดภัย สำหรับครูได้ปรึกษาและเรียนรู้ร่วมกัน น',
     vision_about_sustainability: 'สร้างความยั่งยืน',
     vision_about_sustainability_en: 'Sustainability',
-    vision_about_sustainability_desc: 'พัฒนาระบบพี่เลี้ยงและยกระดับศักยภาพของครู เพื่อให้การจัดการเรียนรู้และการทำวิจัยในห้องเรียนขับเคลื่อนได้อย่างต่อเนื่องและยั่งยืน',
+    vision_about_sustainability_desc: 'พัฒนาระบบครูพี่เลี้ยงวิจัย (Mentorship) แบบกัลยาณมิตร เพื่อให้เกิดการดูแลและส่งต่อความรู้ระหว่างเพื่อนร่วมวิชาชีพอย่างต่อเนื่อง',
 
     vision_about_core_objectives: 'ภารกิจหลัก',
     vision_about_goal_01: 'เป้าหมายที่ 01',
@@ -610,21 +611,21 @@ const translations = {
 
 
     // Core Principles Page //
-    principle_1_title: 'ขับเคลื่อนโดยครู เพื่อครูอย่างแท้จริง',
-    principle_1_en: '(Teacher-Led)',
-    principle_1_desc: 'บริหารและนำโดยครูโรงเรียนเป็นหลัก ทุกการตัดสินใจเกิดจากความต้องการจริง ปราศจากการสั่งการแบบ Top-down',
-    principle_2_title: 'เน้นชุมชนและความร่วมมือ',
-    principle_2_en: '(Collaboration)',
-    principle_2_desc: 'เป็นชุมชนแห่งการเรียนรู้ (CoP / EARC) ที่สมาชิกพร้อมแบ่งปันและช่วยเหลือเกื้อกูลกันแบบกัลยาณมิตร เพื่อเติบโตไปด้วยกัน',
-    principle_3_title: 'มุ่งเน้นห้องเรียนและผลลัพธ์ของผู้เรียน',
-    principle_3_en: '(Classroom-Based)',
-    principle_3_desc: 'งานวิจัย EAR เริ่มจากปัญหาจริง และปลายทางสร้างการเปลี่ยนแปลงเชิงบวกให้แก่ผู้เรียนโดยไม่เน้นสะสมเอกสารวิชาการ',
-    principle_4_title: 'เปิดใจกว้างและเรียนรู้ร่วมกัน',
-    principle_4_en: '(Open & Reflective)',
-    principle_4_desc: 'สร้าง "พื้นที่ปลอดภัย (Safe Space)" ให้ครูกล้าพูดคุยถึงปัญหา หรือความผิดพลาดในชั้นเรียนเพื่อหาทางออกโดยไม่ถูกตัดสิน พร้อมเปิดรับครูจากทุกสังกัด',
-    principle_5_title: 'ส่งต่อความยั่งยืน',
-    principle_5_en: '(Sustainable Mentorship)',
-    principle_5_desc: 'สร้างระบบส่งต่อความรู้เพื่อพัฒนาครูพี่เลี้ยงรุ่นใหม่ให้สืบสานเครือข่ายอย่างยั่งยืน',
+    principle_1_title: 'ขับเคลื่อนโดยครู เพื่อครู',
+    principle_1_en: 'Teacher-Led',
+    principle_1_desc: 'บริหารและตัดสินใจโดยครูเป็นหลัก ตามความต้องการจริงของพื้นที่ โดยปราศจากการสั่งการในลักษณะ Top-down',
+    principle_2_title: 'เน้นความร่วมมือแบบกัลยาณมิตร',
+    principle_2_en: 'Collaboration',
+    principle_2_desc: 'เกื้อกูลกันในฐานะเพื่อนร่วมวิชาชีพ พร้อมแบ่งปันประสบการณ์และเติบโตไปพร้อมกัน',
+    principle_3_title: 'มุ่งผลลัพธ์ที่ตัวผู้เรียน',
+    principle_3_en: 'Classroom-Based',
+    principle_3_desc: 'มุ่งแก้ปัญหาจริงในห้องเรียนและสร้างการเปลี่ยนแปลงให้ผู้เรียนเป็นหลัก ไม่สร้างภาระงานเอกสารวิชาการซ้ำซ้อน',
+    principle_4_title: 'เปิดใจและเรียนรู้ร่วมกัน',
+    principle_4_en: 'Open & Reflective',
+    principle_4_desc: 'สร้าง "พื้นที่ปลอดภัย" ให้ครูกล้าพูดคุยปัญหา ทบทวนตัวเอง (ทั้งความรู้สึก จุดแข็ง และความท้าทาย) และเรียนรู้จากความผิดพลาดร่วมกันโดยไม่โดนตัดสิน',
+    principle_5_title: 'สร้างระบบพี่เลี้ยงระดับภูมิภาคที่ยั่งยืน',
+    principle_5_en: 'Sustainable Mentorship',
+    principle_5_desc: 'บ่มเพาะครูพี่เลี้ยง EAR Mentor และ Trainer ในแต่ละภูมิภาค ให้ดูแล จัดกิจกรรม และให้คำปรึกษาแก่เพื่อนครูในท้องถิ่นได้อย่างเข้มแข็งและยืดหยุ่น',
 
     about_principles_main: 'หลักการดำเนินงาน 5 ข้อ',
     about_principles_count: '5 ข้อ',
@@ -664,13 +665,20 @@ const translations = {
     journey_desc_5_1: 'ขยายผลกระบวนการวิจัย EAR สู่ครูทั่วประเทศผ่านเครือข่าย TReN พร้อมทั้งประเมินผลกระทบเชิงลึก (Impact Analysis) เพื่อวัดการเปลี่ยนแปลงที่เกิดขึ้นต่อตัวครู ห้องเรียน นักเรียน และชุมชนอย่างเป็นรูปธรรม',
 
     journey_intro_desc_new: 'จากจุดเริ่มต้นสู่เครือข่ายวิจัยระดับประเทศ (พ.ศ. 2565 - ปัจจุบัน)',
+
     // Phase 1: จุดกำเนิด (พ.ศ. 2565)
     journey_year_1_title_new: 'พ.ศ. 2565',
     journey_phase_1_new: 'จุดกำเนิด',
-    journey_tren_brand: 'TReN',
-    journey_desc_1_1_new: 'เกิดจากความร่วมมือระหว่าง British Council Thailand และ คณะศิลปศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี (มจธ.) ที่มุ่งติดอาวุธให้ครูประจำการสามารถวิเคราะห์และแก้ปัญหาในชั้นเรียนได้ด้วยตนเอง เพราะบริบทของแต่ละห้องเรียนมีความแตกต่างกัน การรอคอยความช่วยเหลือจากภายนอกหรือการตัดสินใจแก้ปัญหาด้วยความรู้สึกส่วนตัวจึงไม่ยั่งยืน',
-    journey_key_takeaway_new: 'Evidence-based decision',
-    journey_desc_1_2_new: 'โครงการจึงส่งเสริมหลักคิดการตัดสินใจบนพื้นฐานของประจักษ์พยาน ผ่านกระบวนการ Exploratory Action Research (EAR) เพื่อให้ครูแก้ปัญหาได้ตรงจุดและสอดคล้องกับเกณฑ์พัฒนาวิชาชีพของ ก.ค.ศ.',
+    journey_desc_1_1_p1: 'เครือข่าย TReN เกิดจากความร่วมมือระหว่าง ',
+    journey_desc_1_1_p2: ' และ ',
+    journey_desc_1_1_p3: ' ที่มุ่งติดอาวุธให้ครูประจำการสามารถวิเคราะห์และแก้ปัญหาในชั้นเรียนได้ด้วยตนเอง เนื่องจากบริบทของแต่ละห้องเรียนมีความแตกต่างกัน การรอคอยความช่วยเหลือจากภายนอก หรือการตัดสินใจแก้ปัญหาด้วยความรู้สึกส่วนตัวจึงไม่ยั่งยืน',
+    journey_desc_1_2_p1: 'โครงการจึงส่งเสริมหลักคิด ',
+    journey_desc_1_2_p2: ' (การตัดสินใจบนพื้นฐานของประจักษ์พยาน) ผ่านกระบวนการ ',
+    journey_desc_1_2_p3: ' เพื่อให้ครูแก้ปัญหาได้ตรงจุด และสอดคล้องกับเกณฑ์พัฒนาวิชาชีพของ ก.ค.ศ.',
+    journey_partner_1: 'British Council Thailand',
+    journey_partner_2: 'คณะศิลปศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี (มจธ.)',
+    journey_key_concept_1: 'Evidence-based decision',
+    journey_key_concept_2: 'Exploratory Action Research (EAR)',
 
     // Phase 2: ปีที่ 1 (พ.ศ. 2565)
     journey_year_2_title_new: 'ปีที่ 1: พ.ศ. 2565',
@@ -722,8 +730,8 @@ const translations = {
 
     // อ้างอิงท้ายตาราง
     journey_ref_author: '* สุวิมล ว่องวาณิช. (2550).',
-    journey_ref_book: 'การวิจัยปฏิบัติการในชั้นเรียน',
-    journey_ref_pub: '(พิมพ์ครั้งที่ X). สำนักพิมพ์แห่งจุฬาลงกรณ์มหาวิทยาลัย.',
+    journey_ref_book: 'การวิจัยปฏิบัติการในชั้นเรียน.',
+    journey_ref_pub: 'สำนักพิมพ์แห่งจุฬาลงกรณ์มหาวิทยาลัย.',
 
     // Core Role & Missions Page //
     role_main_title: 'บทบาทและภารกิจหลัก',
@@ -765,21 +773,231 @@ const translations = {
     governance_doc_desc: 'เอกสารกำหนดกรอบการทำงานของเครือข่าย TReN เพื่อให้เกิดความเข้าใจร่วมกันและสร้างความยั่งยืนในการดำเนินงาน',
     governance_btn_download: 'ดาวน์โหลดเอกสาร',
 
-    // Supporter Page //
-    sponsor_british_council: 'British Council ประเทศไทย',
-    sponsor_relo: 'Regional English Language Office (RELO) สถานเอกอัครราชทูตสหรัฐอเมริกา',
-    sponsor_kmutt: 'มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี (มจธ.)',
-    sponsor_earc: 'เครือข่ายชุมชนนักปฏิบัติ (EAR Community - EARC)',
-    sponsor_obec:'สำนักวิชาการและมาตรฐานการศึกษา สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน (สพฐ.) กระทรวงศึกษาธิการ',
-    sponsor_ptt: 'บริษัท ปตท. จำกัด (มหาชน)',
-    sponsor_eef: 'กองทุนเพื่อความเสมอภาคทางการศึกษา (กสศ.)',
-    sponsor_earc_desc: 'เครือข่ายครูนักวิจัยในชั้นเรียนที่เกิดขึ้นจากการรวมตัวของครูผู้เข้าร่วมโครงการ TReN ในแต่ละภูมิภาค เพื่อแลกเปลี่ยนเรียนรู้และสนับสนุนซึ่งกันและกัน',
-    
+    // Sponsors Page (TH)
     sponsors_main_title: 'องค์กรพันธมิตรและผู้สนับสนุน',
     sponsors_subtitle: 'Our Partners & Sponsors',
     sponsors_intro: 'ความสำเร็จและการเติบโตอย่างยั่งยืนของเครือข่าย TReN เกิดขึ้นได้ด้วยวิสัยทัศน์และการสนับสนุนอันทรงคุณค่าจากองค์กรพันธมิตรทุกภาคส่วน ที่ร่วมผสานพลังในการพัฒนาศักยภาพครูไทย และยกระดับคุณภาพการศึกษาอย่างต่อเนื่อง',
     sponsors_thank_you: 'ทางเครือข่าย TReN ขอขอบพระคุณองค์กรพันธมิตรทุกแห่งเป็นอย่างยิ่ง:',
     sponsors_outro: 'ทุกการสนับสนุนคือพลังสำคัญในการขับเคลื่อนครูไทยสู่การเป็นผู้นำการเปลี่ยนแปลง เพื่อส่งต่อการเรียนรู้ที่มีคุณภาพให้แก่นักเรียนทั่วประเทศ',
+
+    sponsor_british_council: 'British Council Thailand',
+    sponsor_obec: 'สำนักวิชาการและมาตรฐานการศึกษา สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน (สพฐ.) กระทรวงศึกษาธิการ',
+    sponsor_eef: 'กองทุนเพื่อความเสมอภาคทางการศึกษา (กสศ.)',
+    sponsor_ptt: 'บริษัท ปตท. จำกัด (มหาชน)',
+    sponsor_relo: 'Regional English Language Office (RELO) สถานเอกอัครราชทูตสหรัฐอเมริกา',
+    sponsor_kmutt: 'คณะศิลปศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี (มจธ.)',
+    sponsor_thailand_tesol: 'สมาคมครูผู้สอนภาษาอังกฤษแห่งประเทศไทย (Thailand TESOL)',
+
+    // Member Page //
+    membership_title: 'สมาชิกภาพ',
+    membership_en_title: 'Membership',
+    membership_desc: 'เพื่อเปิดโอกาสให้ครูทุกคนเข้าถึงการพัฒนาวิชาชีพ การสมัครสมาชิก TReN จึงไม่มีค่าใช้จ่ายใดๆ ทั้งสิ้น โดยแบ่งสมาชิกออกเป็น 2 ประเภท:',
+    membership_label_qual: 'คุณสมบัติ:',
+    membership_label_ben: 'สิทธิประโยชน์:',
+    membership_label_opp: 'โอกาสการเรียนรู้เพิ่มเติม:',
+    membership_type_1_title: 'สมาชิกทั่วไป',
+    membership_type_1_en: 'General Member',
+    membership_type_1_qual: 'ครูผู้สอนและผู้สนใจงานวิจัย EAR ทุกสังกัดทั่วประเทศ (รวมถึงผู้ที่ยังไม่เคยผ่านการอบรมเชิงลึก)',
+    membership_type_1_ben: 'เข้าใช้งานคลังความรู้ EAR ออนไลน์ รวมถึงเข้าร่วมฟังเสวนาหรือเวทีแลกเปลี่ยนเรียนรู้ได้ตลอดปีโดยไม่มีค่าใช้จ่าย',
+    membership_type_1_opp: 'สมาชิกทั่วไปที่สนใจเข้าร่วมการอบรมเชิงลึก สามารถติดตามประกาศและสมัครเข้าร่วมกระบวนการคัดเลือกผ่านช่องทางข่าวสารของเครือข่ายได้ตลอดทั้งปี',
+    membership_type_2_title: 'สมาชิกศิษย์เก่าและครูพี่เลี้ยง',
+    membership_type_2_en: 'Alumni & Mentor Member',
+    membership_type_2_qual: 'ครูผู้ผ่านการอบรมเชิงลึกตามหลักสูตร EAR กับทางเครือข่าย',
+    membership_type_2_ben: 'ได้รับสิทธิประโยชน์ของสมาชิกทั่วไปทั้งหมด พร้อมรับคำปรึกษาเชิงลึกจากครูพี่เลี้ยง มีสิทธิ์ส่งผลงานเข้าร่วมเวทีนำเสนอระดับชาติ/สากล และได้รับโอกาสพัฒนาตนเองก้าวสู่การเป็น "ครูพี่เลี้ยงวิจัย (EAR Mentor)" รุ่นต่อไป',    
+    
+    // Operation Page (TH) //
+    ops_title: 'ขอบเขตการดำเนินงานและโครงการหลัก',
+    ops_en_title: 'Key Operational Areas',
+    ops_desc: 'TReN ทำหน้าที่เป็น "ทีมสนับสนุนหลัก" เพื่อขับเคลื่อนและเสริมพลังให้ชุมชนวิจัยครู EARC ในทุกพื้นที่ โดยแบ่งเนื้องานหลักออกเป็น 4 ด้าน:',
+    ops_3_1_title: 'งานพัฒนาศักยภาพและระบบครูพี่เลี้ยงส่วนกลาง',
+    ops_3_1_en: 'Central Capacity & Mentoring',
+    ops_3_1_item_1_title: 'อบรมวิจัยครูระดับชาติ:',
+    ops_3_1_item_1_desc: 'จัดการอบรมการทำวิจัย EAR ออนไลน์ (ปีละ 1–2 ครั้ง) เน้นนำไปใช้ได้จริงในห้องเรียน ปลูกฝังเจตคติเชิงบวกต่อการทำวิจัย และขยายโอกาสให้ครูในพื้นที่ห่างไกล',
+    ops_3_1_item_2_title: 'พัฒนาครูพี่เลี้ยงวิจัย (Train the Trainer & Mentor Community):',
+    ops_3_1_item_2_desc: 'เติมทักษะครูพี่เลี้ยงรุ่นพี่และบ่มเพาะครูพี่เลี้ยงรุ่นใหม่ ควบคู่กับการจัด "ชุมชนแลกเปลี่ยนเรียนรู้ออนไลน์" เพื่อให้ครูพี่เลี้ยงได้ร่วมแบ่งปันประสบการณ์และคอยดูแลเพื่อนครูอย่างต่อเนื่อง',
+    ops_3_1_item_3_title: 'เสวนาเติมความรู้ออนไลน์:',
+    ops_3_1_item_3_desc: 'จัดเสวนาวิชาการออนไลน์สั้นๆ ร่วมกับผู้เชี่ยวชาญ เพื่อเติมองค์ความรู้และเทคนิคใหม่ๆ ในการจัดการเรียนการสอนอย่างสม่ำเสมอ',
+    ops_3_2_title: 'งานบริหารและหนุนเสริมเครือข่ายภูมิภาค',
+    ops_3_2_en: 'EARC Hub & Network Management',
+    ops_3_2_item_1_title: 'สนับสนุนสื่อและเครื่องมือวิชาการ:',
+    ops_3_2_item_1_desc: 'ส่งต่อคู่มือ สื่อ ตัวอย่างงานวิจัย และชุดเครื่องมือ ให้ศูนย์ EARC แต่ละแห่งนำไปปรับใช้ตามบริบทพื้นที่ได้ทันที',
+    ops_3_2_item_2_title: 'เวทีแลกเปลี่ยนระหว่างศูนย์ (Cross-EARC Collaboration):',
+    ops_3_2_item_2_desc: 'ชวนตัวแทนศูนย์ EARC ทุกภูมิภาคมานั่งคุย ถ่ายทอดประสบการณ์ แชร์ความท้าทาย และวางแผนงานร่วมกัน',
+    ops_3_2_item_3_title: 'ประเมินผลกระทบเชิงลึก:',
+    ops_3_2_item_3_desc: 'ประเมินผลลัพธ์ของการทำวิจัย (Impact) ที่เกิดกับตัวครูและผู้เรียน เพื่อนำข้อมูลมาปรับปรุงการทำงานของเครือข่ายให้ตอบโจทย์ครูมากที่สุด',
+    ops_3_3_title: 'งานเผยแพร่ผลงานและเครือข่ายต่างประเทศ',
+    ops_3_3_en: 'Dissemination & International Network',
+    ops_3_3_item_1_title: 'งานประชุมวิชาการเสนอผลงานวิจัยครูระดับชาติ:',
+    ops_3_3_item_1_desc: 'จัดเวทีนำเสนอผลงานวิจัยครูในบรรยากาศ "พื้นที่ปลอดภัยเพื่อการเรียนรู้" ที่เปิดกว้าง ไม่ตัดสิน เน้นแลกเปลี่ยน ให้กำลังใจกัน เพื่อสร้างแรงบันดาลใจและยกระดับวิชาชีพครู',
+    ops_3_3_item_2_title: 'เชื่อมโยงเครือข่ายสากล:',
+    ops_3_3_item_2_desc: 'แสวงหาความร่วมมือกับเครือข่ายการศึกษาในต่างประเทศและประเทศเพื่อนบ้าน (ลาว กัมพูชา เวียดนาม เมียนมา) พร้อมส่งเสริมให้ครูไทยได้มีโอกาสนำเสนอผลงานในระดับสากล',
+    ops_3_4_title: 'งานคลังความรู้ ดิจิทัล และการดูแลสมาชิก',
+    ops_3_4_en: 'Knowledge Hub & Community',
+    ops_3_4_item_1_title: 'คลังความรู้ออนไลน์ (EAR Digital Knowledge Bank):',
+    ops_3_4_item_1_desc: 'รวบรวมงานวิจัย EAR ตัวอย่างแผนการสอน และคู่มือ จัดไว้ในระบบที่เข้าถึงง่ายทุกที่ทุกเวลา โดยไม่มีค่าใช้จ่าย',
+    ops_3_4_item_2_title: 'สื่อสารเรื่องราวแรงบันดาลใจ (Teacher Stories):',
+    ops_3_4_item_2_desc: 'ถ่ายทอดเรื่องเล่าของครูทำวิจัยผ่านช่องทางออนไลน์ เพื่อสร้างพลังใจและเจตคติเชิงบวกต่อการทำวิจัยครู',
+    ops_3_4_item_3_title: 'ดูแลระบบสมาชิก:',
+    ops_3_4_item_3_desc: 'บริหารจัดการระบบลงทะเบียน ฐานข้อมูล และช่องทางสื่อสารหลัก (Line/เพจ) เพื่อคอยตอบคำถามและช่วยเหลือสมาชิกทุกคนอย่างใกล้ชิด',
+
+    // Governance V4 Page (TH) //
+    gov4_title: 'โครงสร้างเครือข่ายและการบริหารงาน',
+    gov4_en_title: 'Governance & Structure',
+    gov4_desc: 'การบริหารงานยึดหลัก "ครูเป็นหัวใจหลัก โดยมีพันธมิตรช่วยหนุนหลัง" เน้นความยืดหยุ่น ทำงานเป็นทีม และแบ่งบทบาทตามความถนัด:',
+    
+    // 4.1
+    gov4_1_title: 'ทีมที่ปรึกษาและพันธมิตรยุทธศาสตร์',
+    gov4_1_en: 'Advisory & Strategic Partners',
+    gov4_1_desc: 'กลุ่มผู้ทรงคุณวุฒิที่มาร่วมเดินทางไปด้วยกันตามความสมัครใจ ทำหน้าที่ช่วยเสนอแนะทิศทางยุทธศาสตร์ สนับสนุนทรัพยากร เชื่อมโยงโอกาสใหม่ๆ ร่วมกับภาคีเครือข่าย และช่วยดูแลธรรมาภิบาลของ TReN ประกอบด้วย:',
+    gov4_1_item_1_title: '1. ที่ปรึกษากิตติมศักดิ์ (Honorary Advisors):',
+    gov4_1_item_1_desc: 'ให้คำปรึกษาเชิงนโยบาย เสริมสร้างความน่าเชื่อถือ และช่วยเชื่อมโยงเครือข่ายระดับชาติ (ผู้ก่อตั้งร่วมดูแลต่อเนื่องโดยไม่มีกำหนดระยะเวลา)',
+    gov4_1_item_2_title: '2. ที่ปรึกษาต่างประเทศ (International Advisors):',
+    gov4_1_item_2_desc: 'ให้คำแนะนำและสนับสนุนการสร้างความร่วมมือในระดับนานาชาติ (วาระคราวละ 3 ปี และต่อวาระได้)',
+    gov4_1_item_3_title: '3. ผู้แทนองค์กรภาคี (Partner Representatives):',
+    gov4_1_item_3_desc: 'สนับสนุนทุน ทรัพยากร วิทยากร และช่วยเชื่อมโยงมาตรฐานวิชาการ (วาระคราวละ 3 ปี หรือตามที่ต้นสังกัดเสนอชื่อ)',
+    gov4_1_item_4_title: '4. ผู้ทรงคุณวุฒิวิชาการ (Experts):',
+    gov4_1_item_4_desc: 'ช่วยกลั่นกรององค์ความรู้และให้ข้อเสนอแนะเชิงลึกเพื่อพัฒนาคุณภาพโครงการ (วาระคราวละ 3 ปี และต่อวาระได้)',
+    gov4_1_item_5_title: '5. อดีตประธานเครือข่าย (Immediate-Past President):',
+    gov4_1_item_5_desc: 'ให้คำแนะนำจากประสบการณ์ตรง เพื่อส่งต่อการทำงานอย่างต่อเนื่อง (ร่วมหนุนเสริม 1 วาระ รวม 4 ปี)',
+
+    // 4.2
+    gov4_2_title: 'ทีมบริหารเครือข่ายส่วนกลาง',
+    gov4_2_en: 'Core Executive Team',
+    gov4_2_desc: 'กลุ่มครูและคนทำงานที่มาร่วมกันดูแลงานประจำวัน นำนโยบายและกรอบวิชาการสู่การปฏิบัติ บริหารงบประมาณ สรุปรายงานทางการเงิน และกำกับดูแลภาระงานหลักทั้ง 4 ด้าน (ร่วมดูแลงานเป็นทีม วาระคราวละ 4 ปี ต่อเนื่องได้ไม่เกิน 1 วาระ) ประกอบด้วย:',
+    gov4_2_item_1_title: '1. ที่ปรึกษาและอดีตประธานเครือข่าย:',
+    gov4_2_item_1_desc: 'ให้คำปรึกษา แนะนำทิศทางการดำเนินงาน และสนับสนุนการขับเคลื่อนภารกิจของเครือข่าย',
+    gov4_2_item_2_title: '2. ประธานเครือข่าย:',
+    gov4_2_item_2_desc: 'ตัวแทนเชื่อมโยงงานภายนอก นำการประชุม และดูแล งานเผยแพร่ผลงานและเครือข่ายต่างประเทศ (ข้อ 3.3)',
+    gov4_2_item_3_title: '3. รองประธานเครือข่าย:',
+    gov4_2_item_3_desc: 'ปฏิบัติหน้าที่แทนประธาน ดูแลภาพรวมงานวิชาการ และหนุนเสริม งานพัฒนาครูและเสวนาออนไลน์ (ข้อ 3.1)',
+    gov4_2_item_4_title: '4. ทีมประสานงานภูมิภาค (EARC Coordinator):',
+    gov4_2_item_4_desc: 'ตัวกลางเชื่อมโยงส่วนกลางกับศูนย์ EARC และดูแล งานหนุนเสริมศูนย์ EARC (ข้อ 3.2)',
+    gov4_2_item_5_title: '5. ทีมสื่อสารและดูแลสมาชิก:',
+    gov4_2_item_5_desc: 'ดูแลคลังความรู้ออนไลน์ สื่อ Teacher Stories และคอยตอบคำถามสมาชิก (ข้อ 3.4)',
+    gov4_2_item_6_title: '6. ทีมเลขานุการและเหรัญญิก:',
+    gov4_2_item_6_desc: 'ดูแลงานนัดหมาย เอกสารเท่าที่จำเป็น และช่วยบริหารจัดการงบประมาณอย่างโปร่งใส',
+
+    // 4.3
+    gov4_3_title: 'ทีมงานศูนย์ขับเคลื่อนวิจัยครูระดับภูมิภาค',
+    gov4_3_en: 'Regional EARC Teams',
+    gov4_3_desc: 'ทีมครูในพื้นที่ที่เป็นหัวใจสำคัญในการจัดกิจกรรม อบรม ให้คำปรึกษา ดูแลครูในจังหวัดหรือภูมิภาคนั้นๆ และร่วมมือกับส่วนกลางอย่างสม่ำเสมอ (ยืดหยุ่นตามการบริหารภายในของแต่ละศูนย์ ไม่กำหนดวาระที่ตายตัว โดยร่วมทบทวนรายชื่อประจำปีกับส่วนกลาง) ประกอบด้วย:',
+    gov4_3_item_1_title: '1. ครูพี่เลี้ยงวิจัยและวิทยากร (EAR Mentors / Trainers):',
+    gov4_3_item_1_desc: 'ครูรุ่นพี่ที่มีประสบการณ์ จัดอบรม EAR และคอยเป็นเพื่อนคู่คิดให้คำปรึกษาแก่ครูในพื้นที่',
+    gov4_3_item_2_title: '2. ครูแกนนำวิจัย (Lead Teacher-Researchers):',
+    gov4_3_item_2_desc: 'ครูผู้ปฏิบัติจริงในพื้นที่ ร่วมวางแผนกิจกรรมและชวนเพื่อนครูมาร่วมเรียนรู้ด้วยกัน',
+
+    // Meetings Page (TH) //
+    meetings_title: 'การประชุมและการดำเนินงาน',
+    meetings_en_title: 'Meetings',
+    meetings_desc: 'เครือข่าย TReN ยึดหลัก "เน้นทำงานจริง ไม่สร้างภาระเอกสาร และไม่กระทบเวลาสอนของครู" การพูดคุยส่วนใหญ่จึงเน้นช่องทางออนไลน์ที่ยืดหยุ่นและเป็นกันเอง ดังนี้:',
+    
+    meetings_item_1_title: 'การพบปะคณะที่ปรึกษาและภาคีเครือข่าย',
+    meetings_item_1_en: 'Advisory & Partner',
+    meetings_item_1_desc: 'พูดคุยแลกเปลี่ยนทิศทางร่วมกันปีละ 1 ครั้ง (ผ่านระบบออนไลน์ หรือจัดร่วมกับงานประชุมใหญ่ประจำปี) เพื่อขอคำแนะนำและเติมพลังใจในการทำงาน',
+    
+    meetings_item_2_title: 'การประชุมใหญ่ประจำปี',
+    meetings_item_2_en: 'Annual Gathering',
+    meetings_item_2_desc: 'จัดปีละ 1 ครั้ง เพื่อสรุปผลงานที่ร่วมกันทำมาตลอดปี แถลงเรื่องงบประมาณอย่างโปร่งใส และเปิดพื้นที่รับฟังความท้าทายและความคิดใหม่ๆ จากสมาชิก',
+    
+    meetings_item_3_title: 'การพูดคุยทีมบริหารส่วนกลาง',
+    meetings_item_3_en: 'Core Team Catch-up',
+    meetings_item_3_desc: 'นัดคุยสบายๆ ผ่านออนไลน์ทุก 3 เดือน เพื่อติดตามงาน ช่วยกันแก้ปัญหา และเตรียมกิจกรรมถัดไป',
+    
+    meetings_item_4_title: 'การแลกเปลี่ยนระดับพื้นที่',
+    meetings_item_4_en: 'EARC Community Spaces',
+    meetings_item_4_desc: 'จัดขึ้นตามความพร้อมและความสะดวกของครูในแต่ละภูมิภาค ผ่านกลุ่ม Line, กิจกรรม PLC หรือวงเสวนาออนไลน์ย่อยตามหัวข้อที่ครูสนใจ',
+    
+    meetings_footer_title: 'การตัดสินใจและการสื่อสาร',
+    meetings_footer_en: 'Decision Making & Communication',
+    meetings_footer_desc: 'เน้นการปรึกษาหารือแบบหารือร่วมกัน (Consensus) ด้วยบรรยากาศกัลยาณมิตร โดยทีมเลขานุการจะช่วยสรุปประเด็นสำคัญและแชร์ให้สมาชิกทุกคนรับทราบผ่านช่องทางออนไลน์ของเครือข่ายอย่างสม่ำเสมอ',
+  
+    // Finances and Rules Page (TH) //
+    rules_title: 'การดูแลทรัพยากร คลังความรู้ และข้อตกลงร่วมกัน',
+    rules_en_title: 'Finances, Sharing & Community Rules',
+    
+    // 6.1
+    rules_6_1_title: 'การดูแลเรื่องงบประมาณ',
+    rules_6_1_en: 'Finances & Transparency',
+    rules_6_1_item_1_title: 'ที่มาของงบประมาณ:',
+    rules_6_1_item_1_desc: 'งบประมาณดำเนินงานของ TReN มาจากทุนสนับสนุนขององค์กรพันธมิตรและหน่วยงานภาคีต่างๆ',
+    rules_6_1_item_2_title: 'ความโปร่งใส:',
+    rules_6_1_item_2_desc: 'บริหารจัดการงบประมาณอย่างประหยัดและโปร่งใส โดยจัดทำสรุปบัญชีรายรับ-รายจ่ายที่ตรวจสอบได้ และสรุปรายงานให้สมาชิกทราบในการพบปะประจำปี',
+
+    // 6.2
+    rules_6_2_title: 'ทรัพย์สินทางปัญญาและการแบ่งปันเพื่อการศึกษา',
+    rules_6_2_en: 'Open Sharing & Creative Commons',
+    rules_6_2_desc: 'เราเชื่อว่า "ความรู้ควรถูกแบ่งปันอย่างเสรีเพื่อประโยชน์ของครูทุกคน" คู่มือ สื่อการเรียนรู้ นวัตกรรม และงานวิจัยที่ TReN ร่วมพัฒนาขึ้น จะถูกเผยแพร่ภายใต้สัญญาอนุญาตเปิด Creative Commons (CC BY-NC-SA) ซึ่งมีหลักง่ายๆ ดังนี้:',
+    rules_6_2_item_1_title: 'อ้างอิงที่มา (Attribution - BY):',
+    rules_6_2_item_1_desc: 'นำไปใช้ได้เลย เพียงอ้างอิงชื่อผู้แต่งและเครือข่าย TReN เพื่อให้เกียรติคนทำงาน',
+    rules_6_2_item_2_title: 'ไม่ใช้เพื่อการค้า (Non-Commercial - NC):',
+    rules_6_2_item_2_desc: 'อนุญาตให้นำไปใช้ เผยแพร่ หรือดัดแปลง เพื่อประโยชน์ทางการศึกษาและการเรียนรู้โดยไม่แสวงหากำไรเท่านั้น',
+    rules_6_2_item_3_title: 'แบ่งปันด้วยเงื่อนไขเดียวกัน (Share-Alike - SA):',
+    rules_6_2_item_3_desc: 'หากนำเนื้อหาไปปรับปรุงหรือต่อยอด ผลงานชิ้นใหม่นั้นต้องนำมาแบ่งปันต่อด้วยสัญญาอนุญาตแบบเดียวกันนี้',
+    rules_6_2_footer: '*ครูและคนทำงานการศึกษาทุกคน สามารถดึงความรู้ สื่อ และคู่มือของ TReN ไปใช้ ดัดแปลง และแจกต่อในโรงเรียนได้ฟรีทุกเมื่อ โดยไม่ต้องกังวลเรื่องติดลิขสิทธิ์*',
+
+    // 6.3
+    rules_6_3_title: 'การปรับปรุงข้อตกลงและการดูแลคลังความรู้',
+    rules_6_3_en: 'Amendments & Legacy',
+    rules_6_3_item_1_title: 'การปรับปรุงข้อตกลง:',
+    rules_6_3_item_1_desc: 'หากวันข้างหน้าเครือข่ายเติบโตขึ้นและจำเป็นต้องปรับเปลี่ยนรายละเอียดในข้อตกลงนี้ เราจะนำเข้าพูดคุยและขอความเห็นชอบร่วมกันในการพบปะประจำปี',
+    rules_6_3_item_2_title: 'การดูแลทรัพยากรในอนาคต:',
+    rules_6_3_item_2_desc: 'หากในอนาคตมีการยุติการดำเนินงานของเครือข่าย งบประมาณคงเหลือและคลังความรู้ดิจิทัลทั้งหมด จะถูกส่งมอบให้แก่หน่วยงานการศึกษาหรือองค์กรสาธารณประโยชน์ เพื่อให้เกิดประโยชน์ต่อวงการครูไทยต่อไป',
+
+    // Team Page (TH)
+    team_main_title: 'ทีมบริหารเครือข่าย',
+    team_main_en_title: 'Network Management Team',
+    
+    // Section 1
+    team_sec1_title: 'ทีมที่ปรึกษาและพันธมิตรยุทธศาสตร์',
+    team_sec1_en: 'Advisory & Strategic Partners',
+    team_role_honorary: 'ที่ปรึกษากิตติมศักดิ์',
+    team_role_inter: 'ที่ปรึกษาต่างประเทศ',
+    team_role_partner: 'ผู้แทนองค์กรภาคี',
+    team_role_expert: 'ผู้ทรงคุณวุฒิวิชาการ',
+    team_role_past_pres: 'อดีตประธานเครือข่าย',
+    
+    team_p1_name: 'ดร. รัชนี เดอร์ซิงห์',
+    team_p1_desc: 'คณะศิลปศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี',
+    team_p2_name: 'Professor Richard Smith',
+    team_p2_desc: 'Warwick University, UK',
+    team_p3_name: 'รศ. สนธิดา เกยูรวงศ์',
+    team_p3_desc: 'ผู้เชี่ยวชาญอิสระด้านการพัฒนาครู / อดีตอาจารย์ประจำคณะศิลปศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี',
+    
+    team_partner_1: 'ผู้แทนจาก British Council Thailand',
+    team_partner_2: 'ผู้แทนจาก RELO',
+    team_partner_3: 'ผู้แทนจาก HCEC',
+    team_partner_4: 'ผู้แทนจาก...',
+
+    // Section 2
+    team_sec2_title: 'ทีมบริหารเครือข่ายส่วนกลาง',
+    team_sec2_en: 'Core Executive Team',
+    team_role_advisor: 'ที่ปรึกษา',
+    team_role_past_pres_short: 'อดีตประธานเครือข่าย',
+    team_role_pres: 'ประธานเครือข่าย',
+    team_role_vp: 'รองประธานเครือข่าย',
+    team_role_coord: 'ทีมประสานงานภูมิภาค',
+    team_role_comms: 'ทีมสื่อสารและดูแลสมาชิก',
+    team_role_sec: 'ทีมเลขานุการและเหรัญญิก',
+
+    // Section 3
+    team_sec3_title: 'ทีมงานศูนย์ขับเคลื่อนวิจัยครูระดับภูมิภาค',
+    team_sec3_en: 'Regional EARC Teams',
+    team_reg_north: '1. ภาคเหนือ (EARC North)',
+    team_reg_northeast: '2. ภาคตะวันออกเฉียงเหนือ (EARC Northeast)',
+    team_reg_central: '3. ภาคกลาง (EARC Central)',
+    team_reg_east: '4. ภาคตะวันออก (EARC East)',
+    team_reg_south: '5. ภาคใต้ (EARC South)',
+    
+    team_zone_upper: 'ตอนบน',
+    team_zone_lower: 'ตอนล่าง',
+    
+    team_role_head: 'หัวหน้า:',
+    team_role_deputy: 'รองหัวหน้า:',
+    team_role_committee: 'กรรมการ:',
+    
+    // Dummies
+    team_dummy_name: 'ชื่อ mmmmmmmmm',
+    team_dummy_school: 'รร. mmmmmmmmm',
 
   },
   en: {
@@ -1329,24 +1547,24 @@ const translations = {
 
     // Vision Mission Objectives Page //
     vision_about_tren_title: 'TReN',
-    vision_about_tren_subtitle: 'Teacher Research Network',
+    vision_about_tren_subtitle: ' ',
     vision_about_tren_en_title: 'Teacher-Research Network',
     vision_about_tren_desc: 'We are TReN (Teacher-Research Network), a research network driven by the power of teachers to solve classroom problems on their own. We are committed to developing research skills through the Exploratory Action Research (EAR) process, building Communities of Practice (CoP) or EAR Communities (EARC) across all 4 regions nationwide, and developing a mentorship system to create a sustainable learning ecosystem. We transform classroom problem-solving into impactful research and truly elevate student achievement.',
 
     vision_about_vision: 'Vision',
-    vision_about_vision_desc: '"To be a national classroom research network that drives Thai teachers to use Exploratory Action Research (EAR) to sustainably develop their own teaching and learning, and grow strongly together."',
+    vision_about_vision_desc: 'To serve as a national classroom research network that empowers Thai teachers to independently and sustainably improve teaching and learning through Exploratory Action Research (EAR). ',
 
     vision_about_mission: 'Mission',
     vision_about_mission_subtitle: 'What we are committed to doing to drive education forward',
     vision_about_empowerment: 'Develop Skills',
     vision_about_empowerment_en: 'Empowerment',
-    vision_about_empowerment_desc: 'Promote knowledge, understanding, and skills in conducting Exploratory Action Research (EAR) so that teachers can practically apply them to solve problems in the classroom.',
+    vision_about_empowerment_desc: 'Enhance knowledge, skills, and positive attitudes toward EAR research, enabling teachers to address classroom challenges effectively. Concurrently, develop teacher-mentor capabilities to deliver impactful peer mentoring.',
     vision_about_community: 'Build a Network',
     vision_about_community_en: 'Community',
-    vision_about_community_desc: 'Expand Communities of Practice (CoP) or EAR Communities (EARC) nationwide as a space for shared learning and exchange.',
+    vision_about_community_desc: 'Drive the Community of Practice (CoP) through EAR Communities (EARCs) nationwide, serving as a development base and a safe learning space for teachers in every region.	',
     vision_about_sustainability: 'Create Sustainability',
     vision_about_sustainability_en: 'Sustainability',
-    vision_about_sustainability_desc: 'Develop a mentorship system and elevate teachers\' potential to ensure that learning management and classroom research can be driven continuously and sustainably.',
+    vision_about_sustainability_desc: 'Develop a robust Mentorship system to ensure continuous knowledge transfer and sustained professional development. ',
 
     vision_about_core_objectives: 'Core Objectives',
     vision_about_goal_01: 'Goal 01',
@@ -1432,13 +1650,19 @@ const translations = {
   
     journey_intro_desc_new: 'From the Beginning to a National Research Network (2022 - Present)',
     
-    // Phase 1: The Origin (2022)
+    // Phase 1: Origin (2022)
     journey_year_1_title_new: '2022',
     journey_phase_1_new: 'The Origin',
-    journey_tren_brand: 'TReN',
-    journey_desc_1_1_new: 'Originated from the collaboration between British Council Thailand and the School of Liberal Arts, King Mongkut\'s University of Technology Thonburi (KMUTT), aimed at equipping in-service teachers with the ability to analyze and solve classroom problems on their own. Because the context of each classroom is different, waiting for external assistance or making problem-solving decisions based on personal feelings is unsustainable.',
-    journey_key_takeaway_new: 'Evidence-based decision',
-    journey_desc_1_2_new: 'The project therefore promotes the principle of making decisions based on evidence through the Exploratory Action Research (EAR) process, so that teachers can solve problems precisely and in accordance with the professional development criteria of the OTEPC.',
+    journey_desc_1_1_p1: 'The TReN network originated from a collaboration between ',
+    journey_desc_1_1_p2: ' and the ',
+    journey_desc_1_1_p3: ', aiming to equip in-service teachers to independently analyze and solve classroom problems. Because every classroom context is unique, waiting for external help or making decisions based on personal feelings is unsustainable.',
+    journey_desc_1_2_p1: 'The project promotes the concept of ',
+    journey_desc_1_2_p2: ' through the ',
+    journey_desc_1_2_p3: ' process, enabling teachers to address problems accurately and in alignment with the Teacher Council of Thailand\'s professional development criteria.',
+    journey_partner_1: 'British Council Thailand',
+    journey_partner_2: 'School of Liberal Arts, King Mongkut\'s University of Technology Thonburi (KMUTT)',
+    journey_key_concept_1: 'Evidence-based decision',
+    journey_key_concept_2: 'Exploratory Action Research (EAR)',
 
     // Phase 2: Year 1 (2022)
     journey_year_2_title_new: 'Year 1: 2022',
@@ -1490,8 +1714,8 @@ const translations = {
 
     // Table References
     journey_ref_author: '* Suwimon Wongwanich. (2007).',
-    journey_ref_book: 'Classroom Action Research',
-    journey_ref_pub: '(Xth Edition). Chulalongkorn University Press.',
+    journey_ref_book: 'Classroom Action Research.',
+    journey_ref_pub: 'Chulalongkorn University Press.',
 
     // Core Role & Missions Page //
     role_main_title: 'Core Roles and Missions',
@@ -1533,21 +1757,231 @@ const translations = {
     governance_doc_desc: 'A document defining the working framework of the TReN network to create mutual understanding and build sustainability in operations.',
     governance_btn_download: 'Download Document',
 
-    // Supporter Page //
-    sponsor_british_council: 'British Council Thailand',
-    sponsor_relo: 'Regional English Language Office (RELO), U.S. Embassy in Thailand',
-    sponsor_kmutt: 'King Mongkut\'s University of Technology Thonburi (KMUTT)',
-    sponsor_earc: 'Community of Practice Network (EAR Community - EARC)',
-    sponsor_obec: 'Bureau of Academic Affairs and Educational Standards, Office of the Basic Education Commission (OBEC), Ministry of Education',
-    sponsor_ptt: 'PTT Public Company Limited',
-    sponsor_eef: 'Equitable Education Fund (EEF)',
-    sponsor_earc_desc: 'A network of classroom teacher-researchers formed by the gathering of teachers participating in the TReN project in each region to exchange learning and support one another.',
-    
-    sponsors_main_title: 'Partner Organizations and Sponsors',
+    // Sponsors Page (EN)
+    sponsors_main_title: 'Partners & Sponsors',
     sponsors_subtitle: 'Our Partners & Sponsors',
-    sponsors_intro: 'The success and sustainable growth of the TReN network are made possible by the vision and invaluable support from partners in all sectors, who join forces to develop the potential of Thai teachers and continuously elevate the quality of education.',
+    sponsors_intro: 'The success and sustainable growth of the TReN network are made possible by the vision and invaluable support of our partners across all sectors, uniting to empower Thai teachers and continuously elevate the quality of education.',
     sponsors_thank_you: 'The TReN network would like to express our deepest gratitude to all our partner organizations:',
-    sponsors_outro: 'Every form of support is a vital force in driving Thai teachers to become leaders of change, in order to pass on quality learning to students nationwide.',
+    sponsors_outro: 'Every form of support is a vital force driving Thai teachers to become leaders of change, delivering quality learning to students nationwide.',
+
+    sponsor_british_council: 'British Council Thailand',
+    sponsor_obec: 'Bureau of Academic Affairs and Educational Standards, OBEC, Ministry of Education',
+    sponsor_eef: 'Equity Education Fund (EEF)',
+    sponsor_ptt: 'PTT Public Company Limited',
+    sponsor_relo: 'Regional English Language Office (RELO), U.S. Embassy',
+    sponsor_kmutt: 'School of Liberal Arts, KMUTT',
+    sponsor_thailand_tesol: 'The Association of English Teachers in Thailand (TESOL)',
+
+    // Member Page (English) //
+    membership_title: 'Membership',
+    membership_en_title: 'Membership',
+    membership_desc: 'To ensure all teachers have access to professional development, applying for TReN membership is completely free. Members are divided into 2 categories:',
+    membership_label_qual: 'Qualifications:',
+    membership_label_ben: 'Benefits:',
+    membership_label_opp: 'Further Learning Opportunities:',
+    membership_type_1_title: 'General Member',
+    membership_type_1_en: 'General Member',
+    membership_type_1_qual: 'Teachers and educators nationwide interested in EAR research (including those who have not yet undergone intensive training).',
+    membership_type_1_ben: 'Access the online EAR knowledge base and attend academic webinars or knowledge-sharing stages throughout the year at no cost.',
+    membership_type_1_opp: 'General members interested in joining the intensive training can follow announcements and apply for the selection process via the network’s news channels throughout the year.',
+    membership_type_2_title: 'Alumni & Mentor Member',
+    membership_type_2_en: 'Alumni & Mentor Member',
+    membership_type_2_qual: 'Teachers who have passed the intensive EAR training program with the network.',
+    membership_type_2_ben: 'Receive all the benefits of general members, along with in-depth consultation from mentors, the right to submit research for national/international presentation stages, and the opportunity to develop themselves into the next generation of "EAR Mentors".',
+
+    // Operation Page (EN) //
+    ops_title: 'Key Operational Areas',
+    ops_en_title: 'Key Operational Areas',
+    ops_desc: 'TReN acts as the "core support team" to drive and empower the EARC teacher research communities in all areas. The main operations are divided into 4 areas:',
+    ops_3_1_title: 'Central Capacity & Mentoring',
+    ops_3_1_en: 'Central Capacity & Mentoring',
+    ops_3_1_item_1_title: 'National Teacher Research Training:',
+    ops_3_1_item_1_desc: 'Organize online EAR research training (1-2 times a year) focusing on practical classroom application, cultivating a positive attitude towards research, and expanding opportunities for teachers in remote areas.',
+    ops_3_1_item_2_title: 'Train the Trainer & Mentor Community:',
+    ops_3_1_item_2_desc: 'Enhance the skills of senior mentors and incubate new mentors, alongside establishing an "Online Knowledge Sharing Community" for mentors to continuously share experiences and support fellow teachers.',
+    ops_3_1_item_3_title: 'Online Knowledge Enrichment Webinars:',
+    ops_3_1_item_3_desc: 'Host short online academic webinars with experts to consistently provide new knowledge and teaching techniques.',
+    ops_3_2_title: 'EARC Hub & Network Management',
+    ops_3_2_en: 'EARC Hub & Network Management',
+    ops_3_2_item_1_title: 'Support Media and Academic Tools:',
+    ops_3_2_item_1_desc: 'Distribute manuals, media, research samples, and toolkits for each EARC center to apply immediately according to their local context.',
+    ops_3_2_item_2_title: 'Cross-EARC Collaboration:',
+    ops_3_2_item_2_desc: 'Invite EARC representatives from all regions to meet, share experiences, discuss challenges, and plan collaboratively.',
+    ops_3_2_item_3_title: 'In-depth Impact Assessment:',
+    ops_3_2_item_3_desc: 'Evaluate the research impact on both teachers and students, utilizing the data to optimize the network’s operations to best meet teachers’ needs.',
+    ops_3_3_title: 'Dissemination & International Network',
+    ops_3_3_en: 'Dissemination & International Network',
+    ops_3_3_item_1_title: 'National Teacher Research Conference:',
+    ops_3_3_item_1_desc: 'Organize research presentation stages in a "Safe Space for Learning" atmosphere that is open and non-judgmental, focusing on sharing and encouraging one another to inspire and elevate the teaching profession.',
+    ops_3_3_item_2_title: 'Connecting International Networks:',
+    ops_3_3_item_2_desc: 'Seek collaboration with educational networks abroad and in neighboring countries (Laos, Cambodia, Vietnam, Myanmar), and encourage Thai teachers to present their work internationally.',
+    ops_3_4_title: 'Knowledge Hub & Community',
+    ops_3_4_en: 'Knowledge Hub & Community',
+    ops_3_4_item_1_title: 'EAR Digital Knowledge Bank:',
+    ops_3_4_item_1_desc: 'Compile EAR research, sample lesson plans, and manuals in an easily accessible, cost-free online system.',
+    ops_3_4_item_2_title: 'Teacher Stories:',
+    ops_3_4_item_2_desc: 'Share stories of teacher-researchers through online channels to build morale and a positive attitude toward teacher research.',
+    ops_3_4_item_3_title: 'Member Management:',
+    ops_3_4_item_3_desc: 'Manage registration systems, databases, and primary communication channels (Line/Facebook Page) to answer questions and closely support all members.',
+
+    // Governance V4 Page (EN) //
+    gov4_title: 'Governance & Structure',
+    gov4_en_title: 'Governance & Structure',
+    gov4_desc: 'The administration is based on the principle of "Teachers at the core, supported by partners," emphasizing flexibility, teamwork, and role division according to aptitude:',
+    
+    // 4.1
+    gov4_1_title: 'Advisory & Strategic Partners',
+    gov4_1_en: 'Advisory & Strategic Partners',
+    gov4_1_desc: 'A group of voluntary experts who join the journey, proposing strategic directions, supporting resources, linking new opportunities with network partners, and overseeing TReN’s good governance. Consisting of:',
+    gov4_1_item_1_title: '1. Honorary Advisors:',
+    gov4_1_item_1_desc: 'Provide policy advice, enhance credibility, and help connect the national network (Founders jointly oversee continuously with no fixed term).',
+    gov4_1_item_2_title: '2. International Advisors:',
+    gov4_1_item_2_desc: 'Provide advice and support in building international collaborations (3-year term, renewable).',
+    gov4_1_item_3_title: '3. Partner Representatives:',
+    gov4_1_item_3_desc: 'Support funding, resources, speakers, and help connect academic standards (3-year term, or as nominated by the affiliated organization).',
+    gov4_1_item_4_title: '4. Experts:',
+    gov4_1_item_4_desc: 'Help filter knowledge and provide in-depth feedback to improve project quality (3-year term, renewable).',
+    gov4_1_item_5_title: '5. Immediate-Past President:',
+    gov4_1_item_5_desc: 'Provide advice from direct experience for seamless operational transition (Co-support for 1 term, totaling 4 years).',
+
+    // 4.2
+    gov4_2_title: 'Core Executive Team',
+    gov4_2_en: 'Core Executive Team',
+    gov4_2_desc: 'A group of teachers and staff who jointly manage daily operations, implement policies and academic frameworks, manage budgets, summarize financial reports, and oversee the 4 main operational areas (Team-based management, 4-year term, maximum 1 consecutive term). Consisting of:',
+    gov4_2_item_1_title: '1. Advisors and Immediate-Past President:',
+    gov4_2_item_1_desc: 'Provide advice, guide operational directions, and support the execution of the network’s missions.',
+    gov4_2_item_2_title: '2. President:',
+    gov4_2_item_2_desc: 'Act as the external liaison, lead meetings, and oversee Dissemination & International Network (Section 3.3).',
+    gov4_2_item_3_title: '3. Vice President:',
+    gov4_2_item_3_desc: 'Act on behalf of the President, oversee overall academic affairs, and support Teacher Development and Online Webinars (Section 3.1).',
+    gov4_2_item_4_title: '4. EARC Coordinator:',
+    gov4_2_item_4_desc: 'Act as a liaison between the center and EARC centers, and oversee EARC Hub Support (Section 3.2).',
+    gov4_2_item_5_title: '5. Communication and Member Care Team:',
+    gov4_2_item_5_desc: 'Manage the online knowledge base, Teacher Stories media, and answer member inquiries (Section 3.4).',
+    gov4_2_item_6_title: '6. Secretary and Treasurer Team:',
+    gov4_2_item_6_desc: 'Manage appointments, essential documents, and assist in transparent budget management.',
+
+    // 4.3
+    gov4_3_title: 'Regional EARC Teams',
+    gov4_3_en: 'Regional EARC Teams',
+    gov4_3_desc: 'Local teacher teams that serve as the heart of organizing activities, training, consulting, and caring for teachers in their province or region, regularly collaborating with the central team (Flexible based on each center’s internal management, no fixed term, reviewed annually with the central team). Consisting of:',
+    gov4_3_item_1_title: '1. EAR Mentors / Trainers:',
+    gov4_3_item_1_desc: 'Senior teachers with EAR training experience who act as thought partners and consultants for local teachers.',
+    gov4_3_item_2_title: '2. Lead Teacher-Researchers:',
+    gov4_3_item_2_desc: 'Practicing teachers in the area who help plan activities and invite fellow teachers to learn together.',
+
+    // Meetings Page (EN) //
+    meetings_title: 'Meetings & Operations',
+    meetings_en_title: 'Meetings',
+    meetings_desc: 'The TReN network adheres to the principle of "Focusing on actual work, no paperwork burden, and not affecting teachers\' teaching time." Most discussions, therefore, emphasize flexible and informal online channels as follows:',
+    
+    meetings_item_1_title: 'Advisory & Partner Meetings',
+    meetings_item_1_en: 'Advisory & Partner',
+    meetings_item_1_desc: 'Discuss and exchange directions together once a year (online or held in conjunction with the Annual Gathering) to seek advice and gain encouragement for the work.',
+    
+    meetings_item_2_title: 'Annual Gathering',
+    meetings_item_2_en: 'Annual Gathering',
+    meetings_item_2_desc: 'Held once a year to summarize the collaborative work done throughout the year, transparently report the budget, and open a space to listen to challenges and new ideas from members.',
+    
+    meetings_item_3_title: 'Core Team Catch-up',
+    meetings_item_3_en: 'Core Team Catch-up',
+    meetings_item_3_desc: 'Informal online catch-ups scheduled every 3 months to track progress, help solve problems, and prepare for upcoming activities.',
+    
+    meetings_item_4_title: 'Local Exchange',
+    meetings_item_4_en: 'EARC Community Spaces',
+    meetings_item_4_desc: 'Organized according to the readiness and convenience of teachers in each region via Line groups, PLC activities, or mini online webinars on topics of interest to teachers.',
+    
+    meetings_footer_title: 'Decision Making & Communication',
+    meetings_footer_en: 'Decision Making & Communication',
+    meetings_footer_desc: 'Focuses on consensus-based consultation in a friendly atmosphere. The secretarial team will help summarize key points and share them with all members regularly through the network\'s online channels.',
+  
+    // Finances and Rules Page (EN) //
+    rules_title: 'Finances, Sharing & Community Rules',
+    rules_en_title: 'Finances, Sharing & Community Rules',
+    
+    // 6.1
+    rules_6_1_title: 'Finances & Transparency',
+    rules_6_1_en: 'Finances & Transparency',
+    rules_6_1_item_1_title: 'Source of Budget:',
+    rules_6_1_item_1_desc: 'TReN\'s operating budget comes from the funding support of alliance organizations and partner agencies.',
+    rules_6_1_item_2_title: 'Transparency:',
+    rules_6_1_item_2_desc: 'Manage the budget economically and transparently by preparing verifiable income-expense summaries and presenting reports to members at the annual gathering.',
+
+    // 6.2
+    rules_6_2_title: 'Intellectual Property & Open Sharing',
+    rules_6_2_en: 'Open Sharing & Creative Commons',
+    rules_6_2_desc: 'We believe that "knowledge should be shared freely for the benefit of all teachers." Manuals, learning materials, innovations, and research co-developed by TReN will be published under a Creative Commons open license (CC BY-NC-SA), which follows these simple principles:',
+    rules_6_2_item_1_title: 'Attribution (BY):',
+    rules_6_2_item_1_desc: 'Feel free to use it, just credit the author(s) and the TReN network to honor the contributors.',
+    rules_6_2_item_2_title: 'Non-Commercial (NC):',
+    rules_6_2_item_2_desc: 'Permitted to be used, distributed, or adapted solely for educational and non-profit learning purposes.',
+    rules_6_2_item_3_title: 'Share-Alike (SA):',
+    rules_6_2_item_3_desc: 'If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.',
+    rules_6_2_footer: '*All teachers and educational workers can access, adapt, and distribute TReN\'s knowledge, materials, and manuals in their schools for free at any time without worrying about copyright restrictions.*',
+
+    // 6.3
+    rules_6_3_title: 'Amendments & Legacy',
+    rules_6_3_en: 'Amendments & Legacy',
+    rules_6_3_item_1_title: 'Amendments to the Agreement:',
+    rules_6_3_item_1_desc: 'If the network grows in the future and details in this agreement need to be adjusted, we will discuss and seek joint approval at the annual gathering.',
+    rules_6_3_item_2_title: 'Future Resource Management:',
+    rules_6_3_item_2_desc: 'If the network ceases operations in the future, all remaining budgets and the digital knowledge bank will be handed over to educational agencies or public benefit organizations to continue benefiting Thai teachers.',
+
+    // Team Page (EN)
+    team_main_title: 'Network Management Team',
+    team_main_en_title: 'Network Management Team',
+    
+    // Section 1
+    team_sec1_title: 'Advisory & Strategic Partners',
+    team_sec1_en: 'Advisory & Strategic Partners',
+    team_role_honorary: 'Honorary Advisors',
+    team_role_inter: 'International Advisors',
+    team_role_partner: 'Partner Representatives',
+    team_role_expert: 'Experts',
+    team_role_past_pres: 'Immediate-Past President',
+    
+    team_p1_name: 'Dr. Ratchanee Dersingh',
+    team_p1_desc: 'School of Liberal Arts, King Mongkut\'s University of Technology Thonburi',
+    team_p2_name: 'Professor Richard Smith',
+    team_p2_desc: 'Warwick University, UK',
+    team_p3_name: 'Assoc. Prof. Sontida Keyuravong',
+    team_p3_desc: 'Independent Teacher Development Expert / Former Lecturer, School of Liberal Arts, KMUTT',
+    
+    team_partner_1: 'Representative from British Council Thailand',
+    team_partner_2: 'Representative from RELO',
+    team_partner_3: 'Representative from HCEC',
+    team_partner_4: 'Representative from...',
+
+    // Section 2
+    team_sec2_title: 'Core Executive Team',
+    team_sec2_en: 'Core Executive Team',
+    team_role_advisor: 'Advisor',
+    team_role_past_pres_short: 'Immediate-Past President',
+    team_role_pres: 'President',
+    team_role_vp: 'Vice President',
+    team_role_coord: 'EARC Coordinator',
+    team_role_comms: 'Communication & Member Care',
+    team_role_sec: 'Secretary & Treasurer',
+
+    // Section 3
+    team_sec3_title: 'Regional EARC Teams',
+    team_sec3_en: 'Regional EARC Teams',
+    team_reg_north: '1. EARC North',
+    team_reg_northeast: '2. EARC Northeast',
+    team_reg_central: '3. EARC Central',
+    team_reg_east: '4. EARC East',
+    team_reg_south: '5. EARC South',
+    
+    team_zone_upper: 'Upper',
+    team_zone_lower: 'Lower',
+    
+    team_role_head: 'Head:',
+    team_role_deputy: 'Deputy:',
+    team_role_committee: 'Committee:',
+    
+    // Dummies
+    team_dummy_name: 'Name mmmmmmmmm',
+    team_dummy_school: 'School mmmmmmmmm',
 
   }
 };

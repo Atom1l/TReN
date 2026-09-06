@@ -6,6 +6,12 @@ import AboutTrenJourney from './AboutTrenJourney';
 import AboutCoreRole from './AboutCoreRoles'; 
 import AboutGovernance from './AboutGovernance';
 import AboutSupporter from './AboutSupporters'; 
+import AboutMembership from './AboutMembership';
+import AboutGovernanceandStructure from './AboutGovernanceStructure';
+import AboutOperations from './AboutOperation';
+import AboutMeetings from './AboutMeeting';
+import AboutFinancesAndRules from './AboutFinancesandRules';
+import AboutTeam from './AboutTeam';
 
 const AboutPage: React.FC = () => {
   const location = useLocation();
@@ -29,15 +35,40 @@ const AboutPage: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full bg-[#F8FAFC]">
-      {/* 1. วิสัยทัศน์และพันธกิจ */}
+      {/* 1.1 วิสัยทัศน์และพันธกิจ */}
       {/* เพิ่ม padding-top เผื่อไว้ให้ Navbar ไม่บังหัวข้อ (scroll-mt) */}
       <section id="about-intro" className="scroll-mt-24">
         <AboutVisionMission />
       </section>
 
-      {/* 2. หลักการดำเนินงาน 5 ข้อ */}
+      {/* 1.2 หลักการดำเนินงาน 5 ข้อ */}
       <section id="about-core-principles" className="scroll-mt-24">
         <AboutCorePrinciples />
+      </section>
+
+      {/* 1.3 สมาชิกภาพ */}
+      <section id="about-membership" className="scroll-mt-24">
+        <AboutMembership />
+      </section>
+
+      {/* 1.4 ขอบเขตการดำเนินงาน */}
+      <section id="about-operations" className="scroll-mt-24">
+        <AboutOperations />
+      </section>
+
+      {/* 1.5 โครงสร้างเครือข่ายและการบริหารงาน */}
+      <section id="about-governance-and-structure" className="scroll-mt-24">
+        <AboutGovernanceandStructure />
+      </section>
+
+      {/* 1.6 การประชุม */}
+      <section id="about-meetings" className="scroll-mt-24">
+        <AboutMeetings />
+      </section>
+
+      {/* 1.7 งบประมาณ */}
+      <section id="about-finances-and-rules" className="scroll-mt-24">
+        <AboutFinancesAndRules />
       </section>
 
       {/* 3. เส้นทางการเติบโต */}
@@ -45,14 +76,9 @@ const AboutPage: React.FC = () => {
         <AboutTrenJourney />
       </section>
 
-      {/* 4. บทบาทและภารกิจหลัก */}
-      <section id="about-core-role" className="scroll-mt-24">
-        <AboutCoreRole />
-      </section>
-
-      {/* โครงสร้างเครือข่าย (ถ้ามี) */}
-      <section id="about-organization" className="scroll-mt-24">
-        {/* <AboutOrganization /> */}
+      {/* 4.โครงสร้างเครือข่าย (ถ้ามี) */}
+      <section id="about-team" className="scroll-mt-24">
+        <AboutTeam />
       </section>
 
       {/* 5. ธรรมนูญเครือข่าย */}
