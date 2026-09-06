@@ -6,7 +6,7 @@ const AboutGovernanceV4: React.FC = () => {
 
   return (
     <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 pb-16 md:pb-24 pt-4">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24">
         
         {/* Header Section */}
         <section className="mb-12 md:mb-16">

@@ -203,13 +203,21 @@ const Navbar = () => {
       name: t('about') || 'About us', 
       path: '/about',
       dropdown: [
-        { name: t('vision_mission_objectives_about_us') || 'วิสัยทัศน์ พันธกิจและเป้าหมายหลัก', path: '/about#about-intro' },
-        { name: t('core_principles_about_us') || 'หลักการดำเนินงาน 5 ข้อ', path: '/about#about-core-principles' },
-        { name: t('tren_journey_about_us') || 'เส้นทางการเติบโตของ TReN', path: '/about#about-journey' },
-        { name: t('core_role_about_us') || 'บทบาทและภารกิจหลักของ TReN', path: '/about#about-core-role' },
-        { name: t('organization_about_us') || 'โครงสร้างเครือข่าย', path: '/about#about-organization' },
-        { name: t('governance_about_us') || 'กรอบการทำงาน', path: '/about#about-governance' },
-        { name: t('supporter_about_us') || 'องค์กรพันธมิตรและผู้สนับสนุน', path: '/about#about-supporters' },
+        { 
+          name: t('nav_about_1') || '1. กรอบการทำงานของเครือข่าย (ธรรมนูญ/constitution)', 
+          path: '/about#constitution',
+          subDropdown: [
+            { name: t('nav_about_1_1') || 'หมวดที่ 1: ข้อมูลทั่วไป', path: '/about#general-info' },
+            { name: t('nav_about_1_2') || 'หมวดที่ 2: สมาชิกภาพ', path: '/about#membership' },
+            { name: t('nav_about_1_3') || 'หมวดที่ 3: ขอบเขตการดำเนินงานและโครงการหลัก', path: '/about#operations' },
+            { name: t('nav_about_1_4') || 'หมวดที่ 4: โครงสร้างเครือข่ายและการบริหารงาน', path: '/about#governance-structure' },
+            { name: t('nav_about_1_5') || 'หมวดที่ 5: การประชุมและการดำเนินงาน (Meetings)', path: '/about#meetings' },
+            { name: t('nav_about_1_6') || 'หมวดที่ 6: การเงิน ทรัพย์สิน และการแก้ไขข้อตกลง (Finances, Intellectual Property & Amendments)', path: '/about#finances' },
+          ]
+        },
+        { name: t('nav_about_2') || '2. เส้นทางการเจริญเติบโต / TReN Journey', path: '/about#journey' },
+        { name: t('nav_about_3') || '3. คณะกรรมการบริหารเครือข่าย/โครงสร้างเครือข่าย', path: '/about#team' },
+        { name: t('nav_about_4') || '4. องค์กรพันธมิตร', path: '/about#supporters' },
       ]
     },
   ];
@@ -227,7 +235,6 @@ const Navbar = () => {
 
           <div className="flex items-center ml-auto xl:gap-8 2xl:gap-12 gap-2">
             
-            {/* เปลี่ยนจุดซ่อนเมนูจาก lg:flex เป็น xl:flex */}
             <div className="hidden xl:flex items-center gap-2 2xl:gap-6 pt-2">
               {menuItems.map((menu) => {
                 const isActive = location.pathname === menu.path;
@@ -248,15 +255,36 @@ const Navbar = () => {
                     </Link>
 
                     {menu.dropdown && (
-                      <div className="absolute top-[80%] left-1/2 -translate-x-1/2 mt-2 w-56 bg-white border border-slate-100 shadow-xl rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden transform group-hover:translate-y-0 translate-y-2">
+                      <div className="absolute top-[80%] left-1/2 -translate-x-1/2 mt-2 w-[24rem] bg-white border border-slate-100 shadow-xl rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform group-hover:translate-y-0 translate-y-2 py-2">
                         {menu.dropdown.map(sub => (
-                          <Link 
-                            key={sub.name} 
-                            to={sub.path} 
-                            className="block px-5 py-3.5 text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium border-b border-slate-50 last:border-0"
-                          >
-                            {sub.name}
-                          </Link>
+                          <div key={sub.name} className="relative group/sub">
+                            <Link 
+                              to={sub.path} 
+                              className="w-full text-left flex items-center justify-between px-5 py-3.5 text-[1rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium border-b border-slate-50 last:border-0 whitespace-normal leading-relaxed"
+                            >
+                              <span>{sub.name}</span>
+                              {sub.subDropdown && (
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-3 flex-shrink-0 text-slate-400 group-hover/sub:text-[#1e3a8a]" viewBox="0 0 20 20" fill="currentColor">
+                                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                                </svg>
+                              )}
+                            </Link>
+
+                            {/* Nested Sub Dropdown */}
+                            {sub.subDropdown && (
+                              <div className="absolute top-0 right-full mr-1 w-[26rem] bg-white border border-slate-100 shadow-xl rounded-2xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 z-50 transform group-hover/sub:-translate-x-0 translate-x-2 py-2">
+                                {sub.subDropdown.map(nested => (
+                                  <Link 
+                                    key={nested.name} 
+                                    to={nested.path} 
+                                    className="block px-5 py-3 text-[0.95rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium border-b border-slate-50 last:border-0 whitespace-normal leading-relaxed"
+                                  >
+                                    {nested.name}
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+                          </div>
                         ))}
                       </div>
                     )}
@@ -275,7 +303,6 @@ const Navbar = () => {
                 </button>
               </Link>
 
-              {/* เปลี่ยนจุดซ่อนปุ่ม User/Login จาก lg:flex เป็น xl:flex */}
               <div className="hidden xl:flex items-center">
                 {isAuthLoading ? (
                   <div className="w-[115px] h-[40px] bg-slate-100 animate-pulse rounded-lg"></div>
@@ -333,7 +360,6 @@ const Navbar = () => {
                 )}
               </div>
 
-              {/* Mobile Hamburger Button: เปลี่ยนจุดแสดงเป็น xl:hidden แทน lg:hidden */}
               <button 
                 className="xl:hidden p-2 text-primary hover:bg-slate-100 rounded-lg transition-colors ml-2 flex-shrink-0 cursor-pointer"
                 onClick={() => setIsMobileMenuOpen(true)}
@@ -353,7 +379,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Sidebar Overlay: เปลี่ยนเป็น xl:hidden ด้วย */}
+      {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[100] flex xl:hidden">
           <div 
@@ -421,9 +447,9 @@ const Navbar = () => {
                       {menu.dropdown ? (
                         <button
                           onClick={(e) => toggleMobileMenu(menu.name, e)}
-                          className={`flex-1 text-left px-8 py-3.5 text-xl transition-colors cursor-pointer ${
+                          className={`flex-1 text-left px-8 py-3.5 text-[1.15rem] transition-colors cursor-pointer ${
                             isActive || isExpanded
-                              ? 'text-[#0a2558] font-semibold' 
+                              ? 'text-[#0a2558] font-bold' 
                               : 'text-slate-800 font-medium hover:bg-slate-50'
                           }`}
                         >
@@ -436,9 +462,9 @@ const Navbar = () => {
                         <Link
                           to={menu.path}
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className={`flex-1 px-8 py-3.5 text-xl transition-colors ${
+                          className={`flex-1 px-8 py-3.5 text-[1.15rem] transition-colors ${
                             isActive 
-                              ? 'text-[#0a2558] font-semibold' 
+                              ? 'text-[#0a2558] font-bold' 
                               : 'text-slate-800 font-medium hover:bg-slate-50'
                           }`}
                         >
@@ -461,18 +487,60 @@ const Navbar = () => {
                       )}
                     </div>
 
+                    {/* Level 2 Dropdown Mobile */}
                     {menu.dropdown && isExpanded && (
                       <div className="bg-slate-50/70 flex flex-col border-y border-slate-100">
-                        {menu.dropdown.map(sub => (
-                          <Link
-                            key={sub.name}
-                            to={sub.path}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="pl-14 pr-8 py-3.5 text-[1.1rem] text-slate-600 hover:text-[#1e3a8a] hover:bg-blue-50/50 font-medium transition-colors cursor-pointer"
-                          >
-                            {sub.name}
-                          </Link>
-                        ))}
+                        {menu.dropdown.map((sub, index) => {
+                          const isSubExpanded = expandedMobileMenus.includes(sub.name);
+                          return (
+                            <div key={index} className="flex flex-col">
+                              <div className="flex justify-between items-center pr-4">
+                                {sub.subDropdown ? (
+                                  <button
+                                    onClick={(e) => toggleMobileMenu(sub.name, e)}
+                                    className="flex-1 text-left pl-14 pr-4 py-3.5 text-[1.05rem] text-slate-700 hover:text-[#1e3a8a] font-medium transition-colors cursor-pointer whitespace-normal"
+                                  >
+                                    {sub.name}
+                                  </button>
+                                ) : (
+                                  <Link
+                                    to={sub.path}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="flex-1 pl-14 pr-8 py-3.5 text-[1.05rem] text-slate-700 hover:text-[#1e3a8a] font-medium transition-colors cursor-pointer whitespace-normal"
+                                  >
+                                    {sub.name}
+                                  </Link>
+                                )}
+                                {sub.subDropdown && (
+                                  <button 
+                                    onClick={(e) => toggleMobileMenu(sub.name, e)}
+                                    className="p-2 text-slate-400 hover:bg-slate-100 rounded-lg transition-colors z-10 cursor-pointer flex-shrink-0"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={`w-4 h-4 transition-transform ${isSubExpanded ? 'rotate-180 text-[#1e3a8a]' : ''}`}>
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                  </button>
+                                )}
+                              </div>
+
+                              {/* Level 3 Dropdown Mobile (Nested) */}
+                              {sub.subDropdown && isSubExpanded && (
+                                <div className="bg-slate-100/50 flex flex-col border-y border-slate-100">
+                                  {sub.subDropdown.map((nested, nIdx) => (
+                                    <Link
+                                      key={nIdx}
+                                      to={nested.path}
+                                      onClick={() => setIsMobileMenuOpen(false)}
+                                      className="pl-20 pr-8 py-3 text-[0.95rem] text-slate-600 hover:text-[#1e3a8a] font-normal transition-colors cursor-pointer whitespace-normal"
+                                    >
+                                      {nested.name}
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -503,7 +571,7 @@ const Navbar = () => {
               <div className="mt-auto mb-10 px-8 text-center border-t border-slate-100 pt-6">
                 <button
                   onClick={handleLogout}
-                  className="text-2xl font-bold text-red-500 hover:text-red-700 transition-colors py-4 w-full cursor-pointer"
+                  className="text-xl font-bold text-red-500 hover:text-red-700 transition-colors py-4 w-full cursor-pointer"
                 >
                   {t('logout') || 'Log Out'}
                 </button>
