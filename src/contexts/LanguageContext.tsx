@@ -56,7 +56,6 @@ const translations = {
     profile: 'โปรไฟล์',
     adminDashboard: 'แดชบอร์ดแอดมิน',
     logout: 'ออกจากระบบ',
-    all_events: 'กิจกรรมทั้งหมด (All Events)',
     upcoming_events_navbar: 'กิจกรรมที่กำลังจะถึง (Upcoming)',
     past_events_navbar: 'กิจกรรมที่ผ่านมา (Past)',
 
@@ -1047,7 +1046,6 @@ const translations = {
     profile: 'Profile',
     adminDashboard: 'Admin Dashboard',
     logout: 'Log Out',
-    all_events: 'All Events',
     upcoming_events_navbar: 'Upcoming Events',
     past_events_navbar: 'Past Events',
 
