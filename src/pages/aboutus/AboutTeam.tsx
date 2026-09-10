@@ -1,49 +1,60 @@
+/* eslint-disable react-hooks/static-components */
 import React from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 const AboutTeam: React.FC = () => {
   const { t } = useLanguage();
 
-  // ข้อมูลทีมภูมิภาค
+  // คอมโพเนนต์ป้ายกำกับ "รอประกาศรายชื่อ" (TBA Badge) ให้ดูสะอาดตาและเป็นมืออาชีพ
+  const TbaBadge = () => (
+    <div className="inline-flex items-center gap-2 px-4 py-1.5 mt-1 rounded-full bg-slate-100 border border-slate-200 text-slate-500">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 opacity-80">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+      <span className="text-lg font-light tracking-wide">{t('team_tba') || 'รอประกาศรายชื่ออย่างเป็นทางการ'}</span>
+    </div>
+  );
+
+  // ข้อมูลทีมภูมิภาค (แทนที่ dummy ด้วย TBA Badge และเอาช่องโรงเรียนออกชั่วคราว)
   const regionalTeams = [
     {
       region: t('team_reg_north') || '1. ภาคเหนือ (EARC North)',
       zones: [
-        { name: t('team_zone_upper') || 'ตอนบน', head: t('team_dummy_name'), headSchool: t('team_dummy_school'), deputy: t('team_dummy_name'), deputySchool: t('team_dummy_school'), committee: t('team_dummy_name'), committeeSchool: t('team_dummy_school') },
-        { name: t('team_zone_lower') || 'ตอนล่าง', head: t('team_dummy_name'), headSchool: t('team_dummy_school'), deputy: t('team_dummy_name'), deputySchool: t('team_dummy_school'), committee: t('team_dummy_name'), committeeSchool: t('team_dummy_school') }
+        { name: t('team_zone_upper') || 'ตอนบน', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> },
+        { name: t('team_zone_lower') || 'ตอนล่าง', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
       ]
     },
     {
       region: t('team_reg_northeast') || '2. ภาคตะวันออกเฉียงเหนือ (EARC Northeast)',
       zones: [
-        { name: t('team_zone_upper') || 'ตอนบน', head: t('team_dummy_name'), headSchool: t('team_dummy_school'), deputy: t('team_dummy_name'), deputySchool: t('team_dummy_school'), committee: t('team_dummy_name'), committeeSchool: t('team_dummy_school') },
-        { name: t('team_zone_lower') || 'ตอนล่าง', head: t('team_dummy_name'), headSchool: t('team_dummy_school'), deputy: t('team_dummy_name'), deputySchool: t('team_dummy_school'), committee: t('team_dummy_name'), committeeSchool: t('team_dummy_school') }
+        { name: t('team_zone_upper') || 'ตอนบน', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> },
+        { name: t('team_zone_lower') || 'ตอนล่าง', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
       ]
     },
     {
       region: t('team_reg_central') || '3. ภาคกลาง (EARC Central)',
       zones: [
-        { name: '', head: t('team_dummy_name'), headSchool: t('team_dummy_school'), deputy: t('team_dummy_name'), deputySchool: t('team_dummy_school'), committee: t('team_dummy_name'), committeeSchool: t('team_dummy_school') }
+        { name: '', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
       ]
     },
     {
       region: t('team_reg_east') || '4. ภาคตะวันออก (EARC East)',
       zones: [
-        { name: '', head: t('team_dummy_name'), headSchool: t('team_dummy_school'), deputy: t('team_dummy_name'), deputySchool: t('team_dummy_school'), committee: t('team_dummy_name'), committeeSchool: t('team_dummy_school') }
+        { name: '', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
       ]
     },
     {
       region: t('team_reg_south') || '5. ภาคใต้ (EARC South)',
       zones: [
-        { name: t('team_zone_upper') || 'ตอนบน', head: t('team_dummy_name'), headSchool: t('team_dummy_school'), deputy: t('team_dummy_name'), deputySchool: t('team_dummy_school'), committee: t('team_dummy_name'), committeeSchool: t('team_dummy_school') },
-        { name: t('team_zone_lower') || 'ตอนล่าง', head: t('team_dummy_name'), headSchool: t('team_dummy_school'), deputy: t('team_dummy_name'), deputySchool: t('team_dummy_school'), committee: t('team_dummy_name'), committeeSchool: t('team_dummy_school') }
+        { name: t('team_zone_upper') || 'ตอนบน', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> },
+        { name: t('team_zone_lower') || 'ตอนล่าง', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
       ]
     }
   ];
 
   return (
     <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24 pb-20">
         
         {/* Header Section */}
         <section className="mb-16">
@@ -61,7 +72,7 @@ const AboutTeam: React.FC = () => {
         ========================================= */}
         <section className="mb-24">
           <div className="mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] tracking-tight">{t('team_sec1_title') || 'ทีมที่ปรึกษาและพันธมิตรยุทธศาสตร์'}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] tracking-tight">{t('team_sec1_title') || 'ทีมที่ปรึกษาและผู้แทนองค์กรเครือข่าย'}</h2>
             <p className="text-lg text-slate-500 uppercase tracking-widest mt-2">{t('team_sec1_en') || 'Advisory & Strategic Partners'}</p>
           </div>
           
@@ -118,16 +129,6 @@ const AboutTeam: React.FC = () => {
               </div>
             </div>
 
-            {/* อดีตประธานเครือข่าย */}
-            <div className="flex flex-col md:flex-row gap-4 md:gap-8 lg:gap-16 py-8 border-b border-slate-200">
-              <div className="md:w-4/12 shrink-0">
-                <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('team_role_past_pres') || 'อดีตประธานเครือข่าย'}</h3>
-                <span className="text-lg text-slate-500 font-medium">(Immediate-Past President)</span>
-              </div>
-              <div className="md:w-8/12">
-                <p className="text-2xl text-slate-800 font-light">-</p>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -152,13 +153,13 @@ const AboutTeam: React.FC = () => {
               </div>
             </div>
 
-            {/* อดีตประธาน */}
+            {/* อดีตประธานเครือข่าย */}
             <div className="flex flex-col md:flex-row gap-4 md:gap-8 lg:gap-16 py-8 border-b border-slate-200">
               <div className="md:w-4/12 shrink-0">
                 <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('team_role_past_pres_short') || 'อดีตประธานเครือข่าย'}</h3>
               </div>
               <div className="md:w-8/12">
-                <p className="text-2xl text-slate-800 font-light">-</p>
+                <p className="text-2xl text-slate-400 font-light">-</p>
               </div>
             </div>
 
@@ -169,13 +170,11 @@ const AboutTeam: React.FC = () => {
                 <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('team_role_vp') || 'รองประธานเครือข่าย'}</h3>
               </div>
               <div className="md:w-8/12">
-                <div className="mb-8 space-y-2">
-                  <p className="text-2xl text-slate-800 font-light">0</p>
-                  <p className="text-2xl text-slate-800 font-light">0</p>
+                <div className="mb-6">
+                  <TbaBadge />
                 </div>
-                <div className="space-y-2">
-                  <p className="text-2xl text-slate-800 font-light">0</p>
-                  <p className="text-2xl text-slate-800 font-light">0</p>
+                <div>
+                  <TbaBadge />
                 </div>
               </div>
             </div>
@@ -186,11 +185,8 @@ const AboutTeam: React.FC = () => {
                 <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('team_role_coord') || 'ทีมประสานงานภูมิภาค'}</h3>
                 <span className="text-lg text-slate-500 font-medium">(EARC Coordinator)</span>
               </div>
-              <div className="md:w-8/12 grid grid-cols-1 sm:grid-cols-2 gap-y-3">
-                <p className="text-2xl text-slate-800 font-light">0</p>
-                <p className="text-2xl text-slate-800 font-light">0</p>
-                <p className="text-2xl text-slate-800 font-light">0</p>
-                <p className="text-2xl text-slate-800 font-light">0</p>
+              <div className="md:w-8/12 flex items-center">
+                <TbaBadge />
               </div>
             </div>
 
@@ -199,11 +195,8 @@ const AboutTeam: React.FC = () => {
               <div className="md:w-4/12 shrink-0">
                 <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('team_role_comms') || 'ทีมสื่อสารและดูแลสมาชิก'}</h3>
               </div>
-              <div className="md:w-8/12 grid grid-cols-1 sm:grid-cols-2 gap-y-3">
-                <p className="text-2xl text-slate-800 font-light">0</p>
-                <p className="text-2xl text-slate-800 font-light">0</p>
-                <p className="text-2xl text-slate-800 font-light">0</p>
-                <p className="text-2xl text-slate-800 font-light">0</p>
+              <div className="md:w-8/12 flex items-center">
+                <TbaBadge />
               </div>
             </div>
 
@@ -212,11 +205,8 @@ const AboutTeam: React.FC = () => {
               <div className="md:w-4/12 shrink-0">
                 <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('team_role_sec') || 'ทีมเลขานุการและเหรัญญิก'}</h3>
               </div>
-              <div className="md:w-8/12 grid grid-cols-1 sm:grid-cols-2 gap-y-3">
-                <p className="text-2xl text-slate-800 font-light">0</p>
-                <p className="text-2xl text-slate-800 font-light">0</p>
-                <p className="text-2xl text-slate-800 font-light">0</p>
-                <p className="text-2xl text-slate-800 font-light">0</p>
+              <div className="md:w-8/12 flex items-center">
+                <TbaBadge />
               </div>
             </div>
           </div>
@@ -247,31 +237,22 @@ const AboutTeam: React.FC = () => {
                         </h4>
                       )}
                       
-                      {/* รายชื่อในโซน (จัดแบบซ้าย-ขวา) */}
-                      <div className="space-y-6 pl-4 md:pl-8">
+                      {/* รายชื่อในโซน (จัดแบบซ้าย-ขวา โดยแสดง Badge TBA) */}
+                      <div className="space-y-5 pl-4 md:pl-8">
                         {/* หัวหน้า */}
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 items-start">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 items-start sm:items-center">
                           <span className="w-28 shrink-0 text-xl font-medium text-[#1e3a8a]">{t('team_role_head') || 'หัวหน้า:'}</span>
-                          <div>
-                            <p className="text-2xl text-slate-800 font-light">{zone.head}</p>
-                            <p className="text-lg text-slate-500 mt-1">{zone.headSchool}</p>
-                          </div>
+                          <div>{zone.head}</div>
                         </div>
                         {/* รองหัวหน้า */}
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 items-start">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 items-start sm:items-center">
                           <span className="w-28 shrink-0 text-xl font-medium text-[#1e3a8a]">{t('team_role_deputy') || 'รองหัวหน้า:'}</span>
-                          <div>
-                            <p className="text-2xl text-slate-800 font-light">{zone.deputy}</p>
-                            <p className="text-lg text-slate-500 mt-1">{zone.deputySchool}</p>
-                          </div>
+                          <div>{zone.deputy}</div>
                         </div>
                         {/* กรรมการ */}
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 items-start">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 items-start sm:items-center">
                           <span className="w-28 shrink-0 text-xl font-medium text-[#1e3a8a]">{t('team_role_committee') || 'กรรมการ:'}</span>
-                          <div>
-                            <p className="text-2xl text-slate-800 font-light">{zone.committee}</p>
-                            <p className="text-lg text-slate-500 mt-1">{zone.committeeSchool}</p>
-                          </div>
+                          <div>{zone.committee}</div>
                         </div>
                       </div>
                     </div>

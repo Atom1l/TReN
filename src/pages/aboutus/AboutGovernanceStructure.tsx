@@ -18,7 +18,7 @@ const AboutGovernanceV4: React.FC = () => {
           </p>
           <div className="w-20 h-1.5 bg-[#1e3a8a] mt-6 rounded-full"></div>
           
-          <p className="mt-8 text-2xl text-slate-800 font-light leading-relaxed max-w-4xl">
+          <p className="mt-8 text-2xl text-slate-800 font-light leading-relaxed max-w-6xl whitespace-pre-line">
             {t('gov4_desc') || 'การบริหารงานยึดหลัก "ครูเป็นหัวใจหลัก โดยมีพันธมิตรช่วยหนุนหลัง" เน้นความยืดหยุ่น ทำงานเป็นทีม และแบ่งบทบาทตามความถนัด:'}
           </p>
         </section>
@@ -32,9 +32,9 @@ const AboutGovernanceV4: React.FC = () => {
               <h3 className="text-2xl font-bold text-[#1e3a8a] tracking-tight leading-snug flex items-start">
                 <span className="text-2xl font-bold text-[#1e3a8a] tracking-tight leading-snug mr-3">1.</span>
                 <div>
-                  {t('gov4_1_title') || 'ทีมที่ปรึกษาและพันธมิตรยุทธศาสตร์'}
+                  {t('gov4_1_title') || 'ทีมที่ปรึกษาและเครือข่ายความร่วมมือ'}
                   <span className="block text-xl text-slate-500 font-medium uppercase tracking-widest mt-2">
-                    {t('gov4_1_en') || 'Advisory & Strategic Partners'}
+                    {t('gov4_1_en') || 'Advisors & Collaborative Partners'}
                   </span>
                 </div>
               </h3>
@@ -51,7 +51,7 @@ const AboutGovernanceV4: React.FC = () => {
                   <span><strong className="font-medium text-[#1e3a8a]">{t('gov4_1_item_2_title') || '2. ที่ปรึกษาต่างประเทศ (International Advisors):'}</strong> {t('gov4_1_item_2_desc') || 'ให้คำแนะนำและสนับสนุนการสร้างความร่วมมือในระดับนานาชาติ (วาระคราวละ 3 ปี และต่อวาระได้)'}</span>
                 </li>
                 <li className="text-2xl text-slate-800 font-light leading-relaxed flex items-start">
-                  <span><strong className="font-medium text-[#1e3a8a]">{t('gov4_1_item_3_title') || '3. ผู้แทนองค์กรภาคี (Partner Representatives):'}</strong> {t('gov4_1_item_3_desc') || 'สนับสนุนทุน ทรัพยากร วิทยากร และช่วยเชื่อมโยงมาตรฐานวิชาการ (วาระคราวละ 3 ปี หรือตามที่ต้นสังกัดเสนอชื่อ)'}</span>
+                  <span><strong className="font-medium text-[#1e3a8a]">{t('gov4_1_item_3_title') || '3. ผู้แทนองค์กรเครือข่าย (Network Representatives):'}</strong> {t('gov4_1_item_3_desc') || 'สนับสนุนทุน ทรัพยากร วิทยากร และช่วยเชื่อมโยงมาตรฐานวิชาการ (วาระคราวละ 3 ปี หรือตามที่ต้นสังกัดเสนอชื่อ)'}</span>
                 </li>
                 <li className="text-2xl text-slate-800 font-light leading-relaxed flex items-start">
                   <span><strong className="font-medium text-[#1e3a8a]">{t('gov4_1_item_4_title') || '4. ผู้ทรงคุณวุฒิวิชาการ (Experts):'}</strong> {t('gov4_1_item_4_desc') || 'ช่วยกลั่นกรององค์ความรู้และให้ข้อเสนอแนะเชิงลึกเพื่อพัฒนาคุณภาพโครงการ (วาระคราวละ 3 ปี และต่อวาระได้)'}</span>

@@ -45,7 +45,7 @@ const AboutMeetings: React.FC = () => {
           </p>
           <div className="w-20 h-1.5 bg-[#1e3a8a] mt-6 rounded-full"></div>
           
-          <p className="mt-8 text-2xl text-slate-800 font-light leading-relaxed max-w-4xl">
+          <p className="mt-8 text-2xl text-slate-800 font-light leading-relaxed max-w-6xl whitespace-pre-line">
             {t('meetings_desc') || 'เครือข่าย TReN ยึดหลัก "เน้นทำงานจริง ไม่สร้างภาระเอกสาร และไม่กระทบเวลาสอนของครู" การพูดคุยส่วนใหญ่จึงเน้นช่องทางออนไลน์ที่ยืดหยุ่นและเป็นกันเอง ดังนี้:'}
           </p>
         </section>

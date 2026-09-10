@@ -18,7 +18,8 @@ const AboutOperations: React.FC = () => {
           </p>
           <div className="w-20 h-1.5 bg-[#1e3a8a] mt-6 rounded-full"></div>
           
-          <p className="mt-8 text-2xl text-slate-800 font-light leading-relaxed max-w-4xl">
+          {/* ขยายความกว้างเป็น max-w-6xl เพื่อไม่ให้ข้อความโดนปัดตกบรรทัดเร็วเกินไป */}
+          <p className="mt-8 text-2xl text-slate-800 font-light leading-relaxed max-w-6xl whitespace-pre-line">
             {t('ops_desc') || 'TReN ทำหน้าที่เป็น "ทีมสนับสนุนหลัก" เพื่อขับเคลื่อนและเสริมพลังให้ชุมชนวิจัยครู EARC ในทุกพื้นที่ โดยแบ่งเนื้องานหลักออกเป็น 4 ด้าน:'}
           </p>
         </section>

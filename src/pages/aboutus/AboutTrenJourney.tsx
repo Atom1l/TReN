@@ -38,8 +38,8 @@ const AboutTrenJourney: React.FC = () => {
           </div>
         </div>
       ),
-      textColor: 'text-[#1e3a8a]',
-      bgColor: 'bg-[#1e3a8a]', 
+      textColor: 'text-indigo-600',
+      bgColor: 'bg-indigo-600', 
     },
     {
       year: t('journey_year_2_title_new') || 'ปีที่ 1: พ.ศ. 2565',
@@ -56,8 +56,8 @@ const AboutTrenJourney: React.FC = () => {
             <p className="relative z-10 text-2xl sm:text-3xl font-medium text-slate-800 leading-snug italic px-6 border-l-[3px] border-indigo-200">
               {t('journey_quote_new') || '"กระบวนการต่างๆ ที่ใช้ในการทำวิจัย เป็นเรื่องที่ครูไม่คุ้นเคย เข้าใจยาก และต้องอาศัยการฝึกปฏิบัติภายใต้พี่เลี้ยงที่เข้าใจในวิธีการวิจัยอย่างสม่ำเสมอ..."'}
             </p>
-            <footer className="mt-6 pl-6 text-lg md:text-xl font-semibold text-indigo-600 tracking-wide">
-              {t('journey_quote_author_new') || '— (สุวิมล ว่องวาณิช, 2550, น. 6)'}
+            <footer className="mt-6 pl-6 text-lg md:text-xl font-semibold text-[#1e3a8a] tracking-wide">
+              {t('journey_quote_author_new') || 'สุวิมล ว่องวาณิช. (2550). การวิจัยปฏิบัติการในชั้นเรียน. สำนักพิมพ์แห่งจุฬาลงกรณ์มหาวิทยาลัย.'}
             </footer>
           </blockquote>
 
@@ -76,13 +76,13 @@ const AboutTrenJourney: React.FC = () => {
         <div className="space-y-6 md:space-y-8">
           <p className="text-2xl text-slate-800 leading-relaxed font-light">
             {t('journey_desc_3_1_new') || 'เพื่อสร้างความยั่งยืนและลดการพึ่งพาผู้เชี่ยวชาญต่างชาติ โครงการจึงคัดเลือกครูรุ่นแรกมาพัฒนาต่อยอดเป็น '}
-            <strong className="font-semibold text-emerald-700">{t('journey_mentor_role') || '"ครูพี่เลี้ยงวิจัย (Teacher-Research Mentor)"'}</strong>
+            <strong className="font-semibold text-[#1e3a8a]">{t('journey_mentor_role') || '"ครูพี่เลี้ยงวิจัย (Teacher-Research Mentors)"'}</strong>
             {t('journey_desc_3_2_new') || ' โดยได้รับเกียรติจาก Prof. Dr. Richard Smith มาถ่ายทอดองค์ความรู้โดยตรง จนกลุ่มครูพี่เลี้ยงแกนนำนี้สามารถขยายผลให้คำปรึกษาแก่เพื่อนครู ครอบคลุมถึง 40 จังหวัดทั่วประเทศ'}
           </p>
         </div>
       ),
-      textColor: 'text-emerald-600',
-      bgColor: 'bg-emerald-600', 
+      textColor: 'text-indigo-600',
+      bgColor: 'bg-indigo-600',  
     },
     {
       year: t('journey_year_4_title_new') || 'ปีที่ 5 - 6 เป็นต้นไป: พ.ศ. 2569 เป็นต้นไป',
@@ -91,13 +91,13 @@ const AboutTrenJourney: React.FC = () => {
         <div className="space-y-6 md:space-y-8">
           <p className="text-2xl text-slate-800 leading-relaxed font-light">
             {t('journey_desc_4_1_new') || 'จากความแข็งแกร่งของกลุ่มครูวิจัยและครูพี่เลี้ยงทั่วประเทศ จึงนำไปสู่การก่อตั้ง '}
-            <strong className="font-semibold text-orange-600">{t('journey_tren_network') || 'เครือข่าย TReN (Teacher-Research Network)'}</strong>
-            {t('journey_desc_4_2_new') || ' อย่างเป็นทางการ โดยขับเคลื่อนผ่านชุมชนนักปฏิบัติระดับภูมิภาค (EART Communities: EARC) แบ่งเป็น 8 โซนทั่วประเทศ ควบคู่กับการยกระดับครูพี่เลี้ยงสู่ระดับสูง (Advanced Level) เพื่อให้แต่ละพื้นที่สามารถพึ่งพาตนเองได้ในระยะยาว พร้อมมุ่งขยายผลกระบวนการ EAR สู่ครูทั่วประเทศและประเมินผลกระทบเชิงลึกอย่างยั่งยืน'}
+            <strong className="font-semibold text-[#1e3a8a]">{t('journey_tren_network') || 'เครือข่าย TReN (Teacher-Research Network)'}</strong>
+            {t('journey_desc_4_2_new') || ' อย่างเป็นทางการ โดยขับเคลื่อนผ่านชุมชนนักปฏิบัติระดับภูมิภาค (EAR Communities: EARC) แบ่งเป็น 8 โซนทั่วประเทศ ควบคู่กับการยกระดับครูพี่เลี้ยงสู่ระดับสูง (Advanced Level) เพื่อให้แต่ละพื้นที่สามารถพึ่งพาตนเองได้ในระยะยาว พร้อมมุ่งขยายผลกระบวนการ EAR สู่ครูทั่วประเทศและประเมินผลกระทบเชิงลึกอย่างยั่งยืน'}
           </p>
         </div>
       ),
-      textColor: 'text-orange-600',
-      bgColor: 'bg-orange-600', 
+      textColor: 'text-indigo-600',
+      bgColor: 'bg-indigo-600',  
     }
   ];
 
@@ -190,9 +190,9 @@ const AboutTrenJourney: React.FC = () => {
           </div>
 
           {/* อ้างอิงด้านล่างตาราง */}
-          <div className="mt-8 text-lg md:text-xl text-slate-500 font-light leading-relaxed">
+          {/* <div className="mt-8 text-lg md:text-xl text-slate-500 font-light leading-relaxed">
             {t('journey_ref_author') || '* สุวิมล ว่องวาณิช. (2550).'} <span className="italic">{t('journey_ref_book') || 'การวิจัยปฏิบัติการในชั้นเรียน'}</span> {t('journey_ref_pub') || '(พิมพ์ครั้งที่ X). สำนักพิมพ์แห่งจุฬาลงกรณ์มหาวิทยาลัย.'}
-          </div>
+          </div> */}
         </section>
 
       </div>

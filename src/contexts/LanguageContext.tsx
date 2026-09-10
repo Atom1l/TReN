@@ -570,7 +570,7 @@ const translations = {
     vision_about_empowerment_desc: 'ส่งเสริมความรู้ ทักษะ และเจตคติเชิงบวกในการทำวิจัย EAR ให้ครูแก้ปัญหาในห้องเรียนได้ตรงจุดด้วยตนเอง พร้อมส่งเสริมครูรุ่นพี่ให้เติบโตเป็น "ครูพี่เลี้ยงวิจัย" ให้คำปรึกษาเพื่อนครูร่วมวิชาชีพได้อย่างมีประสิทธิภาพ',
     vision_about_community: 'สร้างเครือข่าย',
     vision_about_community_en: 'Community',
-    vision_about_community_desc: 'ขับเคลื่อนศูนย์ EAR Community (EARC) ทั่วประเทศ ให้เป็นฐานการพัฒนาและพื้นที่ปลอดภัย สำหรับครูได้ปรึกษาและเรียนรู้ร่วมกัน น',
+    vision_about_community_desc: 'ขับเคลื่อนศูนย์ EAR Community (EARC) ทั่วประเทศ ให้เป็นฐานการพัฒนาและพื้นที่ปลอดภัย สำหรับครูได้ปรึกษาและเรียนรู้ร่วมกัน',
     vision_about_sustainability: 'สร้างความยั่งยืน',
     vision_about_sustainability_en: 'Sustainability',
     vision_about_sustainability_desc: 'พัฒนาระบบครูพี่เลี้ยงวิจัย (Mentorship) แบบกัลยาณมิตร เพื่อให้เกิดการดูแลและส่งต่อความรู้ระหว่างเพื่อนร่วมวิชาชีพอย่างต่อเนื่อง',
@@ -620,7 +620,7 @@ const translations = {
     principle_4_desc: 'สร้าง "พื้นที่ปลอดภัย" ให้ครูกล้าพูดคุยปัญหา ทบทวนตัวเอง (ทั้งความรู้สึก จุดแข็ง และความท้าทาย) และเรียนรู้จากความผิดพลาดร่วมกันโดยไม่โดนตัดสิน',
     principle_5_title: 'สร้างระบบพี่เลี้ยงระดับภูมิภาคที่ยั่งยืน',
     principle_5_en: 'Sustainable Mentorship',
-    principle_5_desc: 'บ่มเพาะครูพี่เลี้ยง EAR Mentor และ Trainer ในแต่ละภูมิภาค ให้ดูแล จัดกิจกรรม และให้คำปรึกษาแก่เพื่อนครูในท้องถิ่นได้อย่างเข้มแข็งและยืดหยุ่น',
+    principle_5_desc: 'บ่มเพาะครูพี่เลี้ยง EAR Mentors และ Trainers ในแต่ละภูมิภาค ให้ดูแล จัดกิจกรรม และให้คำปรึกษาแก่เพื่อนครูในท้องถิ่นได้อย่างเข้มแข็งและยืดหยุ่น',
 
     about_principles_main: 'หลักการดำเนินงาน 5 ข้อ',
     about_principles_count: '5 ข้อ',
@@ -680,14 +680,14 @@ const translations = {
     journey_phase_2_new: 'จุดประกายและวางรากฐาน',
     journey_desc_2_1_new: 'นำโมเดลการวิจัย EAR ระดับโลกของ Prof. Dr. Richard Smith (University of Warwick) และ Dr. Paula Rebolledo มาใช้อบรมครูภาษาอังกฤษรุ่นแรก 21 คน โดยมีผู้เชี่ยวชาญและครูพี่เลี้ยงนานาชาติคอยประกบดูแลอย่างใกล้ชิด ซึ่งการมีครูพี่เลี้ยงหนุนเสริมนี้ถือเป็นหัวใจสำคัญของความสำเร็จ ดังที่ ดร.สุวิมล ว่องวาณิช ได้สะท้อนไว้อย่างน่าสนใจว่า:',
     journey_quote_new: '"กระบวนการต่างๆ ที่ใช้ในการทำวิจัย เป็นเรื่องที่ครูไม่คุ้นเคย เข้าใจยาก และต้องอาศัยการฝึกปฏิบัติภายใต้พี่เลี้ยงที่เข้าใจในวิธีการวิจัยอย่างสม่ำเสมอ..."',
-    journey_quote_author_new: '— (สุวิมล ว่องวาณิช, 2550, น. 6)',
+    journey_quote_author_new: 'สุวิมล ว่องวาณิช. (2550). การวิจัยปฏิบัติการในชั้นเรียน. สำนักพิมพ์แห่งจุฬาลงกรณ์มหาวิทยาลัย.',
     journey_desc_2_2_new: 'เมื่อจบโครงการ ครูไม่เพียงมีทัศนคติที่ดีขึ้นต่อการทำวิจัย แต่ยังสามารถแก้ปัญหาในห้องเรียนได้ตรงจุด พร้อมทั้งสร้างความสัมพันธ์ที่แน่นแฟ้นยิ่งขึ้นกับนักเรียน (Dersingh & Vuong, 2023)',
 
     // Phase 3: ปีที่ 2 - 4 (พ.ศ. 2566 – 2568)
     journey_year_3_title_new: 'ปีที่ 2 – 4: พ.ศ. 2566 – 2568',
     journey_phase_3_new: 'บ่มเพาะแกนนำสู่ 40 จังหวัด',
     journey_desc_3_1_new: 'เพื่อสร้างความยั่งยืนและลดการพึ่งพาผู้เชี่ยวชาญต่างชาติ โครงการจึงคัดเลือกครูรุ่นแรกมาพัฒนาต่อยอดเป็น ',
-    journey_mentor_role: '"ครูพี่เลี้ยงวิจัย (Teacher-Research Mentor)"',
+    journey_mentor_role: '"ครูพี่เลี้ยงวิจัย (Teacher-Research Mentors)"',
     journey_desc_3_2_new: ' โดยได้รับเกียรติจาก Prof. Dr. Richard Smith มาถ่ายทอดองค์ความรู้โดยตรง จนกลุ่มครูพี่เลี้ยงแกนนำนี้สามารถขยายผลให้คำปรึกษาแก่เพื่อนครู ครอบคลุมถึง 40 จังหวัดทั่วประเทศ',
 
     // Phase 4: ปีที่ 5 - 6 (พ.ศ. 2569 เป็นต้นไป)
@@ -695,7 +695,7 @@ const translations = {
     journey_phase_4_new: 'ก่อตั้ง TReN และขยายผลทั่วประเทศ',
     journey_desc_4_1_new: 'จากความแข็งแกร่งของกลุ่มครูวิจัยและครูพี่เลี้ยงทั่วประเทศ จึงนำไปสู่การก่อตั้ง ',
     journey_tren_network: 'เครือข่าย TReN (Teacher-Research Network)',
-    journey_desc_4_2_new: ' อย่างเป็นทางการ โดยขับเคลื่อนผ่านชุมชนนักปฏิบัติระดับภูมิภาค (EART Communities: EARC) แบ่งเป็น 8 โซนทั่วประเทศ ควบคู่กับการยกระดับครูพี่เลี้ยงสู่ระดับสูง (Advanced Level) เพื่อให้แต่ละพื้นที่สามารถพึ่งพาตนเองได้ในระยะยาว พร้อมมุ่งขยายผลกระบวนการ EAR สู่ครูทั่วประเทศและประเมินผลกระทบเชิงลึกอย่างยั่งยืน',
+    journey_desc_4_2_new: ' อย่างเป็นทางการ โดยขับเคลื่อนผ่านชุมชนนักปฏิบัติระดับภูมิภาค (EAR Communities: EARC) แบ่งเป็น 8 โซนทั่วประเทศ ควบคู่กับการยกระดับครูพี่เลี้ยงสู่ระดับสูง (Advanced Level) เพื่อให้แต่ละพื้นที่สามารถพึ่งพาตนเองได้ในระยะยาว พร้อมมุ่งขยายผลกระบวนการ EAR สู่ครูทั่วประเทศและประเมินผลกระทบเชิงลึกอย่างยั่งยืน',
 
     // สรุปตัวเลขการเติบโต (Table)
     journey_table_main_title: 'สรุปตัวเลขการเติบโตของเครือข่าย',
@@ -791,14 +791,14 @@ const translations = {
     membership_label_ben: 'สิทธิประโยชน์:',
     membership_label_opp: 'โอกาสการเรียนรู้เพิ่มเติม:',
     membership_type_1_title: 'สมาชิกทั่วไป',
-    membership_type_1_en: 'General Member',
+    membership_type_1_en: 'General Members',
     membership_type_1_qual: 'ครูผู้สอนและผู้สนใจงานวิจัย EAR ทุกสังกัดทั่วประเทศ (รวมถึงผู้ที่ยังไม่เคยผ่านการอบรมเชิงลึก)',
     membership_type_1_ben: 'เข้าใช้งานคลังความรู้ EAR ออนไลน์ รวมถึงเข้าร่วมฟังเสวนาหรือเวทีแลกเปลี่ยนเรียนรู้ได้ตลอดปีโดยไม่มีค่าใช้จ่าย',
     membership_type_1_opp: 'สมาชิกทั่วไปที่สนใจเข้าร่วมการอบรมเชิงลึก สามารถติดตามประกาศและสมัครเข้าร่วมกระบวนการคัดเลือกผ่านช่องทางข่าวสารของเครือข่ายได้ตลอดทั้งปี',
     membership_type_2_title: 'สมาชิกศิษย์เก่าและครูพี่เลี้ยง',
-    membership_type_2_en: 'Alumni & Mentor Member',
+    membership_type_2_en: 'Alumni & Mentor Members',
     membership_type_2_qual: 'ครูผู้ผ่านการอบรมเชิงลึกตามหลักสูตร EAR กับทางเครือข่าย',
-    membership_type_2_ben: 'ได้รับสิทธิประโยชน์ของสมาชิกทั่วไปทั้งหมด พร้อมรับคำปรึกษาเชิงลึกจากครูพี่เลี้ยง มีสิทธิ์ส่งผลงานเข้าร่วมเวทีนำเสนอระดับชาติ/สากล และได้รับโอกาสพัฒนาตนเองก้าวสู่การเป็น "ครูพี่เลี้ยงวิจัย (EAR Mentor)" รุ่นต่อไป',    
+    membership_type_2_ben: 'ได้รับสิทธิประโยชน์ของสมาชิกทั่วไปทั้งหมด พร้อมรับคำปรึกษาเชิงลึกจากครูพี่เลี้ยง มีสิทธิ์ส่งผลงานเข้าร่วมเวทีนำเสนอระดับชาติ/สากล และได้รับโอกาสพัฒนาตนเองก้าวสู่การเป็น "ครูพี่เลี้ยงวิจัย (EAR Mentors)" รุ่นต่อไป',    
     
     // Operation Page (TH) //
     ops_title: 'ขอบเขตการดำเนินงานและโครงการหลัก',
@@ -841,14 +841,14 @@ const translations = {
     gov4_desc: 'การบริหารงานยึดหลัก "ครูเป็นหัวใจหลัก โดยมีพันธมิตรช่วยหนุนหลัง" เน้นความยืดหยุ่น ทำงานเป็นทีม และแบ่งบทบาทตามความถนัด:',
     
     // 4.1
-    gov4_1_title: 'ทีมที่ปรึกษาและพันธมิตรยุทธศาสตร์',
+    gov4_1_title: 'ทีมที่ปรึกษาและเครือข่ายความร่วมมือ',
     gov4_1_en: 'Advisory & Strategic Partners',
     gov4_1_desc: 'กลุ่มผู้ทรงคุณวุฒิที่มาร่วมเดินทางไปด้วยกันตามความสมัครใจ ทำหน้าที่ช่วยเสนอแนะทิศทางยุทธศาสตร์ สนับสนุนทรัพยากร เชื่อมโยงโอกาสใหม่ๆ ร่วมกับภาคีเครือข่าย และช่วยดูแลธรรมาภิบาลของ TReN ประกอบด้วย:',
     gov4_1_item_1_title: '1. ที่ปรึกษากิตติมศักดิ์ (Honorary Advisors):',
     gov4_1_item_1_desc: 'ให้คำปรึกษาเชิงนโยบาย เสริมสร้างความน่าเชื่อถือ และช่วยเชื่อมโยงเครือข่ายระดับชาติ (ผู้ก่อตั้งร่วมดูแลต่อเนื่องโดยไม่มีกำหนดระยะเวลา)',
     gov4_1_item_2_title: '2. ที่ปรึกษาต่างประเทศ (International Advisors):',
     gov4_1_item_2_desc: 'ให้คำแนะนำและสนับสนุนการสร้างความร่วมมือในระดับนานาชาติ (วาระคราวละ 3 ปี และต่อวาระได้)',
-    gov4_1_item_3_title: '3. ผู้แทนองค์กรภาคี (Partner Representatives):',
+    gov4_1_item_3_title: '3. ผู้แทนองค์กรเครือข่าย (Network Representatives):',
     gov4_1_item_3_desc: 'สนับสนุนทุน ทรัพยากร วิทยากร และช่วยเชื่อมโยงมาตรฐานวิชาการ (วาระคราวละ 3 ปี หรือตามที่ต้นสังกัดเสนอชื่อ)',
     gov4_1_item_4_title: '4. ผู้ทรงคุณวุฒิวิชาการ (Experts):',
     gov4_1_item_4_desc: 'ช่วยกลั่นกรององค์ความรู้และให้ข้อเสนอแนะเชิงลึกเพื่อพัฒนาคุณภาพโครงการ (วาระคราวละ 3 ปี และต่อวาระได้)',
@@ -887,7 +887,7 @@ const translations = {
     meetings_desc: 'เครือข่าย TReN ยึดหลัก "เน้นทำงานจริง ไม่สร้างภาระเอกสาร และไม่กระทบเวลาสอนของครู" การพูดคุยส่วนใหญ่จึงเน้นช่องทางออนไลน์ที่ยืดหยุ่นและเป็นกันเอง ดังนี้:',
     
     meetings_item_1_title: 'การพบปะคณะที่ปรึกษาและภาคีเครือข่าย',
-    meetings_item_1_en: 'Advisory & Partner',
+    meetings_item_1_en: 'Advisory & Partners',
     meetings_item_1_desc: 'พูดคุยแลกเปลี่ยนทิศทางร่วมกันปีละ 1 ครั้ง (ผ่านระบบออนไลน์ หรือจัดร่วมกับงานประชุมใหญ่ประจำปี) เพื่อขอคำแนะนำและเติมพลังใจในการทำงาน',
     
     meetings_item_2_title: 'การประชุมใหญ่ประจำปี',
@@ -943,11 +943,11 @@ const translations = {
     team_main_en_title: 'Network Management Team',
     
     // Section 1
-    team_sec1_title: 'ทีมที่ปรึกษาและพันธมิตรยุทธศาสตร์',
-    team_sec1_en: 'Advisory & Strategic Partners',
+    team_sec1_title: 'ทีมที่ปรึกษาและผู้แทนองค์กรเครือข่าย',
+    team_sec1_en: 'Advisory & Network Representatives',
     team_role_honorary: 'ที่ปรึกษากิตติมศักดิ์',
     team_role_inter: 'ที่ปรึกษาต่างประเทศ',
-    team_role_partner: 'ผู้แทนองค์กรภาคี',
+    team_role_partner: 'ผู้แทนองค์กรเครือข่าย',
     team_role_expert: 'ผู้ทรงคุณวุฒิวิชาการ',
     team_role_past_pres: 'อดีตประธานเครือข่าย',
     
@@ -993,6 +993,7 @@ const translations = {
     // Dummies
     team_dummy_name: 'ชื่อ mmmmmmmmm',
     team_dummy_school: 'รร. mmmmmmmmm',
+    team_tba: 'รอประกาศรายชื่ออย่างเป็นทางการ',
 
   },
   en: {
@@ -1676,7 +1677,7 @@ const translations = {
     journey_phase_4_new: 'Founding TReN and Expanding Nationwide',
     journey_desc_4_1_new: 'The strength of the group of research teachers and mentors nationwide led to the founding of ',
     journey_tren_network: 'the TReN (Teacher-Research Network)',
-    journey_desc_4_2_new: ' officially, driven through regional Communities of Practice (EART Communities: EARC) divided into 8 zones nationwide, alongside elevating mentors to the Advanced Level so that each area can be self-reliant in the long term. This is accompanied by an aim to expand the EAR process to teachers nationwide and assess the in-depth impact sustainably.',
+    journey_desc_4_2_new: ' officially, driven through regional Communities of Practice (EAR Communities: EARC) divided into 8 zones nationwide, alongside elevating mentors to the Advanced Level so that each area can be self-reliant in the long term. This is accompanied by an aim to expand the EAR process to teachers nationwide and assess the in-depth impact sustainably.',
 
     // Summary of Growth Figures (Table)
     journey_table_main_title: 'Summary of the Network\'s Growth Figures',
@@ -1771,13 +1772,13 @@ const translations = {
     membership_label_qual: 'Qualifications:',
     membership_label_ben: 'Benefits:',
     membership_label_opp: 'Further Learning Opportunities:',
-    membership_type_1_title: 'General Member',
-    membership_type_1_en: 'General Member',
+    membership_type_1_title: 'General Members',
+    membership_type_1_en: ' ',
     membership_type_1_qual: 'Teachers and educators nationwide interested in EAR research (including those who have not yet undergone intensive training).',
     membership_type_1_ben: 'Access the online EAR knowledge base and attend academic webinars or knowledge-sharing stages throughout the year at no cost.',
     membership_type_1_opp: 'General members interested in joining the intensive training can follow announcements and apply for the selection process via the network’s news channels throughout the year.',
-    membership_type_2_title: 'Alumni & Mentor Member',
-    membership_type_2_en: 'Alumni & Mentor Member',
+    membership_type_2_title: 'Alumni & Mentor Members',
+    membership_type_2_en: ' ',
     membership_type_2_qual: 'Teachers who have passed the intensive EAR training program with the network.',
     membership_type_2_ben: 'Receive all the benefits of general members, along with in-depth consultation from mentors, the right to submit research for national/international presentation stages, and the opportunity to develop themselves into the next generation of "EAR Mentors".',
 
@@ -1822,14 +1823,14 @@ const translations = {
     gov4_desc: 'The administration is based on the principle of "Teachers at the core, supported by partners," emphasizing flexibility, teamwork, and role division according to aptitude:',
     
     // 4.1
-    gov4_1_title: 'Advisory & Strategic Partners',
-    gov4_1_en: 'Advisory & Strategic Partners',
+    gov4_1_title: 'Advisors & Collaborative Partners',
+    gov4_1_en: ' ',
     gov4_1_desc: 'A group of voluntary experts who join the journey, proposing strategic directions, supporting resources, linking new opportunities with network partners, and overseeing TReN’s good governance. Consisting of:',
     gov4_1_item_1_title: '1. Honorary Advisors:',
     gov4_1_item_1_desc: 'Provide policy advice, enhance credibility, and help connect the national network (Founders jointly oversee continuously with no fixed term).',
     gov4_1_item_2_title: '2. International Advisors:',
     gov4_1_item_2_desc: 'Provide advice and support in building international collaborations (3-year term, renewable).',
-    gov4_1_item_3_title: '3. Partner Representatives:',
+    gov4_1_item_3_title: '3. Network Representatives:',
     gov4_1_item_3_desc: 'Support funding, resources, speakers, and help connect academic standards (3-year term, or as nominated by the affiliated organization).',
     gov4_1_item_4_title: '4. Experts:',
     gov4_1_item_4_desc: 'Help filter knowledge and provide in-depth feedback to improve project quality (3-year term, renewable).',
@@ -1838,7 +1839,7 @@ const translations = {
 
     // 4.2
     gov4_2_title: 'Core Executive Team',
-    gov4_2_en: 'Core Executive Team',
+    gov4_2_en: ' ',
     gov4_2_desc: 'A group of teachers and staff who jointly manage daily operations, implement policies and academic frameworks, manage budgets, summarize financial reports, and oversee the 4 main operational areas (Team-based management, 4-year term, maximum 1 consecutive term). Consisting of:',
     gov4_2_item_1_title: '1. Advisors and Immediate-Past President:',
     gov4_2_item_1_desc: 'Provide advice, guide operational directions, and support the execution of the network’s missions.',
@@ -1855,7 +1856,7 @@ const translations = {
 
     // 4.3
     gov4_3_title: 'Regional EARC Teams',
-    gov4_3_en: 'Regional EARC Teams',
+    gov4_3_en: ' ',
     gov4_3_desc: 'Local teacher teams that serve as the heart of organizing activities, training, consulting, and caring for teachers in their province or region, regularly collaborating with the central team (Flexible based on each center’s internal management, no fixed term, reviewed annually with the central team). Consisting of:',
     gov4_3_item_1_title: '1. EAR Mentors / Trainers:',
     gov4_3_item_1_desc: 'Senior teachers with EAR training experience who act as thought partners and consultants for local teachers.',
@@ -1867,8 +1868,8 @@ const translations = {
     meetings_en_title: 'Meetings',
     meetings_desc: 'The TReN network adheres to the principle of "Focusing on actual work, no paperwork burden, and not affecting teachers\' teaching time." Most discussions, therefore, emphasize flexible and informal online channels as follows:',
     
-    meetings_item_1_title: 'Advisory & Partner Meetings',
-    meetings_item_1_en: 'Advisory & Partner',
+    meetings_item_1_title: 'Advisory & Partners Meetings',
+    meetings_item_1_en: 'Advisory & Partners',
     meetings_item_1_desc: 'Discuss and exchange directions together once a year (online or held in conjunction with the Annual Gathering) to seek advice and gain encouragement for the work.',
     
     meetings_item_2_title: 'Annual Gathering',
@@ -1925,10 +1926,10 @@ const translations = {
     
     // Section 1
     team_sec1_title: 'Advisory & Strategic Partners',
-    team_sec1_en: 'Advisory & Strategic Partners',
+    team_sec1_en: ' ',
     team_role_honorary: 'Honorary Advisors',
     team_role_inter: 'International Advisors',
-    team_role_partner: 'Partner Representatives',
+    team_role_partner: 'Network Representatives',
     team_role_expert: 'Experts',
     team_role_past_pres: 'Immediate-Past President',
     
@@ -1974,6 +1975,7 @@ const translations = {
     // Dummies
     team_dummy_name: 'Name mmmmmmmmm',
     team_dummy_school: 'School mmmmmmmmm',
+    team_tba: 'To be announced',
 
   }
 };

@@ -37,7 +37,8 @@ const AboutMembership: React.FC = () => {
           </p>
           <div className="w-20 h-1.5 bg-[#1e3a8a] mt-6 rounded-full"></div>
           
-          <p className="mt-8 text-2xl text-slate-800 font-light leading-relaxed max-w-4xl whitespace-pre-line">
+          {/* ปรับจาก max-w-4xl เป็น max-w-6xl ตรงนี้ครับ */}
+          <p className="mt-8 text-2xl text-slate-800 font-light leading-relaxed max-w-6xl whitespace-pre-line">
             {t('membership_desc') || 'เพื่อเปิดโอกาสให้ครูทุกคนเข้าถึงการพัฒนาวิชาชีพ การสมัครสมาชิก TReN จึงไม่มีค่าใช้จ่ายใดๆ ทั้งสิ้น โดยแบ่งสมาชิกออกเป็น 2 ประเภท:'}
           </p>
         </section>
