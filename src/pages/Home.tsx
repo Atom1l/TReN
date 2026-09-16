@@ -148,7 +148,7 @@ const Home = () => {
                 title={t('hero_img_click_hint') || 'คลิกเพื่ออ่านบทความฉบับเต็ม'}
               >
                 <img 
-                  src="public/Homepage/cover_1.jpg" 
+                  src="Homepage/cover_1.jpg" 
                   alt="Exploratory Action Research" 
                   className="w-full h-full object-cover group-hover:opacity-90 transition-opacity duration-300"
                 />
@@ -174,7 +174,7 @@ const Home = () => {
                 title={t('hero_img_click_hint') || 'คลิกเพื่ออ่านบทความฉบับเต็ม'}
               >
                 <img 
-                  src="public/Homepage/cover_2.png" 
+                  src="Homepage/cover_2.png" 
                   alt="Exploratory Action Research" 
                   className="w-full h-full object-cover group-hover:opacity-90 transition-opacity duration-300"
                 />

@@ -851,7 +851,7 @@ const Knowledge = () => {
               >
                 {/* หากมีรูปภาพหน้าปกจริง ให้เปลี่ยน src เป็น path ของรูปครับ */}
                 <img 
-                  src="public/Ear_learning_clips/Handbook.JPG" 
+                  src="Ear_learning_clips/Handbook.JPG" 
                   alt="EAR Handbook Cover" 
                   className="w-full h-auto object-cover rounded-xl shadow-lg border border-slate-200"
                   onError={(e) => {
