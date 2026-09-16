@@ -230,19 +230,8 @@ const Navbar = () => {
 
   const menuItems = [
     { name: t('home') || 'Home', path: '/' },
-    { name: t('news') || 'News', path: '/news' },
-    { 
-      name: t('events') || 'Events', 
-      path: '#',
-      dropdown: [
-        { name: t('all_events') || 'All Events (กิจกรรมทั้งหมด)', path: '/events' }, 
-        { name: t('upcoming_events_navbar') || 'Upcoming (กำลังมาถึง)', path: '/events/all?filter=upcoming' },
-        { name: t('past_events_navbar') || 'Past (ผ่านมาแล้ว)', path: '/events/all?filter=past' }
-      ]
-    },
-    { name: t('blogs') || 'Blogs', path: '/blogs' },
-    { name: t('resources') || 'Resource', path: '/resources' },
-    { name: t('showcases') || 'Showcases', path: '/showcases' },
+    // { name: t('news') || 'News', path: '/news' },
+
     { 
       name: t('about') || 'About us', 
       path: '/about',
@@ -264,6 +253,22 @@ const Navbar = () => {
         { name: t('nav_about_4') || '4. องค์กรพันธมิตร', path: '/about#supporters' },
       ]
     },
+
+    { name: t('knowledge') || 'Knowledge', path: '/knowledge' },
+    { name: t('knowledge_column') || 'Knowledge Column', path: '/knowledgecolumn' },
+    { 
+      name: t('events') || 'Events', 
+      path: '#',
+      dropdown: [
+        { name: t('all_events') || 'All Events (กิจกรรมทั้งหมด)', path: '/events' }, 
+        { name: t('upcoming_events_navbar') || 'Upcoming (กำลังมาถึง)', path: '/events/all?filter=upcoming' },
+        { name: t('past_events_navbar') || 'Past (ผ่านมาแล้ว)', path: '/events/all?filter=past' }
+      ]
+    },
+    { name: t('blogs') || 'Blogs', path: '/blogs' },
+    { name: t('resources') || 'Resource', path: '/resources' },
+    { name: t('showcases') || 'Showcases', path: '/showcases' },
+    
   ];
 
   return (
@@ -351,13 +356,13 @@ const Navbar = () => {
 
             <div className="flex items-center gap-2 flex-shrink-0">
               
-              <Link to="/search" className="cursor-pointer">
+              {/* <Link to="/search" className="cursor-pointer">
                 <button className={`p-2 text-primary hover:bg-slate-100 rounded-full transition-all active:scale-90 group cursor-pointer`} title="Search">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 lg:w-5 lg:h-5 xl:w-7 xl:h-7">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                   </svg>
                 </button>
-              </Link>
+              </Link> */}
 
               <div className="hidden lg:flex items-center">
                 {isAuthLoading ? (

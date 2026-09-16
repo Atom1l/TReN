@@ -39,6 +39,8 @@ import AboutCoreRoles from './pages/aboutus/AboutCoreRoles'
 import AboutGovernance from './pages/aboutus/AboutGovernance'
 import AboutSupporters from './pages/aboutus/AboutSupporters'
 import AboutPage from './pages/aboutus/AboutPage'
+import Knowledge from './pages/Knowledge'
+import KnowledgeColumn from './pages/KnowledgeColumn'
 
 function App() {
   return (
@@ -85,7 +87,9 @@ function App() {
               <Route path="/resources" element={<Resources />} />
               <Route path="/create-resource" element={<CreateResource />} />
               <Route path="/edit/resource/:id" element={<CreateResource />} />
-              
+
+              <Route path="/knowledge" element={<Knowledge />} />
+              <Route path="/knowledgecolumn" element={<KnowledgeColumn />} />
 
               {/* Route สำหรับหน้า About Us */}
               <Route path="/about/" element={<AboutPage/>}/>
