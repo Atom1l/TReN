@@ -222,7 +222,7 @@ const NewsDetail = () => {
         wrapper.appendChild(img);
         
         img.classList.add('rounded-xl', 'shadow-md', 'max-w-full', 'h-auto');
-        img.style.margin = '0'; // ลบ margin ภายในออกให้ wrapper จัดการแทน
+        (img as HTMLImageElement).style.margin = '0';
 
         // สร้าง Label
         const label = document.createElement('div');
