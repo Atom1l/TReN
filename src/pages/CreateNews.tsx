@@ -285,26 +285,36 @@ const CreateNews = () => {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-8">
+
+        <div className="text-center mb-10 mt-14">
+          <h1 className="text-5xl lg:text-7xl font-bold text-[#1e3a8a] mb-2">
+            {isEditMode ? (t('edit_news_title') || 'แก้ไขข่าวสารกิจกรรม') : (t('create_news') || 'เพิ่มผลงานสมาชิก')}
+          </h1>
+          <p className="text-xl text-slate-500">
+            {t('create_news_desc') || 'แบ่งปันกิจกรรม ข่าวสารให้แก่สมาชิกในเครือข่าย'}
+          </p>
+        </div>
         
         {/* 🟢 Dropdown เลือกหมวดหมู่ข่าว (Category) */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 mb-6 p-6 sm:px-12 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <label className="text-[#1e3a8a] font-bold whitespace-nowrap text-lg">
+          <label className="text-[#1e3a8a] font-bold whitespace-nowrap text-xl">
             {t('news_category') || 'หมวดหมู่ข่าวสาร'}<span className="text-red-500 ml-1">*</span>
           </label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full sm:w-auto flex-1 p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white cursor-pointer outline-none text-slate-700 font-medium"
+            className="w-full sm:w-auto flex-1 p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white cursor-pointer outline-none text-slate-700 font-medium text-lg"
           >
             <option value="" disabled>-- {t('select_category') || 'เลือกหมวดหมู่ข่าวที่นี่'} --</option>
             <option value="announcement">{t('news_announcements') || 'ประกาศสำคัญ (Announcements)'}</option>
             <option value="success_story">{t('news_earc') || 'เรื่องเล่าความสำเร็จ (EARC Spotlight)'}</option>
             <option value="activity_snapshot">{t('news_activity') || 'ภาพบรรยายกิจกรรมล่าสุด (Activity Snapshot)'}</option>
+            <option value="public_relations">{t('news_public_relations') || 'ประชาสัมพันธ์ (Public Relations)'}</option>
           </select>
         </div>
 
         {/* 🟢 พื้นที่พิมพ์บทความ (Editor) */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-20">
           <div className="p-8 sm:p-12">
             
             {/* Title */}
@@ -334,10 +344,7 @@ const CreateNews = () => {
                 </>
               ) : (
                 <div className="flex flex-col items-center text-slate-400">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 mb-3">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                  </svg>
-                  <span className="font-medium text-lg">{t('add_news_cover') || 'อัปโหลดภาพหน้าปกข่าว'}</span>
+                  <span className="text-xl text-slate-500 italic">{t('add_news_cover') || 'อัปโหลดภาพหน้าปกข่าว'}</span>
                 </div>
               )}
             </div>

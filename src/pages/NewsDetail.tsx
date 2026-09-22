@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
@@ -10,11 +11,11 @@ import ReportModal from '../components/ReportModal';
 const translateText = async (text: string, targetLang: string) => {
   if (!text || !text.trim() || text === '-') return text;
   
-  // นับสัดส่วนภาษาเพื่อล็อคภาษาต้นทาง ป้องกัน Google เดามั่ว
   const cleanText = text.replace(/<[^>]*>?/gm, '');
   const thaiCharsCount = (cleanText.match(/[\u0E00-\u0E7F]/g) || []).length;
   const engCharsCount = (cleanText.match(/[a-zA-Z]/g) || []).length;
-  const isThaiArticle = thaiCharsCount > engCharsCount;
+  
+  const isThaiArticle = thaiCharsCount > 5;
   
   if (targetLang === 'th' && isThaiArticle) return text;
   if (targetLang === 'en' && !isThaiArticle) return text;
@@ -42,7 +43,6 @@ const translateText = async (text: string, targetLang: string) => {
 
   let result = await fetchTranslate(text);
 
-  // ระบบแปลซ้ำสำหรับคำสั้นๆ
   if (result === text && targetLang === 'th' && !isThaiArticle && text.length <= 15) {
     const lowerResult = await fetchTranslate(text.toLowerCase());
     if (lowerResult !== text.toLowerCase()) return lowerResult;
@@ -61,12 +61,13 @@ const NewsDetail = () => {
   const [relatedNews, setRelatedNews] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 🟢 2. State สำหรับแปลภาษา
+  // 🟢 2. State สำหรับแปลภาษา และ Popup รูปภาพ
   const [translatedTitle, setTranslatedTitle] = useState('');
   const [translatedContent, setTranslatedContent] = useState('');
   const [isTranslating, setIsTranslating] = useState(false);
-
+  
   const [isReportOpen, setIsReportOpen] = useState(false);
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null); 
 
   const [alertModal, setAlertModal] = useState({
     isOpen: false,
@@ -84,17 +85,20 @@ const NewsDetail = () => {
     });
   };
 
+  const safeTranslate = (key: string, fallback: string) => {
+    const translated = t(key);
+    return (translated && translated !== key) ? translated : fallback;
+  };
+
   const getCategoryTranslation = (category: string) => {
     if (!category) return '';
     const catLower = category.toLowerCase();
     
-    if (catLower.includes('announcement')) {
-      return t('news_announcements') || 'ประกาศสำคัญ (Announcements)';
-    } else if (catLower.includes('earc') || catLower.includes('success')) {
-      return t('news_earc') || 'เรื่องเล่าความสำเร็จ (EARC Spotlight)';
-    } else if (catLower.includes('activity')) {
-      return t('news_activity') || 'ภาพบรรยายกิจกรรมล่าสุด (Activity Snapshot)';
-    }
+    if (catLower.includes('announcement')) return safeTranslate('news_announcements', 'ประกาศสำคัญ');
+    if (catLower.includes('earc') || catLower.includes('success')) return safeTranslate('news_earc', 'เรื่องเล่าเครือข่าย');
+    if (catLower.includes('activity')) return safeTranslate('news_activity', 'ภาพกิจกรรม');
+    if (catLower.includes('public_relations')) return safeTranslate('news_public_relations', 'ประชาสัมพันธ์');
+    
     return category;
   };
 
@@ -189,7 +193,53 @@ const NewsDetail = () => {
     if (id) fetchNewsData();
   }, [id, navigate, t]);
 
-  // 🟢 3. เรียกใช้งานการแปลเนื้อหาข่าว (Trigger on language switch)
+  // 🟢 3. Script เพื่อเพิ่มป้ายกำกับ "คลิกเพื่อดูภาพเต็ม" ในภาพที่เป็น Content อัตโนมัติ
+  useEffect(() => {
+    const handleContentImageClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target && target.tagName === 'IMG' && target.closest('.article-content')) {
+        setZoomedImage((target as HTMLImageElement).src);
+      } else if (target && target.closest('.image-wrapper-click')) {
+        const img = target.closest('.image-wrapper-click')?.querySelector('img');
+        if (img) setZoomedImage(img.src);
+      }
+    };
+
+    document.addEventListener('click', handleContentImageClick);
+
+    // ค้นหาและตกแต่งรูปภาพที่ Render จาก Quill Editor
+    const contentDiv = document.querySelector('.article-content');
+    if (contentDiv) {
+      const images = contentDiv.querySelectorAll('img:not(.processed)');
+      images.forEach(img => {
+        img.classList.add('processed'); // ป้องกันการห่อซ้ำ
+        
+        // สร้าง Wrapper เพื่อให้วาง Label ได้
+        const wrapper = document.createElement('div');
+        wrapper.className = 'image-wrapper-click relative group cursor-zoom-in my-8 inline-block w-fit max-w-full';
+        
+        img.parentNode?.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+        
+        img.classList.add('rounded-xl', 'shadow-md', 'max-w-full', 'h-auto');
+        img.style.margin = '0'; // ลบ margin ภายในออกให้ wrapper จัดการแทน
+
+        // สร้าง Label
+        const label = document.createElement('div');
+        label.className = 'absolute bottom-3 right-3 bg-slate-900/75 text-white text-[11px] sm:text-xs md:text-sm px-3 py-1.5 rounded-lg backdrop-blur-md flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg';
+        label.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+          </svg>
+          <span>${t('click_to_view_full') || 'คลิกเพื่อดูภาพฉบับเต็ม'}</span>
+        `;
+        wrapper.appendChild(label);
+      });
+    }
+
+    return () => document.removeEventListener('click', handleContentImageClick);
+  }, [translatedContent, newsItem, t]); // รันซ้ำเมื่อเนื้อหาถูกแปลหรือโหลดเสร็จ
+
   useEffect(() => {
     const autoTranslate = async () => {
       if (!newsItem) return;
@@ -321,8 +371,31 @@ const NewsDetail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white pb-24">
+    <div className="min-h-screen bg-white pb-24 relative">
       {renderAlertModal()}
+
+      {/* 🟢 4. โมดอลสำหรับดูรูปขยายใหญ่ (Image Viewer Popup) */}
+      {zoomedImage && (
+        <div 
+          className="fixed inset-0 z-[200] bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 animate-fade-in"
+          onClick={() => setZoomedImage(null)}
+        >
+          <button 
+            className="absolute top-6 right-6 text-white bg-slate-800/50 hover:bg-slate-700 p-2 rounded-full cursor-pointer transition-colors z-10"
+            onClick={() => setZoomedImage(null)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <img 
+            src={zoomedImage} 
+            alt="Zoomed" 
+            className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl transform transition-transform duration-300 scale-100" 
+            onClick={(e) => e.stopPropagation()} // ป้องกันคลิกรูปแล้วปิด
+          />
+        </div>
+      )}
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
@@ -372,29 +445,43 @@ const NewsDetail = () => {
           </span>
         </p>
 
+        {/* 🟢 5. ภาพหน้าปก: ลบเอฟเฟกต์ซูมตอนโฮเวอร์ออก และเพิ่มป้ายกำกับ */}
         {newsItem.thumbnail_url && (
-          <div className="w-full h-[250px] sm:h-[400px] lg:h-[450px] rounded-xl overflow-hidden mb-10 shadow-sm border border-slate-100">
+          <div 
+            className="w-full h-[250px] sm:h-[400px] lg:h-[450px] rounded-xl overflow-hidden mb-10 shadow-sm border border-slate-100 cursor-zoom-in relative group"
+            onClick={() => setZoomedImage(newsItem.thumbnail_url)} 
+          >
             <img 
               src={newsItem.thumbnail_url} 
               alt={newsItem.title} 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover" 
             />
+            {/* ป้ายกำกับบนรูปหน้าปก */}
+            <div className="absolute bottom-4 right-4 bg-slate-900/75 text-white text-xs md:text-sm px-3 py-1.5 rounded-lg backdrop-blur-md flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+              </svg>
+              <span>{t('click_to_view_full') || 'คลิกเพื่อดูภาพเต็มๆ'}</span>
+            </div>
           </div>
         )}
 
+        {/* 🟢 6. ลบคลาส prose ทิ้ง บังคับไซต์ฟอนต์เนื้อหาด้วยตัวเอง text-lg md:text-xl lg:text-[22px] */}
         <div 
-          className="prose prose-lg max-w-none text-slate-700 leading-relaxed mb-12 
+          className="article-content max-w-none text-slate-700 leading-relaxed mb-12 
                      whitespace-pre-wrap break-words overflow-hidden
-                     [&>p]:mb-4 [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-[#1e3a8a] [&>h1]:mb-4 
-                     [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-[#1e3a8a] [&>h2]:mb-3
-                     [&>img]:rounded-xl [&>img]:shadow-sm [&>img]:my-6 [&>img]:max-w-full [&>img]:h-auto
-                     [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:mb-4
-                     [&>pre]:overflow-x-auto [&>pre]:bg-slate-100 [&>pre]:p-4 [&>pre]:rounded-lg"
+                     text-lg md:text-xl lg:text-[22px]
+                     [&>p]:text-lg md:[&>p]:text-xl lg:[&>p]:text-[22px] [&>p]:mb-6
+                     [&>h1]:text-3xl md:[&>h1]:text-4xl lg:[&>h1]:text-5xl [&>h1]:font-bold [&>h1]:text-[#1e3a8a] [&>h1]:mb-6 [&>h1]:mt-10
+                     [&>h2]:text-2xl md:[&>h2]:text-3xl lg:[&>h2]:text-4xl [&>h2]:font-bold [&>h2]:text-[#1e3a8a] [&>h2]:mb-4 [&>h2]:mt-8
+                     [&>ul]:text-lg md:[&>ul]:text-xl lg:[&>ul]:text-[22px] [&>ul]:list-disc [&>ul]:pl-8 [&>ul]:mb-6 [&>ul>li]:mb-3
+                     [&>ol]:text-lg md:[&>ol]:text-xl lg:[&>ol]:text-[22px] [&>ol]:list-decimal [&>ol]:pl-8 [&>ol]:mb-6 [&>ol>li]:mb-3
+                     [&>pre]:overflow-x-auto [&>pre]:bg-slate-100 [&>pre]:p-5 [&>pre]:rounded-xl [&>pre]:text-base"
           dangerouslySetInnerHTML={{ __html: translatedContent || newsItem.content || '' }}
         />
 
         <div className='mb-12'>
-          <h3 className="text-lg font-bold text-[#1e3a8a] mb-3">{t('share_post') || 'Share this post with friends'}</h3>
+          <h3 className="text-xl font-bold text-[#1e3a8a] mb-3">{t('share_post') || 'Share this post with friends'}</h3>
           <div className="flex flex-col sm:flex-row sm:items-center gap-6 justify-between">
             
             <div className="flex flex-wrap gap-2">
@@ -430,25 +517,29 @@ const NewsDetail = () => {
           </div>
         </div>
 
+        {/* กล่องประวัติผู้เขียน */}
         {author && (
-          <div className="bg-[#F8FAFC] p-6 rounded-2xl flex flex-col sm:flex-row gap-6 items-start sm:items-center mb-16 border border-slate-100">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#1e3a8a] rounded-xl flex-shrink-0 flex items-center justify-center text-white text-2xl font-bold overflow-hidden shadow-inner">
-              {author.profilepic ? (
-                <img src={author.profilepic} alt="Author" className="w-full h-full object-cover" />
-              ) : (
-                `${author.first_name?.charAt(0) || ''}`
-              )}
-            </div>
-            <div className="flex-1">
-              <h3 className="text-xl font-bold text-[#1e3a8a] mb-2">{author.first_name} {author.last_name}</h3>
-              <p className="text-slate-600 text-sm mb-3 leading-relaxed">
-                {author.bio || t('no_bio') || 'ผู้เขียนยังไม่ได้เพิ่มคำอธิบายตัวเอง (Bio)'}
-              </p>
-              <Link to={`/profile/${author.id}`} className="text-[#1e3a8a] hover:underline font-semibold">
-                <button className="text-[#1e3a8a] text-sm font-bold underline underline-offset-4 hover:text-blue-900 transition-colors cursor-pointer">
-                  {t('more_posts') || 'ดูผลงานทั้งหมดของผู้เขียน'}
-                </button>
-              </Link>
+          <div className="mb-16">
+            <h3 className="text-xl font-bold text-[#1e3a8a] mb-3">{t('posted_by') || 'ผู้โพสต์ผลงาน'}</h3>
+            <div className="bg-[#F8FAFC] p-6 rounded-2xl flex flex-col sm:flex-row gap-6 items-start sm:items-center border border-slate-100">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#1e3a8a] rounded-xl flex-shrink-0 flex items-center justify-center text-white text-2xl font-bold overflow-hidden shadow-inner">
+                {author.profilepic ? (
+                  <img src={author.profilepic} alt="Author" className="w-full h-full object-cover" />
+                ) : (
+                  `${author.first_name?.charAt(0) || ''}`
+                )}
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-[#1e3a8a] mb-2">{author.first_name} {author.last_name}</h3>
+                <p className="text-slate-600 text-sm mb-3 leading-relaxed">
+                  {author.bio || t('no_bio') || 'ผู้เขียนยังไม่ได้เพิ่มคำอธิบายตัวเอง (Bio)'}
+                </p>
+                <Link to={`/profile/${author.id}`} className="text-[#1e3a8a] hover:underline font-semibold">
+                  <button className="text-[#1e3a8a] text-sm font-bold underline underline-offset-4 hover:text-blue-900 transition-colors cursor-pointer">
+                    {t('more_posts') || 'ดูผลงานทั้งหมดของผู้เขียน'}
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         )}

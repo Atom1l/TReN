@@ -10,7 +10,8 @@ const AboutOperations: React.FC = () => {
         
         {/* Header Section */}
         <section className="mb-12 md:mb-16">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
+          <span className="text-slate-500 font-bold block text-2xl md:text-3xl mb-3">{t('const_cat_3') || 'หมวดที่ 3'}</span>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
             {t('ops_title') || 'ขอบเขตการดำเนินงานและโครงการหลัก'} 
           </h2>
           <p className="text-xl md:text-2xl text-slate-500 font-medium tracking-wide mt-4 uppercase">

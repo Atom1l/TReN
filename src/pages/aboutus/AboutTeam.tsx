@@ -15,46 +15,9 @@ const AboutTeam: React.FC = () => {
     </div>
   );
 
-  // ข้อมูลทีมภูมิภาค (แทนที่ dummy ด้วย TBA Badge และเอาช่องโรงเรียนออกชั่วคราว)
-  const regionalTeams = [
-    {
-      region: t('team_reg_north') || '1. ภาคเหนือ (EARC North)',
-      zones: [
-        { name: t('team_zone_upper') || 'ตอนบน', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> },
-        { name: t('team_zone_lower') || 'ตอนล่าง', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
-      ]
-    },
-    {
-      region: t('team_reg_northeast') || '2. ภาคตะวันออกเฉียงเหนือ (EARC Northeast)',
-      zones: [
-        { name: t('team_zone_upper') || 'ตอนบน', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> },
-        { name: t('team_zone_lower') || 'ตอนล่าง', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
-      ]
-    },
-    {
-      region: t('team_reg_central') || '3. ภาคกลาง (EARC Central)',
-      zones: [
-        { name: '', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
-      ]
-    },
-    {
-      region: t('team_reg_east') || '4. ภาคตะวันออก (EARC East)',
-      zones: [
-        { name: '', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
-      ]
-    },
-    {
-      region: t('team_reg_south') || '5. ภาคใต้ (EARC South)',
-      zones: [
-        { name: t('team_zone_upper') || 'ตอนบน', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> },
-        { name: t('team_zone_lower') || 'ตอนล่าง', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
-      ]
-    }
-  ];
-
   return (
     <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24 pb-20">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24 pb-12 mt-14">
         
         {/* Header Section */}
         <section className="mb-16">
@@ -171,10 +134,12 @@ const AboutTeam: React.FC = () => {
               </div>
               <div className="md:w-8/12">
                 <div className="mb-6">
-                  <TbaBadge />
+                  <p className="text-2xl text-slate-800 font-medium">{t('team_role_pres1') || 'ครูจิติมา ดวงมณี'}</p>
+                  <p className="text-xl text-slate-500 mt-1 font-light">{t('team_role_pres1_desc') || 'โรงเรียนสุรธรรมพิทักษ์ นครราชสีมา'}</p>
                 </div>
                 <div>
-                  <TbaBadge />
+                  <p className="text-2xl text-slate-800 font-medium">{t('team_role_vp1') || 'ครูพัชรินทร์ กุลณา'}</p>
+                  <p className="text-xl text-slate-500 mt-1 font-light">{t('team_role_vp1_desc') || 'โรงเรียนดำรงราษฏร์สงเคราะห์ เชียงราย'}</p>
                 </div>
               </div>
             </div>
@@ -211,59 +176,6 @@ const AboutTeam: React.FC = () => {
             </div>
           </div>
         </section>
-
-        {/* =========================================
-            Section 3: Regional EARC Teams
-        ========================================= */}
-        <section>
-          <div className="mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] tracking-tight">{t('team_sec3_title') || 'ทีมงานศูนย์ขับเคลื่อนวิจัยครูระดับภูมิภาค'}</h2>
-            <p className="text-lg text-slate-500 uppercase tracking-widest mt-2">{t('team_sec3_en') || 'Regional EARC Teams'}</p>
-          </div>
-
-          <div className="space-y-16 border-t-[2px] border-[#1e3a8a] pt-12">
-            {regionalTeams.map((regionData, idx) => (
-              <div key={idx}>
-                {/* ชื่อภาค */}
-                <h3 className="text-3xl font-bold text-[#1e3a8a] mb-8">{regionData.region}</h3>
-                
-                <div className="space-y-10 pl-0 md:pl-6 border-l-[3px] border-slate-200 ml-2">
-                  {regionData.zones.map((zone, zIdx) => (
-                    <div key={zIdx} className="space-y-6">
-                      {/* ชื่อโซน (ตอนบน/ตอนล่าง) */}
-                      {zone.name && (
-                        <h4 className="text-xl font-bold text-slate-500 tracking-wide uppercase flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-slate-400"></span> {zone.name}
-                        </h4>
-                      )}
-                      
-                      {/* รายชื่อในโซน (จัดแบบซ้าย-ขวา โดยแสดง Badge TBA) */}
-                      <div className="space-y-5 pl-4 md:pl-8">
-                        {/* หัวหน้า */}
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 items-start sm:items-center">
-                          <span className="w-28 shrink-0 text-xl font-medium text-[#1e3a8a]">{t('team_role_head') || 'หัวหน้า:'}</span>
-                          <div>{zone.head}</div>
-                        </div>
-                        {/* รองหัวหน้า */}
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 items-start sm:items-center">
-                          <span className="w-28 shrink-0 text-xl font-medium text-[#1e3a8a]">{t('team_role_deputy') || 'รองหัวหน้า:'}</span>
-                          <div>{zone.deputy}</div>
-                        </div>
-                        {/* กรรมการ */}
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 items-start sm:items-center">
-                          <span className="w-28 shrink-0 text-xl font-medium text-[#1e3a8a]">{t('team_role_committee') || 'กรรมการ:'}</span>
-                          <div>{zone.committee}</div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </section>
-
       </div>
     </div>
   );

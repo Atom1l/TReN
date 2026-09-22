@@ -497,7 +497,7 @@ const AdminShowcases = () => {
                       
                       <td className="px-4 py-3 sm:px-6 sm:py-4 text-center">
                         <button 
-                          onClick={() => setViewModal({ isOpen: true, showcase: showcase })} 
+                          onClick={() => navigate(`/showcase/${showcase.id}`)} 
                           className="bg-[#DBEAFE] p-1.5 sm:p-2 rounded-md text-[#1E3A8A] hover:bg-blue-200 transition-colors cursor-pointer" 
                           title={t('view') || 'รายละเอียด'}
                         >

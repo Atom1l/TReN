@@ -375,31 +375,25 @@ const AboutVisionMission: React.FC = () => {
   return (
     <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24">
-        
-        {/* 1. Intro Section - อธิบาย TReN คืออะไร */}
-        <section className="mb-20 md:mb-22">
-          <div className="max-w-4xl">
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
-              {t('vision_about_tren_title') || 'TReN'}
-              <span className="block text-2xl md:text-3xl text-slate-400 mt-2 font-medium tracking-normal">
-                {t('vision_about_tren_subtitle') || 'เครือข่ายวิจัยครู'}
-              </span>
-            </h1>
-            
-            
-            <div className="text-xl md:text-2xl text-slate-800 leading-relaxed font-light tracking-wide space-y-8">
-              <p>
-                <strong className="font-semibold text-[#1e3a8a]">(Teacher-Research Network)</strong>
-              </p>
-            </div>
-            <div className="w-20 h-1.5 bg-[#1e3a8a] mt-6 mb-8 rounded-full"></div>
-          </div>
-        </section>
+
+        <div className="mb-10 text-center md:text-left">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
+            {t('const_main_title') || 'กรอบการทำงานของเครือข่าย'}
+          </h2>
+          <p className="text-2xl md:text-3xl text-slate-500 font-medium tracking-wide mt-2">
+            {t('const_main_en_title') || 'TReN Constitution'}
+          </p>
+          <div className="w-20 h-1.5 bg-[#1e3a8a] mt-6 rounded-full mx-auto md:mx-0"></div>
+        </div>
 
         {/* 2. Big Headline Section - เน้นหัวข้อตัวใหญ่ */}
-        <section className="mb-12 md:mb-16">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
+        <section className="mb-10 mt-20">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
+            <span className="text-slate-500 font-bold block text-2xl md:text-3xl mb-3">{t('const_cat_1') || 'หมวดที่ 1'}</span>
             {t('vision_about_vision_headline') || 'วิสัยทัศน์'} <span> {t('and') || 'และ'} {t('vision_about_mission_headline') || 'พันธกิจ'}</span>
+            <p className="text-xl md:text-2xl text-slate-500 font-medium tracking-wide mt-4">
+              {t('vision_sub_text') || "Vision and Mission"}
+            </p>
           </h2>
         </section>
 
@@ -434,7 +428,7 @@ const AboutVisionMission: React.FC = () => {
                 {/* Item 1 */}
                 <div>
                   <h4 className="text-2xl font-bold text-[#1e3a8a] mb-3 flex items-center gap-4">
-                    <span className="text-[#1e3a8a]">01.</span>
+                    <span className="text-[#1e3a8a]">1.</span>
                     {t('vision_about_empowerment') || 'พัฒนาทักษะ'} <span className="text-slate-500 font-medium text-xl">{t('vision_about_empowerment_en') || '(Empowerment)'}</span>
                   </h4>
                   <p className="text-2xl text-slate-800 font-light leading-relaxed md:pl-12">
@@ -444,7 +438,7 @@ const AboutVisionMission: React.FC = () => {
                 {/* Item 2 */}
                 <div>
                   <h4 className="text-2xl font-bold text-[#1e3a8a] mb-3 flex items-center gap-4">
-                    <span className="text-[#1e3a8a]">02.</span>
+                    <span className="text-[#1e3a8a]">2.</span>
                     {t('vision_about_community') || 'สร้างเครือข่าย'} <span className="text-slate-500 font-medium text-xl">{t('vision_about_community_en') || '(Community)'}</span>
                   </h4>
                   <p className="text-2xl text-slate-800 font-light leading-relaxed md:pl-12">
@@ -454,7 +448,7 @@ const AboutVisionMission: React.FC = () => {
                 {/* Item 3 */}
                 <div>
                   <h4 className="text-2xl font-bold text-[#1e3a8a] mb-3 flex items-center gap-4">
-                    <span className="text-[#1e3a8a]">03.</span>
+                    <span className="text-[#1e3a8a]">3.</span>
                     {t('vision_about_sustainability') || 'สร้างความยั่งยืน'} <span className="text-slate-500 font-medium text-xl">{t('vision_about_sustainability_en') || '(Sustainability)'}</span>
                   </h4>
                   <p className="text-2xl text-slate-800 font-light leading-relaxed md:pl-12">

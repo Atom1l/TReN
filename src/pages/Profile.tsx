@@ -29,7 +29,8 @@ interface ContentItem {
   title: string;
   created_at: string;
   status: string;
-  type: 'blog' | 'showcase' | 'event' | 'resource' | 'news'; // 🟢 เพิ่ม type news
+  // 🟢 เพิ่ม type 'member_work' เข้าไปในสเปค
+  type: 'blog' | 'showcase' | 'event' | 'resource' | 'news' | 'member_work'; 
   rejection_reason?: string;
   thumbnail_url?: string;
   schedule_status?: string; 
@@ -53,11 +54,13 @@ const Profile = () => {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+  // 🟢 เพิ่ม State สำหรับการเปิด/ปิดแถบ Member Works
   const [isBlogsOpen, setIsBlogsOpen] = useState(true);
-  const [isNewsOpen, setIsNewsOpen] = useState(true); // 🟢 เพิ่ม State สำหรับเปิดปิดแถบ News
+  const [isNewsOpen, setIsNewsOpen] = useState(true); 
   const [isEventsOpen, setIsEventsOpen] = useState(true);
   const [isShowcasesOpen, setIsShowcasesOpen] = useState(true);
   const [isResourcesOpen, setIsResourcesOpen] = useState(true); 
+  const [isMemberWorksOpen, setIsMemberWorksOpen] = useState(true); 
 
   const [reasonModal, setReasonModal] = useState({ isOpen: false, text: '' });
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: '', type: '', title: '' });
@@ -120,27 +123,32 @@ const Profile = () => {
       let showcasesQuery2 = supabase.from('showcases').select('*').contains('author_data', JSON.stringify([{ id: targetUserId }]));
       
       let blogsQuery = supabase.from('blogs').select('id, title, created_at, status, rejection_reason, thumbnail_url').eq('author_id', targetUserId);
-      let newsQuery = supabase.from('news').select('id, title, created_at, status, rejection_reason, thumbnail_url').eq('author_id', targetUserId); // 🟢 Query ของ News
+      let newsQuery = supabase.from('news').select('id, title, created_at, status, rejection_reason, thumbnail_url').eq('author_id', targetUserId); 
       let eventsQuery = supabase.from('events').select('*').eq('created_by', targetUserId);
       let resourcesQuery = supabase.from('resources').select('*').eq('author_id', targetUserId);
+      
+      // 🟢 เพิ่ม Query ดึงผลงานสมาชิก
+      let memberWorksQuery = supabase.from('member_works').select('id, title, created_at, status, rejection_reason, thumbnail_url').eq('author_id', targetUserId);
 
       if (!isOwn) {
         blogsQuery = blogsQuery.eq('status', 'published');
-        newsQuery = newsQuery.eq('status', 'published'); // 🟢 เช็ค published สำหรับ news
+        newsQuery = newsQuery.eq('status', 'published'); 
         showcasesQuery1 = showcasesQuery1.eq('status', 'published');
         showcasesQuery2 = showcasesQuery2.eq('status', 'published');
         eventsQuery = eventsQuery.eq('event_state', 'published');
         resourcesQuery = resourcesQuery.eq('status', 'published');
+        memberWorksQuery = memberWorksQuery.eq('status', 'published'); // 🟢 เช็คให้โชว์เฉพาะ published ถัาไม่ใช่โปรไฟล์ตัวเอง
       }
 
       const [
         { data: blogsData, error: blogsError },
-        { data: newsData, error: newsError }, // 🟢 รับค่า News Data
+        { data: newsData, error: newsError }, 
         { data: showcasesData1, error: showcasesError1 },
         { data: showcasesData2, error: showcasesError2 },
         { data: eventsData, error: eventsError },
-        { data: resourcesData, error: resourcesError } 
-      ] = await Promise.all([blogsQuery, newsQuery, showcasesQuery1, showcasesQuery2, eventsQuery, resourcesQuery]);
+        { data: resourcesData, error: resourcesError },
+        { data: memberWorksData, error: memberWorksError } // 🟢 รับค่า Member Works
+      ] = await Promise.all([blogsQuery, newsQuery, showcasesQuery1, showcasesQuery2, eventsQuery, resourcesQuery, memberWorksQuery]);
 
       if (blogsError) console.error("Error fetching blogs:", blogsError);
       if (newsError) console.error("Error fetching news:", newsError);
@@ -148,13 +156,15 @@ const Profile = () => {
       if (showcasesError2) console.error("Error fetching showcases 2:", showcasesError2);
       if (eventsError) console.error("Error fetching events:", eventsError);
       if (resourcesError) console.error("Error fetching resources:", resourcesError);
+      if (memberWorksError) console.error("Error fetching member works:", memberWorksError);
 
       const combinedContents: ContentItem[] = [];
       
       if (blogsData) combinedContents.push(...blogsData.map((b: any) => ({ ...b, type: 'blog' as const })));
-      
-      // 🟢 นำข้อมูล News ใส่เข้า combinedContents
       if (newsData) combinedContents.push(...newsData.map((n: any) => ({ ...n, type: 'news' as const })));
+      
+      // 🟢 นำข้อมูล Member Works ใส่เข้า combinedContents
+      if (memberWorksData) combinedContents.push(...memberWorksData.map((m: any) => ({ ...m, type: 'member_work' as const })));
       
       const rawShowcases = [...(showcasesData1 || []), ...(showcasesData2 || [])];
       const uniqueShowcases = Array.from(new Map(rawShowcases.map(item => [item.id, item])).values());
@@ -231,15 +241,15 @@ const Profile = () => {
   }) : contents;
 
   const blogs = filteredContents.filter(c => c.type === 'blog');
-  const newsList = filteredContents.filter(c => c.type === 'news'); // 🟢 จัดกลุ่ม News
+  const newsList = filteredContents.filter(c => c.type === 'news'); 
   const showcases = filteredContents.filter(c => c.type === 'showcase');
   const eventsList = filteredContents.filter(c => c.type === 'event'); 
   const resourcesList = filteredContents.filter(c => c.type === 'resource');
+  const memberWorks = filteredContents.filter(c => c.type === 'member_work'); // 🟢 จัดกลุ่ม Member Works
 
   const allowedRoles = ['admin', 'co_admin', 'developer'];
   const canCreateSpecialContent = isOwnProfile && user && allowedRoles.includes((user.role || '').toLowerCase());
 
-  // สิทธิ์เฉพาะสำหรับปุ่มสร้างข่าวสาร (อนุญาตเฉพาะ admin และ co_admin)
   const canCreateNews = isOwnProfile && user && ['admin', 'co_admin', 'developer'].includes((user.role || '').toLowerCase());
 
   const handleConfirmDelete = async () => {
@@ -247,10 +257,11 @@ const Profile = () => {
     try {
       let tableName = '';
       if (deleteModal.type === 'blog') tableName = 'blogs';
-      if (deleteModal.type === 'news') tableName = 'news'; // 🟢 เพิ่มเคสลบตาราง news
+      if (deleteModal.type === 'news') tableName = 'news'; 
       if (deleteModal.type === 'event') tableName = 'events';
       if (deleteModal.type === 'showcase') tableName = 'showcases';
       if (deleteModal.type === 'resource') tableName = 'resources'; 
+      if (deleteModal.type === 'member_work') tableName = 'member_works'; // 🟢 เพิ่มตาราง member_works
 
       const itemToDelete = contents.find(item => item.id === deleteModal.id);
 
@@ -429,7 +440,7 @@ const Profile = () => {
         )}
 
         <div className="mt-8 space-y-10">
-          
+
           {/* ================= Section: Blogs ================= */}
           {blogs.length > 0 && (
             <div>
@@ -495,7 +506,7 @@ const Profile = () => {
             </div>
           )}
 
-          {/* 🟢 ================= Section: News ================= */}
+          {/* ================= Section: News ================= */}
           {newsList.length > 0 && (
             <div>
               <div 
@@ -625,7 +636,72 @@ const Profile = () => {
             </div>
           )}
 
-          {/* ================= Section: Showcases ================= */}
+          {/* ================= Section: Member Works (🟢 เพิ่มใหม่) ================= */}
+          {memberWorks.length > 0 && (
+            <div>
+              <div 
+                className="flex items-center gap-4 mb-4 cursor-pointer group"
+                onClick={() => setIsMemberWorksOpen(!isMemberWorksOpen)}
+              >
+                <h2 className="text-[#1e3a8a] font-bold text-xl group-hover:text-blue-900 transition-colors">{t('member_works') || 'ผลงานสมาชิก'} ({memberWorks.length})</h2>
+                <hr className="flex-1 border-slate-200" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isMemberWorksOpen ? 'rotate-180' : ''}`}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+              </div>
+              
+              <div className={`grid transition-all duration-500 ease-in-out ${isMemberWorksOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                <div className="overflow-hidden">
+                  <div className="space-y-4 pb-2 pt-1">
+                    {memberWorks.map(work => (
+                      <div key={work.id} className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+                        <div 
+                          className="flex items-start gap-4 cursor-pointer flex-1"
+                          onClick={() => navigate(`/member-work/${work.id}`)} // ใช้ component Showcase แสดงผลไปก่อนได้เลย
+                        >
+                          <div className={`w-3 h-3 rounded-full mt-2 flex-shrink-0 ${work.status === 'published' ? 'bg-emerald-500' : work.status === 'rejected' ? 'bg-red-500' : work.status === 'draft' ? 'bg-slate-400' : 'bg-yellow-500'}`}></div>
+                          <div>
+                            <h3 className="text-[#1e3a8a] font-bold text-lg hover:underline line-clamp-2">{work.title}</h3>
+                            <p className="text-slate-500 text-sm mt-0.5">
+                              {formatDate(work.created_at)} 
+                              {isOwnProfile && ` | ${translateStatus(work.status)}`}
+                            </p>
+                          </div>
+                        </div>
+
+                        {isOwnProfile && (
+                          <div className="flex items-center justify-end gap-2 border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-100">
+                            {work.status === 'rejected' && (
+                              <button 
+                                onClick={() => setReasonModal({ isOpen: true, text: work.rejection_reason || 'ไม่มีการระบุเหตุผล' })}
+                                className="text-red-600 bg-red-50 font-semibold px-4 py-2 hover:bg-red-100 rounded-lg transition-colors text-sm whitespace-nowrap cursor-pointer"
+                              >
+                                {t('view_rejection_reason') || 'ดูเหตุผล'}
+                              </button>
+                            )}
+                            <button 
+                              onClick={() => navigate(`/edit/member-work/${work.id}`)}
+                              className="text-[#1e3a8a] bg-blue-50 font-semibold px-4 py-2 hover:bg-blue-100 rounded-lg transition-colors text-sm whitespace-nowrap cursor-pointer"
+                            >
+                              {t('edit') || 'แก้ไข'}
+                            </button>
+                            <button 
+                              onClick={() => setDeleteModal({ isOpen: true, id: work.id, type: 'member_work', title: work.title })}
+                              className="text-slate-500 bg-slate-50 font-semibold px-4 py-2 hover:bg-red-100 hover:text-red-600 rounded-lg transition-colors text-sm whitespace-nowrap cursor-pointer"
+                            >
+                              {t('delete') || 'ลบ'}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ================= Section: Showcases (เฉพาะ Admin ที่สร้างได้) ================= */}
           {showcases.length > 0 && (
             <div>
               <div 
@@ -777,12 +853,21 @@ const Profile = () => {
       {isOwnProfile && (
         <div className="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-3">
           {isFabOpen && (
-            <div className="bg-white rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.1)] border border-slate-100 p-2 flex flex-col w-56 animate-fade-in-up">
+            <div className="bg-white rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.1)] border border-slate-100 p-2 flex flex-col w-64 animate-fade-in-up">
               <button onClick={() => { setIsFabOpen(false); navigate('/create/blog'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl text-left text-slate-700 font-medium transition-colors cursor-pointer">
                 <span className="w-8 h-8 rounded-full bg-blue-100 text-[#1e3a8a] flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
                 </span>
                 {t('create_blog') || 'สร้างบล็อก'}
+              </button>
+
+              <button onClick={() => { setIsFabOpen(false); navigate('/create/member-work'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl text-left text-slate-700 font-medium transition-colors cursor-pointer">
+                <span className="w-8 h-8 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+                  </svg>
+                </span>
+                {t('create_member_work') || 'สร้างผลงานสมาชิก'}
               </button>
 
               {canCreateNews && (
@@ -802,7 +887,7 @@ const Profile = () => {
                     <span className="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                     </span>
-                    {t('create_showcase') || 'สร้างผลงาน'}
+                    {t('create_showcase') || 'สร้างผลงาน (Admin)'}
                   </button>
                   <button onClick={() => { setIsFabOpen(false); navigate('/create/event'); }} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 rounded-xl text-left text-slate-700 font-medium transition-colors cursor-pointer">
                     <span className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center">

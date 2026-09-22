@@ -37,7 +37,7 @@ const AboutSupporter: React.FC = () => {
 
   return (
     <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24 pb-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24 pb-24 mt-14">
         
         {/* Header Section */}
         <section className="max-w-4xl mb-12 md:mb-16 relative text-center md:text-left mx-auto md:mx-0">

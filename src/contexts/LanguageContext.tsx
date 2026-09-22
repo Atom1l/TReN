@@ -24,18 +24,31 @@ const translations = {
     register_success: 'สมัครสมาชิกสำเร็จ!',
 
     // Footer
-    copyright: 'ลิขสิทธิ์ © 2026 - TReN.org',
-    languageLabel: 'ภาษาที่ใช้ :',
+    footer_faculty: 'คณะศิลปศาสตร์',
+    footer_uni: 'มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี',
+    footer_address_1: '126 ถนนประชาอุทิศ',
+    footer_address_2: 'บางมด ทุ่งครุ กรุงเทพฯ 10140',
+    footer_email: 'อีเมล:',
+    footer_copyright: 'ลิขสิทธิ์ © 2026 - TReN.org',
 
     // Navbar 
     home: 'หน้าหลัก',
     events: 'กิจกรรม',
     blogs: 'บล็อกบทความ',
     resources: 'คลังความรู้ EAR',
-    showcases: 'ผลงานเด่น',
+    showcases: 'ตัวอย่างงานวิจัยของครู',
     about: 'เกี่ยวกับ TReN',
     about_us_tab_placeholder: 'เกี่ยวกับ TReN',
     knowledge: 'คลังความรู้',
+
+    nav_home: 'หน้าหลัก',
+    nav_about: 'เกี่ยวกับ TReN',
+    nav_knowledge: 'คลังความรู้',
+    nav_events: 'กิจกรรม TReN',
+    nav_research: 'งานวิจัย',
+    nav_blogs: 'บล็อกงานวิจัย',
+    nav_contact: 'ติดต่อเรา',
+    nav_register: 'สมัครสมาชิก',
 
     // Password Update Page //
     back_to_home: 'กลับสู่หน้าหลัก',
@@ -112,9 +125,13 @@ const translations = {
 
     create_blog: 'สร้างบล็อก',
     create_event: 'สร้างกิจกรรม',
-    create_showcase: 'สร้างผลงานเด่น',
+    create_showcase: 'สร้างตัวอย่างงานวิจัย',
     create_news: 'สร้างข่าวสาร',
     delete_success: 'ลบข้อมูลเรียบร้อยแล้ว',
+
+    // Create News Page 
+    edit_news_title:'แก้ไขข่าวสารกิจกรรม',
+    create_news_desc:'แบ่งปันกิจกรรม ข่าวสารให้แก่สมาชิกในเครือข่าย',
 
     // Create Event Page
     create_event_title: 'สร้างกิจกรรมใหม่',
@@ -135,6 +152,7 @@ const translations = {
     attach_media: 'แนบสื่อ',
     create_event_success: 'สร้างกิจกรรมสำเร็จ!',
     create_event_error: 'เกิดข้อผิดพลาดในการสร้างกิจกรรม',
+    registration_url:'ลิงก์สมัครเข้าร่วมกิจกรรม',
 
     update_event_success: 'อัปเดตกิจกรรมสำเร็จ!',
     update_event_error: 'เกิดข้อผิดพลาดในการอัปเดตกิจกรรม',
@@ -215,6 +233,9 @@ const translations = {
     tag_input_hint: '* ค้นหาแท็กที่เคยใช้ หรือพิมพ์แท็กใหม่แล้วกด Enter เพื่อเพิ่ม',
     link_title: 'ลิงก์แหล่งที่มา, URL สไลด์, หรือ URL YouTube/Vimeo',
 
+    create_blog_title: 'สร้างบล็อกใหม่',
+    create_blog_desc: 'แบ่งปันความคิดและประสบการณ์ของคุณกับครูท่านอื่น ๆ',
+
     // All Blogs Page
     teacher_blogs: 'บล็อกของคุณครู',
     all_teachers_blogs: 'บล็อกของคุณครู',
@@ -249,49 +270,60 @@ const translations = {
     filter_done: 'เสร็จสิ้น',
 
     // All Showcases Page
-    showcases_menu: 'ผลงานทั้งหมด',
-    all_showcases_title: 'ผลงานทั้งหมด',
-    search_explore_showcases: 'ค้นหาและสำรวจผลงานทั้งหมดได้ที่นี่',
-    search_showcases_placeholder: 'ค้นหาโดยชื่อผลงาน ผู้สร้าง หรือ คีย์เวิร์ด..',
-    no_showcases_found: 'ไม่พบผลงาน',
-    no_showcases_found_desc: 'ไม่พบผลงานที่ตรงกับการค้นหา หรือในหมวดหมู่นี้',
-    explore_showcases_desc: 'สำรวจและค้นพบผลงานที่สร้างโดยคุณครูเพื่อเป็นแรงบันดาลใจสำหรับผลงานของคุณเอง!',
+    showcases_menu: 'ตัวอย่างงานวิจัยทั้งหมด',
+    all_showcases_title: 'ตัวอย่างงานวิจัยทั้งหมด',
+    search_explore_showcases: 'ค้นหาและสำรวจตัวอย่างงานวิจัยทั้งหมดได้ที่นี่',
+    search_showcases_placeholder: 'ค้นหาโดยชื่อตัวอย่างงานวิจัย ผู้สร้าง หรือ คีย์เวิร์ด..',
+    no_showcases_found: 'ไม่พบตัวอย่างงานวิจัย',
+    no_showcases_found_desc: 'ไม่พบตัวอย่างงานวิจัยที่ตรงกับการค้นหา หรือในหมวดหมู่นี้',
+    explore_showcases_desc: 'สำรวจและค้นพบตัวอย่างงานวิจัยที่สร้างโดยคุณครูเพื่อเป็นแรงบันดาลใจสำหรับตัวอย่างงานวิจัยของคุณเอง!',
     tag_article: 'บทความ',
     tag_presentation: 'การนำเสนอ',
 
     
     // Create Showcase Page
-    require_title: 'กรุณากรอกชื่อผลงาน',
-    require_login: 'คุณต้องเข้าสู่ระบบก่อนจึงจะสามารถสร้างผลงานได้',
+    require_title: 'กรุณากรอกชื่อตัวอย่างวิจัย',
+    add_showcase_cover:'เพิ่มรูปหน้าปกตัวอย่างงานวิจัยที่นี่',
+    require_login: 'คุณต้องเข้าสู่ระบบก่อนจึงจะสามารถสร้างตัวอย่างงานวิจัยได้',
     require_description: 'กรุณากรอกคำอธิบาย',
-    create_showcase_success: 'สร้างผลงานสำเร็จ!',
+    create_showcase_success: 'สร้างตัวอย่างงานวิจัยสำเร็จ!',
     edit_showcase_pending: 'บันทึกการเปลี่ยนแปลงแล้ว!',
-    edit_showcase_success: 'อัปเดตผลงานสำเร็จ!',
+    edit_showcase_success: 'อัปเดตตัวอย่างงานวิจัยสำเร็จ!',
     edit_showcase_published: 'บันทึกเรียบร้อย',
-    create_showcase_published: 'เผยแพร่ผลงานสำเร็จ!',
-    create_showcase_pending: 'ส่งผลงานของคุณเรียบร้อยแล้ว',
-    error_saving: 'เกิดข้อผิดพลาดขณะบันทึกผลงาน',
-    create_showcase_error: 'เกิดข้อผิดพลาดขณะสร้างผลงาน',
-    edit_showcase_error: 'เกิดข้อผิดพลาดขณะแก้ไขผลงาน',
-    create_showcase_title: 'สร้างผลงานเด่น',
-    edit_showcase_title: 'แก้ไขผลงาน',
+    create_showcase_published: 'เผยแพร่ตัวอย่างงานวิจัยนสำเร็จ!',
+    create_showcase_pending: 'ส่งตัวอย่างงานวิจัยของคุณเรียบร้อยแล้ว',
+    error_saving: 'เกิดข้อผิดพลาดขณะบันทึกตัวอย่างงานวิจัย',
+    create_showcase_error: 'เกิดข้อผิดพลาดขณะสร้างตัวอย่างงานวิจัยน',
+    edit_showcase_error: 'เกิดข้อผิดพลาดขณะแก้ไขตัวอย่างงานวิจัย',
+    create_showcase_title: 'สร้างตัวอย่างงานวิจัยเด่น',
+    edit_showcase_title: 'แก้ไขตัวอย่างงานวิจัย',
     save_showcase_changes: 'บันทึกการเปลี่ยนแปลง',
-    create_showcase_desc: 'แบ่งปันผลงานของคุณกับครูท่านอื่น ๆ',
-    create_showcase_title_name: 'ชื่อผลงาน',
+    create_showcase_desc: 'แบ่งปันตัวอย่างงานวิจัยของคุณกับครูท่านอื่น ๆ',
+    create_showcase_title_name: 'ชื่อตัวอย่างงานวิจัย',
     create_showcase_author: 'ผู้สร้าง',
     create_showcase_description: 'คำอธิบาย',
     create_showcase_add_image: 'เพิ่มรูปหน้าปก',
-    link_to_work: 'ลิงก์ไปยังผลงานของคุณ',
-    create_showcase_image_desc: 'คุณสามารถเพิ่มรูปภาพเพื่อแสดงผลงานของคุณ (ไม่จำเป็น)',
+    link_to_work: 'ลิงก์ไปยังตัวอย่างงานวิจัยของคุณ',
+    link_to_teacher_work: 'ลิงก์อ้างอิงเพิ่มเติม',
+    create_showcase_image_desc: 'คุณสามารถเพิ่มรูปภาพเพื่อแสดงตัวอย่างงานวิจัยของคุณ (ไม่จำเป็น)',
     showcase_brief_description: 'คำอธิบายโดยย่อ',
     change_media: 'เปลี่ยนไฟล์สื่อ',
-    create_showcase_btn: 'สร้างผลงาน',
+    create_showcase_btn: 'สร้างตัวอย่างงานวิจัย',
     published_date: 'วันที่เผยแพร่',
-    visit_work: 'ไปยังหน้าผลงาน',
+    visit_work: 'ไปยังหน้าตัวอย่างงานวิจัย',
     create_showcase_author_hint: 'ค้นหาชื่อครูในระบบ หรือพิมพ์ชื่อเองแล้วกด Enter เพื่อเพิ่ม',
     searching: 'กำลังค้นหา...',
     add: 'เพิ่ม',
-    no_links_provided: 'ไม่มีลิงก์ที่มาสำหรับผลงานนี้',
+    no_links_provided: 'ไม่มีลิงก์ที่มาสำหรับตัวอย่างงานวิจัยนี้',
+    school_name: 'ชื่อโรงเรียนต้นสังกัด',
+    school_name_placeholder: 'เช่น โรงเรียนเตรียมอุดมศึกษา...',
+    year_created:'ปีที่สร้างตัวอย่างงานวิจัย',
+    year_created_placeholder:'เช่น 2567, 2569 (ปี พ.ศ.)',
+    search_province:'-- พิมพ์เพื่อค้นหาจังหวัด --',
+    no_province_found:'ไม่พบจังหวัดที่ค้นหา',
+    year:'ปี พ.ศ. ',
+    posted_by:'โพสต์โดย',
+    related_showcase:'ตัวอย่างงานวิจัยของครูที่เกี่ยวข้อง',
 
     // Admin Dashboard Sidebar
     menu: 'รายการทั้งหมด',
@@ -299,7 +331,7 @@ const translations = {
     overview: 'ภาพรวม',
     blog: 'บล็อกบทความ',
     event: 'กิจกรรม',
-    showcase: 'ผลงานเด่น',
+    showcase: 'ตัวอย่างงานวิจัย',
     resource: 'คลังความรู้',
     reports: 'รายงาน',
     users: 'ผู้ใช้งาน',
@@ -324,7 +356,7 @@ const translations = {
     type_report: 'รายงานทั่วไป',
     type_blog: 'บล็อกบทความ',
     type_event: 'กิจกรรม',
-    type_showcase: 'ผลงาน',
+    type_showcase: 'ตัวอย่างงานวิจัย',
     loading: 'กำลังโหลด...',
     showing: 'แสดง',
     to: 'ถึง',
@@ -368,9 +400,9 @@ const translations = {
     delete_event_success: 'ลบกิจกรรมเรียบร้อยแล้ว',
 
     // Admin Showcases
-    showcase_title: 'ผลงานเด่น',
-    no_showcases: 'ไม่พบผลงานเด่น',
-    loading_showcases: 'กำลังโหลดผลงาน...',
+    showcase_title: 'ตัวอย่างงานวิจัย',
+    no_showcases: 'ไม่พบตัวอย่างงานวิจัยเด่น',
+    loading_showcases: 'กำลังโหลดตัวอย่างงานวิจัย...',
 
     // Admin Reports
     report_title: 'รายงาน',
@@ -412,12 +444,12 @@ const translations = {
     position: 'ตำแหน่ง',
     academic_rank: 'ตำแหน่งทางวิชาการ',
     total_blogs: 'จำนวนบล็อก',
-    total_showcases: 'จำนวนผลงาน',
+    total_showcases: 'จำนวนตัวอย่างงานวิจัย',
     ban_user: 'ระงับบัญชีผู้ใช้งาน',
     user: 'ผู้ใช้งาน',
     account_details: 'รายละเอียดผู้ใช้งาน',
     post_count: 'โพสต์',
-    showcase_count: 'ผลงาน',
+    showcase_count: 'ตัวอย่างงานวิจัย',
 
     confirm_ban: 'ยืนยันการระงับบัญชี',
     confirm_ban_message: 'คุณกำลังระงับบัญชีผู้ใช้งาน',
@@ -512,7 +544,9 @@ const translations = {
     our_mission: 'ผลงานตลอด 5 ปีที่ผ่านมา',
     three_hundred_plus: '270+',
     registered_teachers: 'ครูผู้เข้าร่วมโครงการ',
-    over_provinces: 'ครอบคลุม 40 \nจังหวัดทั่วประเทศ',
+    over_provinces: 'ครอบคลุม',
+    over_provinces2: '50 จังหวัด',
+    over_provinces3: 'ทั่วประเทศ',
     one_hundred_fifty_plus: '100+',
     research_projects: 'ผลงานวิจัยในชั้นเรียน',
     already_published: 'ได้รับการตีพิมพ์เผยแพร่แล้วกว่า',
@@ -538,6 +572,8 @@ const translations = {
     news_announcements: 'ข่าวสารสำคัญ',
     news_earc: 'เรื่องเล่าจากเครือข่ายภูมิภาค',
     news_activity: 'ข่าวสารกิจกรรม',
+    public_relations:'ประชาสัมพันธ์',
+    news_public_relations: 'ประชาสัมพันธ์',
     no_news: 'ไม่พบข้อมูล',
     view_all_announcements: 'ดูข่าวสารสำคัญทั้งหมด',
     view_all_stories: 'ดูเรื่องเล่าจากเครือข่ายภูมิภาคทั้งหมด',
@@ -555,17 +591,21 @@ const translations = {
     admin_approve_news_success: 'อนุมัติข่าวสารเรียบร้อยแล้ว',
     error_updating_occurred: 'เกิดข้อผิดพลาดในการอนุมัติข่าวสาร',
 
+    click_to_view_full: 'คลิกเพื่อดูภาพฉบับเต็ม',
+
     // Home - Hero Section (TH)
     hero_tren_title: 'เครือข่ายวิจัยครู TReN',
     hero_tren_subtitle: 'เปลี่ยนห้องเรียนให้เป็นพื้นที่เรียนรู้จริง ด้วยพลังของ "ครูวิจัย"',
     hero_tren_slogan: 'เพราะปัญหานักเรียนในห้องเรียน ครูคือคนที่เข้าใจดีที่สุด!',
     
-    hero_desc_bold_1: 'เครือข่ายวิจัยครู TReN',
-    hero_desc_text_1: ' ชุมชนนักปฏิบัติ (CoP) ของครู 4 ภูมิภาคทั่วไทยที่พร้อมยืนเคียงข้างคุณ เปลี่ยนวิจัยเรื่องยากให้เป็น ',
-    hero_desc_bold_2: '"เครื่องมือเปลี่ยนชีวิตชั้นเรียน"',
-    hero_desc_text_2: ' ด้วยแนวคิด Exploratory Action Research (EAR) ค้นพบปัญหาง่ายๆ จากห้องเรียน แก้ไขได้ตรงจุด โดยมี ',
-    hero_desc_bold_3: '"ครูพี่เลี้ยง"',
-    hero_desc_text_3: ' คอยดูแลและประคับประคองตลอดเส้นทาง',
+    hero_desc_bold_1: 'เครือข่ายครูวิจัย TReN',
+    hero_desc_text_1: 'ชุมชนแห่งการเรียนรู้ทางวิชาชีพ (CoP) ที่พร้อมยืนเคียงข้างครูไทยใน 4 ภูมิภาคทั่วประเทศ',
+    hero_desc_text_1_1: 'เราชวนเปลี่ยน',
+    hero_desc_bold_2: '“การวิจัย”',
+    hero_desc_text_2: 'ให้เป็นกระบวนการเรียนรู้ที่ทำได้จริงในห้องเรียน ผ่านแนวคิด Exploratory Action Research (EAR) ที่เริ่มจากการค้นหาสาเหตุที่แท้จริงของปัญหา ก่อนร่วมกันหาทางพัฒนา โดยมี',
+    hero_desc_bold_3: 'ครูพี่เลี้ยงในพื้นที่ และ ชุมชนวิจัย EAR Community ใน 4 ภูมิภาค',
+    hero_desc_text_3: 'ที่เข้าใจบริบทครูอย่างแท้จริง พร้อมแลกเปลี่ยนเรียนรู้และให้คำปรึกษาตลอดกระบวนการ',
+    hero_btn_community: 'ชุมชนวิจัย EARC 4 ภูมิภาค',
 
     hero_btn_register: 'สมัครเข้าร่วมเครือข่าย',
     hero_btn_resources: 'สำรวจคลังความรู้ EAR',
@@ -580,11 +620,50 @@ const translations = {
     hero_img_hint: '(คลิกเพื่อไปยังบทความ British Council)',
     hero_img_click_hint: 'คลิกเพื่ออ่านบทความฉบับเต็ม',
 
+    member_portfolios:'รวมผลงานสมาชิก',
     network_voices: 'เสียงจากเครือข่าย',
-    gallery_title: 'ประมวลภาพการฝึกอบรม EAR 2026',
+    gallery_title: 'บรรยากาศการอบรม EAR 2026',
+
+    research_topic: 'หัวข้อวิจัย:',
+    
+    hero_quote1_author: 'ครูวิไล พันชนกุล',
+    hero_quote1_school: 'โรงเรียนบ้านดงแสนสุข จ.อุดรธานี',
+    hero_quote1_topic: 'How I developed my teaching to promote my students’ Engagement in English classes',
+    hero_quote1_text: '"จาก findings ทำให้เข้าใจว่า เราต้องรับฟังนักเรียนให้มากขึ้น และเมื่อนักเรียนให้ความไว้วางใจ พวกเขาจะพร้อมทำตามคำแนะนำของเราอย่างเต็มใจ"',
+    
+    hero_quote2_author: 'ครูฟัยซะ หวันตะหา',
+    hero_quote2_school: 'โรงเรียนวัดนางเหล้า จ.สงขลา',
+    hero_quote2_topic: 'Enhancing student engagement in speaking activities',
+    hero_quote2_text: '"บทเรียนสำคัญที่สุดจากการทำวิจัยครั้งนี้ คือการได้รู้ว่านักเรียนต้องการอะไรจริงๆ"',
+
+    box_onsite_title: 'รูปแบบการอบรม Onsite Training',
+    box_onsite_desc: 'กระบวนการพัฒนาครูอย่างเป็นขั้นตอนตลอด 3 ระยะ เริ่มตั้งแต่ Workshop การทำวิจัย ลงมือปฏิบัติจริงในชั้นเรียน และนำเสนอผลงาน พร้อมโอบอุ้มด้วยระบบนิเวศการเรียนรู้',
+    box_onsite_btn: 'อ่านรายละเอียดรูปแบบการอบรมเพิ่มเติม',
+    
+    box_online_title: 'การให้คำปรึกษาออนไลน์ Online Mentoring',
+    box_online_desc: 'การให้คำปรึกษาโดยครูพี่เลี้ยงผู้มีประสบการณ์ เน้นการสร้างพื้นที่ปลอดภัย รับฟังอย่างไม่ตัดสิน และใช้วิธีตั้งคำถามเชิงสะท้อนคิด เพื่อปลูกฝังให้ครูกลายเป็น Reflective Teacher',
+    box_online_btn: 'อ่านรายละเอียดระบบ Mentoring และชมคลิปตัวอย่าง',
+
+    modal_onsite_title: 'รูปแบบการอบรม Onsite Training',
+    modal_onsite_desc1: 'กระบวนการพัฒนาครูอย่างเป็นขั้นตอนตลอด 3 ระยะ เริ่มตั้งแต่ Workshop การทำวิจัย (จัดเดือน พ.ค.) ลงมือปฏิบัติจริงในชั้นเรียน (มิ.ย. – ต.ค.) และนำเสนอผลงาน (พ.ย.)',
+    modal_onsite_desc2: 'พร้อมโอบอุ้มด้วยระบบนิเวศการเรียนรู้ผ่าน ',
+    modal_onsite_bold1: 'ระบบสนับสนุน 2 ระดับ',
+    modal_onsite_li1_title: 'ระดับบุคคล:',
+    modal_onsite_li1_desc: 'ดูแลเข้มข้นในอัตราส่วน 1 : 2 โดยครูพี่เลี้ยงคอยสะท้อนคิดและติดตามความก้าวหน้าอย่างใกล้ชิดทุก 1–2 สัปดาห์',
+    modal_onsite_li2_title: 'ระดับชุมชน:',
+    modal_onsite_li2_desc: 'ร่วมเรียนรู้ผ่านกลุ่ม EAR Community ขนาดเล็ก (7–12 คน) เพื่อแลกเปลี่ยนประสบการณ์ เติมพลังใจ และป้องกันภาวะหมดไฟ',
+
+    modal_online_title: 'การให้คำปรึกษาออนไลน์ Online Mentoring',
+    modal_online_desc1: 'การให้คำปรึกษาโดยครูพี่เลี้ยงผู้มีประสบการณ์ EAR จริง 2-4 ปี เน้นการสร้างพื้นที่ปลอดภัย รับฟังอย่างไม่ตัดสิน และใช้วิธี ',
+    modal_online_bold1: 'ตั้งคำถามเชิงสะท้อนคิด',
+    modal_online_desc2: ' แทนการสั่งงาน เพื่อปลูกฝังให้ครูกลายเป็น ',
+    modal_online_desc3: ' ที่พัฒนาการสอนด้วยตนเองได้ในระยะยาว',
+    modal_online_video_title: 'คลิปตัวอย่างการให้คำปรึกษา',
+    read_full_details: 'อ่านรายละเอียดฉบับเต็ม',
 
     // Knowledge - Part 1 (TH)
-    knowledge_part1_title: 'คลังความรู้ EAR',
+    knowledge_title: 'คลังความรู้ EAR',
+    knowledge_part1_title: ' ทำความรู้จักกับ EAR',
     knowledge_part1_subtitle: 'สำรวจห้องเรียน ขับเคลื่อนการเรียนรู้ด้วยตัวของครูเอง',
     knowledge_part1_quote: '"ห้องเรียนของคุณครู... ไม่มีใครรู้จักดีไปกว่าตัวคุณครูเอง"',
     knowledge_part1_intro_1: 'เปลี่ยนงานวิจัยจาก "เรื่องน่าปวดหัว" ให้กลายเป็น "เครื่องมือคู่ใจ" มาสำรวจ ค้นหา และขับเคลื่อนการเรียนรู้ของเด็กๆ ด้วยตัวคุณครูเองผ่าน Exploratory Action Research (EAR)',
@@ -665,7 +744,7 @@ const translations = {
     // Knowledge - Part 1.2 (TH)
     knowledge_part2_title: 'หลักการ EAR',
     knowledge_part2_subtitle: 'และความแตกต่างจากวิจัยอื่น',
-    knowledge_ear_stages_title: '2 stages of EAR (2 ขั้นตอนของ EAR)',
+    knowledge_ear_stages_title: '2 ขั้นตอนของ EAR',
     knowledge_ear_stage1_title: 'รอบที่ 1: ขั้นสำรวจ (Exploratory Stage)',
     knowledge_ear_stage1_subtitle: 'ค้นหาความจริงและความเข้าใจในชั้นเรียน',
     knowledge_ear_stage1_desc: 'กระบวนการที่ครูทำความเข้าใจสถานการณ์และหาสาเหตุที่แท้จริงของปัญหา ผ่าน 4 ขั้นตอน:',
@@ -743,7 +822,7 @@ const translations = {
     knowledge_ear_diff_r5_c4: 'รายงานการวิจัยในชั้นเรียน',
     knowledge_ear_diff_r5_c5: 'เน้น Oral / Poster Presentation สรุปบทเรียนกระชับ',
 
-    knowledge_ear_getting_started_title: 'จุดเริ่มต้นสำหรับครูมือใหม่ (Getting Started)',
+    knowledge_ear_getting_started_title: 'จุดเริ่มต้นสำหรับครูมือใหม่',
     knowledge_ear_getting_started_subtitle: 'อยากเริ่มต้นทำ EAR ต้องเริ่มอย่างไรดี?',
     knowledge_ear_start_1_title: '1. เริ่มจากเรื่องเล็กที่กวนใจที่สุด:',
     knowledge_ear_start_1_desc: 'ไม่ต้องมองหาปัญหาใหญ่ระดับโรงเรียน เอาแค่เรื่องที่ติดขัดในคาบเรียนเพียง 1 เรื่อง',
@@ -861,6 +940,7 @@ const translations = {
     vision_about_vision_headline: 'วิสัยทัศน์',
     vision_about_mission_headline: 'พันธกิจ',
     vision_about_core_objectives_headline: 'ภารกิจหลัก',
+    vision_sub_text: 'Vision and Mission',
 
     vision_about_tren_desc_1: 'คือ เครือข่ายวิจัยที่ขับเคลื่อนโดยพลังของครู มุ่งมั่นยกระดับศักยภาพครูไทยให้สามารถแก้ปัญหาในชั้นเรียนได้ด้วยตัวเองอย่างตรงจุด ผ่านการทำวิจัยในชั้นเรียนที่เรียกว่า Exploratory Action Research (EAR) หรือการวิจัยเชิงปฏิบัติการเชิงสำรวจ ที่เน้นการนำข้อมูลและหลักฐานจริงจากห้องเรียนมาใช้พัฒนาการเรียนการสอน',
     vision_about_channels_title: 'ช่องทางการเรียนรู้และการเข้าร่วม',
@@ -916,7 +996,7 @@ const translations = {
     journey_year_2_4_title: 'ปีที่ 2 - 4 (พ.ศ. 2566 - 2568)',
     journey_phase_2_4: 'บ่มเพาะแกนนำและความพร้อมสู่เครือข่าย',
     journey_desc_3_1:'เนื่องจากการใช้ครูพี่เลี้ยงชาวต่างชาติมีต้นทุนสูง โครงการจึงตระหนักถึงความยั่งยืนในระยะยาว ในปีที่ 2 (พ.ศ. 2566) จึงได้คัดเลือกครูที่มีศักยภาพจากรุ่นแรกมาเข้ารับการพัฒนาเป็น "ครูพี่เลี้ยงวิจัย (Teacher-Research Mentor)" โดยได้รับเกียรติจาก Professor Dr. Richard Smith ผู้เชี่ยวชาญชาวอังกฤษมาถ่ายทอดองค์ความรู้',
-    journey_desc_3_2:'ตลอดระยะเวลา 3 ปีนี้ ครูพี่เลี้ยงได้ทำหน้าที่ให้คำปรึกษาแก่เพื่อนครู ส่งผลให้โครงการสามารถขยายผลการอบรมครอบคลุมถึง 40 จังหวัดทั่วประเทศ ทำให้มีสมาชิกและครูพี่เลี้ยงกระจายตัวอยู่ตามภูมิภาคต่างๆ อย่างทั่วถึง จนกระทั่งเตรียมพร้อมสู่การยกระดับความร่วมมือครั้งสำคัญ',
+    journey_desc_3_2:'ตลอดระยะเวลา 3 ปีนี้ ครูพี่เลี้ยงได้ทำหน้าที่ให้คำปรึกษาแก่เพื่อนครู ส่งผลให้โครงการสามารถขยายผลการอบรมครอบคลุมถึง 50 จังหวัดทั่วประเทศ ทำให้มีสมาชิกและครูพี่เลี้ยงกระจายตัวอยู่ตามภูมิภาคต่างๆ อย่างทั่วถึง จนกระทั่งเตรียมพร้อมสู่การยกระดับความร่วมมือครั้งสำคัญ',
     journey_year_5_6_title: 'ปีที่ 5 - 6 (พ.ศ. 2569 - 2571)',
     journey_phase_5_6: 'กำเนิดเครือข่าย TReN และการขับเคลื่อนระดับประเทศ',
     journey_desc_4_1: 'จากการเติบโตของกลุ่มครูนักวิจัยทั่วประเทศ นำมาสู่การก่อตั้ง "เครือข่าย Teacher-Research Network (TReN)" อย่างเป็นทางการ',
@@ -954,10 +1034,10 @@ const translations = {
 
     // Phase 3: ปีที่ 2 - 4 (พ.ศ. 2566 – 2568)
     journey_year_3_title_new: 'ปีที่ 2 – 4: พ.ศ. 2566 – 2568',
-    journey_phase_3_new: 'บ่มเพาะแกนนำสู่ 40 จังหวัด',
+    journey_phase_3_new: 'บ่มเพาะแกนนำสู่ 50 จังหวัด',
     journey_desc_3_1_new: 'เพื่อสร้างความยั่งยืนและลดการพึ่งพาผู้เชี่ยวชาญต่างชาติ โครงการจึงคัดเลือกครูรุ่นแรกมาพัฒนาต่อยอดเป็น ',
     journey_mentor_role: '"ครูพี่เลี้ยงวิจัย (Teacher-Research Mentors)"',
-    journey_desc_3_2_new: ' โดยได้รับเกียรติจาก Prof. Dr. Richard Smith มาถ่ายทอดองค์ความรู้โดยตรง จนกลุ่มครูพี่เลี้ยงแกนนำนี้สามารถขยายผลให้คำปรึกษาแก่เพื่อนครู ครอบคลุมถึง 40 จังหวัดทั่วประเทศ',
+    journey_desc_3_2_new: ' โดยได้รับเกียรติจาก Prof. Dr. Richard Smith มาถ่ายทอดองค์ความรู้โดยตรง จนกลุ่มครูพี่เลี้ยงแกนนำนี้สามารถขยายผลให้คำปรึกษาแก่เพื่อนครู ครอบคลุมถึง 50 จังหวัดทั่วประเทศ',
 
     // Phase 4: ปีที่ 5 - 6 (พ.ศ. 2569 เป็นต้นไป)
     journey_year_4_title_new: 'ปีที่ 5 - 6 เป็นต้นไป: พ.ศ. 2569 เป็นต้นไป',
@@ -984,7 +1064,7 @@ const translations = {
     journey_stat_2_desc: 'บ่มเพาะจากครูแกนนำรุ่นแรก สู่ผู้เชี่ยวชาญที่คอยหนุนเสริมเพื่อนครู',
 
     journey_stat_3_name: 'พื้นที่การทำงาน',
-    journey_stat_3_val: '40 จังหวัด',
+    journey_stat_3_val: '50 จังหวัด',
     journey_stat_3_desc: 'กระจายเครือข่ายการเรียนรู้และการดูแลอย่างทั่วถึงทุกภูมิภาค',
 
     journey_stat_4_name: 'ชุมชนนักปฏิบัติ',
@@ -1207,6 +1287,16 @@ const translations = {
     rules_6_3_item_2_title: 'การดูแลทรัพยากรในอนาคต:',
     rules_6_3_item_2_desc: 'หากในอนาคตมีการยุติการดำเนินงานของเครือข่าย งบประมาณคงเหลือและคลังความรู้ดิจิทัลทั้งหมด จะถูกส่งมอบให้แก่หน่วยงานการศึกษาหรือองค์กรสาธารณประโยชน์ เพื่อให้เกิดประโยชน์ต่อวงการครูไทยต่อไป',
 
+    const_cat_1:'หมวดที่ 1',
+    const_cat_2:'หมวดที่ 2',
+    const_cat_3:'หมวดที่ 3',
+    const_cat_4:'หมวดที่ 4',
+    const_cat_5:'หมวดที่ 5',
+    const_cat_6:'หมวดที่ 6',
+    const_cat_7:'หมวดที่ 7',
+    const_main_en_title: 'TReN Constitution',
+    const_main_title: 'กรอบการทำงานของเครือข่าย',
+
     // Team Page (TH)
     team_main_title: 'ทีมบริหารเครือข่าย',
     team_main_en_title: 'Network Management Team',
@@ -1238,7 +1328,11 @@ const translations = {
     team_role_advisor: 'ที่ปรึกษา',
     team_role_past_pres_short: 'อดีตประธานเครือข่าย',
     team_role_pres: 'ประธานเครือข่าย',
+    team_role_pres1: 'ครูจิติมา ดวงมณี',
+    team_role_pres1_desc: 'โรงเรียนสุรธรรมพิทักษ์ นครราชสีมา',
     team_role_vp: 'รองประธานเครือข่าย',
+    team_role_vp1: 'ครูพัชรินทร์ กุลณา',
+    team_role_vp1_desc: 'โรงเรียนดำรงราษฏร์สงเคราะห์ เชียงราย',
     team_role_coord: 'ทีมประสานงานภูมิภาค',
     team_role_comms: 'ทีมสื่อสารและดูแลสมาชิก',
     team_role_sec: 'ทีมเลขานุการและเหรัญญิก',
@@ -1264,6 +1358,163 @@ const translations = {
     team_dummy_school: 'รร. mmmmmmmmm',
     team_tba: 'รอประกาศรายชื่ออย่างเป็นทางการ',
 
+    // About EARC Section
+    earc_title: 'ชุมชนวิจัยครู EAR Community (EARC)',
+    earc_intro_1: 'จากจุดเริ่มต้นของการบ่มเพาะครูและครูพี่เลี้ยงครอบคลุมกว่า 50 จังหวัดทั่วประเทศตั้งแต่ปี พ.ศ. 2565 เรามุ่งมั่นยกระดับการทำวิจัยปฏิบัติการเชิงสำรวจ (EAR) ให้กลายเป็น ',
+    earc_intro_highlight: 'วิถีการทำงานและวัฒนธรรมการเรียนรู้ที่ยั่งยืนของครูไทย',
+    earc_intro_2: ' เพื่อให้ครูทุกคนสามารถวิเคราะห์ แก้ปัญหา และพัฒนาการจัดการเรียนการสอนในห้องเรียนได้ด้วยตนเองอย่างแท้จริงตลอดชีวิตวิชาชีพ',
+    earc_intro_3: 'เราจึงจัดตั้ง "EAR Community (EARC)" ขึ้นเพื่อทำหน้าที่เป็นกลไกขับเคลื่อนในระดับพื้นที่ โดยเน้นการสร้าง ',
+    earc_intro_4: ' ที่เปิดกว้างในการรับฟัง ให้คำปรึกษา และแลกเปลี่ยนเรียนรู้จากเคสงานวิจัยจริงของเพื่อนครู เพื่อนำไปปรับใช้แก้ปัญหาในห้องเรียน พร้อมหนุนเสริมให้เกิดชุมชนนักปฏิบัติ (Community of Practice) ที่สามารถดูแล พึ่งพา และพัฒนาศักยภาพร่วมกันได้อย่างยั่งยืน',
+    
+    earc_mission_title: 'ภารกิจหลักในระดับพื้นที่ของ EARC',
+    earc_mission_1_title: 'ขับเคลื่อนการพัฒนาครู',
+    earc_mission_1_desc: 'จัดกระบวนการบ่มเพาะและพัฒนาครูในท้องถิ่น เพื่อกระจายองค์ความรู้ EAR ให้เข้าถึงครูได้อย่างทั่วถึงและตรงตามบริบทพื้นที่ โดยมีเครือข่ายส่วนกลาง (TReN) คอยเป็นกองหนุนทางวิชาการเพื่อรักษามาตรฐานความรู้',
+    earc_mission_2_title: 'ยกระดับคุณภาพงานวิจัย',
+    earc_mission_2_desc: 'ให้คำปรึกษาเพื่อนครูอย่างใกล้ชิด พร้อมช่วยกลั่นกรองและถอดบทเรียนจากห้องเรียนจริง เพื่อให้ผลงานวิจัย EAR มีคุณภาพสูง มีความน่าเชื่อถือทางวิชาการ และนำไปใช้พัฒนาผู้เรียนได้จริง',
+    earc_mission_3_title: 'พัฒนาวิชาชีพของตนเอง',
+    earc_mission_3_desc: 'เป็นฐานการเรียนรู้ให้ทีมทำงานและครูพี่เลี้ยงในภูมิภาค ได้พัฒนาทักษะผู้นำการเปลี่ยนแปลง การจัดกระบวนการเรียนรู้ และการบริหารจัดการชุมชน เพื่อยกระดับศักยภาพตนเองและเติบโตในสายวิชาชีพอย่างเป็นระบบ',
+    
+    earc_process_title: 'กระบวนการขับเคลื่อนตลอดภาคการศึกษา',
+    earc_process_desc: 'การพัฒนาครูในชุมชน EARC ดำเนินการอย่างเข้มข้นตลอดภาคการศึกษาที่ 1 ผ่าน 3 ขั้นตอนหลัก:',
+    earc_process_1_title: 'EAR Workshop',
+    earc_process_1_desc: 'เรียนรู้กระบวนการทำวิจัยเชิงปฏิบัติการ EAR ที่เน้นการนำไปใช้จริงในห้องเรียน เครื่องมือเข้าใจง่าย และเห็นผลลัพธ์ชัดเจน',
+    earc_process_2_title: 'ลงมือปฏิบัติจริงพร้อมครูพี่เลี้ยง',
+    earc_process_2_desc: 'ครูนำกระบวนการ EAR ไปใช้แก้ปัญหาผู้เรียนจริง โดยมีครูพี่เลี้ยงในพื้นที่คอยให้คำปรึกษาและดูแลอย่างใกล้ชิดตลอดกระบวนการ',
+    earc_process_3_title: 'เวทีถอดบทเรียนและนำเสนอผลงาน',
+    earc_process_3_desc: 'แลกเปลี่ยนเรียนรู้ระดับพื้นที่เพื่อประมวลผลการเปลี่ยนแปลงของผู้เรียน ถอดองค์ความรู้จากห้องเรียน สะท้อนคิด และนำเสนอผลลัพธ์',
+    
+    earc_coverage_title: 'การดำเนินงานครอบคลุม 8 เขตพื้นที่ทั่วประเทศ',
+    earc_coverage_desc: 'เพื่อให้องค์ความรู้ EAR กระจายไปถึงครูในทุกบริบทและเข้าถึงได้ง่ายที่สุด EARC จึงจัดตั้งศูนย์ขับเคลื่อนและส่งต่อองค์ความรู้ครอบคลุม 8 เขตพื้นที่ทั่วประเทศ:',
+    earc_zone_north: 'ภาคเหนือ: ตอนบน / ตอนล่าง',
+    earc_zone_ne: 'ภาคตะวันออกเฉียงเหนือ: ตอนบน / ตอนล่าง',
+    earc_zone_central: 'ภาคกลาง',
+    earc_zone_east: 'ภาคตะวันออก',
+    earc_zone_south: 'ภาคใต้: ตอนบน / ตอนล่าง',
+    earc_zone_bkk: 'กรุงเทพมหานครและปริมณฑล',
+    earc_map_placeholder: 'พื้นที่สำหรับใส่แผนที่ 8 เขตพื้นที่ (EARC Map)',
+
+    earc_en_title: 'EARC',
+    earc_mission_en:'Core Regional Missions',
+    earc_process_en: 'Driving Process',
+    earc_coverage_en: 'Coverage Areas',
+    earc_see_team_list: '(สามารถดูรายชื่อคณะทำงานและทีมครูพี่เลี้ยงแต่ละพื้นที่ได้ในหัวข้อถัดไป)',
+    team_reg_bkk: '6. กรุงเทพมหานครและปริมณฑล (EARC Bangkok & Vicinity)',
+
+    // Training Page (TH)
+    training_model_title: 'รูปแบบการอบรม',
+    training_intro_title: 'กระบวนการพัฒนา 3 ระยะ & ระบบสนับสนุน 2 ระดับ',
+    training_intro_desc_1: 'โครงการพัฒนาครูผ่าน EAR ออกแบบระบบให้ครูเติบโตอย่างเป็นขั้นตอน โดยมีโครงสร้างกระบวนการพัฒนา 3 ระยะ ควบคู่ไปกับ ',
+    training_intro_desc_bold1: 'ระบบสนับสนุน 2 ระดับ',
+    training_intro_desc_2: 'ที่เปรียบเสมือนระบบนิเวศแห่งการเรียนรู้ (Learning Ecology) ที่คอยโอบอุ้ม เพื่อให้มั่นใจว่าครูทุกคนจะได้รับความช่วยเหลืออย่างทั่วถึง และ ',
+    training_intro_desc_bold2: 'ไม่ถูกทิ้งไว้ข้างหลัง',
+    training_intro_desc_3: 'ตลอดเส้นทางการทำวิจัย',
+    
+    training_sec_a_title: 'ก. กระบวนการพัฒนา 3 ระยะ',
+    training_phase1_title: 'ระยะที่ 1: บ่มเพาะฐานคิด',
+    training_phase1_desc: 'เข้าร่วมการอบรม Onsite Workshop เพื่อเสริมสร้างองค์ความรู้ กรอบแนวคิด และเข้าใจกระบวนการวิจัยปฏิบัติการเชิงสำรวจ (Exploratory Action Research: EAR) อย่างเป็นระบบ',
+    training_phase2_title: 'ระยะที่ 2: ปฏิบัติการจริง',
+    training_phase2_desc: 'ครูนำความรู้ลงไปปฏิบัติจริงในชั้นเรียนของตนเองผ่านกระบวนการ 7 Research Tasks โดยใช้เวลาต่อเนื่องตลอดภาคเรียน',
+    training_phase3_title: 'ระยะที่ 3: สังเคราะห์และแบ่งปัน',
+    training_phase3_desc: 'รวบรวม เรียบเรียง และนำเสนอผลงานวิจัยผ่านเวทีออนไลน์ EAR Sharing Session เพื่อแลกเปลี่ยนเรียนรู้ สรุปบทเรียนร่วมกัน และขยายผลสู่เครือข่ายวิชาชีพ',
+
+    training_sec_b_title: 'ข. ระบบสนับสนุน 2 ระดับ',
+    training_sec_b_desc: 'เพื่อป้องกันไม่ให้การทำวิจัยกลายเป็นภาระที่โดดเดี่ยว และเพื่อให้ครูก้าวผ่านความท้าทายได้อย่างราบรื่นถูกต้องตามหลักวิชาการ โครงการจึงวางระบบสนับสนุนไว้ 2 ระดับ:',
+    
+    training_tier1_title: '1) ระดับรายบุคคล',
+    ratio: 'อัตราส่วน',
+    training_tier1_quote: 'การวิจัยของครูไม่ใช่การปล่อยให้ลงไปว่ายน้ำคนเดียวลำพังกลางมหาสมุทรแห่งปัญหา แต่มีคนคอยประคองให้ก้าวไปข้างหน้าได้อย่างมั่นใจ',
+    training_tier1_p1_bold: 'การดูแลแบบเข้มข้น:',
+    training_tier1_p1_desc: 'จับคู่ครูพี่เลี้ยง (Mentor) 1 คน ต่อ ครูผู้ทำวิจัย 2 คน เพื่อให้การดูแลเป็นไปอย่างทั่วถึง ลึกซึ้ง และตรงจุด',
+    training_tier1_p2_bold: 'การสะท้อนคิดอย่างต่อเนื่อง (Reflective Dialogue):',
+    training_tier1_p2_desc: 'ครูพี่เลี้ยงจะคอยให้คำปรึกษา ติดตามความก้าวหน้าอย่างใกล้ชิดทุก 1–2 สัปดาห์ ไม่เพียงแต่คอยตรวจทานงานวิจัยให้ถูกต้องตามหลักวิชาการเท่านั้น แต่ยังเป็นผู้ฟังที่คอยช่วยสะท้อนคิด (Reflection) คลายข้อสงสัย และช่วยหาแนวทางแก้ไขปัญหาที่เกิดขึ้นจริงในชั้นเรียน',
+
+    training_tier2_title: '2) ระดับชุมชนวิชาชีพ',
+    training_tier2_quote: 'สร้างระบบนิเวศการเรียนรู้ (Ecology of Training) ที่เชื่อมโยงครูเข้าด้วยกัน เพื่อให้เห็นว่าเราต่างเผชิญความท้าทายร่วมกัน และไม่มีใครต้องต่อสู้เพียงลำพัง',
+    training_tier2_p1_bold: 'เครือข่ายเพื่อนร่วมทาง (Peer Support):',
+    training_tier2_p1_desc: 'จัดกลุ่มชุมชนย่อยขนาด 7–12 คน (ประกอบด้วยครูผู้ทำวิจัยและครูพี่เลี้ยง) เพื่อสร้างพื้นที่ปลอดภัยทางวิชาการและการเรียนรู้',
+    training_tier2_p2_bold: 'เวทีสะท้อนคิดแลกเปลี่ยน (Roundtable Discussion 2 ครั้งสำคัญ):',
+    training_tier2_p2_1_bold: 'ครั้งที่ 1:',
+    training_tier2_p2_1_desc: 'หลังสิ้นสุดขั้นตอนการสำรวจปัญหา (Exploratory Phase) เพื่อทบทวนโจทย์วิจัยและแผนการจัดการเรียนรู้ร่วมกัน',
+    training_tier2_p2_2_bold: 'ครั้งที่ 2:',
+    training_tier2_p2_2_desc: 'หลังสิ้นสุดขั้นตอนการปฏิบัติการและเก็บข้อมูล (Action Phase) เพื่อสรุปบทเรียนและผลลัพธ์ที่เกิดขึ้น',
+    training_tier2_p3_bold: 'เติมพลังใจและป้องกันภาวะหมดไฟ (Burnout Prevention):',
+    training_tier2_p3_desc: 'เป็นพื้นที่แลกเปลี่ยนประสบการณ์ อุปสรรค และทางออกภายใต้บรรยากาศกัลยาณมิตร การได้ยินได้ฟังปัญหาและวิธีแก้จากเพื่อนครู (Peers) ช่วยให้เกิดแรงบันดาลใจ ถอดบทเรียนร่วมกัน และขับเคลื่อนการทำงานไปด้วยกันโดยไม่มีใครถูกทิ้งไว้เบื้องหลัง',
+
+    mentoring_title: 'การให้คำปรึกษาออนไลน์',
+    mentoring_purpose_title: 'จุดประสงค์ของการ Mentoring',
+    mentoring_purpose_quote: 'การประคับประคองและจับมือครูเดิน (Hand-in-Hand Mentoring) โดยไม่ปล่อยให้ครูรู้สึกโดดเดี่ยว ไม่เข้าไปกำหนดชี้นำ แต่ช่วยให้ครูค้นพบคำตอบได้ด้วยตนเอง',
+    mentoring_purpose_desc: 'ระบบการให้คำปรึกษาออนไลน์ของ TReN ออกแบบมาเพื่อดูแลครูผู้ทำวิจัยอย่างใกล้ชิดและยืดหยุ่นผ่านช่องทางออนไลน์ โดยยึดหลักการพัฒนาที่ให้ครูเป็นศูนย์กลางของการเรียนรู้',
+    
+    mentoring_concept_title: 'แนวคิดและข้อคิดสะท้อนจาก ศ.ดร.สุวิมล ว่องวาณิช',
+    mentoring_concept_quote: '......(การทำวิจัย) เป็นเรื่องที่เข้าใจยากและต้องอาศัยการฝึกปฏิบัติภายใต้พี่เลี้ยงที่เข้าใจในวิธีการวิจัยอย่างสม่ำเสมอ',
+    mentoring_concept_ref: '— ศ.ดร.สุวิมล ว่องวาณิช (การวิจัยปฏิบัติการในชั้นเรียน, 2550, หน้า 6)',
+    mentoring_concept_desc: 'แนวคิดนี้คือหัวใจสำคัญที่ TReN นำมาออกแบบระบบ Mentoring เพราะเราเชื่อว่า เมื่อครูมีผู้ชี้แนะที่เคยผ่านประสบการณ์จริงมาคอยเติมพลังใจและประคองความคิด ความกังวลในการทำวิจัยจะเปลี่ยนเป็นความมั่นใจ และนำไปสู่ผลสำเร็จของการพัฒนาชั้นเรียนอย่างแท้จริง',
+
+    mentoring_roles_title: 'บทบาท คุณสมบัติ และทักษะหลักของ Mentor',
+    mentoring_role_1_title: 'ผ่านการบ่มเพาะและเปี่ยมด้วยประสบการณ์จริง',
+    mentoring_role_1_desc: 'Mentor ทุกท่านไม่เพียงแต่เคยผ่านประสบการณ์การทำวิจัย EAR ในชั้นเรียนของตนเองมาก่อนเท่านั้น แต่ยังได้รับการ อบรมบ่มเพาะทักษะการเป็นครูพี่เลี้ยงเชิงลึกจากโครงการ TReN ควบคู่กับการสะสมประสบการณ์จริงในบทบาท Mentor มาอย่างต่อเนื่อง 2–4 ปี จึงมีความเข้าใจทั้งกระบวนการวิจัยและการประคับประคองครูอย่างมืออาชีพ',
+    
+    mentoring_role_2_title: 'ทักษะสำคัญในการประคับประคอง',
+    mentoring_skill_1_bold: 'การฟังอย่างไม่ตัดสิน (Active & Non-judgmental Listening):',
+    mentoring_skill_1_desc: 'รับฟังด้วยความตั้งใจ เปิดรับทุกปัญหาและความกังวลของครู โดยไม่ตัดสินถูก-ผิด เพื่อสร้างพื้นที่ปลอดภัยทางความคิด (Psychological Safety)',
+    mentoring_skill_2_bold: 'การเสริมนั่งร้านทางปัญญา (Scaffolding):',
+    mentoring_skill_2_desc: 'การคอยสนับสนุนโครงสร้างความคิดและประคับประคองเป็นระยะ เพื่อให้ครูก้าวผ่านจุดยากลำบากในการทำวิจัยไปทีละขั้นอย่างมั่นใจ',
+    mentoring_skill_3_bold: 'ความเห็นอกเห็นใจและความเข้าใจบริบท (Empathy & Contextual Understanding):',
+    mentoring_skill_3_desc: 'เข้าใจข้อจำกัด ภาระงาน และบริบทความเป็นจริงของโรงเรียนในระบบการศึกษาไทยเป็นอย่างดี ทำให้คำแนะนำที่ให้สามารถนำไปปฏิบัติจริงได้ในห้องเรียน',
+
+    mentoring_role_3_title: 'พลังของการตั้งคำถาม เพื่อสร้าง "ครูช่างสะท้อนคิด"',
+    mentoring_role_3_desc: 'Mentor ของ TReN จะไม่ใช้วิธีบอกคำตอบสำเร็จรูปหรือสั่งให้ทำ แต่จะใช้ "การตั้งคำถามเชิงสะท้อนคิด" (Reflective Questions) ชวนคุยและตั้งคำถามตลอดเวลา การฝึกตั้งคำถามอย่างต่อเนื่องนี้ ไม่เพียงช่วยแก้ปัญหาในวิจัยเท่านั้น แต่ยังมีเป้าหมายสำคัญเพื่อปลูกฝังกระบวนการคิด ให้เมื่อครูกลับไปทำวิจัยหรือจัดการเรียนรู้ด้วยตนเอง ครูจะกลายเป็น "Reflective Teacher" ที่คอยตั้งคำถาม ประเมิน และสะท้อนคิดกับการสอนของตนเองอยู่ตลอดเวลาอย่างเป็นธรรมชาติ',
+    
+    mentoring_role_4_title: 'ลีลาการ Mentoring ที่เป็นเอกลักษณ์',
+    mentoring_role_4_desc: 'การ Mentoring ใน TReN ไม่มีสูตรสำเร็จหรือรูปแบบตายตัว Mentor แต่ละท่านมีสไตล์ เอกลักษณ์ และเทคนิคเฉพาะตัวในการชวนคุยและสร้างบรรยากาศที่เป็นกันเอง เพื่อให้ครูรู้สึกผ่อนคลาย กล้าเปิดใจเล่าปัญหา และพร้อมเรียนรู้ไปด้วยกัน',
+
+    mentoring_clips_title: 'สื่อเรียนรู้และคลิปวิดีโอตัวอย่าง',
+    mentoring_clips_desc: 'ภายในหน้านี้ ผู้สนใจสามารถรับชม คลิปวิดีโอตัวอย่างบรรยากาศการทำ Online Mentoring จริง ของ Mentor ในแต่ละสไตล์ เพื่อให้เห็นภาพกระบวนการตั้งคำถาม การประคับประคองความคิด และบทสนทนาการสะท้อนคิดที่เป็นธรรมชาติ:',
+    mentoring_clip_1_desc: 'การใช้คำถามเพื่อชวนครูทบทวนและตกผลึกโจทย์วิจัย (Exploration Phase)',
+    mentoring_clip_2_desc: 'เทคนิคการตั้งคำถามเพื่อแก้ปัญหาเฉพาะหน้าในชั้นเรียน (Action Phase)',
+    mentoring_clip_3_desc: 'การ Mentoring สไตล์กัลยาณมิตรเพื่อเติมพลังใจและสร้างลักษณะ Reflective Teacher (Reflection Phase)',
+    mentoring_note: 'หมายเหตุ: สามารถคลิกที่ชื่อคลิปเพื่อเปิดดูตัวอย่างได้ (รอการอัปเดตลิงก์วิดีโอ)',
+
+    // Events & Training Page (TH)
+    events_header: 'กิจกรรม & การอบรม',
+    training_model_section: 'รูปแบบการอบรม (Training Model)',
+    nav_about_training: 'รูปแบบการอบรม',
+    nav_mentoring: 'การให้คำปรึกษา',
+    nav_video_demo: 'ตัวอย่างการให้คำปรึกษา',
+    yearly_plan_section: 'แผนกิจกรรมประจำปี',
+    yearly_plan_placeholder: 'พื้นที่สำหรับใส่แผนภูมิรูปภาพแผนกิจกรรมประจำปี',
+    academic_sharing_section: 'เวทีวิชาการและแลกเปลี่ยนเรียนรู้',
+    past_events_section: 'กิจกรรมที่ผ่านมา',
+
+    // === Create Member Works Page ===
+    edit_member_work_title: "แก้ไขผลงานสมาชิก",
+    member_works:'ผลงานสมาชิก',
+    create_member_work_title: "สร้างผลงานสมาชิก",
+    create_member_work_desc: "แบ่งปันผลงาน กิจกรรม และความสำเร็จของคุณให้กับสมาชิกเครือข่าย",
+    member_work_title_placeholder: "ชื่อผลงาน หรือชื่อกิจกรรม...",
+    add_member_work_cover: "เพิ่มรูปภาพประกอบผลงานที่นี่",
+    member_work_desc_placeholder: "อธิบายรายละเอียดผลงานของคุณที่นี่...",
+    create_member_work_author: "ชื่อผู้สร้างผลงาน",
+    create_author_hint: "ค้นหาชื่อสมาชิกในระบบ หรือพิมพ์ชื่อเองแล้วกด Enter เพื่อเพิ่ม",
+    date_created: "วันเดือนปีที่สร้างผลงาน",
+    date_created_placeholder: "เช่น 12 สิงหาคม 2567",
+    delete_link: "ลบลิงก์นี้",
+    edit_work_success: "อัปเดตข้อมูลผลงานเรียบร้อยแล้ว!",
+    edit_work_published: "บันทึกและเผยแพร่เรียบร้อยแล้ว!",
+    create_work_pending: "ส่งผลงานเพื่อรอตรวจสอบเรียบร้อยแล้ว!",
+    create_work_published: "เผยแพร่ผลงานเรียบร้อยแล้ว!",
+    error_loading_data: "ไม่สามารถดึงข้อมูลมาแก้ไขได้",
+    create_member_work:'สร้างผลงานสมาชิก',
+    link_to_work_member:'ลิงก์ผลงานของคุณ',
+
+    // === All Member Works Page ===
+    all_member_works_title: "ผลงานสมาชิกทั้งหมด",
+    explore_member_works_desc: "ค้นหาและรับชมผลงาน กิจกรรม และความสำเร็จจากสมาชิกเครือข่ายของเรา",
+    search_member_works_placeholder: "ค้นหาจากชื่อผลงาน ชื่อผู้สร้าง หรือคำค้นหา...",
+    loading_member_works: "กำลังโหลดผลงานสมาชิก...",
+    no_member_works_found: "ไม่พบผลงานสมาชิก",
+    no_member_works_found_desc: "ไม่พบผลงานที่ตรงกับการค้นหา หรือในหมวดหมู่นี้",
+
   },
   en: {
     translating: 'Translating...',
@@ -1283,8 +1534,12 @@ const translations = {
     register_success: 'Registration successful!',
 
     // Footer
-    copyright: 'Copyright © 2026 - TReN.org',
-    languageLabel: 'Language :',
+    footer_faculty: 'School of Liberal Arts',
+    footer_uni: "King Mongkut's University of Technology Thonburi",
+    footer_address_1: '126 Pracha Uthit Rd.',
+    footer_address_2: 'Bang Mod, Thung Khru, Bangkok 10140',
+    footer_email: 'Email:',
+    footer_copyright: 'Copyright © 2026 - TReN.org',
 
     // Password Update Page //
     back_to_home: 'Back to Home',
@@ -1312,6 +1567,15 @@ const translations = {
     about: 'About TReN',
     about_us_tab_placeholder: 'About TReN',
     knowledge: 'Knowledge Hub',
+
+    nav_home: 'Home',
+    nav_about: 'About TReN',
+    nav_knowledge: 'Knowledge',
+    nav_events: 'TReN Events',
+    nav_research: 'Research',
+    nav_blogs: 'Research Blogs',
+    nav_contact: 'Contact Us',
+    nav_register: 'Join TReN',
 
     // Navbar Dropdown 
     profile: 'Profile',
@@ -1376,6 +1640,10 @@ const translations = {
 
     delete_success: 'Deleted successfully!',
 
+    // Create News Page 
+    edit_news_title:'Edit News',
+    create_news_desc:'Share activities and news with network members.',
+
     // Create Event Page
     create_event_title: 'Create an Event',
     create_event_desc: 'Create an event schedule for people to attend.',
@@ -1395,6 +1663,7 @@ const translations = {
     event_creating: 'Creating...',
     create_event_success: 'Create Event Success!',
     create_event_error: 'An error occurred while creating the event',
+    registration_url:'Registration link',
 
     update_event_success: 'Update Event Success!',
     update_event_error: 'An error occurred while updating the event',
@@ -1476,6 +1745,9 @@ const translations = {
     tag_input_hint: '* Search for existing tags or type a new tag and press Enter to add',
     link_title: 'Resource link, Slide URL, or YouTube/Vimeo URL',
 
+    create_blog_title: 'Create Blog',
+    create_blog_desc: 'Share your thoughts with other teachers.',
+
     // All Blogs Page
     teacher_blogs: 'Teacher\'s Blogs',
     all_teachers_blogs: 'Teacher\'s Blogs',
@@ -1494,6 +1766,7 @@ const translations = {
 
     // Create Showcase Page
     require_title: 'Please fill the title',
+    add_showcase_cover:'Add showcase cover image here.',
     require_login: 'You must be logged in to create a showcase',
     require_description: 'Please fill the description',
     create_showcase_success: 'Showcase created successfully!',
@@ -1512,6 +1785,7 @@ const translations = {
     create_showcase_description: 'Description',
     create_showcase_add_image: 'Add Image cover',
     link_to_work: 'Link to your work',
+    link_to_teacher_work: 'Additional reference links',
     create_showcase_image_desc: 'You can add an image to showcase your work (optional)',
     showcase_brief_description: 'Brief Description',
     change_media: 'Change Media',
@@ -1524,6 +1798,14 @@ const translations = {
     searching: 'Searching...',
     add: 'Add',
     no_links_provided: 'No links provided for this showcase',
+    school_name: 'Name of the affiliated school',
+    school_name_placeholder: 'e.g., Triam Udom Suksa School...',
+    year_created:'Created in',
+    year_created_placeholder:'e.g., 2567,2569 (B.E.)',
+    search_province:'-- Type to search for a province --',
+    no_province_found:'No province found',
+    year:'B.E. ',
+    posted_by:'Post by',
     
 
     // All Events Page
@@ -1773,7 +2055,7 @@ const translations = {
     our_mission: 'Achievements over the past 5 years',
     three_hundred_plus: '270+',
     registered_teachers: 'Teachers participated',
-    over_provinces: 'covers 40 \nprovinces nationwide',
+    over_provinces: 'covers 50 provinces\n nationwide',
     one_hundred_fifty_plus: '100+',
     research_projects: 'Classroom Research Projects',
     already_published: 'Already published over',
@@ -1799,6 +2081,7 @@ const translations = {
     news_announcements: 'Announcements',
     news_earc: 'EARC Spotlight',
     news_activity: 'Activity News',
+    news_public_relations: 'Public Relations',
     no_news: 'No data found',
     view_all_announcements: 'View All Announcements',
     view_all_stories: 'View All Stories',
@@ -1808,17 +2091,20 @@ const translations = {
     admin_approve_news_success: 'News approved successfully',
     error_updating_occurred: 'An error occurred while approving the news',
 
+    click_to_view_full: 'Click to see full size image',
+
     // Home - Hero Section (EN)
     hero_tren_title: 'TReN Teacher-Research Network',
     hero_tren_subtitle: 'Transforming classrooms into real learning spaces with the power of "Teacher-Researchers"',
     hero_tren_slogan: 'Because teachers understand classroom problems best!',
     
-    hero_desc_bold_1: 'TReN Teacher-Research Network',
-    hero_desc_text_1: ' is a Community of Practice (CoP) for teachers across 4 regions in Thailand, ready to stand by your side. We turn complex research into ',
-    hero_desc_bold_2: '"a tool that changes classroom lives"',
-    hero_desc_text_2: ' through the concept of Exploratory Action Research (EAR). Discover simple classroom problems and solve them precisely, with ',
-    hero_desc_bold_3: '"Mentors"',
-    hero_desc_text_3: ' guiding and supporting you throughout the journey.',
+    hero_desc_bold_1: 'TReN Teacher Research Network',
+    hero_desc_text_1: 'A Community of Practice (CoP) standing beside Thai teachers across 4 regions nationwide. We invite teachers to transform',
+    hero_desc_bold_2: '"research"',
+    hero_desc_text_2: 'into a practical learning process in the classroom through Exploratory Action Research (EAR), starting with identifying root causes before developing solutions together, supported by',
+    hero_desc_bold_3: 'local mentors and the EAR Community across 4 regions',
+    hero_desc_text_3: 'who truly understand teachers\' contexts, ready to exchange knowledge and provide consultation throughout the process.',
+    hero_btn_community: 'EARC 4 Regions Community',
 
     hero_btn_register: 'Join the Network',
     hero_btn_resources: 'Explore EAR Resources',
@@ -1833,11 +2119,50 @@ const translations = {
     hero_img_hint: '(Click to visit the British Council article)',
     hero_img_click_hint: 'Click to read the full article',
 
+    member_portfolios:"Collection of Members' Work",
     network_voices: 'The Voice of the Network',
     gallery_title: 'EAR 2026 Training Gallery',
 
+    research_topic: 'Research Topic:',
+    
+    hero_quote1_author: 'Teacher Wilai Phanchanokul',
+    hero_quote1_school: 'Ban Dongsansuk School, Udon Thani',
+    hero_quote1_topic: 'How I developed my teaching to promote my students’ Engagement in English classes',
+    hero_quote1_text: '"The findings made me realize that we need to listen to students more. And when students trust us, they are willing to fully follow our advice."',
+    
+    hero_quote2_author: 'Teacher Faisa Wantaha',
+    hero_quote2_school: 'Wat Nang Lao School, Songkhla',
+    hero_quote2_topic: 'Enhancing student engagement in speaking activities',
+    hero_quote2_text: '"The most important lesson from doing this research is getting to know what the students really want."',
+
+    box_onsite_title: 'Onsite Training Format',
+    box_onsite_desc: 'A step-by-step teacher development process over 3 phases: starting from the research workshop, actual classroom implementation, and results presentation, supported by a learning ecosystem.',
+    box_onsite_btn: 'Read more details about the training format',
+    
+    box_online_title: 'Online Mentoring',
+    box_online_desc: 'Mentoring by experienced mentors focusing on creating a safe space, non-judgmental listening, and using reflective questioning to cultivate Reflective Teachers.',
+    box_online_btn: 'Read more about the Mentoring system and watch a sample clip',
+
+    modal_onsite_title: 'Onsite Training Format',
+    modal_onsite_desc1: 'A step-by-step teacher development process over 3 phases: Research Workshop (held in May), actual classroom implementation (Jun - Oct), and results presentation (Nov).',
+    modal_onsite_desc2: 'Supported by a learning ecosystem through ',
+    modal_onsite_bold1: '2-level support system',
+    modal_onsite_li1_title: 'Individual Level:',
+    modal_onsite_li1_desc: 'Intensive care at a 1:2 ratio by a mentor who provides reflection and closely monitors progress every 1-2 weeks.',
+    modal_onsite_li2_title: 'Community Level:',
+    modal_onsite_li2_desc: 'Learn together in small EAR Community groups (7-12 people) to exchange experiences, recharge, and prevent burnout.',
+
+    modal_online_title: 'Online Mentoring',
+    modal_online_desc1: 'Mentoring by mentors with 2-4 years of actual EAR experience, focusing on creating a safe space, non-judgmental listening, and using ',
+    modal_online_bold1: 'reflective questioning',
+    modal_online_desc2: ' instead of giving orders, to cultivate teachers into ',
+    modal_online_desc3: ' who can develop their own teaching in the long run.',
+    modal_online_video_title: 'Mentoring Sample Clip',
+    read_full_details: 'Read full details',
+
     // Knowledge - Part 1 (EN)
-    knowledge_part1_title: 'EAR Knowledge Hub',
+    knowledge_title: 'EAR Knowledge Hub',
+    knowledge_part1_title: 'Get to know EAR',
     knowledge_part1_subtitle: 'Explore the Classroom, Drive Learning by Teachers Themselves',
     knowledge_part1_quote: '"Your classroom... no one knows it better than you, the teacher."',
     knowledge_part1_intro_1: 'Transform research from a "headache" into your "trusted tool". Come explore, discover, and drive children\'s learning by yourself through Exploratory Action Research (EAR).',
@@ -2114,6 +2439,7 @@ const translations = {
     vision_about_vision_headline: 'Vision',
     vision_about_mission_headline: 'Mission',
     vision_about_core_objectives_headline: 'Core Objectives',
+    vision_sub_text: 'Vision and Mission',
 
     vision_about_tren_desc_1: 'is a research network driven by the power of teachers. We are committed to elevating the potential of Thai teachers to solve classroom problems directly and independently through classroom research called Exploratory Action Research (EAR), which emphasizes using actual data and evidence from the classroom to improve teaching and learning.',
     vision_about_channels_title: 'Learning Channels and Participation',
@@ -2167,7 +2493,7 @@ const translations = {
     journey_year_2_4_title: 'Years 2 - 4 (2023 - 2025)',
     journey_phase_2_4: 'Cultivating Core Leaders and Preparing for the Network',
     journey_desc_3_1: 'Because using foreign mentor teachers incurs high costs, the project recognized the need for long-term sustainability. In Year 2 (2023), teachers with potential from the first cohort were selected to be developed as "Teacher-Research Mentors", with the honor of having British expert Professor Dr. Richard Smith impart his knowledge.',
-    journey_desc_3_2: 'Over these three years, the mentors have provided consultation to fellow teachers, enabling the project to expand its training to cover 40 provinces nationwide. This allowed members and mentors to be thoroughly distributed across various regions, leading up to the preparation for a significant elevation of cooperation.',
+    journey_desc_3_2: 'Over these three years, the mentors have provided consultation to fellow teachers, enabling the project to expand its training to cover 50 provinces nationwide. This allowed members and mentors to be thoroughly distributed across various regions, leading up to the preparation for a significant elevation of cooperation.',
     journey_year_5_6_title: 'Years 5 - 6 (2026 - 2028)',
     journey_phase_5_6: 'The Birth of the TReN Network and National Mobilization',
     journey_desc_4_1: 'The growth of teacher-researcher groups nationwide led to the official establishment of the "Teacher-Research Network (TReN)".',
@@ -2205,10 +2531,10 @@ const translations = {
 
     // Phase 3: Year 2 - 4 (2023 – 2025)
     journey_year_3_title_new: 'Year 2 – 4: 2023 – 2025',
-    journey_phase_3_new: 'Incubating Leaders to 40 Provinces',
+    journey_phase_3_new: 'Incubating Leaders to 50 Provinces',
     journey_desc_3_1_new: 'To build sustainability and reduce reliance on foreign experts, the project selected teachers from the first cohort to be further developed into ',
     journey_mentor_role: '"Teacher-Research Mentors"',
-    journey_desc_3_2_new: ' and was honored by Prof. Dr. Richard Smith who directly transferred the body of knowledge, until this group of core mentors could expand their results by providing consultation to fellow teachers, covering up to 40 provinces nationwide.',
+    journey_desc_3_2_new: ' and was honored by Prof. Dr. Richard Smith who directly transferred the body of knowledge, until this group of core mentors could expand their results by providing consultation to fellow teachers, covering up to 50 provinces nationwide.',
 
     // Phase 4: Year 5 - 6 (2026 Onwards)
     journey_year_4_title_new: 'Year 5 - 6 Onwards: 2026 Onwards',
@@ -2235,7 +2561,7 @@ const translations = {
     journey_stat_2_desc: 'Incubated from the first cohort of core teachers to experts who continually support fellow teachers',
 
     journey_stat_3_name: 'Working Areas',
-    journey_stat_3_val: '40 Provinces',
+    journey_stat_3_val: '50 Provinces',
     journey_stat_3_desc: 'Distributing learning and care networks thoroughly across all regions',
 
     journey_stat_4_name: 'Communities of Practice',
@@ -2458,6 +2784,14 @@ const translations = {
     rules_6_3_item_2_title: 'Future Resource Management:',
     rules_6_3_item_2_desc: 'If the network ceases operations in the future, all remaining budgets and the digital knowledge bank will be handed over to educational agencies or public benefit organizations to continue benefiting Thai teachers.',
 
+    const_cat_1:'Section 1',
+    const_cat_2:'Section 2',
+    const_cat_3:'Section 3',
+    const_cat_4:'Section 4',
+    const_cat_5:'Section 5',
+    const_cat_6:'Section 6',
+    const_cat_7:'Section 7',
+
     // Team Page (EN)
     team_main_title: 'Network Management Team',
     team_main_en_title: 'Network Management Team',
@@ -2514,6 +2848,163 @@ const translations = {
     team_dummy_name: 'Name mmmmmmmmm',
     team_dummy_school: 'School mmmmmmmmm',
     team_tba: 'To be announced',
+
+    // About EARC Section
+    earc_title: 'EAR Community (EARC)',
+    earc_intro_1: 'Building upon our initiative that has incubated teachers and mentors across over 50 provinces nationwide since 2022, we aim to elevate Exploratory Action Research (EAR) into ',
+    earc_intro_highlight: 'a sustainable working style and learning culture for Thai teachers',
+    earc_intro_2: ' so every teacher can truly analyze, solve problems, and improve classroom instruction independently throughout their professional life.',
+    earc_intro_3: 'Therefore, we established the "EAR Community (EARC)" as a regional driving mechanism, focusing on creating a ',
+    earc_intro_4: ' that is open to listening, consulting, and exchanging knowledge based on real research cases from fellow teachers. This fosters a Community of Practice where teachers can sustainably support, rely on, and develop each other’s potential.',
+    
+    earc_mission_title: 'Core Regional Missions of EARC',
+    earc_mission_1_title: 'Driving Teacher Development',
+    earc_mission_1_desc: 'Organizing local incubation and development processes to distribute EAR knowledge extensively and contextually, with the central network (TReN) acting as academic support to maintain knowledge standards.',
+    earc_mission_2_title: 'Elevating Research Quality',
+    earc_mission_2_desc: 'Providing close consultation to fellow teachers, helping screen and extract lessons from real classrooms to ensure EAR research is of high quality, academically reliable, and practically applicable for student development.',
+    earc_mission_3_title: 'Professional Self-Development',
+    earc_mission_3_desc: 'Serving as a learning base for regional working teams and mentors to develop change leadership, learning facilitation, and community management skills, systematically elevating their potential and professional growth.',
+    
+    earc_process_title: 'Driving Process Throughout the Semester',
+    earc_process_desc: 'Teacher development in the EARC community is intensively conducted throughout the 1st semester via 3 main steps:',
+    earc_process_1_title: 'EAR Workshop',
+    earc_process_1_desc: 'Learning the EAR action research process with a focus on practical classroom application, easy-to-understand tools, and clear results.',
+    earc_process_2_title: 'Practical Implementation with Mentors',
+    earc_process_2_desc: 'Teachers apply the EAR process to solve real student problems, with local mentors providing close consultation and care throughout the process.',
+    earc_process_3_title: 'Lesson Extraction & Presentation',
+    earc_process_3_desc: 'A regional knowledge exchange session to process student changes, extract classroom knowledge, reflect, and present the results.',
+    
+    earc_coverage_title: 'Operations Covering 8 Regional Zones Nationwide',
+    earc_coverage_desc: 'To ensure EAR knowledge reaches teachers in all contexts as easily as possible, EARC has established driving and knowledge transfer centers covering 8 zones nationwide:',
+    earc_zone_north: 'North: Upper / Lower',
+    earc_zone_ne: 'Northeast: Upper / Lower',
+    earc_zone_central: 'Central',
+    earc_zone_east: 'East',
+    earc_zone_south: 'South: Upper / Lower',
+    earc_zone_bkk: 'Bangkok and Vicinity',
+    earc_map_placeholder: 'Placeholder for 8 Regional Zones Map (EARC Map)',
+
+    earc_en_title: 'EARC',
+    earc_mission_en:'Core Regional Missions',
+    earc_process_en: 'Driving Process',
+    earc_coverage_en: 'Coverage Areas',
+    earc_see_team_list: '(You can view the list of the working committee and mentors for each area in next section.)',
+    team_reg_bkk: '6. Bangkok and Vicinity (EARC Bangkok & Vicinity)',
+
+    // Training Page (EN)
+    training_model_title: 'Training Model',
+    training_intro_title: '3 Core Phases & 2-Tier Support System',
+    training_intro_desc_1: 'The EAR teacher development program is designed for step-by-step growth, featuring 3 core phases alongside a ',
+    training_intro_desc_bold1: '2-Tier Support System',
+    training_intro_desc_2: 'acting as a Learning Ecology. This ensures that every teacher receives comprehensive assistance and ',
+    training_intro_desc_bold2: 'is not left behind',
+    training_intro_desc_3: 'throughout their research journey.',
+    
+    training_sec_a_title: 'A. 3 Core Training Phases',
+    training_phase1_title: 'Phase 1: Inception',
+    training_phase1_desc: 'Attend the Onsite Workshop to build knowledge, conceptual frameworks, and systematically understand Exploratory Action Research (EAR).',
+    training_phase2_title: 'Phase 2: Implementation',
+    training_phase2_desc: 'Teachers apply their knowledge in their own classrooms through 7 Research Tasks continuously over the semester.',
+    training_phase3_title: 'Phase 3: Synthesis & Dissemination',
+    training_phase3_desc: 'Compile, refine, and present research findings via the online EAR Sharing Session to exchange knowledge, summarize lessons, and expand the professional network.',
+
+    training_sec_b_title: 'B. 2-Tier Support System',
+    training_sec_b_desc: 'To prevent research from becoming an isolating burden and to ensure teachers smoothly overcome challenges in an academically sound manner, the program implements a 2-tier support system:',
+    
+    training_tier1_title: '1) Mentorship Level',
+    ratio: 'Ratio',
+    training_tier1_quote: 'Teacher research is not about letting them swim alone in an ocean of problems, but having someone to support them so they can move forward confidently.',
+    training_tier1_p1_bold: 'Intensive Care:',
+    training_tier1_p1_desc: 'Pairing 1 Mentor with 2 Teachers to ensure thorough, deep, and targeted support.',
+    training_tier1_p2_bold: 'Reflective Dialogue:',
+    training_tier1_p2_desc: 'Mentors consult and closely monitor progress every 1-2 weeks. They not only verify the academic accuracy of the research but also listen, facilitate reflection, clear doubts, and help find practical solutions for the classroom.',
+
+    training_tier2_title: '2) Community Level',
+    training_tier2_quote: 'Create a Learning Ecology that connects teachers, showing that we face challenges together and no one has to struggle alone.',
+    training_tier2_p1_bold: 'Peer Support:',
+    training_tier2_p1_desc: 'Forming small community groups of 7-12 people (including teachers and mentors) to create a safe space for academic learning.',
+    training_tier2_p2_bold: 'Roundtable Discussions (2 Key Sessions):',
+    training_tier2_p2_1_bold: 'Session 1:',
+    training_tier2_p2_1_desc: 'After the Exploratory Phase, to review research questions and co-plan learning management.',
+    training_tier2_p2_2_bold: 'Session 2:',
+    training_tier2_p2_2_desc: 'After the Action Phase, to summarize lessons learned and the outcomes achieved.',
+    training_tier2_p3_bold: 'Burnout Prevention:',
+    training_tier2_p3_desc: 'A friendly space to share experiences, obstacles, and solutions. Hearing problems and solutions from peers provides inspiration, helps synthesize lessons, and drives collective progress without leaving anyone behind.',
+
+    mentoring_title: 'Online Mentoring',
+    mentoring_purpose_title: 'The Purpose of Mentoring',
+    mentoring_purpose_quote: 'Hand-in-Hand Mentoring ensures teachers never feel isolated. We do not dictate; we guide them to discover the answers themselves.',
+    mentoring_purpose_desc: "TReN's online mentoring system is designed to provide close, flexible support for teacher-researchers through online channels, focusing on a teacher-centric development approach.",
+    
+    mentoring_concept_title: 'Concepts and Reflections by Prof. Dr. Suwimon Wongwanich',
+    mentoring_concept_quote: '......(Doing research) is complex and requires continuous practice under a mentor who truly understands research methodology.',
+    mentoring_concept_ref: '— Prof. Dr. Suwimon Wongwanich (Action Research in Classroom, 2007, p. 6)',
+    mentoring_concept_desc: 'This concept is the core of TReN’s mentoring system. We believe that when teachers have experienced mentors to empower and support them, anxiety turns into confidence, leading to genuine success in classroom development.',
+
+    mentoring_roles_title: 'TReN Mentor Profile & Skills',
+    mentoring_role_1_title: 'Experienced & Trained Mentors',
+    mentoring_role_1_desc: 'All mentors have not only conducted EAR in their own classrooms but have also undergone in-depth mentorship training by TReN, accumulating 2–4 years of practical mentoring experience. They deeply understand both the research process and how to professionally support teachers.',
+    
+    mentoring_role_2_title: 'Essential Mentoring Skills',
+    mentoring_skill_1_bold: 'Active & Non-judgmental Listening:',
+    mentoring_skill_1_desc: 'Listening attentively to every problem and concern without judgment to create Psychological Safety.',
+    mentoring_skill_2_bold: 'Scaffolding:',
+    mentoring_skill_2_desc: 'Supporting their thought structures periodically to help them confidently overcome research challenges step by step.',
+    mentoring_skill_3_bold: 'Empathy & Contextual Understanding:',
+    mentoring_skill_3_desc: 'Understanding the heavy workloads and actual contexts of Thai schools, ensuring that advice is practical and applicable in real classrooms.',
+
+    mentoring_role_3_title: 'The Power of Questioning: Building "Reflective Teachers"',
+    mentoring_role_3_desc: 'TReN mentors do not give ready-made answers. Instead, they use "Reflective Questions" to continuously engage teachers. This practice not only solves research problems but aims to cultivate a mindset where teachers naturally become "Reflective Teachers" who constantly question, assess, and reflect on their own teaching.',
+    
+    mentoring_role_4_title: 'Unique & Flexible Mentoring Style',
+    mentoring_role_4_desc: 'There is no fixed formula for Mentoring in TReN. Each mentor has their own unique style, technique, and friendly approach to make teachers feel relaxed, willing to open up, and ready to learn together.',
+
+    mentoring_clips_title: 'Mentoring Video Demonstration',
+    mentoring_clips_desc: 'On this page, you can watch sample videos of real Online Mentoring sessions by different mentors to visualize the questioning process, thought scaffolding, and natural reflective dialogues:',
+    mentoring_clip_1_desc: 'Using questions to help teachers review and refine research topics (Exploration Phase)',
+    mentoring_clip_2_desc: 'Questioning techniques for solving immediate classroom problems (Action Phase)',
+    mentoring_clip_3_desc: 'Friendly mentoring style to empower and build Reflective Teachers (Reflection Phase)',
+    mentoring_note: 'Note: Click on the clip name to watch the demonstration (Awaiting video link updates).',
+
+    // Events & Training Page (EN)
+    events_header: 'Events & Training',
+    training_model_section: 'Training Model',
+    nav_about_training: 'Training Model',
+    nav_mentoring: 'Online Mentoring',
+    nav_video_demo: 'Mentoring Video Demonstration', 
+    yearly_plan_section: 'Yearly Plan',
+    yearly_plan_placeholder: 'Placeholder for Yearly Activity Plan Chart/Image',
+    academic_sharing_section: 'Academic Sharing Sessions', 
+    past_events_section: 'Past Events Archive',
+
+    // === Create Member Works Page ===
+  edit_member_work_title: "Edit Member Work",
+  member_works:'Member Works',
+  create_member_work_title: "Create Member Work",
+  create_member_work_desc: "Share your works, events, and achievements with the network.",
+  member_work_title_placeholder: "Work or Event Title...",
+  add_member_work_cover: "Add cover image here",
+  member_work_desc_placeholder: "Describe the details of your work here...",
+  create_member_work_author: "Author(s)",
+  create_author_hint: "Search for a member's name or type a name and press Enter to add",
+  date_created: "Date Created",
+  date_created_placeholder: "e.g. 12 August 2024",
+  delete_link: "Delete this link",
+  edit_work_success: "Work updated successfully!",
+  edit_work_published: "Saved and published successfully!",
+  create_work_pending: "Work submitted for review successfully!",
+  create_work_published: "Work published successfully!",
+  error_loading_data: "Could not fetch data for editing.",
+  create_member_work:'Create Member Works',
+  link_to_work_member: 'Link to the work',
+
+  // === All Member Works Page ===
+  all_member_works_title: "All Member Works",
+  explore_member_works_desc: "Explore works, activities, and achievements from our network members.",
+  search_member_works_placeholder: "Search by title, author or keyword...",
+  loading_member_works: "Loading member works...",
+  no_member_works_found: "No member works found",
+  no_member_works_found_desc: "No works match your search or category.",
 
   }
 };

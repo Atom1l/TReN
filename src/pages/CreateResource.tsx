@@ -239,7 +239,7 @@ const CreateResource = () => {
         </p>
       </div>
 
-      <div className="max-w-3xl mx-auto bg-[#F4F6F9] rounded-2xl p-6 sm:p-10 shadow-sm border border-slate-100">
+      <div className="max-w-3xl mx-auto bg-[#F4F6F9] rounded-2xl p-6 sm:p-10 shadow-sm border border-slate-100 mb-20">
         <form onSubmit={handleSubmit} className="space-y-6">
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -254,7 +254,7 @@ const CreateResource = () => {
                 value={formData.title} 
                 onChange={handleChange} 
                 required 
-                className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white outline-none" 
+                className="w-full h-auto text-3xl sm:text-4xl leading-[1.5] font-bold text-[#1e3a8a] placeholder-slate-300 border-b border-slate-200 pt-2 pb-4 mb-8 focus:outline-none focus:border-[#1e3a8a] transition-colors bg-transparent" 
               />
             </div>
 

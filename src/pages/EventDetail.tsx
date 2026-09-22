@@ -56,6 +56,7 @@ const EventDetail = () => {
   const [isTranslating, setIsTranslating] = useState(false);
 
   const [isReportOpen, setIsReportOpen] = useState(false);
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
 
   const [alertModal, setAlertModal] = useState({
     isOpen: false,
@@ -234,8 +235,31 @@ const EventDetail = () => {
   const resourceLinks = Array.isArray(event.resource_links) ? event.resource_links : [];
 
   return (
-    <div className="min-h-screen bg-white pb-24">
+    <div className="min-h-screen bg-white pb-24 relative">
       {renderAlertModal()}
+
+      {/* 🟢 3. โมดอลสำหรับดูรูปขยายใหญ่ (Image Viewer Popup) */}
+      {zoomedImage && (
+        <div 
+          className="fixed inset-0 z-[200] bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 animate-fade-in"
+          onClick={() => setZoomedImage(null)}
+        >
+          <button 
+            className="absolute top-6 right-6 text-white bg-slate-800/50 hover:bg-slate-700 p-2 rounded-full cursor-pointer transition-colors z-10"
+            onClick={() => setZoomedImage(null)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <img 
+            src={zoomedImage} 
+            alt="Zoomed" 
+            className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl transform transition-transform duration-300 scale-100" 
+            onClick={(e) => e.stopPropagation()} 
+          />
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
@@ -256,36 +280,48 @@ const EventDetail = () => {
           </div>
         )}
 
-        {/* 🟢 3. อัปเดตส่วนแสดงผล วันที่ | สถานที่ และเพิ่ม กลุ่มเป้าหมาย ไว้บรรทัดถัดไป */}
         <div className="text-slate-500 mb-8 text-base sm:text-lg mt-4 space-y-1.5">
           <p>
             {formattedDate} | {translatedLocation || event.location || 'ไม่ระบุสถานที่'}
           </p>
-          {/* {event.target_audience && (
-            <p className="flex items-center gap-2">
-              <span className="font-semibold text-[#1e3a8a]">{t('target_audience') || 'กลุ่มเป้าหมาย'}:</span> 
-              <span>{getTargetTranslation(event.target_audience)}</span>
-            </p>
-          )} */}
         </div>
 
-        {/* Cover Image */}
+        {/* 🟢 4. Cover Image: เพิ่มคลาส cursor-zoom-in และป้ายกำกับ */}
         {event.thumbnail_url && (
-          <div className="w-full h-[300px] sm:h-[400px] lg:h-[500px] rounded-xl overflow-hidden mb-10 shadow-sm border border-slate-100">
-            <img 
-              src={event.thumbnail_url} 
-              alt={event.title} 
-              className="w-full h-full object-cover"
-            />
-          </div>
+           <div 
+           className="w-full h-[300px] sm:h-[400px] lg:h-[500px] rounded-xl overflow-hidden mb-10 shadow-sm border border-slate-100 cursor-zoom-in relative group"
+           onClick={() => setZoomedImage(event.thumbnail_url)} 
+         >
+           <img 
+             src={event.thumbnail_url} 
+             alt={event.title} 
+             className="w-full h-full object-cover" 
+           />
+           {/* ป้ายกำกับบนรูปหน้าปก */}
+           <div className="absolute bottom-4 right-4 bg-slate-900/75 text-white text-xs md:text-sm px-3 py-1.5 rounded-lg backdrop-blur-md flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg">
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-4 h-4">
+               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+             </svg>
+             <span>{t('click_to_view_full') || 'คลิกเพื่อดูภาพเต็มๆ'}</span>
+           </div>
+         </div>
         )}
 
-        {/* About this Event ที่แปลภาษาแล้ว */}
+        {/* 🟢 5. ขยายขนาดฟอนต์เนื้อหา (Content) ให้ได้มาตรฐานเดียวกับหน้า News และ Blog */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-[#1e3a8a] mb-4">{t('about_event') || 'About this Event'}</h2>
-          <p className="text-slate-700 leading-relaxed text-lg whitespace-pre-wrap break-words">
-            {translatedRecap || event.full_recap_content || 'ยังไม่มีการสรุปเนื้อหาสำหรับกิจกรรมนี้'}
-          </p>
+          <h2 className="text-2xl md:text-3xl font-bold text-[#1e3a8a] mb-6">{t('about_event') || 'About this Event'}</h2>
+          <div 
+             className="article-content max-w-none text-slate-700 leading-relaxed mb-12 
+                        whitespace-pre-wrap break-words overflow-hidden
+                        text-lg md:text-xl lg:text-[22px]
+                        [&>p]:text-lg md:[&>p]:text-xl lg:[&>p]:text-[22px] [&>p]:mb-6
+                        [&>h1]:text-3xl md:[&>h1]:text-4xl lg:[&>h1]:text-5xl [&>h1]:font-bold [&>h1]:text-[#1e3a8a] [&>h1]:mb-6 [&>h1]:mt-10
+                        [&>h2]:text-2xl md:[&>h2]:text-3xl lg:[&>h2]:text-4xl [&>h2]:font-bold [&>h2]:text-[#1e3a8a] [&>h2]:mb-4 [&>h2]:mt-8
+                        [&>ul]:text-lg md:[&>ul]:text-xl lg:[&>ul]:text-[22px] [&>ul]:list-disc [&>ul]:pl-8 [&>ul]:mb-6 [&>ul>li]:mb-3
+                        [&>ol]:text-lg md:[&>ol]:text-xl lg:[&>ol]:text-[22px] [&>ol]:list-decimal [&>ol]:pl-8 [&>ol]:mb-6 [&>ol>li]:mb-3
+                        [&>pre]:overflow-x-auto [&>pre]:bg-slate-100 [&>pre]:p-5 [&>pre]:rounded-xl [&>pre]:text-base"
+             dangerouslySetInnerHTML={{ __html: translatedRecap || event.full_recap_content || 'ยังไม่มีการสรุปเนื้อหาสำหรับกิจกรรมนี้' }}
+          />
         </div>
 
         {/* Event Resources */}
@@ -317,7 +353,7 @@ const EventDetail = () => {
 
         {/* Share and Report */}
         <div className='mb-12 border-t border-slate-200 pt-8'>
-          <h3 className="text-lg font-bold text-[#1e3a8a] mb-3">{t('share_post') || 'Share this post with a friends'}</h3>
+          <h3 className="text-xl font-bold text-[#1e3a8a] mb-3">{t('share_post') || 'Share this post with a friends'}</h3>
           <div className="flex flex-col sm:flex-row sm:items-center gap-6 justify-between">
             <div className="flex flex-wrap gap-2">
               <button onClick={shareToFacebook} title="Share to Facebook" className="w-10 h-10 bg-[#EBF1FA] text-[#1e3a8a] rounded-md flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-colors cursor-pointer">

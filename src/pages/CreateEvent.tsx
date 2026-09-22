@@ -271,31 +271,31 @@ const CreateEvent = () => {
       )}
 
       {/* Header */}
-      <div className="max-w-3xl mx-auto text-center mt-8 mb-10">
-        <h1 className="text-4xl lg:text-5xl font-bold text-[#1e3a8a] mb-2">
+      <div className="max-w-3xl mx-auto text-center mt-28 mb-10">
+        <h1 className="text-5xl lg:text-7xl font-bold text-[#1e3a8a] mb-2">
           {isEditMode ? (t('edit_event_title') || 'Edit Event') : (t('create_event_title') || 'Create an Event')}
         </h1>
-        <p className="text-md lg:text-lg text-slate-500">
+        <p className="text-xl text-slate-500">
           {isEditMode ? 'Update the details of your event below.' : (t('create_event_desc') || 'Create an event schedule for people to attend.')}
         </p>
       </div>
 
-      <div className="max-w-3xl mx-auto bg-[#F4F6F9] rounded-2xl p-6 sm:p-10 shadow-sm border border-slate-100">
+      <div className="max-w-3xl mx-auto bg-[#F4F6F9] rounded-2xl p-6 sm:p-10 shadow-sm border border-slate-100 mb-20">
         <form onSubmit={handleSubmit} className="space-y-6">
           
-          <div>
-            <label className="block text-slate-600 font-semibold mb-2 text-lg">{t('creat_event_name') || 'Event Name'}<span className='text-red-500 ml-1'>*</span></label>
+          <div className=' py-2 px-2'>
+            <label className="block text-slate-600 font-semibold mb-2 text-xl">{t('creat_event_name') || 'Event Name'}<span className='text-red-500 ml-1'>*</span></label>
             <input type="text" name="title" value={formData.title} onChange={handleChange} required className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-slate-600 font-semibold mb-2 text-lg">{t('event_date') || 'Date'}<span className='text-red-500 ml-1'>*</span></label>
+            <div className=' py-2 px-2'>
+              <label className="block text-slate-600 font-semibold mb-2 text-xl">{t('event_date') || 'Date'}<span className='text-red-500 ml-1'>*</span></label>
               <input type="date" name="event_date" value={formData.event_date} onChange={handleChange} required className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white" />
             </div>
 
-            <div>
-              <label className="block text-slate-600 font-semibold mb-2 text-lg">{t('event_time') || 'Time'}<span className='text-red-500 ml-1'>*</span></label>
+            <div className=' py-2 px-2'>
+              <label className="block text-slate-600 font-semibold mb-2 text-xl">{t('event_time') || 'Time'}<span className='text-red-500 ml-1'>*</span></label>
               <div className="flex items-center gap-2">
                 
                 {/* เวลาเริ่มต้น */}
@@ -341,14 +341,14 @@ const CreateEvent = () => {
               </div>
             </div>
 
-            <div className='md:col-span-2'>
-              <label className="block text-slate-600 font-semibold mb-2 text-lg">{t('event_location') || 'Location'}<span className='text-red-500 ml-1'>*</span></label>
+            <div className='md:col-span-2 py-2 px-2'>
+              <label className="block text-slate-600 font-semibold mb-2 text-xl">{t('event_location') || 'Location'}<span className='text-red-500 ml-1'>*</span></label>
               <input type="text" name="location" value={formData.location} onChange={handleChange} required className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white" />
             </div>
 
             {/* 🟢 4. เพิ่มฟิลด์ Target Audience */}
-            <div>
-              <label className="block text-slate-600 font-semibold mb-2 text-lg">
+            <div className=' py-2 px-2'>
+              <label className="block text-slate-600 font-semibold mb-2 text-xl">
                 {t('target_audience') || 'กลุ่มเป้าหมาย'}
               </label>
               <select
@@ -366,8 +366,8 @@ const CreateEvent = () => {
             </div>
 
             {/* 🟢 5. เพิ่มฟิลด์ Registration URL */}
-            <div>
-              <label className="block text-slate-600 font-semibold mb-2 text-lg">
+            <div className=' py-2 px-2'>
+              <label className="block text-slate-600 font-semibold mb-2 text-xl">
                 {t('registration_url') || 'ลิงก์ลงทะเบียนเข้าร่วม'}
               </label>
               <input 
@@ -381,13 +381,13 @@ const CreateEvent = () => {
             </div>
           </div>
 
-          <div>
-            <label className="block text-slate-600 font-semibold mb-2 text-lg">{t('event_brief_description') || 'Brief Description'}<span className='text-red-500 ml-1'>*</span></label>
+          <div className=' py-2 px-2'>
+            <label className="block text-slate-600 font-semibold mb-2 text-xl">{t('event_brief_description') || 'Brief Description'}<span className='text-red-500 ml-1'>*</span></label>
             <textarea name="brief_description" value={formData.brief_description} onChange={handleChange} rows={4} className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white resize-none"></textarea>
           </div>
 
-          <div>
-            <label className="block text-slate-600 font-semibold mb-2 text-lg">{t('add_image_cover') || 'Add Image Cover'}{!isEditMode && <span className='text-red-500 ml-1'>*</span>}</label>
+          <div className=' py-2 px-2'>
+            <label className="block text-slate-600 font-semibold mb-2 text-xl">{t('add_image_cover') || 'Add Image Cover'}{!isEditMode && <span className='text-red-500 ml-1'>*</span>}</label>
             <div className="flex flex-col items-start gap-4">
               <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/jpeg, image/png, image/webp" className="hidden" />
               <button type="button" onClick={() => fileInputRef.current?.click()} className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg text-slate-600 font-medium hover:bg-slate-50 shadow-sm">
@@ -404,23 +404,23 @@ const CreateEvent = () => {
 
           <div className="pt-4">
             <div className="flex items-center justify-between cursor-pointer border-b border-slate-300 pb-2" onClick={() => setShowPostDetails(!showPostDetails)}>
-              <h3 className="text-[#1e3a8a] font-bold text-lg">{t('post_event_details') || 'Post Event Details'}</h3>
+              <h3 className="text-[#1e3a8a] font-bold text-xl">{t('post_event_details') || 'Post Event Details'}</h3>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${showPostDetails ? 'rotate-180' : ''}`}><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
             </div>
             
             <div className={`grid transition-all duration-500 ease-in-out ${showPostDetails ? 'grid-rows-[1fr] opacity-100 mt-6 mb-8' : 'grid-rows-[0fr] opacity-0 m-0'}`}>
               <div className="overflow-hidden">
                 <div className="space-y-6">
-                  <div>
-                    <label className="flex items-baseline gap-2 text-slate-600 font-semibold mb-2 text-lg">
+                  <div className='py-2 px-2'>
+                    <label className="flex items-baseline gap-2 text-slate-600 font-semibold mb-2 text-xl">
                       {t('about_event') || 'About Event'}
                       <span className="text-[#1e3a8a] font-normal text-xs">{t('conclude_info') || '(Conclude info after Event end)'}</span>
                     </label>
                     <textarea name="about_event" value={formData.about_event} onChange={handleChange} rows={5} className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white resize-none"></textarea>
                   </div>
-                  <div>
+                  <div className='py-2 px-2'>
                     <div className="flex items-center justify-between mb-2">
-                      <label className="flex items-baseline gap-2 text-slate-600 font-semibold text-lg">
+                      <label className="flex items-baseline gap-2 text-slate-600 font-semibold text-xl">
                         {t('resource_link') || 'Resource Links'}
                       </label>
                       <button 

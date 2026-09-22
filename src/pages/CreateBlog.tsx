@@ -346,6 +346,15 @@ const CreateBlog = () => {
         </div>
       </div>
 
+      <div className="text-center mb-2 mt-22">
+        <h1 className="text-5xl lg:text-7xl font-bold text-[#1e3a8a] mb-2">
+          {isEditMode ? (t('edit_blog_title') || 'Edit a Blog') : (t('create_blog_title') || 'Create a Blog')}
+        </h1>
+        <p className="text-xl text-slate-500">
+          {t('create_blog_desc') || 'Share your thoughts with other teachers.'}
+        </p>
+      </div>
+
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
           
@@ -372,7 +381,7 @@ const CreateBlog = () => {
                   </div>
                 </>
               ) : (
-                <span className="text-slate-500 italic">{t('add_blog_cover') || 'เพิ่มรูปหน้าปกบล็อกที่นี่'}</span>
+                <span className="text-xl text-slate-500 italic">{t('add_blog_cover') || 'เพิ่มรูปหน้าปกบล็อกที่นี่'}</span>
               )}
             </div>
 
@@ -389,8 +398,8 @@ const CreateBlog = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 mt-6 p-6">
-          <h3 className="text-[#1e3a8a] font-bold mb-4">{t('category_and_tags') || 'Category & Tags'}</h3>
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 mt-6 p-6 mb-20">
+          <h3 className="text-[#1e3a8a] text-2xl font-bold mb-3">{t('category_and_tags') || 'Category & Tags'}</h3>
           
           <div className="relative w-full sm:w-3/4">
             <div className="w-full flex flex-wrap items-center gap-2 p-2 border border-slate-300 rounded-lg focus-within:ring-2 focus-within:ring-[#1e3a8a] transition-all bg-white min-h-[50px]">
@@ -409,7 +418,7 @@ const CreateBlog = () => {
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={handleKeyDownTag}
-                className="flex-1 min-w-[150px] py-1 px-2 outline-none text-base bg-transparent text-slate-700"
+                className="flex-1 min-w-[150px] py-1 px-2 outline-none text-base text-xl bg-transparent text-slate-700"
               />
             </div>
             <p className="text-slate-400 text-xs mt-2 italic">{t('tag_input_hint') || '* ค้นหาแท็กที่เคยใช้ หรือพิมพ์แท็กใหม่แล้วกด Enter เพื่อเพิ่ม'}</p>

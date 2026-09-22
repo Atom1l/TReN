@@ -17,14 +17,15 @@ interface NewsData {
   author_name?: string;
 }
 
-// 🟢 1. ฟังก์ชันแปลภาษาอัตโนมัติ
+// 🟢 1. ฟังก์ชันแปลภาษาอัตโนมัติ (ปรับให้ฉลาดขึ้น ไม่แปลมั่วถ้ามีภาษาไทยปนอยู่)
 const translateText = async (text: string, targetLang: string) => {
   if (!text || !text.trim() || text === '-') return text;
   
   const cleanText = text.replace(/<[^>]*>?/gm, '');
   const thaiCharsCount = (cleanText.match(/[\u0E00-\u0E7F]/g) || []).length;
-  const engCharsCount = (cleanText.match(/[a-zA-Z]/g) || []).length;
-  const isThaiArticle = thaiCharsCount > engCharsCount;
+  
+  // 💡 ปรับเกณฑ์: ถ้าเจอตัวอักษรไทยมากกว่า 5 ตัว ให้ถือว่าเป็นบทความภาษาไทยเลย (ไม่ต้องเทียบสัดส่วนกับอังกฤษ)
+  const isThaiArticle = thaiCharsCount > 5; 
   
   if (targetLang === 'th' && isThaiArticle) return text;
   if (targetLang === 'en' && !isThaiArticle) return text;
@@ -62,11 +63,22 @@ const translateText = async (text: string, targetLang: string) => {
 
 // ตัด HTML Tags
 const stripHtml = (html: string) => {
+  if (!html) return "";
   const doc = new DOMParser().parseFromString(html, 'text/html');
-  return doc.body.textContent || "";
+  return doc.body.textContent || doc.body.innerText || "";
 };
 
-// 🟢 2. Component สำหรับการ์ดข่าวสาร
+// 💡 2. ตัวกรองข้อความขั้นสูง (ช่วยทำความสะอาดภาษาไทยและรวมสระให้ค้นหาง่ายขึ้น)
+const normalizeSearchText = (text: string) => {
+  if (!text) return '';
+  return text
+    .toString()
+    .normalize('NFC') // รวมสระและวรรณยุกต์ที่ลอยแยกกัน (แก้ปัญหาพิมพ์จาก Mac)
+    .toLowerCase()
+    .replace(/[\u200B-\u200D\uFEFF\u200E\u200F]/g, ''); // ลบอักขระซ่อนเร้นทั้งหมด
+};
+
+// 🟢 3. Component สำหรับการ์ดข่าวสาร
 const NewsCard: React.FC<{ 
   newsItem: NewsData; 
   onClick: () => void; 
@@ -187,12 +199,20 @@ const AllNews = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const safeTranslate = (key: string, fallback: string) => {
+    const translated = t(key);
+    return (translated && translated !== key) ? translated : fallback;
+  };
+
   const getCategoryTranslation = (category: string) => {
     if (!category) return '';
     const catLower = category.toLowerCase();
-    if (catLower.includes('announcement')) return t('news_announcements') || 'ประกาศสำคัญ';
-    if (catLower.includes('earc') || catLower.includes('success')) return t('news_earc') || 'เรื่องเล่าเครือข่าย';
-    if (catLower.includes('activity')) return t('news_activity') || 'ภาพกิจกรรม';
+    
+    if (catLower.includes('announcement')) return safeTranslate('news_announcements', 'ประกาศสำคัญ');
+    if (catLower.includes('earc') || catLower.includes('success')) return safeTranslate('news_earc', 'เรื่องเล่าเครือข่าย');
+    if (catLower.includes('activity')) return safeTranslate('news_activity', 'ภาพกิจกรรม');
+    if (catLower.includes('public_relations')) return safeTranslate('news_public_relations', 'ประชาสัมพันธ์');
+    
     return category;
   };
 
@@ -252,15 +272,25 @@ const AllNews = () => {
     setCurrentPage(1); 
   };
 
+  // 💡 4. ระบบค้นหาแบบยืดหยุ่น (ล้อตาม AllShowcases และจัดการภาษาไทย)
   const filteredNews = news.filter((item) => {
-    const searchLower = searchTerm.toLowerCase();
-    
-    // ค้นหาแบบกว้างขึ้น (ครอบคลุมวันที่ด้วย)
-    const matchesSearch = 
-      (item.title || '').toLowerCase().includes(searchLower) ||
-      (item.author_name || '').toLowerCase().includes(searchLower) ||
-      (stripHtml(item.content) || '').toLowerCase().includes(searchLower) ||
-      formatDate(item.created_at).toLowerCase().includes(searchLower);
+    let matchesSearch = true;
+
+    if (searchTerm) {
+      const rawSearch = normalizeSearchText(searchTerm);
+      const searchTermsArray = rawSearch.split(/\s+/).filter(Boolean);
+      
+      const searchableText = `
+        ${normalizeSearchText(item.title)} 
+        ${normalizeSearchText(item.author_name || '')} 
+        ${normalizeSearchText(stripHtml(item.content))} 
+        ${normalizeSearchText(getCategoryTranslation(item.category))} 
+        ${normalizeSearchText(formatDate(item.created_at))}
+      `;
+
+      // ค้นหาแบบรวมสระและเว้นวรรคได้
+      matchesSearch = searchTermsArray.every(term => searchableText.includes(term));
+    }
     
     let matchesFilter = true;
     if (activeFilter !== 'all') {
@@ -286,6 +316,7 @@ const AllNews = () => {
     { id: 'announcement', label: t('news_announcements') || 'ประกาศสำคัญ' },
     { id: 'success_story', label: t('news_earc') || 'เรื่องเล่าความสำเร็จ' },
     { id: 'activity_snapshot', label: t('news_activity') || 'ภาพกิจกรรมล่าสุด' },
+    { id: 'public_relations', label: t('news_public_relations') || 'ประชาสัมพันธ์' }
   ];
 
   return (
@@ -323,7 +354,7 @@ const AllNews = () => {
           </div>
         </div>
 
-        {/* 🟢 3. ปุ่มตัวกรองหมวดหมู่ข่าวสาร (Filter) */}
+        {/* 🟢 ปุ่มตัวกรองหมวดหมู่ข่าวสาร (Filter) */}
         <div className="flex flex-wrap gap-3 mb-10">
           {filterOptions.map((filter) => (
             <button

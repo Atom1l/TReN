@@ -1,48 +1,56 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useLanguage } from '../contexts/LanguageContext';
 import CommentSection from '../components/CommentSection'; 
-
 import ReportModal from '../components/ReportModal';
 
+// 🟢 1. ฟังก์ชันแปลภาษาอัจฉริยะ (Proportion Detection + Retry Trick)
 const translateText = async (text: string, targetLang: string) => {
-  if (!text || !text.trim()) return text;
+  if (!text || !text.trim() || text === '-') return text;
   
-  // 1. เช็คว่าในข้อความเดิมมี "ตัวอักษรภาษาไทย" อยู่หรือไม่
-  const hasThai = /[\u0E00-\u0E7F]/.test(text);
+  const cleanText = text.replace(/<[^>]*>?/gm, '');
+  const thaiCharsCount = (cleanText.match(/[\u0E00-\u0E7F]/g) || []).length;
+  const engCharsCount = (cleanText.match(/[a-zA-Z]/g) || []).length;
   
-  // 2. ดักทางป้องกันการแปลมั่ว!
-  // - ถ้าเว็บเลือกเป็น 'th' และบทความเป็นภาษาไทยอยู่แล้ว -> ไม่ต้องแปล
-  if (targetLang === 'th' && hasThai) return text;
-  // - ถ้าเว็บเลือกเป็น 'en' และบทความไม่มีภาษาไทยเลย (เป็นอังกฤษอยู่แล้ว) -> ไม่ต้องแปล
-  if (targetLang === 'en' && !hasThai) return text;
+  // 💡 ปรับเกณฑ์ไม่ให้แปลมั่ว ถ้ามีภาษาไทยมากกว่า 5 ตัวอักษร
+  const isThaiArticle = thaiCharsCount > 5;
+  
+  if (targetLang === 'th' && isThaiArticle) return text;
+  if (targetLang === 'en' && !isThaiArticle) return text;
 
-  // 3. บังคับล็อคภาษาต้นทาง (sl) ไปเลย ไม่ให้ Google ใช้ auto เดามั่ว
-  const sourceLang = hasThai ? 'th' : 'en';
+  const sourceLang = isThaiArticle ? 'th' : 'en';
   
-  try {
-    const response = await fetch(
-      `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `q=${encodeURIComponent(text)}`,
-      }
-    );
-    const data = await response.json();
-    
-    if (data && data[0]) {
-      return data[0].map((item: any) => item[0]).join('');
+  const fetchTranslate = async (queryText: string) => {
+    try {
+      const response = await fetch(
+        `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `q=${encodeURIComponent(queryText)}`,
+        }
+      );
+      const data = await response.json();
+      if (data && data[0]) return data[0].map((item: any) => item[0]).join('');
+      return queryText;
+    } catch (error) {
+      console.error('Translation Error:', error);
+      return queryText; 
     }
-    return text;
-  } catch (error) {
-    console.error('Translation Error:', error);
-    return text; 
+  };
+
+  let result = await fetchTranslate(text);
+
+  if (result === text && targetLang === 'th' && !isThaiArticle && text.length <= 15) {
+    const lowerResult = await fetchTranslate(text.toLowerCase());
+    if (lowerResult !== text.toLowerCase()) return lowerResult;
   }
+
+  return result;
 };
 
 const BlogDetail = () => {
@@ -55,12 +63,13 @@ const BlogDetail = () => {
   const [relatedBlogs, setRelatedBlogs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 🟢 2. เพิ่ม State สำหรับจัดเก็บเนื้อหาที่แปลภาษาแล้ว
+  // 🟢 2. State สำหรับแปลภาษา และ Popup รูปภาพ
   const [translatedTitle, setTranslatedTitle] = useState('');
   const [translatedContent, setTranslatedContent] = useState('');
   const [isTranslating, setIsTranslating] = useState(false);
 
   const [isReportOpen, setIsReportOpen] = useState(false);
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null); // State เก็บรูปที่ถูกคลิกขยาย
 
   const [alertModal, setAlertModal] = useState({
     isOpen: false,
@@ -170,19 +179,63 @@ const BlogDetail = () => {
     if (id) fetchBlogData();
   }, [id, navigate, t]);
 
-  // 🟢 3. useEffect สำหรับดักจับการเปลี่ยนภาษา เมื่อผู้ใช้กดเปลี่ยนที่ Footer
+  // 🟢 3. Script เพื่อเพิ่มป้ายกำกับ "คลิกเพื่อดูภาพเต็ม" ในภาพที่เป็น Content อัตโนมัติ (แบบ NewsDetail)
+  useEffect(() => {
+    const handleContentImageClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target && target.tagName === 'IMG' && target.closest('.article-content')) {
+        setZoomedImage((target as HTMLImageElement).src);
+      } else if (target && target.closest('.image-wrapper-click')) {
+        const img = target.closest('.image-wrapper-click')?.querySelector('img');
+        if (img) setZoomedImage(img.src);
+      }
+    };
+
+    document.addEventListener('click', handleContentImageClick);
+
+    // ค้นหาและตกแต่งรูปภาพที่ Render จาก Quill Editor
+    const contentDiv = document.querySelector('.article-content');
+    if (contentDiv) {
+      const images = contentDiv.querySelectorAll<HTMLImageElement>('img:not(.processed)');
+      images.forEach(img => {
+        img.classList.add('processed'); 
+        
+        // สร้าง Wrapper เพื่อให้วาง Label ได้
+        const wrapper = document.createElement('div');
+        wrapper.className = 'image-wrapper-click relative group cursor-zoom-in my-8 inline-block w-fit max-w-full';
+        
+        img.parentNode?.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+        
+        img.classList.add('rounded-xl', 'shadow-md', 'max-w-full', 'h-auto');
+        img.style.margin = '0'; 
+
+        // สร้าง Label "คลิกเพื่อดูภาพเต็มๆ"
+        const label = document.createElement('div');
+        label.className = 'absolute bottom-3 right-3 bg-slate-900/75 text-white text-[11px] sm:text-xs md:text-sm px-3 py-1.5 rounded-lg backdrop-blur-md flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg';
+        label.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+          </svg>
+          <span>${t('click_to_view_full') || 'คลิกเพื่อดูภาพเต็มๆ'}</span>
+        `;
+        wrapper.appendChild(label);
+      });
+    }
+
+    return () => document.removeEventListener('click', handleContentImageClick);
+  }, [translatedContent, blog, t]); 
+
+  // 🟢 4. useEffect สำหรับดักจับการเปลี่ยนภาษา เมื่อผู้ใช้กดเปลี่ยนที่ Footer
   useEffect(() => {
     const autoTranslate = async () => {
       if (!blog) return;
 
-      // ตั้งค่าเริ่มต้นให้แสดงเนื้อหาเดิมไปก่อน
       setTranslatedTitle(blog.title);
       setTranslatedContent(blog.content);
-
       setIsTranslating(true);
 
       try {
-        // สั่งแปลพร้อมกันทั้ง Title และ Content เพื่อความรวดเร็ว
         const [newTitle, newContent] = await Promise.all([
           translateText(blog.title, language),
           translateText(blog.content, language)
@@ -307,8 +360,31 @@ const BlogDetail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white pb-24">
+    <div className="min-h-screen bg-white pb-24 relative">
       {renderAlertModal()}
+
+      {/* 🟢 5. โมดอลสำหรับดูรูปขยายใหญ่ (Image Viewer Popup) */}
+      {zoomedImage && (
+        <div 
+          className="fixed inset-0 z-[200] bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 animate-fade-in"
+          onClick={() => setZoomedImage(null)}
+        >
+          <button 
+            className="absolute top-6 right-6 text-white bg-slate-800/50 hover:bg-slate-700 p-2 rounded-full cursor-pointer transition-colors z-10"
+            onClick={() => setZoomedImage(null)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <img 
+            src={zoomedImage} 
+            alt="Zoomed" 
+            className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl transform transition-transform duration-300 scale-100" 
+            onClick={(e) => e.stopPropagation()} 
+          />
+        </div>
+      )}
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
@@ -339,7 +415,6 @@ const BlogDetail = () => {
           </div>
         )}
 
-        {/* 🟢 4. แสดงผลหัวข้อที่ผ่านการแปลภาษาแล้ว พร้อมป้ายสถานะกำลังแปล */}
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a8a] leading-tight mt-4 break-words">
           {translatedTitle || blog.title}
         </h1>
@@ -365,30 +440,44 @@ const BlogDetail = () => {
           </div>
         )}
 
+        {/* 🟢 6. ภาพหน้าปก: เพิ่มคลาส cursor-zoom-in และป้ายกำกับ "คลิกเพื่อดูภาพเต็มๆ" */}
         {blog.thumbnail_url && (
-          <div className="w-full h-[250px] sm:h-[400px] lg:h-[450px] rounded-xl overflow-hidden mb-10 shadow-sm border border-slate-100">
+          <div 
+            className="w-full h-[250px] sm:h-[400px] lg:h-[450px] rounded-xl overflow-hidden mb-10 shadow-sm border border-slate-100 cursor-zoom-in relative group"
+            onClick={() => setZoomedImage(blog.thumbnail_url)} 
+          >
             <img 
               src={blog.thumbnail_url} 
               alt={blog.title} 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover" 
             />
+            {/* ป้ายกำกับบนรูปหน้าปก */}
+            <div className="absolute bottom-4 right-4 bg-slate-900/75 text-white text-xs md:text-sm px-3 py-1.5 rounded-lg backdrop-blur-md flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+              </svg>
+              <span>{t('click_to_view_full') || 'คลิกเพื่อดูภาพเต็มๆ'}</span>
+            </div>
           </div>
         )}
 
-        {/* 🟢 5. แสดงผลเนื้อหาบทความที่ผ่านการแปลภาษาแล้ว */}
+        {/* 🟢 7. ลบคลาส prose ทิ้ง บังคับไซต์ฟอนต์เนื้อหาด้วยตัวเอง text-lg md:text-xl lg:text-[22px] */}
         <div 
-          className="prose prose-lg max-w-none text-slate-700 leading-relaxed mb-12 
+          className="article-content max-w-none text-slate-700 leading-relaxed mb-12 
                      whitespace-pre-wrap break-words overflow-hidden
-                     [&>p]:mb-4 [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-[#1e3a8a] [&>h1]:mb-4 
-                     [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-[#1e3a8a] [&>h2]:mb-3
-                     [&>img]:rounded-xl [&>img]:shadow-sm [&>img]:my-6 [&>img]:max-w-full [&>img]:h-auto
-                     [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:mb-4
-                     [&>pre]:overflow-x-auto [&>pre]:bg-slate-100 [&>pre]:p-4 [&>pre]:rounded-lg"
+                     text-lg md:text-xl lg:text-[22px]
+                     [&>p]:text-lg md:[&>p]:text-xl lg:[&>p]:text-[22px] [&>p]:mb-6
+                     [&>h1]:text-3xl md:[&>h1]:text-4xl lg:[&>h1]:text-5xl [&>h1]:font-bold [&>h1]:text-[#1e3a8a] [&>h1]:mb-6 [&>h1]:mt-10
+                     [&>h2]:text-2xl md:[&>h2]:text-3xl lg:[&>h2]:text-4xl [&>h2]:font-bold [&>h2]:text-[#1e3a8a] [&>h2]:mb-4 [&>h2]:mt-8
+                     [&>img]:rounded-xl [&>img]:shadow-md [&>img]:my-8 [&>img]:max-w-full [&>img]:h-auto [&>img]:cursor-zoom-in hover:[&>img]:opacity-95 transition-opacity
+                     [&>ul]:text-lg md:[&>ul]:text-xl lg:[&>ul]:text-[22px] [&>ul]:list-disc [&>ul]:pl-8 [&>ul]:mb-6 [&>ul>li]:mb-3
+                     [&>ol]:text-lg md:[&>ol]:text-xl lg:[&>ol]:text-[22px] [&>ol]:list-decimal [&>ol]:pl-8 [&>ol]:mb-6 [&>ol>li]:mb-3
+                     [&>pre]:overflow-x-auto [&>pre]:bg-slate-100 [&>pre]:p-5 [&>pre]:rounded-xl [&>pre]:text-base"
           dangerouslySetInnerHTML={{ __html: translatedContent || blog.content || '' }}
         />
 
         <div className='mb-12'>
-          <h3 className="text-lg font-bold text-[#1e3a8a] mb-3">{t('share_post') || 'Share this post with friends'}</h3>
+          <h3 className="text-xl font-bold text-[#1e3a8a] mb-3">{t('share_post') || 'Share this post with friends'}</h3>
           <div className="flex flex-col sm:flex-row sm:items-center gap-6 justify-between">
             
             <div className="flex flex-wrap gap-2">
@@ -424,25 +513,29 @@ const BlogDetail = () => {
           </div>
         </div>
 
+        {/* กล่องประวัติผู้เขียน */}
         {author && (
-          <div className="bg-[#F8FAFC] p-6 rounded-2xl flex flex-col sm:flex-row gap-6 items-start sm:items-center mb-16 border border-slate-100">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#1e3a8a] rounded-xl flex-shrink-0 flex items-center justify-center text-white text-2xl font-bold overflow-hidden shadow-inner">
-              {author.profilepic ? (
-                <img src={author.profilepic} alt="Author" className="w-full h-full object-cover" />
-              ) : (
-                `${author.first_name?.charAt(0) || ''}`
-              )}
-            </div>
-            <div className="flex-1">
-              <h3 className="text-xl font-bold text-[#1e3a8a] mb-2">{author.first_name} {author.last_name}</h3>
-              <p className="text-slate-600 text-sm mb-3 leading-relaxed">
-                {author.bio || t('no_bio') || 'ผู้เขียนยังไม่ได้เพิ่มคำอธิบายตัวเอง (Bio)'}
-              </p>
-              <Link to={`/profile/${author.id}`} className="text-[#1e3a8a] hover:underline font-semibold">
-                <button className="text-[#1e3a8a] text-sm font-bold underline underline-offset-4 hover:text-blue-900 transition-colors cursor-pointer">
-                  {t('more_posts') || 'More Posts'}
-                </button>
-              </Link>
+          <div className="mb-16">
+            <h3 className="text-xl font-bold text-[#1e3a8a] mb-3">{t('posted_by') || 'ผู้โพสต์ผลงาน'}</h3>
+            <div className="bg-[#F8FAFC] p-6 rounded-2xl flex flex-col sm:flex-row gap-6 items-start sm:items-center border border-slate-100">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#1e3a8a] rounded-xl flex-shrink-0 flex items-center justify-center text-white text-2xl font-bold overflow-hidden shadow-inner">
+                {author.profilepic ? (
+                  <img src={author.profilepic} alt="Author" className="w-full h-full object-cover" />
+                ) : (
+                  `${author.first_name?.charAt(0) || ''}`
+                )}
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-[#1e3a8a] mb-2">{author.first_name} {author.last_name}</h3>
+                <p className="text-slate-600 text-sm mb-3 leading-relaxed">
+                  {author.bio || t('no_bio') || 'ผู้เขียนยังไม่ได้เพิ่มคำอธิบายตัวเอง (Bio)'}
+                </p>
+                <Link to={`/profile/${author.id}`} className="text-[#1e3a8a] hover:underline font-semibold">
+                  <button className="text-[#1e3a8a] text-sm font-bold underline underline-offset-4 hover:text-blue-900 transition-colors cursor-pointer">
+                    {t('more_posts') || 'ดูผลงานทั้งหมดของผู้เขียน'}
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         )}

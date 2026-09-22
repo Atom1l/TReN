@@ -1,38 +1,29 @@
 // src/components/Footer.tsx
-import { useLanguage } from '../contexts/LanguageContext'; // นำเข้า Hook ที่เราสร้างไว้
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Footer = () => {
-  // เรียกใช้ State และฟังก์ชันจาก Context
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
 
   return (
-    <footer className="w-full bg-white border-t border-slate-200 mt-auto">
-      <div className="w-full px-14 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <footer className="w-full bg-slate-50 border-t border-slate-200 mt-auto">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-10 md:py-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
         
-        <div className="text-slate-600 font-bold text-lg md:text-xl tracking-wide">
-          {t('copyright')}
+        {/* ข้อมูลการติดต่อ */}
+        <div className="flex flex-col gap-1.5 text-slate-600 font-light text-base md:text-lg">
+          <strong className="text-[#1e3a8a] font-bold text-xl md:text-2xl mb-2 tracking-wide">
+            TReN
+          </strong>
+          <p>{t('footer_faculty') || 'คณะศิลปศาสตร์'} {t('footer_uni') || 'มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี'}</p>
+          <p>{t('footer_address_1') || '126 ถนนประชาอุทิศ'} {t('footer_address_2') || 'บางมด ทุ่งครุ กรุงเทพฯ 10140'}</p>
+          <p className="mt-2">
+            <strong className="font-medium text-slate-700">{t('footer_email') || 'อีเมล:'}</strong> 
+            <span className="ml-2 text-slate-400">-</span> {/* พื้นที่เว้นว่างสำหรับใส่อีเมลในอนาคต */}
+          </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <span className="text-slate-600 font-bold text-lg md:text-xl">
-            {t('languageLabel')}
-          </span>
-          <div className="relative">
-            {/* ผูก value และ onChange เข้ากับ Context */}
-            <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value as 'th' | 'en')}
-              className="appearance-none border border-slate-800 rounded-lg px-4 py-2.5 pr-10 text-primary font-bold text-lg bg-white outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
-            >
-              <option className='cursor-pointer' value="th">ภาษาไทย(TH)</option>
-              <option className='cursor-pointer' value="en">English(EN)</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-primary">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-6 h-6">
-                <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
-              </svg>
-            </div>
-          </div>
+        {/* ลิขสิทธิ์ (Copyright) */}
+        <div className="w-full md:w-auto text-slate-500 text-sm md:text-base border-t md:border-t-0 border-slate-200 pt-6 md:pt-0 text-left md:text-right">
+          {t('footer_copyright') || 'ลิขสิทธิ์ © 2026 - TReN.org'}
         </div>
 
       </div>

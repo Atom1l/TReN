@@ -28,7 +28,7 @@ const AccordionItem = ({
         </svg>
       </button>
       <div 
-        className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[2500px] opacity-100' : 'max-h-0 opacity-0'}`}
+        className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[3000px] opacity-100' : 'max-h-0 opacity-0'}`}
       >
         <div className="p-6 md:p-8 pt-2 md:pt-2 border-t border-slate-100">
           {children}
@@ -41,18 +41,17 @@ const AccordionItem = ({
 const Knowledge = () => {
   const { t } = useLanguage();
   
-  // State สำหรับควบคุมการเปิด/ปิด Accordion Section A
-  const [openSection, setOpenSection] = useState<string | null>(null);
-  const [openCol2, setOpenCol2] = useState<string | null>(null);
-  const [openCol3, setOpenCol3] = useState<string | null>(null);
+  // 💡 เปลี่ยน State เป็น Array (string[]) เพื่อให้เปิดพร้อมกันได้หลายหัวข้อ (Manual Close)
+  const [openSections, setOpenSections] = useState<string[]>([]);
+  const [openCol2s, setOpenCol2s] = useState<string[]>([]);
+  const [openCol3s, setOpenCol3s] = useState<string[]>([]);
+  const [openClipSections, setOpenClipSections] = useState<string[]>([]);
 
-  // State สำหรับควบคุมการเปิด/ปิด Accordion Section B (Clips)
-  const [openClipSection, setOpenClipSection] = useState<string | null>(null);
-
-  const toggleSection = (id: string) => setOpenSection(openSection === id ? null : id);
-  const toggleCol2 = (id: string) => setOpenCol2(openCol2 === id ? null : id);
-  const toggleCol3 = (id: string) => setOpenCol3(openCol3 === id ? null : id);
-  const toggleClipSection = (id: string) => setOpenClipSection(openClipSection === id ? null : id);
+  // 💡 อัปเดตฟังก์ชัน Toggle เพื่อเพิ่ม/ลบ ID ออกจาก Array แทนการทับค่าเดิม
+  const toggleSection = (id: string) => setOpenSections(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+  const toggleCol2 = (id: string) => setOpenCol2s(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+  const toggleCol3 = (id: string) => setOpenCol3s(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+  const toggleClipSection = (id: string) => setOpenClipSections(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
 
   // State สำหรับควบคุม Video Modal
   const [videoModal, setVideoModal] = useState<{ isOpen: boolean; videoTitle: string; videoUrl: string }>({
@@ -72,7 +71,6 @@ const Knowledge = () => {
   // Helper สำหรับแปลงลิงก์ Google Drive ให้อยู่ในรูปแบบที่ Iframe อ่านได้
   const getEmbedUrl = (url: string) => {
     if (!url || url === '#') return '';
-    // ตรวจสอบว่าเป็นลิงก์ Google Drive หรือไม่ และแปลง /view เป็น /preview
     if (url.includes('drive.google.com')) {
       return url.replace(/\/view.*$/, '/preview');
     }
@@ -83,35 +81,54 @@ const Knowledge = () => {
     <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200 min-h-screen">
       <div className="max-w-[85rem] mx-auto px-6 lg:px-8 pt-16 md:pt-24 pb-24">
         
-        {/* ================= SECTION A: EAR Basic Knowledge (ห้ามเปลี่ยน) ================= */}
-        <section className="mb-24">
+        {/* ================= SECTION A: EAR Basic Knowledge ================= */}
+        <section className="pb-24 border-b-4 border-slate-300">
           
           <div className="mb-16 md:mb-20 flex flex-col items-center text-center max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
-              {t('knowledge_part1_title') || 'คลังความรู้ EAR'}
+              {t('knowledge_title') || 'คลังความรู้ EAR'}
             </h1>
             <p className="text-xl md:text-2xl text-slate-500 mt-6 font-light tracking-wide leading-relaxed">
               (EAR Knowledge Hub)
             </p>
           </div>
 
-          <div className="space-y-0">
+          {/* Hero Image Grid */}
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 mb-16 ">
+             <div className="md:col-span-2 relative rounded-3xl overflow-hidden border-2 border-slate-200 group">
+                <img src="/Homepage/cover_1.webp" alt="EAR Workshop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/10 transition-colors"></div>
+             </div>
+             <div className="hidden md:flex flex-col gap-4">
+                <div className="flex-1 relative rounded-3xl overflow-hidden border-2 border-slate-200 group">
+                   <img src="/Homepage/cover_2.webp" alt="EAR Presentation" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                   <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/10 transition-colors"></div>
+                </div>
+                <div className="flex-1 relative rounded-3xl overflow-hidden border-2 border-slate-200 group bg-blue-100 flex items-center justify-center">
+                   <img src="/Homepage/cover_3.webp" alt="EAR Presentation" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                   <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/10 transition-colors"></div>
+                </div>
+             </div>
+          </div>
+
+          <div className="space-y-0 relative">
             
             {/* --- 1. ทำความรู้จัก EAR --- */}
-            <div className="flex flex-col items-start py-12 md:py-16 border-t border-slate-300">
-              <div className="w-full mb-10">
-                <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] tracking-tight mb-3">
-                  <span>1. </span>{t('knowledge_part1_title') || '1. ทำความรู้จัก EAR'}
-                </h2>
-                <p className="text-slate-500 font-light leading-relaxed text-xl md:text-2xl">
-                  {t('knowledge_part1_subtitle') || 'สำรวจห้องเรียน ขับเคลื่อนการเรียนรู้ด้วยตัวคุณเอง'}
-                </p>
-                <div className="w-12 h-[3px] bg-[#1e3a8a] mt-6"></div>
+            <div className="flex flex-col items-start pt-16 pb-12 md:pb-16 md:pt-20 mt-10relative z-10 bg-[#F8FAFC]">
+              <div className="w-full mb-10 flex items-center gap-6">
+                <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-[#1e3a8a] text-white font-bold text-2xl shadow-md shrink-0">1</div>
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] tracking-tight mb-2">
+                    {t('knowledge_part1_title') || 'ทำความรู้จัก EAR'}
+                  </h2>
+                  <p className="text-slate-500 font-light leading-relaxed text-xl md:text-2xl">
+                    {t('knowledge_part1_subtitle') || 'สำรวจห้องเรียน ขับเคลื่อนการเรียนรู้ด้วยตัวคุณเอง'}
+                  </p>
+                </div>
               </div>
 
-              <div className="w-full">
-                
-                <AccordionItem title={t('knowledge_why_ear_title_main') || 'ทำไมต้อง EAR?'} isOpen={openSection === '1.1'} onClick={() => toggleSection('1.1')}>
+              <div className="w-full pl-0 md:pl-16">
+                <AccordionItem title={t('knowledge_why_ear_title_main') || 'ทำไมต้อง EAR?'} isOpen={openSections.includes('1.1')} onClick={() => toggleSection('1.1')}>
                   <div className="my-6 space-y-6 text-xl md:text-2xl text-slate-800 font-light leading-relaxed">
                     <p>{t('knowledge_why_ear_desc_1') || 'ในชีวิตการทำงานจริงของคุณครู ทุกวันคือการรับมือกับความท้าทายที่ไม่เคยเหมือนกัน:'}</p>
                     <ul className="space-y-4 pl-2">
@@ -129,7 +146,7 @@ const Knowledge = () => {
                   </div>
                 </AccordionItem>
 
-                <AccordionItem title={t('knowledge_what_ear_title_main') || 'EAR คืออะไร?'} isOpen={openSection === '1.2'} onClick={() => toggleSection('1.2')}>
+                <AccordionItem title={t('knowledge_what_ear_title_main') || 'EAR คืออะไร?'} isOpen={openSections.includes('1.2')} onClick={() => toggleSection('1.2')}>
                   <div className="my-6 space-y-6 text-xl md:text-2xl text-slate-800 font-light leading-relaxed">
                     <p><strong className="font-bold text-[#1e3a8a]">Exploratory Action Research (EAR)</strong> {t('knowledge_what_ear_desc_1') || 'คือ การวิจัยปฏิบัติการเชิงสำรวจ ที่เน้นการ "สำรวจให้ลึกซึ้งก่อนลงมือแก้ปัญหา" เปลี่ยนครูผู้สอน สู่ "ครูวิจัยหน้างาน" (Teacher-Researcher)'}</p>
                     <div className="border-l-[4px] border-[#1e3a8a] pl-6 py-4 italic text-[#1e3a8a] font-medium bg-blue-50/50 pr-6 rounded-r-2xl text-xl md:text-2xl">
@@ -138,7 +155,7 @@ const Knowledge = () => {
                   </div>
                 </AccordionItem>
 
-                <AccordionItem title={t('knowledge_how_ear_title_main') || 'EAR เปลี่ยนห้องเรียนได้อย่างไร?'} isOpen={openSection === '1.3'} onClick={() => toggleSection('1.3')}>
+                <AccordionItem title={t('knowledge_how_ear_title_main') || 'EAR เปลี่ยนห้องเรียนได้อย่างไร?'} isOpen={openSections.includes('1.3')} onClick={() => toggleSection('1.3')}>
                   <div className="space-y-8 text-xl md:text-2xl text-slate-800 font-light leading-relaxed border-l-[3px] border-slate-200 ml-4 pl-8 py-4">
                     <div className="relative">
                       <span className="absolute -left-[41px] top-2 w-4 h-4 rounded-full bg-[#1e3a8a] ring-[6px] ring-white"></span>
@@ -159,7 +176,7 @@ const Knowledge = () => {
                   </div>
                 </AccordionItem>
 
-                <AccordionItem title={t('knowledge_why_matters_title') || 'ทำไมครูต้องทำ EAR?'} isOpen={openSection === '1.4'} onClick={() => toggleSection('1.4')}>
+                <AccordionItem title={t('knowledge_why_matters_title') || 'ทำไมครูต้องทำ EAR?'} isOpen={openSections.includes('1.4')} onClick={() => toggleSection('1.4')}>
                   <div className="my-6 space-y-8 text-xl md:text-2xl text-slate-800 font-light leading-relaxed">
                     <div className="bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-100">
                       <h4 className="font-bold text-[#1e3a8a] mb-2">{t('knowledge_matter1_title') || '1. ด้านผู้เรียนและห้องเรียน'}</h4>
@@ -187,7 +204,7 @@ const Knowledge = () => {
                   </div>
                 </AccordionItem>
 
-                <AccordionItem title={t('knowledge_myth_title_main') || 'ปลดล็อกความเชื่อเดิมๆ'} isOpen={openSection === '1.5'} onClick={() => toggleSection('1.5')}>
+                <AccordionItem title={t('knowledge_myth_title_main') || 'ปลดล็อกความเชื่อเดิมๆ'} isOpen={openSections.includes('1.5')} onClick={() => toggleSection('1.5')}>
                   <div className="my-6 space-y-8 text-xl md:text-2xl text-slate-800 font-light leading-relaxed">
                     <div className="space-y-6">
                       <div className="bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-100 flex flex-col md:flex-row md:items-center gap-6">
@@ -239,107 +256,109 @@ const Knowledge = () => {
             </div>
 
             {/* --- 2. หลักการ EAR --- */}
-            <div className="flex flex-col items-start py-12 md:py-16 border-t border-slate-300">
-              <div className="w-full mb-10">
-                <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] tracking-tight mb-3">
-                  <span>2. </span>{t('knowledge_part2_title') || '2. หลักการ EAR'}
-                </h2>
-                <p className="text-slate-500 font-light text-xl md:text-2xl">
-                  {t('knowledge_part2_subtitle') || 'และความแตกต่างจากวิจัยอื่น'}
-                </p>
-                <div className="w-12 h-[3px] bg-[#1e3a8a] mt-6"></div>
+            <div className="flex flex-col items-start py-12 md:py-16 border-t-4 border-slate-300 relative z-10 bg-[#F8FAFC]">
+              <div className="w-full mb-10 flex items-center gap-6">
+                <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-[#1e3a8a] text-white font-bold text-2xl shadow-md shrink-0">2</div>
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] tracking-tight mb-2">
+                    {t('knowledge_part2_title') || 'หลักการ EAR'}
+                  </h2>
+                  <p className="text-slate-500 font-light text-xl md:text-2xl">
+                    {t('knowledge_part2_subtitle') || 'และความแตกต่างจากวิจัยอื่น'}
+                  </p>
+                </div>
               </div>
 
-              <div className="w-full">
-                <AccordionItem title={t('knowledge_ear_stages_title') || '2 stages of EAR (2 ขั้นตอนของ EAR)'} isOpen={openCol2 === '2.1'} onClick={() => toggleCol2('2.1')}>
-                  <div className="my-6 space-y-10 text-xl md:text-2xl text-slate-800 font-light leading-relaxed">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                      <div className="bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-100 flex flex-col h-full relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-blue-100 rounded-bl-full opacity-50"></div>
-                        <h4 className="font-bold text-[#1e3a8a] mb-2 z-10">{t('knowledge_ear_stage1_title')}</h4>
-                        <p className="text-slate-500 italic mb-6 z-10">{t('knowledge_ear_stage1_subtitle')}</p>
-                        <p className="text-lg md:text-xl text-slate-600 mb-4 z-10">{t('knowledge_ear_stage1_desc')}</p>
-                        <ul className="space-y-4 pl-2 text-lg md:text-xl z-10">
-                          <li className="flex items-start gap-3"><strong className="text-[#1e3a8a] shrink-0">1. Reflect:</strong> {t('knowledge_ear_s1_p1')}</li>
-                          <li className="flex items-start gap-3"><strong className="text-[#1e3a8a] shrink-0">2. Plan:</strong> {t('knowledge_ear_s1_p2')}</li>
-                          <li className="flex items-start gap-3"><strong className="text-[#1e3a8a] shrink-0">3. Observe:</strong> {t('knowledge_ear_s1_p3')}</li>
-                          <li className="flex items-start gap-3"><strong className="text-[#1e3a8a] shrink-0">4. Reflect:</strong> {t('knowledge_ear_s1_p4')}</li>
-                        </ul>
+              <div className="w-full pl-0 md:pl-16">
+                
+                <AccordionItem title={t('knowledge_ear_stages_title') || '2 stages of EAR (2 ขั้นตอนของ EAR)'} isOpen={openCol2s.includes('2.1')} onClick={() => toggleCol2('2.1')}>
+                  <div className="my-6 space-y-16 text-xl md:text-2xl text-slate-800 font-light leading-relaxed">
+                    
+                    {/* 🟢 ส่วนที่ 1: รูปภาพ 1 คู่กับคำอธิบาย Stage 1 & Stage 2 */}
+                    <div className="space-y-10">
+                      {/* รูปภาพที่ 1 */}
+                      <div className="w-full max-w-2xl mx-auto rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-white p-2">
+                        <img src="/Ear_Diagram_1.webp" alt="EAR Stages Diagram" className="w-full h-auto object-contain" />
                       </div>
-                      <div className="bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-100 flex flex-col h-full relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-100 rounded-bl-full opacity-50"></div>
-                        <h4 className="font-bold text-emerald-700 mb-2 z-10">{t('knowledge_ear_stage2_title')}</h4>
-                        <p className="text-emerald-600/70 italic mb-6 z-10">{t('knowledge_ear_stage2_subtitle')}</p>
-                        <p className="text-lg md:text-xl text-slate-600 mb-4 z-10">{t('knowledge_ear_stage2_desc')}</p>
-                        <ul className="space-y-4 pl-2 text-lg md:text-xl z-10">
-                          <li className="flex items-start gap-3"><strong className="text-emerald-600 shrink-0">5. Plan:</strong> {t('knowledge_ear_s2_p5')}</li>
-                          <li className="flex items-start gap-3"><strong className="text-emerald-600 shrink-0">6. Act:</strong> {t('knowledge_ear_s2_p6')}</li>
-                          <li className="flex items-start gap-3"><strong className="text-emerald-600 shrink-0">7. Observe:</strong> {t('knowledge_ear_s2_p7')}</li>
-                          <li className="flex items-start gap-3"><strong className="text-emerald-600 shrink-0">8. Reflect:</strong> {t('knowledge_ear_s2_p8')}</li>
-                          <li className="flex items-start gap-3"><strong className="text-emerald-600 shrink-0">9. Re-plan:</strong> {t('knowledge_ear_s2_p9')}</li>
-                        </ul>
+
+                      {/* เนื้อหาอธิบาย */}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+                        <div className="space-y-4">
+                          <h4 className="font-bold text-[#1e3a8a] text-2xl md:text-3xl">{t('knowledge_ear_stage1_title')}</h4>
+                          <p className="text-slate-500 italic">{t('knowledge_ear_stage1_subtitle')}</p>
+                          <p className="text-slate-700">{t('knowledge_ear_stage1_desc')}</p>
+                          <ul className="space-y-3 pl-2 list-none text-slate-700">
+                            <li className="flex items-start gap-3"><span className="font-bold text-[#1e3a8a] shrink-0">1. Reflect:</span> <span>{t('knowledge_ear_s1_p1')}</span></li>
+                            <li className="flex items-start gap-3"><span className="font-bold text-[#1e3a8a] shrink-0">2. Plan:</span> <span>{t('knowledge_ear_s1_p2')}</span></li>
+                            <li className="flex items-start gap-3"><span className="font-bold text-[#1e3a8a] shrink-0">3. Observe:</span> <span>{t('knowledge_ear_s1_p3')}</span></li>
+                            <li className="flex items-start gap-3"><span className="font-bold text-[#1e3a8a] shrink-0">4. Reflect:</span> <span>{t('knowledge_ear_s1_p4')}</span></li>
+                          </ul>
+                        </div>
+                        
+                        <div className="space-y-4">
+                          <h4 className="font-bold text-emerald-700 text-2xl md:text-3xl">{t('knowledge_ear_stage2_title')}</h4>
+                          <p className="text-emerald-600/70 italic">{t('knowledge_ear_stage2_subtitle')}</p>
+                          <p className="text-slate-700">{t('knowledge_ear_stage2_desc')}</p>
+                          <ul className="space-y-3 pl-2 list-none text-slate-700">
+                            <li className="flex items-start gap-3"><span className="font-bold text-emerald-700 shrink-0">5. Plan:</span> <span>{t('knowledge_ear_s2_p5')}</span></li>
+                            <li className="flex items-start gap-3"><span className="font-bold text-emerald-700 shrink-0">6. Act:</span> <span>{t('knowledge_ear_s2_p6')}</span></li>
+                            <li className="flex items-start gap-3"><span className="font-bold text-emerald-700 shrink-0">7. Observe:</span> <span>{t('knowledge_ear_s2_p7')}</span></li>
+                            <li className="flex items-start gap-3"><span className="font-bold text-emerald-700 shrink-0">8. Reflect:</span> <span>{t('knowledge_ear_s2_p8')}</span></li>
+                            <li className="flex items-start gap-3"><span className="font-bold text-emerald-700 shrink-0">9. Re-plan:</span> <span>{t('knowledge_ear_s2_p9')}</span></li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
-                    <div className="pt-10 border-t border-slate-200">
-                      <h4 className="font-bold text-[#1e3a8a] text-2xl md:text-3xl mb-8 flex items-center gap-3">
+
+                    <hr className="border-slate-200" />
+
+                    {/* 🟢 ส่วนที่ 2: รูปภาพ 2 คู่กับเนื้อหาตัวอย่าง 8 ขั้นตอน */}
+                    <div className="space-y-10">
+                      <h4 className="font-bold text-[#1e3a8a] text-2xl md:text-3xl flex items-center gap-3">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.829 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.487 1.509 1.333 1.509 2.316V18" /></svg>
-                        {t('knowledge_ear_example_title')}
+                        {t('knowledge_ear_example_title') || 'ตามมาดูครูใช้ EAR อย่างไร'}
                       </h4>
-                      <div className="space-y-0 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
-                        <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active py-4">
-                          <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-[#1e3a8a] text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow z-10 text-sm">1</div>
-                          <div className="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] bg-blue-50/50 p-4 rounded-xl shadow-sm ml-4 md:ml-0 text-lg md:text-xl">
-                            <strong className="text-[#1e3a8a] block mb-1">Reflect:</strong> {t('knowledge_ear_ex_1')}
-                          </div>
-                        </div>
-                        <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active py-4">
-                          <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-[#1e3a8a] text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow z-10 text-sm">2</div>
-                          <div className="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] bg-blue-50/50 p-4 rounded-xl shadow-sm ml-4 md:ml-0 text-lg md:text-xl">
-                            <strong className="text-[#1e3a8a] block mb-1">Plan:</strong> {t('knowledge_ear_ex_2')}
-                          </div>
-                        </div>
-                        <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active py-4">
-                          <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-[#1e3a8a] text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow z-10 text-sm">3</div>
-                          <div className="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] bg-blue-50/50 p-4 rounded-xl shadow-sm ml-4 md:ml-0 text-lg md:text-xl">
-                            <strong className="text-[#1e3a8a] block mb-1">Observe:</strong> {t('knowledge_ear_ex_3')}
-                          </div>
-                        </div>
-                        <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active py-4">
-                          <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-[#1e3a8a] text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow z-10 text-sm">4</div>
-                          <div className="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] bg-[#1e3a8a] text-white p-4 rounded-xl shadow-sm ml-4 md:ml-0 text-lg md:text-xl">
-                            <strong className="text-white block mb-1">Reflect:</strong> {t('knowledge_ear_ex_4')}
-                          </div>
-                        </div>
-                        <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active py-4">
-                          <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-emerald-500 text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow z-10 text-sm">5</div>
-                          <div className="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] bg-emerald-50/50 p-4 rounded-xl shadow-sm ml-4 md:ml-0 text-lg md:text-xl">
-                            <strong className="text-emerald-700 block mb-1">Plan:</strong> {t('knowledge_ear_ex_5')}
-                          </div>
-                        </div>
-                        <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active py-4">
-                          <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-emerald-500 text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow z-10 text-sm">6</div>
-                          <div className="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] bg-emerald-50/50 p-4 rounded-xl shadow-sm ml-4 md:ml-0 text-lg md:text-xl">
-                            <strong className="text-emerald-700 block mb-1">Act:</strong> {t('knowledge_ear_ex_6')}
-                          </div>
-                        </div>
-                        <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active py-4">
-                          <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-emerald-500 text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow z-10 text-sm">7</div>
-                          <div className="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] bg-emerald-50/50 p-4 rounded-xl shadow-sm ml-4 md:ml-0 text-lg md:text-xl">
-                            <strong className="text-emerald-700 block mb-1">Observe:</strong> {t('knowledge_ear_ex_7')}
-                          </div>
-                        </div>
-                        <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active py-4">
-                          <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-emerald-500 text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow z-10 text-sm">8</div>
-                          <div className="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] bg-emerald-600 text-white p-4 rounded-xl shadow-sm ml-4 md:ml-0 text-lg md:text-xl">
-                            <strong className="text-emerald-50 block mb-1">Reflect:</strong> {t('knowledge_ear_ex_8')}
-                          </div>
-                        </div>
+
+                      {/* รูปภาพที่ 2 */}
+                      <div className="w-full max-w-4xl mx-auto rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-white p-2">
+                        <img src="/Ear_Diagram_2.webp" alt="EAR Example Timeline" className="w-full h-auto object-contain" />
+                      </div>
+
+                      {/* เนื้อหา List เรียงจากซ้ายไปขวา */}
+                      <div className="my-6 space-y-6 text-xl md:text-2xl text-slate-800 font-light leading-relaxed pt-4">
+                        <ul className="space-y-6 pl-2">
+                          <li className="flex items-start gap-4">
+                            <div><strong className="font-bold text-[#1e3a8a]">1. Reflect:</strong> {t('knowledge_ear_ex_1') || 'นักเรียนขาดแรงจูงใจในการเรียน'}</div>
+                          </li>
+                          <li className="flex items-start gap-4">
+                            <div><strong className="font-bold text-[#1e3a8a]">2. Plan:</strong> {t('knowledge_ear_ex_2') || 'ฉันวางแผนหาวิธีเก็บข้อมูลเพื่อเข้าใจปัญหานี้'}</div>
+                          </li>
+                          <li className="flex items-start gap-4">
+                            <div><strong className="font-bold text-[#1e3a8a]">3. Observe:</strong> {t('knowledge_ear_ex_3') || 'ฉันสอบถามมุมมองความคิดเห็นของนักเรียน และขอให้เพื่อนครูเข้ามาช่วยสังเกตการสอนในห้องเรียน'}</div>
+                          </li>
+                          <li className="flex items-start gap-4">
+                            <div><strong className="font-bold text-[#1e3a8a]">4. Reflect:</strong> {t('knowledge_ear_ex_4') || 'ฉันวิเคราะห์ข้อมูลและสรุปผลได้ว่า: นักเรียนอยากมีโอกาสพูดสื่อสารในชั้นเรียนมากขึ้น'}</div>
+                          </li>
+                          <li className="flex items-start gap-4">
+                            <div><strong className="font-bold text-emerald-700">5. Plan:</strong> {t('knowledge_ear_ex_5') || 'ฉันวางแผนและออกแบบแผนการจัดการเรียนรู้ (Action Plan)'}</div>
+                          </li>
+                          <li className="flex items-start gap-4">
+                            <div><strong className="font-bold text-emerald-700">6. Act:</strong> {t('knowledge_ear_ex_6') || 'ฉันปรับการสอนโดยเน้นเน้นกิจกรรมการสนทนาแลกเปลี่ยนมากขึ้น'}</div>
+                          </li>
+                          <li className="flex items-start gap-4">
+                            <div><strong className="font-bold text-emerald-700">7. Observe:</strong> {t('knowledge_ear_ex_7') || 'ฉันสอบถามมุมมองความคิดเห็นของนักเรียนอีกครั้ง และขอให้เพื่อนครูเข้ามาช่วยสังเกตการสอน'}</div>
+                          </li>
+                          <li className="flex items-start gap-4">
+                            <div><strong className="font-bold text-emerald-700">8. Reflect:</strong> {t('knowledge_ear_ex_8') || 'ฉันวิเคราะห์ข้อมูลและสรุปผลได้ว่า: นักเรียนมีส่วนร่วมกับการเรียนมากขึ้น แต่ยังต้องการฝึกฝนเพิ่มเติมอีก'}</div>
+                          </li>
+                        </ul>
                       </div>
                     </div>
+
                   </div>
                 </AccordionItem>
 
-                <AccordionItem title={t('knowledge_ear_key_title_main') || 'Key of EAR (หัวใจสำคัญของการทำวิจัย EAR)'} isOpen={openCol2 === '2.2'} onClick={() => toggleCol2('2.2')}>
+                <AccordionItem title={t('knowledge_ear_key_title_main') || 'Key of EAR (หัวใจสำคัญของการทำวิจัย EAR)'} isOpen={openCol2s.includes('2.2')} onClick={() => toggleCol2('2.2')}>
                   <div className="my-6 space-y-8 text-xl md:text-2xl text-slate-800 font-light leading-relaxed">
                     <ul className="space-y-4 pl-2">
                       <li className="flex items-start gap-4"><span className="text-[#1e3a8a] mt-1">&bull;</span><span>{t('knowledge_ear_key_1')}</span></li>
@@ -358,7 +377,7 @@ const Knowledge = () => {
                   </div>
                 </AccordionItem>
 
-                <AccordionItem title={t('knowledge_ear_diff_title') || 'How EAR is different from other research (ไขข้อสงสัย: EAR ต่างจากการวิจัยอื่นอย่างไร)'} isOpen={openCol2 === '2.3'} onClick={() => toggleCol2('2.3')}>
+                <AccordionItem title={t('knowledge_ear_diff_title') || 'How EAR is different from other research (ไขข้อสงสัย: EAR ต่างจากการวิจัยอื่นอย่างไร)'} isOpen={openCol2s.includes('2.3')} onClick={() => toggleCol2('2.3')}>
                   <div className="my-6 space-y-6 text-xl md:text-2xl text-slate-800 font-light leading-relaxed">
                     <p>{t('knowledge_ear_diff_intro')}</p>
                     <div className="overflow-x-auto mt-8 rounded-2xl border border-slate-200 shadow-sm">
@@ -414,22 +433,19 @@ const Knowledge = () => {
                   </div>
                 </AccordionItem>
 
-                <AccordionItem title={t('knowledge_ear_getting_started_title') || 'จุดเริ่มต้นสำหรับครูมือใหม่ (Getting Started)'} isOpen={openCol2 === '2.4'} onClick={() => toggleCol2('2.4')}>
+                <AccordionItem title={t('knowledge_ear_getting_started_title') || 'จุดเริ่มต้นสำหรับครูมือใหม่ (Getting Started)'} isOpen={openCol2s.includes('2.4')} onClick={() => toggleCol2('2.4')}>
                   <div className="my-6 space-y-6 text-xl md:text-2xl text-slate-800 font-light leading-relaxed">
                     <p className="font-medium text-[#1e3a8a] mb-6 bg-blue-50/50 p-4 rounded-xl border-l-[4px] border-[#1e3a8a] inline-block">
                       {t('knowledge_ear_getting_started_subtitle')}
                     </p>
                     <ul className="space-y-6 pl-2">
                       <li className="flex items-start gap-4">
-                        <span className="text-[#1e3a8a] mt-1">&bull;</span>
                         <div><strong className="font-bold text-[#1e3a8a]">{t('knowledge_ear_start_1_title')}</strong> {' '}{t('knowledge_ear_start_1_desc')}</div>
                       </li>
                       <li className="flex items-start gap-4">
-                        <span className="text-[#1e3a8a] mt-1">&bull;</span>
                         <div><strong className="font-bold text-[#1e3a8a]">{t('knowledge_ear_start_2_title')}</strong> {' '}{t('knowledge_ear_start_2_desc')}</div>
                       </li>
                       <li className="flex items-start gap-4">
-                        <span className="text-[#1e3a8a] mt-1">&bull;</span>
                         <div><strong className="font-bold text-[#1e3a8a]">{t('knowledge_ear_start_3_title')}</strong> {' '}{t('knowledge_ear_start_3_desc')}</div>
                       </li>
                     </ul>
@@ -440,35 +456,37 @@ const Knowledge = () => {
             </div>
 
             {/* --- 3. FAQ --- */}
-            <div className="flex flex-col items-start py-12 md:py-16 border-t border-slate-300">
-              <div className="w-full mb-10">
-                <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] tracking-tight mb-3">
-                  <span>3. </span>{t('knowledge_part3_title') || '3. คำถามที่พบบ่อย'}
-                </h2>
-                <p className="text-slate-500 font-light text-xl md:text-2xl">
-                  (FAQ)
-                </p>
-                <div className="w-12 h-[3px] bg-[#1e3a8a] mt-6"></div>
+            <div className="flex flex-col items-start py-12 md:py-16 border-t-4 border-slate-300 relative z-10 bg-[#F8FAFC]">
+              <div className="w-full mb-10 flex items-center gap-6">
+                <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-[#1e3a8a] text-white font-bold text-2xl shadow-md shrink-0">3</div>
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] tracking-tight mb-2">
+                    {t('knowledge_part3_title') || 'คำถามที่พบบ่อย'}
+                  </h2>
+                  <p className="text-slate-500 font-light text-xl md:text-2xl">
+                    (FAQ)
+                  </p>
+                </div>
               </div>
 
-              <div className="w-full">
-                <AccordionItem title={t('knowledge_faq_1_q') || 'ทำ EAR แล้วต้องเขียนรายงานเล่มหนา 5 บทหรือไม่?'} isOpen={openCol3 === '3.1'} onClick={() => toggleCol3('3.1')}>
+              <div className="w-full pl-0 md:pl-16">
+                <AccordionItem title={t('knowledge_faq_1_q') || 'ทำ EAR แล้วต้องเขียนรายงานเล่มหนา 5 บทหรือไม่?'} isOpen={openCol3s.includes('3.1')} onClick={() => toggleCol3('3.1')}>
                   <div className="text-xl md:text-2xl text-slate-800 font-light leading-relaxed">
-                    <strong className="font-bold text-[#1e3a8a] block mb-3">{t('answer')}</strong>
+                    <strong className="font-bold text-[#1e3a8a] block mb-3">{t('answer') || 'คำตอบ:'}</strong>
                     {t('knowledge_faq_1_a') || 'ไม่จำเป็น! EAR ให้ความสำคัญกับ "กระบวนการและการเปลี่ยนแปลงในห้องเรียน" ผลลัพธ์สามารถนำเสนอผ่าน Poster, Slide หรือบทสนทนาแลกเปลี่ยน (Oral Presentation) ได้ โดยไม่สร้างภาระงานเอกสารให้ครู'}
                   </div>
                 </AccordionItem>
 
-                <AccordionItem title={t('knowledge_faq_2_q') || 'พบว่าปัญหาเกิดจากตัวเด็กเอง จะทำอย่างไรต่อ?'} isOpen={openCol3 === '3.2'} onClick={() => toggleCol3('3.2')}>
+                <AccordionItem title={t('knowledge_faq_2_q') || 'พบว่าปัญหาเกิดจากตัวเด็กเอง จะทำอย่างไรต่อ?'} isOpen={openCol3s.includes('3.2')} onClick={() => toggleCol3('3.2')}>
                   <div className="text-xl md:text-2xl text-slate-800 font-light leading-relaxed">
-                    <strong className="font-bold text-[#1e3a8a] block mb-3">{t('answer')}</strong>
+                    <strong className="font-bold text-[#1e3a8a] block mb-3">{t('answer') || 'คำตอบ:'}</strong>
                     {t('knowledge_faq_2_a') || 'นั่นคือจุดเด่นของ EAR! การสำรวจในรอบแรกจะช่วยให้เราเห็น "เหตุผลเบื้องหลัง" พฤติกรรมนั้น ทำให้เราออกแบบ Action ในรอบที่ 2 ได้ตรงจุด ไม่ใช่แค่สั่งบทลงโทษ'}
                   </div>
                 </AccordionItem>
 
-                <AccordionItem title={t('knowledge_faq_3_q') || 'ไม่มีเวลาทำวิจัยเลย จะแบ่งเวลามาทำ EAR ได้อย่างไร?'} isOpen={openCol3 === '3.3'} onClick={() => toggleCol3('3.3')}>
+                <AccordionItem title={t('knowledge_faq_3_q') || 'ไม่มีเวลาทำวิจัยเลย จะแบ่งเวลามาทำ EAR ได้อย่างไร?'} isOpen={openCol3s.includes('3.3')} onClick={() => toggleCol3('3.3')}>
                   <div className="text-xl md:text-2xl text-slate-800 font-light leading-relaxed">
-                    <strong className="font-bold text-[#1e3a8a] block mb-3">{t('answer')}</strong>
+                    <strong className="font-bold text-[#1e3a8a] block mb-3">{t('answer') || 'คำตอบ:'}</strong>
                     {t('knowledge_faq_3_a') || 'EAR คือการ "วิจัยไปพร้อมกับการสอน" (Teaching as Research) เครื่องมือเก็บข้อมูลคือสิ่งที่คุณทำอยู่แล้วในชีวิตประจำวัน เช่น การตรวจงาน การคุยกับเด็ก จึงไม่ต้องแบ่งเวลาเพิ่มเพื่อทำวิจัยต่างหาก'}
                   </div>
                 </AccordionItem>
@@ -478,8 +496,8 @@ const Knowledge = () => {
           </div>
         </section>
 
-        {/* ================= SECTION B: EAR Learning Clips (วิดีโอ Modal + Accordion Rows) ================= */}
-        <section className="pt-30 border-t border-slate-300">
+        {/* ================= SECTION B: EAR Learning Clips ================= */}
+        <section className="mt-16 pt-16 pb-30 border-b-4 border-slate-300">
           
           <div className="mb-16 md:mb-20 flex flex-col items-center text-center max-w-4xl mx-auto">
             <h2 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
@@ -490,7 +508,7 @@ const Knowledge = () => {
             </p>
           </div>
 
-          <div className="flex flex-col items-start py-12 md:py-16 border-t border-slate-300">
+          <div className="flex flex-col items-start py-0 md:py-4"> 
             <div className="w-full mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] tracking-tight mb-3">
@@ -506,7 +524,7 @@ const Knowledge = () => {
             <div className="w-full">
               
               {/* Unit 1 */}
-              <AccordionItem title={t('knowledge_clip_u1_title') || '1. แนะนำ EAR (Introducing EAR)'} isOpen={openClipSection === 'clip.1'} onClick={() => toggleClipSection('clip.1')}>
+              <AccordionItem title={t('knowledge_clip_u1_title') || '1. แนะนำ EAR (Introducing EAR)'} isOpen={openClipSections.includes('clip.1')} onClick={() => toggleClipSection('clip.1')}>
                 <div className="space-y-2">
                   <div onClick={() => openVideo(t('knowledge_clip_u1_1') || '1.1 วิจัยครูและคุณค่าต่อการพัฒนาการสอน', 'https://drive.google.com/file/d/1fRFGnokYHfjojp8VvD399FRWriuKwgMG/view?usp=sharing')} className="flex items-center justify-between p-4 md:p-5 rounded-2xl hover:bg-blue-50 cursor-pointer transition-all border border-transparent hover:border-blue-100 group">
                     <div className="flex items-center gap-4">
@@ -526,15 +544,12 @@ const Knowledge = () => {
                   </div>
                   <div className="pt-6 mt-4 border-t border-slate-100 flex items-center justify-between gap-4">
                     <span className="text-base font-semibold text-emerald-700 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100">Handbook: Unit 1, 2 and 3</span>
-                    {/* <a href="https://drive.google.com/drive/folders/1XzhTjvq091PDTOkt4LOmCKhnOatwLMZG" target="_blank" rel="noopener noreferrer" className="text-[#1e3a8a] text-base font-bold hover:underline flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-xl transition-colors hover:bg-blue-100">
-                      Drive <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
-                    </a> */}
                   </div>
                 </div>
               </AccordionItem>
 
               {/* Unit 2 */}
-              <AccordionItem title={t('knowledge_clip_u2_title') || '2. การระบุปัญหาในชั้นเรียน (Identifying problems)'} isOpen={openClipSection === 'clip.2'} onClick={() => toggleClipSection('clip.2')}>
+              <AccordionItem title={t('knowledge_clip_u2_title') || '2. การระบุปัญหาในชั้นเรียน (Identifying problems)'} isOpen={openClipSections.includes('clip.2')} onClick={() => toggleClipSection('clip.2')}>
                 <div className="space-y-2">
                   <div onClick={() => openVideo(t('knowledge_clip_u2_1') || '2.1 การเลือกหัวข้อวิจัยของคุณ', 'https://drive.google.com/file/d/1cuvaSl7QUeiuw2x5hnNgkdJX76sLw2ip/view?usp=drive_link')} className="flex items-center justify-between p-4 md:p-5 rounded-2xl hover:bg-blue-50 cursor-pointer transition-all border border-transparent hover:border-blue-100 group">
                     <div className="flex items-center gap-4">
@@ -546,15 +561,12 @@ const Knowledge = () => {
                   </div>
                   <div className="pt-6 mt-4 border-t border-slate-100 flex items-center justify-between gap-4">
                     <span className="text-base font-semibold text-emerald-700 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100">Handbook: Unit 4</span>
-                    {/* <a href="https://drive.google.com/drive/folders/1_OGScuP-cVUkcqQ8jpri9nVLYZH1xLf" target="_blank" rel="noopener noreferrer" className="text-[#1e3a8a] text-base font-bold hover:underline flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-xl transition-colors hover:bg-blue-100">
-                      Drive <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
-                    </a> */}
                   </div>
                 </div>
               </AccordionItem>
 
               {/* Unit 3 */}
-              <AccordionItem title={t('knowledge_clip_u3_title') || '3. การตั้งคำถามวิจัย (Asking E-RQ)'} isOpen={openClipSection === 'clip.3'} onClick={() => toggleClipSection('clip.3')}>
+              <AccordionItem title={t('knowledge_clip_u3_title') || '3. การตั้งคำถามวิจัย (Asking E-RQ)'} isOpen={openClipSections.includes('clip.3')} onClick={() => toggleClipSection('clip.3')}>
                 <div className="space-y-2">
                   <div onClick={() => openVideo(t('knowledge_clip_u3_1') || '3.1 จากหัวข้อวิจัยสู่การตั้งคำถามวิจัย', 'https://drive.google.com/file/d/1lBf3h5Q9LTWHXLad9ZNYFMczL4pv6XT6/view?usp=drive_link')} className="flex items-center justify-between p-4 md:p-5 rounded-2xl hover:bg-blue-50 cursor-pointer transition-all border border-transparent hover:border-blue-100 group">
                     <div className="flex items-center gap-4">
@@ -574,15 +586,12 @@ const Knowledge = () => {
                   </div>
                   <div className="pt-6 mt-4 border-t border-slate-100 flex items-center justify-between gap-4">
                     <span className="text-base font-semibold text-emerald-700 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100">Handbook: Unit 4</span>
-                    {/* <a href="https://drive.google.com/drive/folders/14ZTfOY_v4tpfxjkDDfbKeMZi6oVZuxm9" target="_blank" rel="noopener noreferrer" className="text-[#1e3a8a] text-base font-bold hover:underline flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-xl transition-colors hover:bg-blue-100">
-                      Drive <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
-                    </a> */}
                   </div>
                 </div>
               </AccordionItem>
 
               {/* Unit 4 */}
-              <AccordionItem title={t('knowledge_clip_u4_title') || '4. การเก็บรวบรวมข้อมูล (Data collection)'} isOpen={openClipSection === 'clip.4'} onClick={() => toggleClipSection('clip.4')}>
+              <AccordionItem title={t('knowledge_clip_u4_title') || '4. การเก็บรวบรวมข้อมูล (Data collection)'} isOpen={openClipSections.includes('clip.4')} onClick={() => toggleClipSection('clip.4')}>
                 <div className="space-y-2">
                   <div onClick={() => openVideo(t('knowledge_clip_u4_1') || '4.1 เรียนรู้จากตัวอย่างจริง', 'https://drive.google.com/file/d/1AHY1h10kDcc9J6OMcnarP0RnYiUETe_x/view?usp=drive_link')} className="flex items-center justify-between p-4 md:p-5 rounded-2xl hover:bg-blue-50 cursor-pointer transition-all border border-transparent hover:border-blue-100 group">
                     <div className="flex items-center gap-4">
@@ -610,15 +619,12 @@ const Knowledge = () => {
                   </div>
                   <div className="pt-6 mt-4 border-t border-slate-100 flex items-center justify-between gap-4">
                     <span className="text-base font-semibold text-emerald-700 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100">Handbook: Unit 5</span>
-                    {/* <a href="https://drive.google.com/drive/folders/1YDZLAMD9JVO-Jp89N9SfBQ-TFGAubn6K" target="_blank" rel="noopener noreferrer" className="text-[#1e3a8a] text-base font-bold hover:underline flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-xl transition-colors hover:bg-blue-100">
-                      Drive <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
-                    </a> */}
                   </div>
                 </div>
               </AccordionItem>
 
               {/* Unit 5 */}
-              <AccordionItem title={t('knowledge_clip_u5_title') || '5. เครื่องมือเก็บรวบรวมข้อมูล (Tools for data collection)'} isOpen={openClipSection === 'clip.5'} onClick={() => toggleClipSection('clip.5')}>
+              <AccordionItem title={t('knowledge_clip_u5_title') || '5. เครื่องมือเก็บรวบรวมข้อมูล (Tools for data collection)'} isOpen={openClipSections.includes('clip.5')} onClick={() => toggleClipSection('clip.5')}>
                 <div className="space-y-2">
                   <div onClick={() => openVideo(t('knowledge_clip_u5_1') || '5.1 เครื่องมือ: บันทึกสะท้อนคิด การสัมภาษณ์ และสนทนากลุ่ม', 'https://drive.google.com/file/d/1Ut86IX20awwftQncdfFgZNah8RVQ218Q/view?usp=drive_link')} className="flex items-center justify-between p-4 md:p-5 rounded-2xl hover:bg-blue-50 cursor-pointer transition-all border border-transparent hover:border-blue-100 group">
                     <div className="flex items-center gap-4">
@@ -646,15 +652,12 @@ const Knowledge = () => {
                   </div>
                   <div className="pt-6 mt-4 border-t border-slate-100 flex items-center justify-between gap-4">
                     <span className="text-base font-semibold text-emerald-700 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100">Handbook: Unit 5</span>
-                    {/* <a href="https://drive.google.com/drive/folders/18_RpjAGqXNTdV2NAk8_5tVw2wA6EltfR" target="_blank" rel="noopener noreferrer" className="text-[#1e3a8a] text-base font-bold hover:underline flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-xl transition-colors hover:bg-blue-100">
-                      Drive <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
-                    </a> */}
                   </div>
                 </div>
               </AccordionItem>
 
               {/* Unit 6 */}
-              <AccordionItem title={t('knowledge_clip_u6_title') || '6. การวิเคราะห์และการตีความข้อมูล (Data analysis)'} isOpen={openClipSection === 'clip.6'} onClick={() => toggleClipSection('clip.6')}>
+              <AccordionItem title={t('knowledge_clip_u6_title') || '6. การวิเคราะห์และการตีความข้อมูล (Data analysis)'} isOpen={openClipSections.includes('clip.6')} onClick={() => toggleClipSection('clip.6')}>
                 <div className="space-y-2">
                   <div onClick={() => openVideo(t('knowledge_clip_u6_1') || '6.1 การวิเคราะห์และการตีความข้อมูล', 'https://drive.google.com/file/d/1kzqnORo184NJaFUQjn76hXd1d4Ntq2ob/view?usp=drive_link')} className="flex items-center justify-between p-4 md:p-5 rounded-2xl hover:bg-blue-50 cursor-pointer transition-all border border-transparent hover:border-blue-100 group">
                     <div className="flex items-center gap-4">
@@ -698,15 +701,12 @@ const Knowledge = () => {
                   </div>
                   <div className="pt-6 mt-4 border-t border-slate-100 flex items-center justify-between gap-4">
                     <span className="text-base font-semibold text-emerald-700 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100">Handbook: Unit 6 & 8</span>
-                    {/* <a href="https://drive.google.com/drive/folders/150-003u9wzfbuck-3_NNcYrwD476VcKm" target="_blank" rel="noopener noreferrer" className="text-[#1e3a8a] text-base font-bold hover:underline flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-xl transition-colors hover:bg-blue-100">
-                      Drive <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
-                    </a> */}
                   </div>
                 </div>
               </AccordionItem>
 
               {/* Unit 7 */}
-              <AccordionItem title={t('knowledge_clip_u7_title') || '7. การจัดทำแผนปฏิบัติการ (Action Plan)'} isOpen={openClipSection === 'clip.7'} onClick={() => toggleClipSection('clip.7')}>
+              <AccordionItem title={t('knowledge_clip_u7_title') || '7. การจัดทำแผนปฏิบัติการ (Action Plan)'} isOpen={openClipSections.includes('clip.7')} onClick={() => toggleClipSection('clip.7')}>
                 <div className="space-y-2">
                   <div onClick={() => openVideo(t('knowledge_clip_u7_1') || '7.1 ปูพื้นฐานเกี่ยวกับแผนปฏิบัติการ', 'https://drive.google.com/file/d/1LqoGRBdqL6hIUblvzRY8Fom0GOcLkOok/view?usp=drive_link')} className="flex items-center justify-between p-4 md:p-5 rounded-2xl hover:bg-blue-50 cursor-pointer transition-all border border-transparent hover:border-blue-100 group">
                     <div className="flex items-center gap-4">
@@ -750,15 +750,12 @@ const Knowledge = () => {
                   </div>
                   <div className="pt-6 mt-4 border-t border-slate-100 flex items-center justify-between gap-4">
                     <span className="text-base font-semibold text-emerald-700 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100">Handbook: Unit 7</span>
-                    {/* <a href="https://drive.google.com/drive/folders/18NPDPZJ_rfvn_vNz7D3ZzD3DAp9v10g" target="_blank" rel="noopener noreferrer" className="text-[#1e3a8a] text-base font-bold hover:underline flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-xl transition-colors hover:bg-blue-100">
-                      Drive <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
-                    </a> */}
                   </div>
                 </div>
               </AccordionItem>
 
               {/* Unit 8 */}
-              <AccordionItem title={t('knowledge_clip_u8_title') || '8. การเผยแพร่และแบ่งปันผลงาน (Sharing results)'} isOpen={openClipSection === 'clip.8'} onClick={() => toggleClipSection('clip.8')}>
+              <AccordionItem title={t('knowledge_clip_u8_title') || '8. การเผยแพร่และแบ่งปันผลงาน (Sharing results)'} isOpen={openClipSections.includes('clip.8')} onClick={() => toggleClipSection('clip.8')}>
                 <div className="space-y-2">
                   <div onClick={() => openVideo(t('knowledge_clip_u8_1') || '8.1 ทำความรู้จักการแบ่งปันผลงาน: ทำอะไร ทำไมต้องทำ และทำอย่างไร', 'https://drive.google.com/file/d/1Z69k6N7yOwSAJKQHTW-U2XCXcH0r6VGE/view?usp=drive_link')} className="flex items-center justify-between p-4 md:p-5 rounded-2xl hover:bg-blue-50 cursor-pointer transition-all border border-transparent hover:border-blue-100 group">
                     <div className="flex items-center gap-4">
@@ -786,9 +783,6 @@ const Knowledge = () => {
                   </div>
                   <div className="pt-6 mt-4 border-t border-slate-100 flex items-center justify-between gap-4">
                     <span className="text-base font-semibold text-emerald-700 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100">Handbook: Unit 9</span>
-                    {/* <a href="https://drive.google.com/drive/folders/11TNOXWllavcNF3NNfOmc3ECrOSoVq9Fc" target="_blank" rel="noopener noreferrer" className="text-[#1e3a8a] text-base font-bold hover:underline flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-xl transition-colors hover:bg-blue-100">
-                      Drive <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
-                    </a> */}
                   </div>
                 </div>
               </AccordionItem>
@@ -798,7 +792,7 @@ const Knowledge = () => {
         </section>
 
         {/* ================= SECTION C: EAR Handbook ================= */}
-        <section className="pt-30 border-t border-slate-300">
+        <section className="pt-30">
           
           <div className="mb-16 md:mb-20 flex flex-col items-center text-center max-w-4xl mx-auto">
             <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
@@ -849,19 +843,15 @@ const Knowledge = () => {
                 rel="noopener noreferrer"
                 className="block relative w-full max-w-[280px] lg:max-w-xs transition-transform duration-500 hover:scale-105"
               >
-                {/* หากมีรูปภาพหน้าปกจริง ให้เปลี่ยน src เป็น path ของรูปครับ */}
                 <img 
                   src="Ear_learning_clips/Handbook.JPG" 
                   alt="EAR Handbook Cover" 
                   className="w-full h-auto object-cover rounded-xl shadow-lg border border-slate-200"
                   onError={(e) => {
-                    // Fallback เมื่อโหลดรูปไม่ขึ้น
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.nextElementSibling?.classList.remove('hidden');
                   }}
                 />
-                
-                {/* Placeholder กรณียังไม่มีรูปหน้าปก หรือโหลดรูปไม่ขึ้น */}
                 <div className="hidden w-full aspect-[3/4] bg-[#008dbb] rounded-xl shadow-lg border border-slate-200 flex flex-col items-center justify-center p-6 text-white text-center">
                    <div className="w-16 h-16 mb-4 opacity-50">
                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">

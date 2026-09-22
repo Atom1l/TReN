@@ -41,6 +41,12 @@ import AboutSupporters from './pages/aboutus/AboutSupporters'
 import AboutPage from './pages/aboutus/AboutPage'
 import Knowledge from './pages/Knowledge'
 import KnowledgeColumn from './pages/KnowledgeColumn'
+import OnsiteTraining from './pages/training_details/OnsiteTraining'
+import OnlineMentoring from './pages/training_details/OnlineMentoring'
+import ShowcaseDetail from './pages/ShowcaseDetail'
+import CreateMemberWorks from './pages/CreateMemberWorks'
+import MemberWorkDetail from './pages/MemberWorkDetail'
+import AllMemberWorks from './pages/AllMemberWorks'
 
 function App() {
   return (
@@ -69,6 +75,7 @@ function App() {
 
               <Route path="/create/showcase" element={<CreateShowcase />} />
               <Route path="/edit/showcase/:id" element={<CreateShowcase />} />
+              <Route path="/showcase/:id" element={<ShowcaseDetail />} />
 
               <Route path="/create/news" element={<CreateNews />} />
               <Route path="/edit/news/:id" element={<CreateNews />} />
@@ -99,6 +106,16 @@ function App() {
               <Route path="/about/core-role" element={<AboutCoreRoles />} />
               <Route path="/about/governance" element={<AboutGovernance />} />
               <Route path="/about/supporter" element={<AboutSupporters />} />
+
+              {/* Route สำหรับหน้า Training Details */}
+              <Route path="/training/onsite" element={<OnsiteTraining />} />
+              <Route path="/training/mentoring" element={<OnlineMentoring />}/>
+
+              {/** Route สำหรับหน้า Create Member Works */}
+              <Route path="/member-works" element={<AllMemberWorks />}/>
+              <Route path="/create/member-work" element={<CreateMemberWorks />}/>
+              <Route path="/member-work/:id" element={<MemberWorkDetail />} />
+              <Route path="/edit/member-work/:id" element={<CreateMemberWorks />} />
               
               {/* Route สำหรับ Admin Dashboard */}
               <Route path="/admin-dashboard" element={<AdminLayout />}>

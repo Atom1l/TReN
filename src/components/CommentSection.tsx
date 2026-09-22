@@ -10,7 +10,7 @@ import ReportModal from '../components/ReportModal';
 // 🟢 1. อัปเดต Props ให้รองรับ postType 'news'
 interface CommentSectionProps {
   postId: string;
-  postType: 'event' | 'blog' | 'news'; 
+  postType: 'news' | 'blog' | 'event' | 'showcase';
 }
 
 interface CommentData {

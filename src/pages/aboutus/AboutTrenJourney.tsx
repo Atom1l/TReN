@@ -103,7 +103,7 @@ const AboutTrenJourney: React.FC = () => {
 
   return (
     <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24 mt-14">
         
         {/* Intro Section */}
         <section className="max-w-4xl mb-10 relative mx-auto md:mx-0">
@@ -149,7 +149,7 @@ const AboutTrenJourney: React.FC = () => {
 
         {/* --- ตารางสรุปตัวเลขการเติบโต (Table Section) --- */}
         <section className="pt-24 border-t border-slate-300">
-          <h2 className="text-4xl lg:text-5xl font-bold text-[#1e3a8a] mb-12 tracking-tight">
+          <h2 className="text-4xl font-bold text-[#1e3a8a] mb-12 tracking-tight">
             {t('journey_table_main_title') || 'สรุปตัวเลขการเติบโตของเครือข่าย'}
           </h2>
           
