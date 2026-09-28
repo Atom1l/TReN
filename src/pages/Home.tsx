@@ -109,22 +109,24 @@ const Home = () => {
             ? (t('modal_onsite_title') || 'รูปแบบการอบรม Onsite Training') 
             : (t('modal_online_title') || 'การให้คำปรึกษาออนไลน์ Online Mentoring')}
           fullLinkUrl={infoModal.type === 'onsite' ? "/training/onsite" : "/training/mentoring"}
-          fullLinkText={t('read_full_details') || 'อ่านข้อมูลฉบับเต็ม'}
+          
+          fullLinkText={t('read_more') || 'อ่านเพิ่มเติม'}
+          
           content={
             infoModal.type === 'onsite' ? (
-              <div className="space-y-6 text-xl text-slate-700 leading-relaxed font-light">
+              <div className="space-y-6 text-xl text-slate-800 leading-relaxed font-normal">
                 <p>{t('modal_onsite_desc1')}</p>
                 <p>{t('modal_onsite_desc2')} <strong className="font-bold text-[#1e3a8a]">{t('modal_onsite_bold1')}</strong>:</p>
                 <ul className="space-y-4 pl-4 border-l-4 border-blue-200">
-                  <li><strong className="font-bold text-[#1e3a8a]">{t('modal_onsite_li1_title')}</strong> {t('modal_onsite_li1_desc')}</li>
-                  <li><strong className="font-bold text-[#1e3a8a]">{t('modal_onsite_li2_title')}</strong> {t('modal_onsite_li2_desc')}</li>
+                  <li><strong className=" text-[#1e3a8a]">{t('modal_onsite_li1_title')}</strong> {t('modal_onsite_li1_desc')}</li>
+                  <li><strong className="text-[#1e3a8a]">{t('modal_onsite_li2_title')}</strong> {t('modal_onsite_li2_desc')}</li>
                 </ul>
               </div>
             ) : (
-              <div className="space-y-6 text-xl text-slate-700 leading-relaxed font-light">
+              <div className="space-y-6 text-xl text-slate-800 leading-relaxed font-normal">
                 <p>
                   {t('modal_online_desc1')} <strong className="font-bold text-[#1e3a8a]">"{t('modal_online_bold1')}"</strong> 
-                  {t('modal_online_desc2')} <em className="font-medium text-[#1e3a8a]">Reflective Teacher</em> {t('modal_online_desc3')}
+                  {t('modal_online_desc2')} <em className="font-bold text-[#1e3a8a]">Reflective Teacher</em> {t('modal_online_desc3')}
                 </p>
               </div>
             )

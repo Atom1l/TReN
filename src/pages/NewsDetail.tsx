@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
@@ -399,7 +400,7 @@ const NewsDetail = () => {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
-        <div className="text-[#555555] text-sm md:text-lg mt-4 mb-4">
+        <div className="text-[#555555] text-base md:text-xl font-medium mt-4 mb-4">
           <Link to="/" className="hover:text-[#1e3a8a] transition-colors">{t('home') || 'Home'}</Link> / <Link to="/news" className="hover:text-[#1e3a8a] transition-colors">{t('news') || 'News'}</Link> / <span className="text-slate-800">{translatedTitle || newsItem.title}</span>
         </div>
 
@@ -437,7 +438,7 @@ const NewsDetail = () => {
           </div>
         )}
 
-        <p className="text-slate-500 mb-6 text-base sm:text-lg mt-2 flex items-center gap-3">
+        <p className="text-slate-500 mb-6 text-lg sm:text-xl font-medium mt-2 flex items-center gap-3">
           <span>{formattedDate}</span>
           <span className="text-slate-300">|</span>
           <span className="bg-[#EBF1FA] text-[#1e3a8a] text-xs sm:text-sm px-3 py-1 rounded-full font-medium shadow-sm">
@@ -516,78 +517,6 @@ const NewsDetail = () => {
 
           </div>
         </div>
-
-        {/* กล่องประวัติผู้เขียน */}
-        {author && (
-          <div className="mb-16">
-            <h3 className="text-xl font-bold text-[#1e3a8a] mb-3">{t('posted_by') || 'ผู้โพสต์ผลงาน'}</h3>
-            <div className="bg-[#F8FAFC] p-6 rounded-2xl flex flex-col sm:flex-row gap-6 items-start sm:items-center border border-slate-100">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#1e3a8a] rounded-xl flex-shrink-0 flex items-center justify-center text-white text-2xl font-bold overflow-hidden shadow-inner">
-                {author.profilepic ? (
-                  <img src={author.profilepic} alt="Author" className="w-full h-full object-cover" />
-                ) : (
-                  `${author.first_name?.charAt(0) || ''}`
-                )}
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-[#1e3a8a] mb-2">{author.first_name} {author.last_name}</h3>
-                <p className="text-slate-600 text-sm mb-3 leading-relaxed">
-                  {author.bio || t('no_bio') || 'ผู้เขียนยังไม่ได้เพิ่มคำอธิบายตัวเอง (Bio)'}
-                </p>
-                <Link to={`/profile/${author.id}`} className="text-[#1e3a8a] hover:underline font-semibold">
-                  <button className="text-[#1e3a8a] text-sm font-bold underline underline-offset-4 hover:text-blue-900 transition-colors cursor-pointer">
-                    {t('more_posts') || 'ดูผลงานทั้งหมดของผู้เขียน'}
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 🟢 ข่าวสารที่เกี่ยวข้อง (Related News) */}
-        {relatedNews.length > 0 && (
-          <div className="mb-16 border-t border-slate-200 pt-12">
-            <div className="flex justify-between items-end mb-6">
-              <h2 className="text-2xl font-bold text-[#1e3a8a]">{t('related_news') || 'ข่าวสารที่เกี่ยวข้อง:'}</h2>
-              <Link to={`/news?category=${newsItem?.category}`} className="text-[#1e3a8a] text-sm font-bold underline underline-offset-4 hover:text-blue-900 transition-colors cursor-pointer">
-                {t('view_all') || 'View all'}
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedNews.map((relNews) => (
-                <div key={relNews.id} className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col group cursor-pointer" onClick={() => navigate(`/news/${relNews.id}`)}>
-                  <div className="h-40 bg-slate-200 relative overflow-hidden">
-                    {relNews.thumbnail_url ? (
-                      <img src={relNews.thumbnail_url} alt={relNews.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-400">No Image</div>
-                    )}
-                    {relNews.category && (
-                      <span className="absolute bottom-3 left-3 bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-md shadow-sm">
-                        {getCategoryTranslation(relNews.category)}
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-5 flex flex-col flex-1">
-                    <h3 className="text-[#1e3a8a] font-bold mb-2 line-clamp-1">{relNews.title}</h3>
-                    <div className="text-xs text-slate-400 mb-3 space-y-1">
-                      <p>{t('by_author') || 'โดย'} <span className="">{relNews.author_name}</span></p>
-                      <p>{new Date(relNews.created_at).toLocaleDateString()}</p>
-                    </div>
-                    <p className="text-slate-500 text-xs line-clamp-3 mb-4 flex-1">
-                      {stripHtml(relNews.content)}
-                    </p>
-                    <button className="text-slate-500 text-xs font-medium border border-slate-300 rounded-full px-4 py-1.5 w-fit hover:bg-slate-50 transition-colors cursor-pointer mt-auto">
-                      {t('read_more') || 'อ่านเพิ่มเติม'} &rarr;
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <CommentSection postId={newsItem.id} postType="news" />
 
         <ReportModal 
           isOpen={isReportOpen} 

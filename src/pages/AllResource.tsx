@@ -690,7 +690,7 @@ const Resources = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
         {/* Breadcrumb */}
-        <div className="text-[#555555] text-sm md:text-lg mt-4 mb-4">
+        <div className="text-[#555555] text-base md:text-xl font-medium mt-4 mb-4">
           <span className="hover:text-[#1e3a8a] transition-colors cursor-pointer" onClick={() => navigate('/')}>{t('home') || 'หน้าแรก'}</span> 
           <span className='mx-2'>/</span>
           <span className="text-[#1e3a8a] font-semibold">{t('resources') || 'คลังข้อมูล'}</span>

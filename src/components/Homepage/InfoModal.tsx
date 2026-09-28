@@ -30,7 +30,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ isOpen, title, content, fullLinkU
             onClick={onClose}
             className="bg-[#1e3a8a] text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-800 transition-colors shadow-sm"
           >
-            {fullLinkText}
+            {fullLinkText} <span className='ml-2' aria-hidden="true">&rarr;</span>
           </Link>
         </div>
       </div>

@@ -10,7 +10,7 @@ interface NewsSectionProps {
   successStories: any[];
   showcases: any[];
   publicRelations?: any[]; 
-  memberWorks?: any[]; // 🟢 เพิ่ม prop สำหรับรับข้อมูล member_works 
+  memberWorks?: any[]; 
   isLoading: boolean;
   onOpenInfoModal: (type: 'onsite' | 'online') => void;
 }
@@ -34,31 +34,41 @@ const NewsSection: React.FC<NewsSectionProps> = memo(({
 
         {/* ----- Info Cards สำหรับ Onsite / Online Mentoring ----- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
-          <div onClick={() => onOpenInfoModal('onsite')} className="bg-white p-8 md:p-10 rounded-[2rem] border border-blue-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-start group">
-            <div className="w-16 h-16 bg-blue-50 text-[#1e3a8a] rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#1e3a8a] group-hover:text-white transition-colors">
+          
+          {/* Card 1: Onsite Training */}
+          <div onClick={() => onOpenInfoModal('onsite')} className="bg-slate-100 p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-start group">
+            {/* 💡 ปรับสีพื้นหลังโลโก้เป็นสีฟ้าอ่อน ให้ดูกลมกลืนและสมดุลกับพื้นหลังการ์ด */}
+            <div className="w-16 h-16 bg-[#1e3a8a] text-white rounded-2xl flex items-center justify-center mb-6">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>
             </div>
             <h3 className="text-2xl md:text-3xl font-bold text-[#1e3a8a] mb-4">{t('box_onsite_title') || 'รูปแบบการอบรม Onsite Training'}</h3>
-            <p className="text-slate-500 text-lg md:text-xl font-light leading-relaxed mb-8 flex-1">{t('box_onsite_desc') || 'กระบวนการพัฒนาครูอย่างเป็นขั้นตอนตลอด 3 ระยะ เริ่มตั้งแต่ Workshop การทำวิจัย ลงมือปฏิบัติจริงในชั้นเรียน และนำเสนอผลงาน พร้อมโอบอุ้มด้วยระบบนิเวศการเรียนรู้'}</p>
-            <div className="w-full pt-6 border-t border-slate-100 flex justify-end">
-              <span className="text-[#1e3a8a] font-bold text-lg flex items-center gap-2 group-hover:underline group-hover:text-blue-600 transition-colors">
-                {t('read_more') || 'อ่านเพิ่มเติม'} <span aria-hidden="true" className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+            <p className="text-slate-800 text-lg md:text-xl font-light leading-relaxed mb-8 flex-1">
+              {t('box_onsite_desc') || 'กระบวนการพัฒนาครูอย่างเป็นขั้นตอนตลอด 3 ระยะ เริ่มตั้งแต่ Workshop การทำวิจัย ลงมือปฏิบัติจริงในชั้นเรียน และนำเสนอผลงาน พร้อมโอบอุ้มด้วยระบบนิเวศการเรียนรู้'}
+            </p>
+            <div className="w-full pt-6 border-t border-slate-200 flex justify-end">
+              <span className="bg-[#1e3a8a] text-white px-6 py-3 rounded-xl font-bold text-lg flex items-center gap-2 hover:bg-blue-900 hover:shadow-md transition-all duration-300 group-hover:translate-x-1">
+                {t('read_more') || 'อ่านเพิ่มเติม'} <span aria-hidden="true">&rarr;</span>
               </span>
             </div>
           </div>
 
-          <div onClick={() => onOpenInfoModal('online')} className="bg-white p-8 md:p-10 rounded-[2rem] border border-blue-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-start group">
-            <div className="w-16 h-16 bg-blue-50 text-[#1e3a8a] rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#1e3a8a] group-hover:text-white transition-colors">
+          {/* Card 2: Online Mentoring */}
+          <div onClick={() => onOpenInfoModal('online')} className="bg-slate-100 p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-start group">
+            {/* 💡 ปรับสีพื้นหลังโลโก้เป็นสีฟ้าอ่อน ให้ดูกลมกลืนและสมดุลกับพื้นหลังการ์ด */}
+            <div className="w-16 h-16 bg-[#1e3a8a] text-white rounded-2xl flex items-center justify-center mb-6">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" /></svg>
             </div>
             <h3 className="text-2xl md:text-3xl font-bold text-[#1e3a8a] mb-4">{t('box_online_title') || 'การให้คำปรึกษาออนไลน์ Online Mentoring'}</h3>
-            <p className="text-slate-500 text-lg md:text-xl font-light leading-relaxed mb-8 flex-1">{t('box_online_desc') || 'การให้คำปรึกษาโดยครูพี่เลี้ยงผู้มีประสบการณ์ เน้นการสร้างพื้นที่ปลอดภัย รับฟังอย่างไม่ตัดสิน และใช้วิธีตั้งคำถามเชิงสะท้อนคิด เพื่อปลูกฝังให้ครูกลายเป็น Reflective Teacher'}</p>
-            <div className="w-full pt-6 border-t border-slate-100 flex justify-end">
-              <span className="text-[#1e3a8a] font-bold text-lg flex items-center gap-2 group-hover:underline group-hover:text-blue-600 transition-colors">
-                {t('read_more') || 'อ่านเพิ่มเติม'} <span aria-hidden="true" className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+            <p className="text-slate-800 text-lg md:text-xl font-light leading-relaxed mb-8 flex-1">
+              {t('box_online_desc') || 'การให้คำปรึกษาโดยครูพี่เลี้ยงผู้มีประสบการณ์ เน้นการสร้างพื้นที่ปลอดภัย รับฟังอย่างไม่ตัดสิน และใช้วิธีตั้งคำถามเชิงสะท้อนคิด เพื่อปลูกฝังให้ครูกลายเป็น Reflective Teacher'}
+            </p>
+            <div className="w-full pt-6 border-t border-slate-200 flex justify-end">
+              <span className="bg-[#1e3a8a] text-white px-6 py-3 rounded-xl font-bold text-lg flex items-center gap-2 hover:bg-blue-900 hover:shadow-md transition-all duration-300 group-hover:translate-x-1">
+                {t('read_more') || 'อ่านเพิ่มเติม'} <span aria-hidden="true">&rarr;</span>
               </span>
             </div>
           </div>
+
         </div>
 
         {/* ----- 1. ประชาสัมพันธ์และกิจกรรม (PR & Activity Snapshots) ----- */}
@@ -70,8 +80,9 @@ const NewsSection: React.FC<NewsSectionProps> = memo(({
               </div>
               <h3 className="text-3xl lg:text-4xl font-bold text-slate-800">{t('news_activity') || 'ข่าวสารกิจกรรม'}</h3>
             </div>
-            <Link to="/news" className="text-[#1e3a8a] text-lg font-medium hover:underline cursor-pointer flex items-center gap-2">
-              {t('view_all') || 'ดูทั้งหมด'} <span aria-hidden="true">&rarr;</span>
+            {/* 💡 ปรับปุ่ม ดูทั้งหมด */}
+            <Link to="/news" className="bg-[#1e3a8a] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-xl font-bold text-sm md:text-base flex items-center gap-2 hover:bg-blue-900 hover:shadow-md transition-all duration-300 group">
+              {t('view_all') || 'ดูทั้งหมด'} <span aria-hidden="true" className="group-hover:translate-x-1 transition-transform">&rarr;</span>
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -117,8 +128,8 @@ const NewsSection: React.FC<NewsSectionProps> = memo(({
               </div>
               <h3 className="text-3xl lg:text-4xl font-bold text-slate-800">{t('showcases') || 'งานวิจัยเด่น (EAR Showcases)'}</h3>
             </div>
-            <Link to="/showcases" className="text-[#1e3a8a] text-lg font-medium hover:underline cursor-pointer flex items-center gap-2">
-              {t('view_all') || 'ดูทั้งหมด'} <span aria-hidden="true">&rarr;</span>
+            <Link to="/showcases" className="bg-[#1e3a8a] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-xl font-bold text-sm md:text-base flex items-center gap-2 hover:bg-blue-900 hover:shadow-md transition-all duration-300 group">
+              {t('view_all') || 'ดูทั้งหมด'} <span aria-hidden="true" className="group-hover:translate-x-1 transition-transform">&rarr;</span>
             </Link>
           </div>
 
@@ -132,18 +143,23 @@ const NewsSection: React.FC<NewsSectionProps> = memo(({
                   to={`/showcase/${showcase.id}`} 
                   className="flex flex-col bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer group"
                 >
-                  <div className="h-48 sm:h-56 bg-slate-200 overflow-hidden relative">
-                    {showcase.thumbnail_url ? (
-                      <img src={showcase.thumbnail_url} loading="lazy" decoding="async" alt={showcase.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-400 text-lg bg-slate-100">No Image</div>
-                    )}
-                  </div>
-                  <div className="p-6 flex-1 flex flex-col">
-                    <h4 className="text-xl font-bold text-[#1e3a8a] line-clamp-2 leading-snug group-hover:underline mb-2">{showcase.title}</h4>
-                    <p className="text-sm text-slate-500 mt-auto pt-4 border-t border-slate-50 line-clamp-1">
-                      {t('by_author') || 'โดย'} {showcase.author_data ? (typeof showcase.author_data === 'string' ? JSON.parse(showcase.author_data)[0]?.name : showcase.author_data[0]?.name) : showcase.author_name || 'Unknown'}
+                  {/* 💡 1. ส่วนเนื้อหา (หัวข้อและผู้เขียน) เอาขึ้นก่อนและปรับให้ใหญ่ขึ้น */}
+                  <div className="p-6 md:p-8 flex-1 flex flex-col bg-white relative z-10">
+                    <h4 className="text-2xl font-bold text-[#1e3a8a] line-clamp-3 leading-snug group-hover:underline mb-4">
+                      {showcase.title}
+                    </h4>
+                    <p className="text-base text-lg font-semibold text-slate-600 mt-auto px-1 pt-4 border-t border-slate-100 line-clamp-1">
+                      {t('by_author') || 'โดย'} <span className="text-[#1e3a8a]">{showcase.author_data ? (typeof showcase.author_data === 'string' ? JSON.parse(showcase.author_data)[0]?.name : showcase.author_data[0]?.name) : showcase.author_name || 'Unknown'}</span>
                     </p>
+                  </div>
+
+                  {/* 💡 2. ส่วนรูปภาพ ย้ายมาไว้ด้านล่างสุด และลดขนาดลงให้ไม่แย่งซีน */}
+                  <div className="h-32 sm:h-40 bg-slate-50 overflow-hidden relative border-t border-slate-100">
+                    {showcase.thumbnail_url ? (
+                      <img src={showcase.thumbnail_url} loading="lazy" decoding="async" alt={showcase.title} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-slate-300 text-sm bg-slate-50">No Image</div>
+                    )}
                   </div>
                 </Link>
               ))
@@ -162,15 +178,13 @@ const NewsSection: React.FC<NewsSectionProps> = memo(({
               </div>
               <h3 className="text-3xl lg:text-4xl font-bold text-slate-800">{t('member_portfolios') || 'รวมผลงานสมาชิก'}</h3>
             </div>
-            {/* 💡 ลิงก์ไปยังหน้า AllMemberWorks.tsx */}
-            <Link to="/member-works" className="text-[#1e3a8a] text-lg font-medium hover:underline cursor-pointer flex items-center gap-2">
-              {t('view_all') || 'ดูทั้งหมด'} <span aria-hidden="true">&rarr;</span>
+            <Link to="/member-works" className="bg-[#1e3a8a] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-xl font-bold text-sm md:text-base flex items-center gap-2 hover:bg-blue-900 hover:shadow-md transition-all duration-300 group">
+              {t('view_all') || 'ดูทั้งหมด'} <span aria-hidden="true" className="group-hover:translate-x-1 transition-transform">&rarr;</span>
             </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {isLoading ? (
-               /* 💡 ปรับให้ Loading แสดง 3 กล่องขนาดเท่า Showcase */
                Array(3).fill(0).map((_, i) => <div key={i} className="h-80 bg-slate-200 animate-pulse rounded-3xl"></div>)
             ) : memberWorks && memberWorks.length > 0 ? (
               memberWorks.map((work) => (
@@ -179,20 +193,23 @@ const NewsSection: React.FC<NewsSectionProps> = memo(({
                   to={`/member-work/${work.id}`} 
                   className="flex flex-col bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer group"
                 >
-                  <div className="h-48 sm:h-56 bg-slate-200 overflow-hidden relative">
-                    {work.thumbnail_url ? (
-                      <img src={work.thumbnail_url} loading="lazy" decoding="async" alt={work.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-400 text-lg bg-slate-100">No Image</div>
-                    )}
-                  </div>
-                  {/* 💡 ปรับ Padding เป็น p-6 ให้เท่า Showcase */}
-                  <div className="p-6 flex-1 flex flex-col">
-                    <h4 className="text-xl font-bold text-[#1e3a8a] line-clamp-2 leading-snug group-hover:underline mb-2">{work.title}</h4>
-                    {/* 💡 ปรับ text-sm และ pt-4 ให้เท่า Showcase */}
-                    <p className="text-sm text-slate-500 mt-auto pt-4 border-t border-slate-50 line-clamp-1">
-                      {t('by_author') || 'โดย'} {work.author_name || 'Unknown'}
+                  {/* 💡 1. ส่วนเนื้อหา (ใช้โครงสร้างเดียวกับ Showcases เป๊ะๆ) */}
+                  <div className="p-6 md:p-8 flex-1 flex flex-col bg-white relative z-10">
+                    <h4 className="text-2xl font-bold text-[#1e3a8a] line-clamp-3 leading-snug group-hover:underline mb-4">
+                      {work.title}
+                    </h4>
+                    <p className="text-base text-lg font-semibold text-slate-600 mt-auto px-1 pt-4 border-t border-slate-100 line-clamp-1">
+                      {t('by_author') || 'โดย'} <span className="text-[#1e3a8a]">{work.author_name || 'Unknown'}</span>
                     </p>
+                  </div>
+
+                  {/* 💡 2. ส่วนรูปภาพ (ย้ายมาไว้ด้านล่างเหมือน Showcases) */}
+                  <div className="h-32 sm:h-40 bg-slate-50 overflow-hidden relative border-t border-slate-100">
+                    {work.thumbnail_url ? (
+                      <img src={work.thumbnail_url} loading="lazy" decoding="async" alt={work.title} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-slate-300 text-sm bg-slate-50">No Image</div>
+                    )}
                   </div>
                 </Link>
               ))

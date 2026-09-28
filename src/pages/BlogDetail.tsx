@@ -388,7 +388,7 @@ const BlogDetail = () => {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
-        <div className="text-[#555555] text-sm md:text-lg mt-4 mb-4">
+        <div className="text-[#555555] text-lg sm:text-xl mt-4 mb-4">
           <Link to="/blogs" className="hover:text-[#1e3a8a] transition-colors">{t('blogs') || 'Blogs'}</Link> / <span className="text-slate-800">{translatedTitle || blog.title}</span>
         </div>
 
@@ -426,11 +426,11 @@ const BlogDetail = () => {
           </div>
         )}
 
-        <p className="text-slate-500 mb-6 text-base sm:text-lg mt-2">
+        <p className="text-slate-500 mb-6 text-lg sm:text-xl font-medium mt-2">
           {formattedDate}
         </p>
 
-        {tags.length > 0 && (
+        {/* {tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-8">
             {tags.map((tag: string, index: number) => (
               <span key={index} className="bg-[#1e3a8a] text-white text-xs sm:text-sm px-4 py-1.5 rounded-full font-medium shadow-sm">
@@ -438,7 +438,7 @@ const BlogDetail = () => {
               </span>
             ))}
           </div>
-        )}
+        )} */}
 
         {/* 🟢 6. ภาพหน้าปก: เพิ่มคลาส cursor-zoom-in และป้ายกำกับ "คลิกเพื่อดูภาพเต็มๆ" */}
         {blog.thumbnail_url && (

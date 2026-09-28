@@ -620,7 +620,7 @@ const translations = {
     hero_img_hint: '(คลิกเพื่อไปยังบทความ British Council)',
     hero_img_click_hint: 'คลิกเพื่ออ่านบทความฉบับเต็ม',
 
-    member_portfolios:'รวมผลงานสมาชิก',
+    member_portfolios:'รวมผลงานต่อยอดของครู',
     network_voices: 'เสียงจากเครือข่าย',
     gallery_title: 'บรรยากาศการอบรม EAR 2026',
 

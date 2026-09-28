@@ -118,53 +118,52 @@ const NewsCard: React.FC<{
     if (!dateString) return '-';
     return new Date(dateString).toLocaleDateString(
       language === 'th' ? 'th-TH' : 'en-GB', 
-      { day: 'numeric', month: 'long', year: 'numeric' }
+      { day: 'numeric', month: 'short', year: 'numeric' }
     );
   };
 
   return (
     <div 
       onClick={onClick}
-      className="bg-white rounded-2xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] border border-slate-100 overflow-hidden flex flex-col h-full cursor-pointer group hover:-translate-y-1 transition-all duration-300"
+      className="block relative rounded-3xl overflow-hidden h-64 sm:h-72 lg:h-80 group shadow-md border border-slate-100 cursor-pointer transform-gpu"
     >
-      <div className="h-48 sm:h-56 bg-slate-200 overflow-hidden relative">
-        {newsItem.thumbnail_url ? (
-          <img src={newsItem.thumbnail_url} alt={newsItem.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-slate-400">{t('no_image') || 'No Image'}</div>
-        )}
-        <div className="absolute bottom-4 left-4 bg-orange-500/90 backdrop-blur-sm px-4 py-1.5 rounded-md text-xs font-bold text-white shadow-sm">
-          {getCategoryTranslation(newsItem.category)}
+      {newsItem.thumbnail_url ? (
+        <img 
+          src={newsItem.thumbnail_url} 
+          loading="lazy" 
+          decoding="async" 
+          alt={newsItem.title} 
+          className="w-full h-full object-cover transform-gpu will-change-transform backface-hidden group-hover:scale-105 transition-transform duration-700 ease-out" 
+        />
+      ) : (
+        <div className="w-full h-full bg-slate-200 flex items-center justify-center text-slate-400 text-xl">
+          {t('no_image') || 'No Image'}
         </div>
-      </div>
+      )}
       
-      <div className="p-6 flex flex-col flex-1">
-        <div className="mb-2">
-          {isTranslating && (
-            <span className="inline-block text-[10px] bg-orange-50 text-orange-600 px-2 py-0.5 rounded font-semibold animate-pulse mb-1">
-              {t('translating') || 'Translating...'}
-            </span>
-          )}
-          <h3 className="text-[#1e3a8a] text-xl font-bold line-clamp-2 leading-tight">{translatedTitle || newsItem.title}</h3>
+      {/* 💡 Overlay Background (ปรับเป็น Gradient จากดำขึ้นมาใส) */}
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent pointer-events-none"></div>
+      
+      {/* 💡 ส่วนเนื้อหาซ้อนทับภาพ (Title, Date, Category) */}
+      <div className="absolute bottom-6 left-6 right-6 pointer-events-none flex flex-col justify-end h-full">
+        <div className="flex flex-col items-start gap-1.5 mb-2">
+          <span className="bg-orange-500 text-white px-2 py-0.5 rounded text-[10px] font-bold shadow-sm uppercase tracking-wider">
+            {getCategoryTranslation(newsItem.category)}
+          </span>
+          <span className="text-emerald-400 font-bold text-sm">
+            {formatDate(newsItem.created_at)}
+          </span>
         </div>
         
-        <div className="text-xs text-slate-500 mb-3 space-y-1 mt-1">
-          <p className="flex items-center gap-1.5 font-medium">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-[#1e3a8a]">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-            </svg>
-            <span className='pt-1'>{t('by_author') || 'โพสต์โดย'} {newsItem.author_name}</span>
-          </p>
-          <p className="pt-1">{formatDate(newsItem.created_at)}</p>
-        </div>
-
-        <p className="text-slate-500 text-sm line-clamp-3 mb-6 flex-1 leading-relaxed">
-          {translatedSnippet || stripHtml(newsItem.content) || t('no_content') || 'ไม่มีเนื้อหาโดยย่อ'}
-        </p>
+        <h4 className="text-white font-bold line-clamp-2 text-xl sm:text-2xl leading-snug">
+          {translatedTitle || newsItem.title}
+        </h4>
         
-        <button className="mt-auto border border-slate-300 text-slate-600 px-5 py-2 rounded-full font-medium hover:bg-slate-50 transition-colors w-fit text-sm cursor-pointer">
-          {t('read_more') || 'อ่านเพิ่มเติม'} &rarr;
-        </button>
+        {isTranslating && (
+          <span className="inline-block text-[10px] bg-orange-50/20 text-orange-200 px-2 py-0.5 rounded font-semibold animate-pulse mt-1 w-fit">
+            {t('translating') || 'Translating...'}
+          </span>
+        )}
       </div>
     </div>
   );
@@ -323,7 +322,7 @@ const AllNews = () => {
     <div className="min-h-screen bg-white pb-24 border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
-        <div className="text-[#555555] text-sm md:text-lg mt-4 mb-4">
+        <div className="text-[#555555] text-base md:text-xl font-medium mt-4 mb-4">
           <span className="hover:text-[#1e3a8a] transition-colors cursor-pointer" onClick={() => navigate('/')}>{t('home') || 'หน้าแรก'}</span> 
           <span className='mx-2'>/</span>
           <span className="text-[#1e3a8a] font-semibold">{t('news') || 'ข่าวสารและอัปเดต'}</span> 

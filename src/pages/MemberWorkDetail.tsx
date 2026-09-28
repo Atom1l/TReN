@@ -389,7 +389,7 @@ const MemberWorkDetail = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
         {/* Breadcrumb */}
-        <div className="text-[#555555] text-sm md:text-lg mt-4 mb-4">
+        <div className="text-[#555555] text-lg sm:text-xl mt-4 mb-4">
           <Link to="/member-works" className="hover:text-[#1e3a8a] transition-colors">{t('member_works') || 'ผลงานสมาชิก'}</Link> / <span className="text-slate-800">{translatedTitle || work.title}</span>
         </div>
 
@@ -428,7 +428,7 @@ const MemberWorkDetail = () => {
         )}
 
         {/* 🟢 4. ส่วนแสดงชื่อผู้เขียน และ ปีที่สร้างผลงาน */}
-        <div className="text-slate-500 text-base sm:text-lg mt-4 mb-6 leading-relaxed flex flex-wrap items-center gap-y-2">
+        <div className="text-slate-500 text-lg sm:text-xl font-medium mt-4 mb-6 leading-relaxed flex flex-wrap items-center gap-y-2">
             <span className="font-medium mr-1">{t('by_author') || 'โดย'}</span>{' '}
             {parsedAuthors.length > 0 ? (
               parsedAuthors.map((auth, index) => (

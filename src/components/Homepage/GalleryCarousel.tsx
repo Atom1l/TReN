@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 const galleryImages = [
-  "/Homepage/cover_1.webp", 
+  "/Training/Onsite_12.webp",
+  "/Training/Onsite_10.webp",
   "/Homepage/cover_3.webp",
-  "/Homepage/cover_4.webp", 
+  "/Homepage/cover_1.webp", 
+  "/Training/Onsite_16.webp",
+  "/Training/Onsite_17.webp",
+  "/Homepage/cover_4.webp",
   "/Homepage/cover_2.webp",
 ];
 

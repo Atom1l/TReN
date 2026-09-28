@@ -290,10 +290,10 @@ const AllMemberWorks = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
-        <div className="text-[#555555] text-sm md:text-lg mt-4 mb-4">
+        <div className="text-[#555555] text-base md:text-xl font-medium mt-4 mb-4">
           <span className="hover:text-[#1e3a8a] transition-colors cursor-pointer" onClick={() => navigate('/')}>{t('home') || 'หน้าแรก'}</span> 
           <span className='mx-2'>/</span>
-          <span className="text-[#1e3a8a] font-semibold">{t('all_member_works_title') || 'All Member Works'}</span>
+          <span className="text-[#1e3a8a] font-semibold">{t('member_portfolios') || 'All Member Works'}</span>
         </div>
 
         <div className="mb-8">
@@ -303,7 +303,7 @@ const AllMemberWorks = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
               </svg>        
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-[#1e3a8a] pt-2">{t('all_member_works_title') || 'ผลงานสมาชิกทั้งหมด'}</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-[#1e3a8a] pt-2">{t('member_portfolios') || 'ผลงานสมาชิกทั้งหมด'}</h1>
           </div>
           <p className="text-slate-600 mb-6 text-lg">{t('explore_member_works_desc') || 'ค้นหาและรับชมผลงาน กิจกรรม และความสำเร็จจากสมาชิกเครือข่ายของเรา'}</p>
           

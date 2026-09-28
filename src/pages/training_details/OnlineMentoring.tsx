@@ -49,7 +49,7 @@ const OnlineMentoring = () => {
     <div className="w-full min-h-screen bg-white pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
-        <div className="text-[#555555] text-sm md:text-lg mt-4 ">
+        <div className="text-[#555555] text-base md:text-xl font-medium mt-4 ">
           <Link to="/" className="hover:text-[#1e3a8a] transition-colors">{t('nav_home') || 'หน้าหลัก'}</Link> / <span className="text-[#1e3a8a] font-bold">การให้คำปรึกษาออนไลน์</span>
         </div>
 

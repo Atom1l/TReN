@@ -36,7 +36,7 @@ const OnsiteTraining = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
 
         {/* Breadcrumb */}
-        <div className="text-[#555555] text-sm md:text-lg mt-4 ">
+        <div className="text-[#555555] text-base md:text-xl font-medium mt-4 ">
           <Link to="/" className="hover:text-[#1e3a8a] transition-colors">{t('nav_home') || 'หน้าหลัก'}</Link> / <span className="text-[#1e3a8a] font-bold">{t('training_model_title') || 'รูปแบบการอบรม'}</span>
         </div>
 
@@ -45,13 +45,36 @@ const OnsiteTraining = () => {
           {t('training_model_title') || 'รูปแบบการอบรม'}
         </h1>
 
-        {/* Hero Image */}
-        <div className="w-full h-[250px] sm:h-[400px] lg:h-[450px] rounded-xl overflow-hidden mb-10 shadow-sm border border-slate-100 mt-12 mb-16">
-          <img 
-            src="/Homepage/cover_1.webp" 
-            alt="Training Model" 
-            className="w-full h-full object-cover"
-          />
+        {/* 🟢 Hero Images - แบบตาราง Grid 2x2 🟢 */}
+        <div className="grid grid-cols-2 gap-2 sm:gap-4 mt-12 mb-18 rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+          <div className="w-full h-40 sm:h-64 lg:h-80 overflow-hidden group">
+            <img 
+              src="/Training/Onsite_1.webp" 
+              alt="Onsite Training 1" 
+              className="w-full h-full object-cover  "
+            />
+          </div>
+          <div className="w-full h-40 sm:h-64 lg:h-80 overflow-hidden group">
+            <img 
+              src="/Training/Onsite_2.webp" 
+              alt="Onsite Training 2" 
+              className="w-full h-full object-cover  "
+            />
+          </div>
+          <div className="w-full h-40 sm:h-64 lg:h-80 overflow-hidden group">
+            <img 
+              src="/Training/Onsite_3.webp" 
+              alt="Onsite Training 3" 
+              className="w-full h-full object-cover  "
+            />
+          </div>
+          <div className="w-full h-40 sm:h-64 lg:h-80 overflow-hidden group">
+            <img 
+              src="/Training/Onsite_4.webp" 
+              alt="Onsite Training 4" 
+              className="w-full h-full object-cover  "
+            />
+          </div>
         </div>
 
         {/* ==================== เนื้อหาบทความ (Blog Style) ==================== */}

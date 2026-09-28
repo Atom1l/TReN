@@ -404,9 +404,9 @@ const ShowcaseDetail = () => {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
-        {/* Breadcrumb */}
-        <div className="text-[#555555] text-sm md:text-lg mt-4 mb-4">
-          <Link to="/showcases" className="hover:text-[#1e3a8a] transition-colors">{t('showcases') || 'Showcases'}</Link> / <span className="text-slate-800">{translatedTitle || showcase.title}</span>
+        {/* 💡 Breadcrumb ปรับให้ตัวใหญ่ขึ้น */}
+        <div className="text-[#555555] text-base md:text-xl font-medium mt-4 mb-4">
+          <Link to="/showcases" className="hover:text-[#1e3a8a] transition-colors">{t('showcases') || 'Showcases'}</Link> <span className="mx-2">/</span> <span className="text-slate-800">{translatedTitle || showcase.title}</span>
         </div>
 
         {/* Warning Bar (Preview Mode) */}
@@ -443,24 +443,24 @@ const ShowcaseDetail = () => {
           </div>
         )}
 
-        {/* 🟢 4. ส่วนแสดงชื่อผู้เขียน + โรงเรียน/จังหวัด + ปีที่สร้างผลงาน */}
-        <div className="text-slate-500 text-base sm:text-lg mt-4 mb-6 leading-relaxed flex flex-wrap items-center gap-y-2">
-            <span className="font-medium mr-1">{t('by_author') || 'โดย'}</span>{' '}
+        {/* 💡 4. ส่วนแสดงชื่อผู้เขียน ปรับให้ใหญ่ขึ้นตามคำขอ */}
+        <div className="text-slate-500 text-lg sm:text-xl font-medium mt-4 mb-6 leading-relaxed flex flex-wrap items-center gap-y-2">
+            <span className="mr-2">{t('by_author') || 'โดย'}</span>
             {parsedAuthors.length > 0 ? (
               parsedAuthors.map((auth, index) => (
                 <React.Fragment key={index}>
                   {auth.id ? (
-                    <Link to={`/profile/${auth.id}`} className="text-[#1e3a8a] hover:underline font-bold">
+                    <Link to={`/profile/${auth.id}`} className="text-[#1e3a8a] hover:underline font-bold text-xl sm:text-2xl">
                       {auth.name}
                     </Link>
                   ) : (
-                    <span className="font-bold text-[#1e3a8a]">{auth.name}</span>
+                    <span className="font-bold text-[#1e3a8a] text-xl sm:text-2xl">{auth.name}</span>
                   )}
                   {index < parsedAuthors.length - 1 && <span className="mr-1">, </span>}
                 </React.Fragment>
               ))
             ) : (
-              <span className="font-bold text-[#1e3a8a]">
+              <span className="font-bold text-[#1e3a8a] text-xl sm:text-2xl">
                 {showcase.author_name || 'Unknown'}
               </span>
             )}
@@ -468,8 +468,8 @@ const ShowcaseDetail = () => {
             {/* แสดงโรงเรียนและจังหวัด */}
             {(showcase.school_name || showcase.school_province) && (
               <>
-                <span className="mx-2 text-slate-300">|</span>
-                <span className="font-medium text-slate-600">
+                <span className="mx-3 text-slate-300">|</span>
+                <span className="text-slate-600">
                   {showcase.school_name && <span>{showcase.school_name} </span>}
                   {showcase.school_province && <span>จ.{getProvinceLabel(showcase.school_province)}</span>}
                 </span>
@@ -479,24 +479,13 @@ const ShowcaseDetail = () => {
             {/* แสดงปีที่สร้างผลงาน */}
             {showcase.year_created && (
               <>
-                <span className="mx-2 text-slate-300">|</span>
-                <span className="font-medium text-slate-600">
+                <span className="mx-3 text-slate-300">|</span>
+                <span className="text-slate-600">
                   {t('year') || 'ปี'} {showcase.year_created}
                 </span>
               </>
             )}
         </div>
-
-        {/* Tags */}
-        {tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-8">
-            {tags.map((tag: string, index: number) => (
-              <span key={index} className="bg-[#1e3a8a] text-white text-xs sm:text-sm px-4 py-1.5 rounded-full font-medium shadow-sm">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
 
         {/* ภาพหน้าปก */}
         {showcase.thumbnail_url && (
@@ -593,87 +582,6 @@ const ShowcaseDetail = () => {
 
           </div>
         </div>
-
-        {/* กล่องประวัติผู้เขียน */}
-        {primaryAuthor && (
-          <div className="mb-16">
-            <h3 className="text-xl font-bold text-[#1e3a8a] mb-3">{t('posted_by') || 'ผู้โพสต์ผลงาน'}</h3>
-            <div className="bg-[#F8FAFC] p-6 rounded-2xl flex flex-col sm:flex-row gap-6 items-start sm:items-center border border-slate-100">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#1e3a8a] rounded-xl flex-shrink-0 flex items-center justify-center text-white text-2xl font-bold overflow-hidden shadow-inner">
-                {primaryAuthor.profilepic ? (
-                  <img src={primaryAuthor.profilepic} alt="Author" className="w-full h-full object-cover" />
-                ) : (
-                  `${primaryAuthor.first_name?.charAt(0) || ''}`
-                )}
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-[#1e3a8a] mb-2">{primaryAuthor.first_name} {primaryAuthor.last_name}</h3>
-                <p className="text-slate-600 text-sm mb-3 leading-relaxed">
-                  {primaryAuthor.bio || t('no_bio') || 'ผู้เขียนยังไม่ได้เพิ่มคำอธิบายตัวเอง (Bio)'}
-                </p>
-                <Link to={`/profile/${primaryAuthor.id}`} className="text-[#1e3a8a] hover:underline font-semibold">
-                  <button className="text-[#1e3a8a] text-sm font-bold underline underline-offset-4 hover:text-blue-900 transition-colors cursor-pointer">
-                    {t('more_posts') || 'ดูผลงานทั้งหมดของผู้เขียน'}
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Related Showcases */}
-        {relatedShowcases.length > 0 && (
-          <div className="mb-16 border-t border-slate-200 pt-12">
-            <div className="flex justify-between items-end mb-6">
-              <h2 className="text-2xl font-bold text-[#1e3a8a]">{t('related_showcases') || 'Related Showcases:'}</h2>
-              <button onClick={() => navigate('/showcases')} className="text-[#1e3a8a] text-sm font-bold underline underline-offset-4 hover:text-blue-900 transition-colors cursor-pointer">
-                {t('view_all') || 'View all'}
-              </button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedShowcases.map((relShowcase) => {
-                 let rAuthors: any[] = [];
-                 try {
-                   if (relShowcase.author_data) {
-                     rAuthors = typeof relShowcase.author_data === 'string' ? JSON.parse(relShowcase.author_data) : relShowcase.author_data;
-                   }
-                 } catch (e) { console.error(e); }
-
-                 return (
-                  <div key={relShowcase.id} className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col group cursor-pointer" onClick={() => navigate(`/showcase/${relShowcase.id}`)}>
-                    <div className="h-40 bg-slate-200 relative overflow-hidden">
-                      {relShowcase.thumbnail_url ? (
-                        <img src={relShowcase.thumbnail_url} alt={relShowcase.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-slate-400">No Image</div>
-                      )}
-                      {relShowcase.tag && (
-                        <span className="absolute bottom-3 left-3 bg-[#1e3a8a] text-white text-[10px] font-bold px-3 py-1 rounded-md shadow-sm">
-                          {relShowcase.tag.split(',')[0].trim()}
-                        </span>
-                      )}
-                    </div>
-                    <div className="p-5 flex flex-col flex-1">
-                      <h3 className="text-[#1e3a8a] font-bold mb-2 line-clamp-1">{relShowcase.title}</h3>
-                      <div className="text-xs text-slate-400 mb-3 space-y-1">
-                        <p>{t('by_author') || 'โดย'} <span>{rAuthors.length > 0 ? rAuthors[0].name : relShowcase.author_name}</span></p>
-                        <p>{new Date(relShowcase.created_at).toLocaleDateString()}</p>
-                      </div>
-                      <p className="text-slate-500 text-xs line-clamp-3 mb-4 flex-1">
-                        {stripHtml(relShowcase.description)}
-                      </p>
-                      <button className="text-slate-500 text-xs font-medium border border-slate-300 rounded-full px-4 py-1.5 w-fit hover:bg-slate-50 transition-colors cursor-pointer mt-auto">
-                        {t('read_more') || 'อ่านเพิ่มเติม'} &rarr;
-                      </button>
-                    </div>
-                  </div>
-                 )
-              })}
-            </div>
-          </div>
-        )}
-
-        <CommentSection postId={showcase.id} postType="showcase" />
 
         <ReportModal 
           isOpen={isReportOpen} 

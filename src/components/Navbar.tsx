@@ -266,7 +266,7 @@ const Navbar = () => {
       <nav className="z-50 font-sans w-full bg-white border-b border-slate-200 flex flex-col relative">
         
         {/* ================= 1. Top Bar (Facebook & Language) ================= */}
-        <div className="w-full bg-slate-50 border-b border-slate-100 py-1.5 px-4 lg:px-8 xl:px-12 flex justify-end items-center gap-4">
+        <div className="w-full bg-[#1e3a8a] border-b border-slate-100 py-1.5 px-4 lg:px-8 xl:px-12 flex justify-end items-center gap-4">
           {/* Facebook Icon */}
           <a 
             href="https://www.facebook.com/britishcouncilthailand" 
@@ -286,11 +286,11 @@ const Navbar = () => {
           {/* Language Selection */}
           <button 
             onClick={() => setLanguage(language === 'th' ? 'en' : 'th')} 
-            className="flex items-center gap-1.5 text-[0.8rem] md:text-sm font-bold text-slate-500 cursor-pointer"
+            className="flex items-center gap-1.5 text-[0.8rem] md:text-sm font-bold text-white cursor-pointer"
           >
-            <span className={`${language === 'th' ? 'text-[#1e3a8a] underline underline-offset-4' : 'hover:text-[#1e3a8a]'}`}>THAI</span>
+            <span className={`${language === 'th' ? 'text-white underline underline-offset-4' : 'hover:text-white'}`}>THAI</span>
             <span className="font-normal text-slate-300">/</span>
-            <span className={`${language === 'en' ? 'text-[#1e3a8a] underline underline-offset-4' : 'hover:text-[#1e3a8a]'}`}>ENG</span>
+            <span className={`${language === 'en' ? 'text-white underline underline-offset-4' : 'hover:text-white'}`}>ENG</span>
           </button>
         </div>
 
@@ -362,7 +362,7 @@ const Navbar = () => {
                                     onClick={() => { setForceOpenDropdown(null); setForceOpenSubDropdown(null); }}
                                     className="block px-8 py-2.5 text-[0.9rem] text-slate-500 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium whitespace-normal leading-relaxed"
                                   >
-                                    - {nested.name}
+                                    {nested.name}
                                   </Link>
                                 ))}
                               </div>

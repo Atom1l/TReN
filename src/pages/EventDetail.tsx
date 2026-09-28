@@ -264,7 +264,7 @@ const EventDetail = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
         {/* Breadcrumb */}
-        <div className="text-[#555555] text-sm md:text-lg mt-4 mb-4">
+        <div className="text-[#555555] text-lg sm:text-xl mt-4 mb-4">
           <Link to="/events" className="hover:text-[#1e3a8a] transition-colors">{t('events') || 'Events'}</Link> / <span className="text-slate-800">{translatedTitle || event.title}</span>
         </div>
 
@@ -280,7 +280,7 @@ const EventDetail = () => {
           </div>
         )}
 
-        <div className="text-slate-500 mb-8 text-base sm:text-lg mt-4 space-y-1.5">
+        <div className="text-slate-500 mb-8 text-lg sm:text-xl font-medium mt-4 space-y-1.5">
           <p>
             {formattedDate} | {translatedLocation || event.location || 'ไม่ระบุสถานที่'}
           </p>
