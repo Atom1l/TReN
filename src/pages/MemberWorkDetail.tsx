@@ -360,6 +360,35 @@ const MemberWorkDetail = () => {
     return status;
   };
 
+  // 🟢 วุ้นแปลภาษา (Shortcode Parser)
+  const parseShortcodes = (html: string) => {
+    if (!html) return '';
+    let parsed = html;
+
+    // 1. แปลง [bluebox] ให้เป็นกล่องสีฟ้า
+    parsed = parsed.replace(
+      /<p>\s*\[bluebox\]\s*<\/p>([\s\S]*?)<p>\s*\[\/bluebox\]\s*<\/p>/gi, 
+      '<div class="bg-[#EBF1FA] border-l-4 border-[#1e3a8a] p-6 md:p-8 rounded-r-2xl my-8 text-slate-800 text-lg md:text-xl leading-relaxed shadow-sm">$1</div>'
+    );
+    parsed = parsed.replace(
+      /\[bluebox\]([\s\S]*?)\[\/bluebox\]/gi, 
+      '<div class="bg-[#EBF1FA] border-l-4 border-[#1e3a8a] p-6 md:p-8 rounded-r-2xl my-8 text-slate-800 text-lg md:text-xl leading-relaxed shadow-sm">$1</div>'
+    );
+
+    // 2. แปลง [spoiler] ให้เป็นปุ่มกดซ่อน/ขยาย (Accordion)
+    // หมายเหตุ: ReactQuill มักแปลง " เป็น &quot;
+    parsed = parsed.replace(
+      /<p>\s*\[spoiler title=(?:&quot;|")([^\]]+)(?:&quot;|")\]\s*<\/p>([\s\S]*?)<p>\s*\[\/spoiler\]\s*<\/p>/gi,
+      '<details class="group bg-slate-50 border border-slate-200 rounded-2xl my-8 overflow-hidden shadow-sm"><summary class="px-6 py-5 font-bold text-[#1e3a8a] text-lg md:text-xl cursor-pointer hover:bg-slate-100 transition-colors list-none flex justify-between items-center">$1 <svg class="w-6 h-6 text-slate-400 group-open:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></summary><div class="px-6 py-6 border-t border-slate-200 bg-white text-lg md:text-xl">$2</div></details>'
+    );
+    parsed = parsed.replace(
+      /\[spoiler title=(?:&quot;|")([^\]]+)(?:&quot;|")\]([\s\S]*?)\[\/spoiler\]/gi,
+      '<details class="group bg-slate-50 border border-slate-200 rounded-2xl my-8 overflow-hidden shadow-sm"><summary class="px-6 py-5 font-bold text-[#1e3a8a] text-lg md:text-xl cursor-pointer hover:bg-slate-100 transition-colors list-none flex justify-between items-center">$1 <svg class="w-6 h-6 text-slate-400 group-open:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></summary><div class="px-6 py-6 border-t border-slate-200 bg-white text-lg md:text-xl">$2</div></details>'
+    );
+
+    return parsed;
+  };
+
   return (
     <div className="min-h-screen bg-white pb-24 relative">
       {renderAlertModal()}
@@ -503,7 +532,7 @@ const MemberWorkDetail = () => {
                      [&>ul]:text-lg md:[&>ul]:text-xl lg:[&>ul]:text-[22px] [&>ul]:list-disc [&>ul]:pl-8 [&>ul]:mb-6 [&>ul>li]:mb-3
                      [&>ol]:text-lg md:[&>ol]:text-xl lg:[&>ol]:text-[22px] [&>ol]:list-decimal [&>ol]:pl-8 [&>ol]:mb-6 [&>ol>li]:mb-3
                      [&>pre]:overflow-x-auto [&>pre]:bg-slate-100 [&>pre]:p-5 [&>pre]:rounded-xl [&>pre]:text-base"
-          dangerouslySetInnerHTML={{ __html: translatedContent || work.description || '' }}
+          dangerouslySetInnerHTML={{ __html: parseShortcodes(translatedContent || showcase.description || '') }}
         />
 
         {/* ปุ่ม Link to Work (ถ้ามี) */}
@@ -566,82 +595,6 @@ const MemberWorkDetail = () => {
 
           </div>
         </div>
-
-        {/* กล่องประวัติผู้เขียน */}
-        {primaryAuthor && (
-          <div className="mb-16">
-            <h3 className="text-xl font-bold text-[#1e3a8a] mb-3">{t('posted_by') || 'ผู้โพสต์ผลงาน'}</h3>
-            <div className="bg-[#F8FAFC] p-6 rounded-2xl flex flex-col sm:flex-row gap-6 items-start sm:items-center border border-slate-100">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#1e3a8a] rounded-xl flex-shrink-0 flex items-center justify-center text-white text-2xl font-bold overflow-hidden shadow-inner">
-                {primaryAuthor.profilepic ? (
-                  <img src={primaryAuthor.profilepic} alt="Author" className="w-full h-full object-cover" />
-                ) : (
-                  `${primaryAuthor.first_name?.charAt(0) || ''}`
-                )}
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-[#1e3a8a] mb-2">{primaryAuthor.first_name} {primaryAuthor.last_name}</h3>
-                <p className="text-slate-600 text-sm mb-3 leading-relaxed">
-                  {primaryAuthor.bio || t('no_bio') || 'ผู้เขียนยังไม่ได้เพิ่มคำอธิบายตัวเอง (Bio)'}
-                </p>
-                <Link to={`/profile/${primaryAuthor.id}`} className="text-[#1e3a8a] hover:underline font-semibold">
-                  <button className="text-[#1e3a8a] text-sm font-bold underline underline-offset-4 hover:text-blue-900 transition-colors cursor-pointer">
-                    {t('more_posts') || 'ดูผลงานทั้งหมดของผู้เขียน'}
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Related Works (Member Works) */}
-        {relatedWorks.length > 0 && (
-          <div className="mb-16 border-t border-slate-200 pt-12">
-            <div className="flex justify-between items-end mb-6">
-              <h2 className="text-2xl font-bold text-[#1e3a8a]">{t('related_member_works') || 'ผลงานสมาชิกที่เกี่ยวข้อง:'}</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedWorks.map((relWork) => {
-                 let rAuthors: any[] = [];
-                 try {
-                   if (relWork.author_data) {
-                     rAuthors = typeof relWork.author_data === 'string' ? JSON.parse(relWork.author_data) : relWork.author_data;
-                   }
-                 } catch (e) { console.error(e); }
-
-                 return (
-                  <div key={relWork.id} className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col group cursor-pointer" onClick={() => navigate(`/member-work/${relWork.id}`)}>
-                    <div className="h-40 bg-slate-200 relative overflow-hidden">
-                      {relWork.thumbnail_url ? (
-                        <img src={relWork.thumbnail_url} alt={relWork.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-slate-400">No Image</div>
-                      )}
-                      {relWork.tag && (
-                        <span className="absolute bottom-3 left-3 bg-[#1e3a8a] text-white text-[10px] font-bold px-3 py-1 rounded-md shadow-sm">
-                          {relWork.tag.split(',')[0].trim()}
-                        </span>
-                      )}
-                    </div>
-                    <div className="p-5 flex flex-col flex-1">
-                      <h3 className="text-[#1e3a8a] font-bold mb-2 line-clamp-1">{relWork.title}</h3>
-                      <div className="text-xs text-slate-400 mb-3 space-y-1">
-                        <p>{t('by_author') || 'โดย'} <span>{rAuthors.length > 0 ? rAuthors[0].name : relWork.author_name}</span></p>
-                        <p>{new Date(relWork.created_at).toLocaleDateString()}</p>
-                      </div>
-                      <p className="text-slate-500 text-xs line-clamp-3 mb-4 flex-1">
-                        {stripHtml(relWork.description)}
-                      </p>
-                      <button className="text-slate-500 text-xs font-medium border border-slate-300 rounded-full px-4 py-1.5 w-fit hover:bg-slate-50 transition-colors cursor-pointer mt-auto">
-                        {t('read_more') || 'อ่านเพิ่มเติม'} &rarr;
-                      </button>
-                    </div>
-                  </div>
-                 )
-              })}
-            </div>
-          </div>
-        )}
 
         {/* เรียกใช้ Component แสดงคอมเมนต์ โดยตั้ง postType เป็น member_work */}
         <CommentSection

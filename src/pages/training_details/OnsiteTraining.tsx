@@ -175,6 +175,11 @@ const OnsiteTraining = () => {
                     </span>
                   </p>
                 </div>
+
+                {/* 💡 1. รูป Onsite_21.webp ด้านล่างระดับที่ 1 */}
+                <div className="w-full max-w-4xl mx-auto mt-10 rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+                  <img src="/Training/Onsite_21.webp" alt="Mentorship Level" className="w-full h-auto object-cover" />
+                </div>
               </div>
 
               {/* ระดับที่ 2 */}
@@ -189,18 +194,27 @@ const OnsiteTraining = () => {
                   </p>
                 </div>
 
-                <div className="space-y-8">
-                  <p className="text-2xl text-slate-800 font-light leading-relaxed flex items-start gap-3">
-                    <span className="text-[#1e3a8a] mt-1 shrink-0">&bull;</span>
-                    <span>
-                      <strong className="font-semibold text-[#1e3a8a] mr-2">{t('training_tier2_p1_bold') || 'เครือข่ายเพื่อนร่วมทาง (Peer Support):'}</strong>
-                      {t('training_tier2_p1_desc') || 'จัดกลุ่มชุมชนย่อยขนาด 7–12 คน (ประกอบด้วยครูผู้ทำวิจัยและครูพี่เลี้ยง) เพื่อสร้างพื้นที่ปลอดภัยทางวิชาการและการเรียนรู้'}
-                    </span>
-                  </p>
+                <div className="space-y-12">
                   
+                  {/* บล็อก เครือข่ายเพื่อนร่วมทาง */}
+                  <div>
+                    <p className="text-2xl text-slate-800 font-light leading-relaxed flex items-start gap-3">
+                      <span className="text-[#1e3a8a] mt-1 shrink-0">&bull;</span>
+                      <span>
+                        <strong className="font-semibold text-[#1e3a8a] mr-2">{t('training_tier2_p1_bold') || 'เครือข่ายเพื่อนร่วมทาง (Peer Support):'}</strong>
+                        {t('training_tier2_p1_desc') || 'จัดกลุ่มชุมชนย่อยขนาด 7–12 คน (ประกอบด้วยครูผู้ทำวิจัยและครูพี่เลี้ยง) เพื่อสร้างพื้นที่ปลอดภัยทางวิชาการและการเรียนรู้'}
+                      </span>
+                    </p>
+                    {/* 💡 2. รูป Onsite_18.webp ด้านล่าง เครือข่ายเพื่อนร่วมทาง */}
+                    <div className="w-full max-w-4xl mx-auto mt-8">
+                      <img src="/Training/Onsite_18.webp" alt="Peer Support" className="w-full h-auto object-cover rounded-2xl shadow-sm border border-slate-100" />
+                    </div>
+                  </div>
+                  
+                  {/* บล็อก เวทีสะท้อนคิดแลกเปลี่ยน */}
                   <div className="text-2xl text-slate-800 font-light leading-relaxed flex items-start gap-3">
                     <span className="text-[#1e3a8a] mt-1 shrink-0">&bull;</span>
-                    <div>
+                    <div className="w-full">
                       <strong className="font-semibold text-[#1e3a8a] block mb-3">{t('training_tier2_p2_bold') || 'เวทีสะท้อนคิดแลกเปลี่ยน (Roundtable Discussion 2 ครั้งสำคัญ):'}</strong>
                       <ul className="pl-6 space-y-3">
                         <li className="flex items-start">
@@ -212,6 +226,10 @@ const OnsiteTraining = () => {
                           <span><strong className="font-medium text-[#1e3a8a]">{t('training_tier2_p2_2_bold') || 'ครั้งที่ 2:'}</strong> {t('training_tier2_p2_2_desc') || 'หลังสิ้นสุดขั้นตอนการปฏิบัติการและเก็บข้อมูล (Action Phase) เพื่อสรุปบทเรียนและผลลัพธ์ที่เกิดขึ้น'}</span>
                         </li>
                       </ul>
+                      {/* 💡 3. รูป Onsite_20.webp ด้านล่าง ครั้งที่ 2 */}
+                      <div className="w-full max-w-4xl mx-auto mt-8">
+                        <img src="/Training/Onsite_20.webp" alt="Roundtable Discussion" className="w-full h-auto object-cover rounded-2xl shadow-sm border border-slate-100" />
+                      </div>
                     </div>
                   </div>
 

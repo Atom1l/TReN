@@ -82,8 +82,9 @@ const translations = {
     nav_about_1_5: 'หมวดที่ 5: การประชุมและการดำเนินงาน',
     nav_about_1_6: 'หมวดที่ 6: การเงิน ทรัพย์สิน และการแก้ไขข้อตกลง',
     nav_about_2: 'เส้นทางการเจริญเติบโต / TReN Journey',
-    nav_about_3: 'คณะกรรมการบริหารเครือข่าย/โครงสร้างเครือข่าย',
-    nav_about_4: 'องค์กรพันธมิตร',
+    nav_about_3: 'ทีมบริหารเครือข่าย',
+    nav_about_4: 'ทีมงานศูนย์ขับเคลื่อนวิจัยครูระดับภูมิภาค',
+    nav_about_5: 'องค์กรพันธมิตร',
 
     // Profile Page
     profile_title: 'โปรไฟล์ของฉัน',
@@ -628,12 +629,12 @@ const translations = {
     
     hero_quote1_author: 'ครูวิไล พันชนกุล',
     hero_quote1_school: 'โรงเรียนบ้านดงแสนสุข จ.อุดรธานี',
-    hero_quote1_topic: 'How I developed my teaching to promote my students’ Engagement in English classes',
+    hero_quote1_topic: 'แนวทางการพัฒนาการสอนเพื่อเพิ่มการมีส่วนร่วมของนักเรียนในวิชาภาษาอังกฤษ',
     hero_quote1_text: '"จาก findings ทำให้เข้าใจว่า เราต้องรับฟังนักเรียนให้มากขึ้น และเมื่อนักเรียนให้ความไว้วางใจ พวกเขาจะพร้อมทำตามคำแนะนำของเราอย่างเต็มใจ"',
     
     hero_quote2_author: 'ครูฟัยซะ หวันตะหา',
     hero_quote2_school: 'โรงเรียนวัดนางเหล้า จ.สงขลา',
-    hero_quote2_topic: 'Enhancing student engagement in speaking activities',
+    hero_quote2_topic: 'การจัดกิจกรรมการพูดภาษาอังกฤษเพื่อเพิ่มการมีส่วนร่วมของนักเรียน',
     hero_quote2_text: '"บทเรียนสำคัญที่สุดจากการทำวิจัยครั้งนี้ คือการได้รู้ว่านักเรียนต้องการอะไรจริงๆ"',
 
     box_onsite_title: 'รูปแบบการอบรม Onsite Training',
@@ -1487,9 +1488,9 @@ const translations = {
     past_events_section: 'กิจกรรมที่ผ่านมา',
 
     // === Create Member Works Page ===
-    edit_member_work_title: "แก้ไขผลงานสมาชิก",
-    member_works:'ผลงานสมาชิก',
-    create_member_work_title: "สร้างผลงานสมาชิก",
+    edit_member_work_title: "แก้ไขผลงานต่อยอดของครู",
+    member_works:'ผลงานต่อยอดของครู',
+    create_member_work_title: "สร้างผลงานต่อยอด",
     create_member_work_desc: "แบ่งปันผลงาน กิจกรรม และความสำเร็จของคุณให้กับสมาชิกเครือข่าย",
     member_work_title_placeholder: "ชื่อผลงาน หรือชื่อกิจกรรม...",
     add_member_work_cover: "เพิ่มรูปภาพประกอบผลงานที่นี่",
@@ -1504,15 +1505,15 @@ const translations = {
     create_work_pending: "ส่งผลงานเพื่อรอตรวจสอบเรียบร้อยแล้ว!",
     create_work_published: "เผยแพร่ผลงานเรียบร้อยแล้ว!",
     error_loading_data: "ไม่สามารถดึงข้อมูลมาแก้ไขได้",
-    create_member_work:'สร้างผลงานสมาชิก',
+    create_member_work:'สร้างผลงานต่อยอด',
     link_to_work_member:'ลิงก์ผลงานของคุณ',
 
     // === All Member Works Page ===
-    all_member_works_title: "ผลงานสมาชิกทั้งหมด",
+    all_member_works_title: "ผลงานต่อยอดของครูทั้งหมด",
     explore_member_works_desc: "ค้นหาและรับชมผลงาน กิจกรรม และความสำเร็จจากสมาชิกเครือข่ายของเรา",
     search_member_works_placeholder: "ค้นหาจากชื่อผลงาน ชื่อผู้สร้าง หรือคำค้นหา...",
-    loading_member_works: "กำลังโหลดผลงานสมาชิก...",
-    no_member_works_found: "ไม่พบผลงานสมาชิก",
+    loading_member_works: "กำลังโหลดผลงานต่อยอดของครู...",
+    no_member_works_found: "ไม่พบผลงานต่อยอดของครู",
     no_member_works_found_desc: "ไม่พบผลงานที่ตรงกับการค้นหา หรือในหมวดหมู่นี้",
 
   },
@@ -1594,7 +1595,8 @@ const translations = {
     nav_about_1_6: 'Chapter 6: Finances, Intellectual Property & Amendments',
     nav_about_2: 'TReN Journey',
     nav_about_3: 'Network Management Team',
-    nav_about_4: 'Partners & Sponsors',
+    nav_about_4: 'Regional EARC Teams',
+    nav_about_5: 'Partners & Sponsors',
 
     // Profile Page
     profile_title: 'My Profile',

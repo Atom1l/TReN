@@ -242,8 +242,9 @@ const Navbar = () => {
           ]
         },
         { name: t('nav_about_2') || '2. เส้นทางการเจริญเติบโต / TReN Journey', path: '/about#journey' },
-        { name: t('nav_about_3') || '3. คณะกรรมการบริหารเครือข่าย/โครงสร้างเครือข่าย', path: '/about#team' },
-        { name: t('nav_about_4') || '4. องค์กรพันธมิตร', path: '/about#supporters' },
+        { name: t('nav_about_3') || '3. ทีมบริหารเครือข่าย', path: '/about#team' },
+        { name: t('nav_about_4') || '4. ทีมงานศูนย์ขับเคลื่อนวิจัยครูระดับภูมิภาค', path: '/about#regional-teams' },
+        { name: t('nav_about_5') || '5. องค์กรพันธมิตร', path: '/about#supporters' },
       ]
     },
     { name: t('nav_knowledge') || 'คลังความรู้', path: '/knowledge' },
@@ -295,7 +296,7 @@ const Navbar = () => {
         </div>
 
         {/* ================= 2. Main Navbar ================= */}
-        <div className="w-full px-4 lg:px-8 xl:px-12 h-[4.5rem] flex items-center justify-between">
+        <div className="w-full px-2 sm:px-4 lg:px-8 xl:px-12 h-[4.5rem] flex items-center justify-between">
           
           <div className="flex items-center gap-2 cursor-pointer flex-shrink-0">
             <Link to="/" className="text-3xl lg:text-4xl font-black text-primary tracking-tighter hover:opacity-80 transition-opacity">
@@ -335,6 +336,7 @@ const Navbar = () => {
                           : 'opacity-0 invisible translate-y-2 lg:group-hover:opacity-100 lg:group-hover:visible lg:group-hover:translate-y-0'
                       }`}>
                         {menu.dropdown.map(sub => (
+                          // 💡 แก้ไข SubDropdown: กลับไปใช้รูปแบบกางออกด้านขวา และใช้ Invisible Bridge
                           <div key={sub.name} className="relative group/sub">
                             <Link 
                               to={sub.path} 
@@ -343,24 +345,29 @@ const Navbar = () => {
                             >
                               <span>{sub.name}</span>
                               {sub.subDropdown && (
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-3 flex-shrink-0 text-slate-400 lg:group-hover/sub:text-[#1e3a8a]" viewBox="0 0 20 20" fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-3 flex-shrink-0 text-slate-400 lg:group-hover/sub:text-[#1e3a8a] transition-transform -rotate-90" viewBox="0 0 20 20" fill="currentColor">
                                   <path fillRule="evenodd" d="M19.5 8.25l-7.5 7.5-7.5-7.5" clipRule="evenodd" />
                                 </svg>
                               )}
                             </Link>
 
-                            {/* 💡 แก้ไข SubDropdown ตรงนี้: ให้แสดงผลซ้อนลงมาด้านล่าง (Stack) แทนที่จะเปิดซ้าย เพื่อแก้ปัญหาล้นจอ */}
+                            {/* 💡 Invisible Bridge ป้องกันเมนูปิด */}
                             {sub.subDropdown && (
-                              <div className={`
-                                w-full bg-slate-50 overflow-hidden transition-all duration-300 border-b border-slate-100
-                                ${forceOpenSubDropdown === sub.name ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 lg:group-hover/sub:max-h-[500px] lg:group-hover/sub:opacity-100'}
-                              `}>
+                              <div className="hidden lg:block absolute top-0 -right-4 w-4 h-full z-40 bg-transparent pointer-events-auto"></div>
+                            )}
+
+                            {sub.subDropdown && (
+                              <div className={`absolute top-0 left-[100%] ml-2 w-[22rem] bg-white border border-slate-100 shadow-xl rounded-2xl transition-all duration-200 z-50 transform py-2 ${
+                                forceOpenSubDropdown === sub.name
+                                  ? 'opacity-100 visible translate-x-0'
+                                  : 'opacity-0 invisible translate-x-2 lg:group-hover/sub:opacity-100 lg:group-hover/sub:visible lg:group-hover/sub:translate-x-0'
+                              }`}>
                                 {sub.subDropdown.map(nested => (
                                   <Link 
                                     key={nested.name} 
                                     to={nested.path} 
                                     onClick={() => { setForceOpenDropdown(null); setForceOpenSubDropdown(null); }}
-                                    className="block px-8 py-2.5 text-[0.9rem] text-slate-500 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium whitespace-normal leading-relaxed"
+                                    className="block px-6 py-3 text-[0.95rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium whitespace-normal leading-relaxed border-b border-slate-50 last:border-0"
                                   >
                                     {nested.name}
                                   </Link>
@@ -378,7 +385,7 @@ const Navbar = () => {
 
             <div className="hidden lg:block w-px h-6 bg-slate-300 mx-2 xl:mx-4"></div>
 
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               {isAuthLoading ? (
                 <div className="w-[85px] lg:w-[95px] xl:w-[115px] h-[36px] bg-slate-100 animate-pulse rounded-lg"></div>
               ) : user && userData ? (
@@ -422,19 +429,30 @@ const Navbar = () => {
                   )}
                 </div>
               ) : (
-                <button
-                  onClick={() => setIsLoginModalOpen(true)}
-                  className="bg-primary hover:bg-secondary text-white px-4 py-2 text-sm xl:text-[0.95rem] font-bold transition-all active:scale-95 shadow-md shadow-primary/10 rounded-xl flex-shrink-0 cursor-pointer">
-                  {t('nav_register') || 'สมัครสมาชิก'}
-                </button>
+                <>
+                  {/* 💡 แสดงปุ่มเต็มใบเฉพาะจอใหญ่ (xl ขึ้นไป) */}
+                  <button
+                    onClick={() => setIsLoginModalOpen(true)}
+                    className="hidden xl:flex bg-primary hover:bg-secondary text-white px-4 py-2 text-[0.95rem] font-bold transition-all active:scale-95 shadow-md shadow-primary/10 rounded-xl cursor-pointer">
+                    {t('nav_register') || 'สมัครสมาชิก'}
+                  </button>
+                  {/* 💡 แสดงปุ่มย่อรูปไอคอนในมือถือถึงจอ lg เพื่อประหยัดพื้นที่ */}
+                  <button
+                    onClick={() => setIsLoginModalOpen(true)}
+                    className="xl:hidden bg-primary hover:bg-secondary text-white w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center font-bold transition-all active:scale-95 shadow-md shadow-primary/10 rounded-xl cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                  </button>
+                </>
               )}
             </div>
 
             <button 
-              className="lg:hidden p-2 text-primary hover:bg-slate-100 rounded-lg transition-colors ml-2 flex-shrink-0 cursor-pointer"
+              className="lg:hidden p-1.5 sm:p-2 text-primary hover:bg-slate-100 rounded-lg transition-colors ml-1 sm:ml-2 flex-shrink-0 cursor-pointer"
               onClick={() => setIsMobileMenuOpen(true)}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-7 h-7 sm:w-8 sm:h-8">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
               </svg>
             </button>
@@ -452,9 +470,9 @@ const Navbar = () => {
       {/* ================= 3. Mobile Sidebar Overlay ================= */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[100] flex lg:hidden">
-          <div className="w-1/3 bg-black/40 backdrop-blur-sm relative" onClick={() => setIsMobileMenuOpen(false)}></div>
+          <div className="w-[15%] sm:w-1/3 bg-black/40 backdrop-blur-sm relative" onClick={() => setIsMobileMenuOpen(false)}></div>
 
-          <div className="w-2/3 bg-white h-full shadow-2xl flex flex-col relative animate-slide-in-right">
+          <div className="w-[85%] sm:w-2/3 bg-white h-full shadow-2xl flex flex-col relative animate-slide-in-right">
             <button className="w-full flex justify-end px-4 py-4 cursor-pointer" onClick={() => setIsMobileMenuOpen(false)}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="#0a2558" className="w-8 h-8">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -462,43 +480,43 @@ const Navbar = () => {
             </button>
 
             {user && userData ? (
-              <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)} className="bg-[#e6f0fa] hover:bg-[#d8e8f8] transition-colors px-6 py-8 flex flex-col gap-2 relative cursor-pointer group">
+              <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)} className="bg-[#e6f0fa] hover:bg-[#d8e8f8] transition-colors px-6 py-6 sm:py-8 flex flex-col gap-2 relative cursor-pointer group">
                 <div className="flex items-center gap-4">        
-                  <div className="shrink-0 w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl shadow-sm overflow-hidden group-hover:scale-105 transition-transform">
+                  <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl shadow-sm overflow-hidden group-hover:scale-105 transition-transform">
                     {userData.profilepic ? <img src={userData.profilepic} alt="Profile" className="w-full h-full object-cover" /> : userData.first_name?.[0]}
                   </div>    
                   <div className="flex flex-col flex-1 min-w-0">               
-                    <span className="truncate block text-xl font-bold text-slate-800 leading-tight group-hover:text-primary transition-colors">
+                    <span className="truncate block text-lg sm:text-xl font-bold text-slate-800 leading-tight group-hover:text-primary transition-colors">
                       {userData.first_name} {userData.last_name}
                     </span>                 
-                    <span className="truncate block text-[1.05rem] text-slate-600">{user.email}</span>       
+                    <span className="truncate block text-sm sm:text-[1.05rem] text-slate-600">{user.email}</span>       
                   </div>
                 </div>
               </Link>
             ) : (
-               <div className="px-6 py-8 pt-10 flex flex-col gap-4 border-b border-slate-100">
-                  <span className="text-xl font-bold text-slate-800">ยินดีต้อนรับสู่ TReN</span>
-                  <button onClick={() => { setIsLoginModalOpen(true); setIsMobileMenuOpen(false); }} className="bg-primary hover:bg-secondary text-white py-3 rounded-xl font-medium text-lg w-full transition-colors cursor-pointer">
+               <div className="px-6 py-6 sm:py-8 pt-8 sm:pt-10 flex flex-col gap-4 border-b border-slate-100">
+                  <span className="text-lg sm:text-xl font-bold text-slate-800">ยินดีต้อนรับสู่ TReN</span>
+                  <button onClick={() => { setIsLoginModalOpen(true); setIsMobileMenuOpen(false); }} className="bg-primary hover:bg-secondary text-white py-2.5 sm:py-3 rounded-xl font-medium text-base sm:text-lg w-full transition-colors cursor-pointer">
                     {t('nav_register') || 'สมัครสมาชิก / เข้าสู่ระบบ'}
                   </button>
                </div>
             )}
 
-            <div className="flex-1 overflow-y-auto py-6 flex flex-col">
+            <div className="flex-1 overflow-y-auto py-4 sm:py-6 flex flex-col">
               {menuItems.map((menu) => {
                 const isActive = location.pathname === menu.path || (menu.path === '/showcases' && location.pathname.startsWith('/showcases'));
                 const isExpanded = expandedMobileMenus.includes(menu.name);
 
                 return (
                   <div key={menu.name} className="flex flex-col">
-                    <div className="flex justify-between items-center relative pr-4">
+                    <div className="flex justify-between items-center relative pr-2 sm:pr-4">
                       {menu.dropdown ? (
-                        <button onClick={(e) => toggleMobileMenu(menu.name, e)} className={`flex-1 text-left px-8 py-3.5 text-[1.15rem] transition-colors cursor-pointer flex items-center gap-2 ${isActive || isExpanded ? 'text-[#0a2558] font-bold' : 'text-slate-800 font-medium hover:bg-slate-50'}`}>
+                        <button onClick={(e) => toggleMobileMenu(menu.name, e)} className={`flex-1 text-left px-6 sm:px-8 py-3 sm:py-3.5 text-base sm:text-[1.15rem] transition-colors cursor-pointer flex items-center gap-2 ${isActive || isExpanded ? 'text-[#0a2558] font-bold' : 'text-slate-800 font-medium hover:bg-slate-50'}`}>
                           {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-[#1e3a8a] rounded-r-md"></div>}
                           {menu.name}
                         </button>
                       ) : (
-                        <Link to={menu.path} onClick={() => setIsMobileMenuOpen(false)} className={`flex-1 px-8 py-3.5 text-[1.15rem] transition-colors flex items-center gap-2 ${isActive ? 'text-[#0a2558] font-bold' : 'text-slate-800 font-medium hover:bg-slate-50'}`}>
+                        <Link to={menu.path} onClick={() => setIsMobileMenuOpen(false)} className={`flex-1 px-6 sm:px-8 py-3 sm:py-3.5 text-base sm:text-[1.15rem] transition-colors flex items-center gap-2 ${isActive ? 'text-[#0a2558] font-bold' : 'text-slate-800 font-medium hover:bg-slate-50'}`}>
                           {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-[#1e3a8a] rounded-r-md"></div>}
                           {menu.name}
                         </Link>
@@ -506,7 +524,7 @@ const Navbar = () => {
                       
                       {menu.dropdown && (
                         <button onClick={(e) => toggleMobileMenu(menu.name, e)} className="p-2 text-slate-400 hover:bg-slate-100 rounded-lg transition-colors z-10 cursor-pointer">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={`w-5 h-5 transition-transform ${isExpanded ? 'rotate-180 text-[#1e3a8a]' : ''}`}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${isExpanded ? 'rotate-180 text-[#1e3a8a]' : ''}`}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                         </button>
                       )}
                     </div>
@@ -517,19 +535,19 @@ const Navbar = () => {
                           const isSubExpanded = expandedMobileMenus.includes(sub.name);
                           return (
                             <div key={index} className="flex flex-col">
-                              <div className="flex justify-between items-center pr-4">
+                              <div className="flex justify-between items-center pr-2 sm:pr-4">
                                 {sub.subDropdown ? (
-                                  <button onClick={(e) => toggleMobileMenu(sub.name, e)} className="flex-1 text-left pl-14 pr-4 py-3.5 text-[1.05rem] text-slate-700 hover:text-[#1e3a8a] font-medium transition-colors cursor-pointer whitespace-normal">
+                                  <button onClick={(e) => toggleMobileMenu(sub.name, e)} className="flex-1 text-left pl-10 sm:pl-14 pr-4 py-3 sm:py-3.5 text-sm sm:text-[1.05rem] text-slate-700 hover:text-[#1e3a8a] font-medium transition-colors cursor-pointer whitespace-normal">
                                     {sub.name}
                                   </button>
                                 ) : (
-                                  <Link to={sub.path} onClick={() => setIsMobileMenuOpen(false)} className="flex-1 pl-14 pr-8 py-3.5 text-[1.05rem] text-slate-700 hover:text-[#1e3a8a] font-medium transition-colors cursor-pointer whitespace-normal">
+                                  <Link to={sub.path} onClick={() => setIsMobileMenuOpen(false)} className="flex-1 pl-10 sm:pl-14 pr-6 sm:pr-8 py-3 sm:py-3.5 text-sm sm:text-[1.05rem] text-slate-700 hover:text-[#1e3a8a] font-medium transition-colors cursor-pointer whitespace-normal">
                                     {sub.name}
                                   </Link>
                                 )}
                                 {sub.subDropdown && (
                                   <button onClick={(e) => toggleMobileMenu(sub.name, e)} className="p-2 text-slate-400 hover:bg-slate-100 rounded-lg transition-colors z-10 cursor-pointer flex-shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={`w-4 h-4 transition-transform ${isSubExpanded ? 'rotate-180 text-[#1e3a8a]' : ''}`}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform ${isSubExpanded ? 'rotate-180 text-[#1e3a8a]' : ''}`}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                                   </button>
                                 )}
                               </div>
@@ -537,7 +555,7 @@ const Navbar = () => {
                               {sub.subDropdown && isSubExpanded && (
                                 <div className="bg-slate-100/50 flex flex-col border-y border-slate-100">
                                   {sub.subDropdown.map((nested, nIdx) => (
-                                    <Link key={nIdx} to={nested.path} onClick={() => setIsMobileMenuOpen(false)} className="pl-20 pr-8 py-3 text-[0.95rem] text-slate-600 hover:text-[#1e3a8a] font-normal transition-colors cursor-pointer whitespace-normal">
+                                    <Link key={nIdx} to={nested.path} onClick={() => setIsMobileMenuOpen(false)} className="pl-14 sm:pl-20 pr-6 sm:pr-8 py-2.5 sm:py-3 text-[0.85rem] sm:text-[0.95rem] text-slate-600 hover:text-[#1e3a8a] font-normal transition-colors cursor-pointer whitespace-normal">
                                       {nested.name}
                                     </Link>
                                   ))}
@@ -554,7 +572,7 @@ const Navbar = () => {
 
               {user && userData && ['admin', 'co-admin', 'developer'].includes(userData.role.toLowerCase()) && (
                 <div className="mt-2 border-t border-slate-100 pt-2">
-                  <Link to="/admin-dashboard" onClick={() => setIsMobileMenuOpen(false)} className={`relative block px-8 py-3.5 text-xl font-medium transition-colors cursor-pointer ${location.pathname === '/admin-dashboard' ? 'text-[#0a2558] font-semibold' : 'text-slate-800 hover:bg-slate-50'}`}>
+                  <Link to="/admin-dashboard" onClick={() => setIsMobileMenuOpen(false)} className={`relative block px-6 sm:px-8 py-3 sm:py-3.5 text-lg sm:text-xl font-medium transition-colors cursor-pointer ${location.pathname === '/admin-dashboard' ? 'text-[#0a2558] font-semibold' : 'text-slate-800 hover:bg-slate-50'}`}>
                     {location.pathname === '/admin-dashboard' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-[#1e3a8a] rounded-r-md"></div>}
                     {t('adminDashboard') || 'Admin Dashboard'}
                   </Link>
@@ -563,8 +581,8 @@ const Navbar = () => {
             </div>
 
             {user && (
-              <div className="mt-auto mb-10 px-8 text-center border-t border-slate-100 pt-6">
-                <button onClick={handleLogout} className="text-xl font-bold text-red-500 hover:text-red-700 transition-colors py-4 w-full cursor-pointer">
+              <div className="mt-auto mb-8 sm:mb-10 px-6 sm:px-8 text-center border-t border-slate-100 pt-4 sm:pt-6">
+                <button onClick={handleLogout} className="text-lg sm:text-xl font-bold text-red-500 hover:text-red-700 transition-colors py-3 sm:py-4 w-full cursor-pointer">
                   {t('logout') || 'Log Out'}
                 </button>
               </div>

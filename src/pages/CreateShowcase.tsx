@@ -59,7 +59,7 @@ const CreateShowcase = () => {
 
   const modules = {
     toolbar: [
-      ['bold', 'italic', 'underline', 'strike', { 'color': [] }, 'link', { 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['bold', 'italic', 'underline', 'strike', { 'color': [] },'link', 'image', 'video',{ 'list': 'ordered'}, { 'list': 'bullet' }],
     ],
   };
 

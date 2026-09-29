@@ -23,7 +23,7 @@ const HeroSection = () => {
 
       <div className="w-full max-w-5xl flex flex-col gap-10 mx-auto">
         {/* 🟢 1. นำเนื้อหามาใส่ในกรอบพื้นหลังสีฟ้าอ่อน */}
-        <div className="bg-blue-50/70 p-8 md:p-12 rounded-[2rem] border border-blue-100 shadow-sm text-center">
+        <div className="bg-blue-100 p-8 md:p-12 rounded-[2rem] border border-blue-200 shadow-sm text-center">
           <p className="text-2xl md:text-3xl text-slate-800 leading-relaxed font-light text-balance">
             <strong className="font-bold text-[#1e3a8a]">{t('hero_desc_bold_1') || 'เครือข่ายครูวิจัย TReN'}</strong>
             {' '}{t('hero_desc_text_1') || 'ชุมชนแห่งการเรียนรู้ทางวิชาชีพ (CoP) ที่พร้อมยืนเคียงข้างครูไทยใน 4 ภูมิภาคทั่วประเทศ'}<br/><br/>
@@ -61,7 +61,7 @@ const HeroSection = () => {
                 <span className="hidden md:block text-blue-200">|</span>
                 <span className="text-slate-600 text-base font-medium">{t('hero_quote1_school') || 'โรงเรียนบ้านดอนแสนสุข จ.อุดรธานี'}</span>
               </div>
-              <h4 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 leading-snug">
+              <h4 className="text-2xl font-bold text-slate-800 mb-4 leading-snug">
                 <span className="text-[#1e3a8a] font-bold mr-2">{t('research_topic') || 'หัวข้อวิจัย:'} </span>
                 {t('hero_quote1_topic') || 'How I developed my teaching to promote my students’ Engagement in English classes'}
               </h4>
@@ -85,7 +85,7 @@ const HeroSection = () => {
                 <span className="hidden md:block text-blue-200">|</span>
                 <span className="text-slate-600 text-base font-medium">{t('hero_quote2_school') || 'โรงเรียนวัดนางเหล้า จ.สงขลา'}</span>
               </div>
-              <h4 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 leading-snug">
+              <h4 className="text-2xl font-bold text-slate-800 mb-4 leading-snug">
                 <span className="text-[#1e3a8a] font-bold md:ml-2 block md:inline md:order-2">{t('research_topic') || 'หัวข้อวิจัย:'} </span>
                 <span className="md:order-1">{t('hero_quote2_topic') || 'Enhancing student engagement in speaking activities'}</span>
               </h4>

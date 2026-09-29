@@ -6,8 +6,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useLanguage } from '../contexts/LanguageContext';
 
-import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
+// 💡 Import Constants จังหวัด
+import { THAI_PROVINCES } from '../constants/Province';
+
+// 🟢 1. Import TinyMCE Editor แทน ReactQuill
+import { Editor } from '@tinymce/tinymce-react';
 
 interface AuthorTag {
   id: string | null;
@@ -33,7 +36,7 @@ const CreateMemberWorks = () => {
   const [alertInfo, setAlertInfo] = useState({ show: false, type: 'success', message: '' });
 
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(''); // 💡 เก็บ HTML จาก TinyMCE
   const [links, setLinks] = useState([{ title: '', url: '' }]);
   
   const [authors, setAuthors] = useState<AuthorTag[]>([]);
@@ -41,19 +44,16 @@ const CreateMemberWorks = () => {
   const [authorSuggestions, setAuthorSuggestions] = useState<any[]>([]);
   const [isSearchingAuthor, setIsSearchingAuthor] = useState(false);
 
-  // 💡 State สำหรับฟิลด์ใหม่ (ตัด School/Province ออก ใช้แค่ Year/Date)
+  const [schoolName, setSchoolName] = useState('');
   const [yearCreated, setYearCreated] = useState('');
+  const [schoolProvince, setSchoolProvince] = useState('');
+  const [provinceSearch, setProvinceSearch] = useState('');
+  const [isProvinceOpen, setIsProvinceOpen] = useState(false);
 
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
   const [tagSuggestions, setTagSuggestions] = useState<string[]>([]);
   const [isSearchingTag, setIsSearchingTag] = useState(false);
-
-  const modules = {
-    toolbar: [
-      ['bold', 'italic', 'underline', 'strike', { 'color': [] }, 'link', { 'list': 'ordered'}, { 'list': 'bullet' }],
-    ],
-  };
 
   const showCustomAlert = (type: 'success' | 'error', message: string, redirectPath?: string) => {
     setAlertInfo({ show: true, type, message });
@@ -169,7 +169,6 @@ const CreateMemberWorks = () => {
           const { data: userData } = await supabase.from('user').select('role').eq('id', user.id).single();
           const userRole = userData?.role?.toLowerCase() || 'user';
 
-          // 💡 ดึงจากตาราง member_works
           const { data, error } = await supabase
             .from('member_works')
             .select('*')
@@ -189,7 +188,17 @@ const CreateMemberWorks = () => {
 
             setTitle(data.title || '');
             setContent(data.description || ''); 
+            
+            setSchoolName(data.school_name || '');
             setYearCreated(data.year_created || '');
+            
+            setSchoolProvince(data.school_province || '');
+            if (data.school_province) {
+              const foundProv = THAI_PROVINCES.find(
+                (p: (typeof THAI_PROVINCES)[number]) => p.value === data.school_province
+              );
+              if (foundProv) setProvinceSearch(foundProv.label);
+            }
 
             if (data['Link to work']) {
               let parsedLinks = [{ title: '', url: '' }];
@@ -356,10 +365,11 @@ const CreateMemberWorks = () => {
         "Link to work": validLinks,
         author_name: authors.map(a => a.name).join(', '), 
         author_data: authors,
+        school_name: schoolName.trim() || null, 
+        school_province: schoolProvince || null, 
         year_created: yearCreated.trim() || null
       };
 
-      // 💡 บันทึกลงตาราง member_works
       if (isEditMode) {
         const { error: updateError } = await supabase.from('member_works').update(workDataToSave).eq('id', id);
         if (updateError) throw updateError;
@@ -487,15 +497,27 @@ const CreateMemberWorks = () => {
               )}
             </div>
 
-            {/* Rich Text Editor */}
-            <div className="editor-container">
-              <ReactQuill 
-                theme="snow" 
-                value={content} 
-                onChange={setContent} 
-                modules={modules}
-                placeholder={t('member_work_desc_placeholder') || 'อธิบายรายละเอียดผลงานของคุณที่นี่...'}
-                className="min-h-[300px] text-xl text-slate-700"
+            {/* 🟢 2. Rich Text Editor: เปลี่ยนเป็น TinyMCE */}
+            <div className="editor-container border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+              <Editor
+                apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
+                value={content}
+                onEditorChange={(newContent) => setContent(newContent)}
+                init={{
+                  height: 500,
+                  menubar: true, /* 💡 เปิดแถบ Menu bar ด้านบนเพื่อเข้าถึงเมนูแทรกตารางแบบลึก */
+                  plugins: [
+                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                    'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                  ],
+                  toolbar: 'undo redo | blocks | ' +
+                    'bold italic forecolor backcolor | alignleft aligncenter ' +
+                    'alignright alignjustify | bullist numlist outdent indent | ' +
+                    'table image link | removeformat | help', // 💡 มีปุ่ม table ให้กดตรงนี้ด้วย
+                  content_style: 'body { font-family: "Sarabun", "Prompt", sans-serif; font-size: 1.125rem; color: #334155; } table { border-collapse: collapse; width: 100%; } td, th { border: 1px solid #cbd5e1; padding: 8px; }',
+                  placeholder: 'อธิบายรายละเอียดผลงานของคุณที่นี่... \n(คุณสามารถสร้างตารางได้โดยคลิกที่เมนู Table ด้านบน หรือปุ่มตารางที่แถบเครื่องมือ)',
+                }}
               />
             </div>
           </div>
@@ -558,12 +580,67 @@ const CreateMemberWorks = () => {
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex flex-col gap-3">
-              <label className="text-[#1e3a8a] text-2xl font-bold">{t('date_created') || 'วันเดือนปีที่สร้างผลงาน'}</label>
+              <label className="text-[#1e3a8a] text-2xl font-bold">{t('school_name') || 'ชื่อโรงเรียนต้นสังกัด'}</label>
               <input 
                 type="text" 
-                placeholder={t('date_created_placeholder') || 'เช่น 12 สิงหาคม 2567'} 
+                placeholder={t('school_name_placeholder') || 'เช่น โรงเรียนเตรียมอุดมศึกษา...'} 
+                value={schoolName} 
+                onChange={(e) => setSchoolName(e.target.value)} 
+                className="w-full p-3.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white outline-none text-xl text-slate-700" 
+              />
+            </div>
+            
+            <div className="flex flex-col gap-3 relative">
+              <label className="text-[#1e3a8a] text-2xl font-bold">{t('province') || 'จังหวัด'}</label>
+              <input
+                type="text"
+                placeholder={t('search_province') || '-- พิมพ์เพื่อค้นหาจังหวัด --'}
+                value={provinceSearch}
+                onChange={(e) => {
+                  setProvinceSearch(e.target.value);
+                  setSchoolProvince('');
+                  setIsProvinceOpen(true);
+                }}
+                onFocus={() => setIsProvinceOpen(true)}
+                onBlur={() => setTimeout(() => setIsProvinceOpen(false), 200)}
+                className="w-full p-3.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white outline-none text-xl text-slate-700"
+              />
+              <div className="absolute right-4 top-[65px] pointer-events-none text-slate-400">
+                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                   <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                 </svg>
+              </div>
+
+              {isProvinceOpen && (
+                <div className="absolute top-[90px] z-20 w-full bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                  {THAI_PROVINCES.filter((p: { value: string; label: string }) => p.label.includes(provinceSearch)).length > 0 ? (
+                    THAI_PROVINCES.filter((p: { value: string; label: string }) => p.label.includes(provinceSearch)).map((prov: { value: string; label: string }) => (
+                      <div 
+                        key={prov.value} 
+                        onClick={() => {
+                          setSchoolProvince(prov.value);
+                          setProvinceSearch(prov.label);
+                          setIsProvinceOpen(false);
+                        }}
+                        className="p-3 hover:bg-slate-50 cursor-pointer text-slate-700 text-lg border-b border-slate-100 last:border-0 transition-colors"
+                      >
+                        {prov.label}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-4 text-center text-slate-500 text-lg">{t('no_province_found') || 'ไม่พบจังหวัดที่ค้นหา'}</div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <label className="text-[#1e3a8a] text-2xl font-bold">{t('year_created') || 'ปีที่สร้างผลงาน'}</label>
+              <input 
+                type="text" 
+                placeholder={t('year_created_placeholder') || 'เช่น พ.ศ. 2567, 2024'} 
                 value={yearCreated} 
                 onChange={(e) => setYearCreated(e.target.value)} 
                 className="w-full p-3.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white outline-none text-xl text-slate-700" 
@@ -686,32 +763,6 @@ const CreateMemberWorks = () => {
 
       </div>
 
-      <style>{`
-        .editor-container .ql-container {
-          font-family: inherit;
-          font-size: 1.125rem;
-          border: none !important;
-        }
-        .editor-container .ql-toolbar {
-          position: sticky;
-          top: 80px; 
-          z-index: 40;
-          background-color: white;
-          border: none !important;
-          border-bottom: 1px solid #e2e8f0 !important;
-          margin-bottom: 1rem;
-          padding: 10px 0;
-        }
-        .editor-container .ql-editor {
-          padding: 0;
-          min-height: 300px;
-        }
-        .editor-container .ql-editor.ql-blank::before {
-          font-style: italic;
-          color: #94a3b8;
-          left: 0;
-        }
-      `}</style>
     </div>
   );
 };

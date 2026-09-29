@@ -36,7 +36,7 @@ const NewsSection: React.FC<NewsSectionProps> = memo(({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
           
           {/* Card 1: Onsite Training */}
-          <div onClick={() => onOpenInfoModal('onsite')} className="bg-slate-100 p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-start group">
+          <div onClick={() => onOpenInfoModal('onsite')} className="bg-blue-100 p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-start group">
             {/* 💡 ปรับสีพื้นหลังโลโก้เป็นสีฟ้าอ่อน ให้ดูกลมกลืนและสมดุลกับพื้นหลังการ์ด */}
             <div className="w-16 h-16 bg-[#1e3a8a] text-white rounded-2xl flex items-center justify-center mb-6">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>
@@ -53,7 +53,7 @@ const NewsSection: React.FC<NewsSectionProps> = memo(({
           </div>
 
           {/* Card 2: Online Mentoring */}
-          <div onClick={() => onOpenInfoModal('online')} className="bg-slate-100 p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-start group">
+          <div onClick={() => onOpenInfoModal('online')} className="bg-blue-100 p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-start group">
             {/* 💡 ปรับสีพื้นหลังโลโก้เป็นสีฟ้าอ่อน ให้ดูกลมกลืนและสมดุลกับพื้นหลังการ์ด */}
             <div className="w-16 h-16 bg-[#1e3a8a] text-white rounded-2xl flex items-center justify-center mb-6">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" /></svg>
