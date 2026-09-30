@@ -532,7 +532,7 @@ const MemberWorkDetail = () => {
                      [&>ul]:text-lg md:[&>ul]:text-xl lg:[&>ul]:text-[22px] [&>ul]:list-disc [&>ul]:pl-8 [&>ul]:mb-6 [&>ul>li]:mb-3
                      [&>ol]:text-lg md:[&>ol]:text-xl lg:[&>ol]:text-[22px] [&>ol]:list-decimal [&>ol]:pl-8 [&>ol]:mb-6 [&>ol>li]:mb-3
                      [&>pre]:overflow-x-auto [&>pre]:bg-slate-100 [&>pre]:p-5 [&>pre]:rounded-xl [&>pre]:text-base"
-          dangerouslySetInnerHTML={{ __html: parseShortcodes(translatedContent || showcase.description || '') }}
+          dangerouslySetInnerHTML={{ __html: parseShortcodes(translatedContent || work.description || '') }}
         />
 
         {/* ปุ่ม Link to Work (ถ้ามี) */}
