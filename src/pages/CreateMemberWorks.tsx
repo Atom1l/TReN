@@ -9,7 +9,6 @@ import { useLanguage } from '../contexts/LanguageContext';
 // 💡 Import Constants จังหวัด
 import { THAI_PROVINCES } from '../constants/Province';
 
-// 🟢 1. Import TinyMCE Editor แทน ReactQuill
 import { Editor } from '@tinymce/tinymce-react';
 
 interface AuthorTag {
@@ -36,7 +35,7 @@ const CreateMemberWorks = () => {
   const [alertInfo, setAlertInfo] = useState({ show: false, type: 'success', message: '' });
 
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState(''); // 💡 เก็บ HTML จาก TinyMCE
+  const [content, setContent] = useState(''); 
   const [links, setLinks] = useState([{ title: '', url: '' }]);
   
   const [authors, setAuthors] = useState<AuthorTag[]>([]);
@@ -455,80 +454,109 @@ const CreateMemberWorks = () => {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-5xl mx-auto px-4 py-8"> {/* 💡 ปรับให้แคบลงนิดนึงเพื่อให้ทรง Card ดูสวยขึ้น */}
         
-        <div className="text-center mb-10 mt-14">
-          <h1 className="text-5xl lg:text-7xl font-bold text-[#1e3a8a] mb-2">
+        <div className="text-center mb-10 mt-6 sm:mt-10">
+          <h1 className="text-4xl lg:text-6xl font-bold text-[#1e3a8a] mb-3">
             {isEditMode ? (t('edit_member_work_title') || 'แก้ไขผลงานสมาชิก') : (t('create_member_work') || 'เพิ่มผลงานสมาชิก')}
           </h1>
-          <p className="text-xl text-slate-500">
+          <p className="text-lg text-slate-500">
             {t('create_member_work_desc') || 'แบ่งปันผลงาน กิจกรรม และความสำเร็จของคุณให้กับสมาชิกเครือข่าย'}
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-          <div className="p-8 sm:p-12">
+        {/* ==================== ก้อนที่ 1: Header (Title & Thumbnail) ==================== */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 sm:p-10 mb-8">
+          {/* Title Input */}
+          <input
+            type="text"
+            placeholder={t('member_work_title_placeholder') || 'ชื่อผลงาน หรือชื่อกิจกรรม...'}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full h-auto text-3xl sm:text-4xl leading-[1.5] font-bold text-[#1e3a8a] placeholder-slate-300 border-b border-slate-200 pt-2 pb-5 mb-8 focus:outline-none focus:border-[#1e3a8a] transition-colors bg-transparent"
+          />
+
+          {/* Thumbnail Upload */}
+          <div 
+            onClick={() => fileInputRef.current?.click()}
+            className={`w-full h-48 sm:h-64 sm:mb-2 bg-slate-50 rounded-xl border-2 border-dashed border-slate-300 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition-colors relative overflow-hidden group`}
+          >
+            <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/jpeg, image/png, image/webp" className="hidden" />
             
-            {/* Title Input */}
-            <input
-              type="text"
-              placeholder={t('member_work_title_placeholder') || 'ชื่อผลงาน หรือชื่อกิจกรรม...'}
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full h-auto text-3xl sm:text-4xl leading-[1.5] font-bold text-[#1e3a8a] placeholder-slate-300 border-b border-slate-200 pt-2 pb-4 mb-8 focus:outline-none focus:border-[#1e3a8a] transition-colors bg-transparent"
-            />
-
-            {/* Thumbnail Upload */}
-            <div 
-              onClick={() => fileInputRef.current?.click()}
-              className={`w-full h-48 sm:h-64 mb-8 bg-slate-200 rounded-lg border-2 border-dashed border-slate-300 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition-colors relative overflow-hidden group`}
-            >
-              <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/jpeg, image/png, image/webp" className="hidden" />
-              
-              {previewUrl ? (
-                <>
-                  <img src={previewUrl} alt="Cover Preview" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="text-white font-medium">{t('click_change_image') || 'กดเพื่อเปลี่ยนรูปภาพ'}</span>
-                  </div>
-                </>
-              ) : (
-                <span className="text-xl text-slate-500 italic">{t('add_member_work_cover') || 'เพิ่มรูปภาพประกอบผลงานที่นี่'}</span>
-              )}
-            </div>
-
-            {/* 🟢 2. Rich Text Editor: เปลี่ยนเป็น TinyMCE */}
-            <div className="editor-container border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
-              <Editor
-                apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
-                value={content}
-                onEditorChange={(newContent) => setContent(newContent)}
-                init={{
-                  height: 500,
-                  menubar: true, /* 💡 เปิดแถบ Menu bar ด้านบนเพื่อเข้าถึงเมนูแทรกตารางแบบลึก */
-                  plugins: [
-                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                    'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-                  ],
-                  toolbar: 'undo redo | blocks | ' +
-                    'bold italic forecolor backcolor | alignleft aligncenter ' +
-                    'alignright alignjustify | bullist numlist outdent indent | ' +
-                    'table image link | removeformat | help', // 💡 มีปุ่ม table ให้กดตรงนี้ด้วย
-                  content_style: 'body { font-family: "Sarabun", "Prompt", sans-serif; font-size: 1.125rem; color: #334155; } table { border-collapse: collapse; width: 100%; } td, th { border: 1px solid #cbd5e1; padding: 8px; }',
-                  placeholder: 'อธิบายรายละเอียดผลงานของคุณที่นี่... \n(คุณสามารถสร้างตารางได้โดยคลิกที่เมนู Table ด้านบน หรือปุ่มตารางที่แถบเครื่องมือ)',
-                }}
-              />
-            </div>
+            {previewUrl ? (
+              <>
+                <img src={previewUrl} alt="Cover Preview" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="text-white font-medium">{t('click_change_image') || 'กดเพื่อเปลี่ยนรูปภาพ'}</span>
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-slate-400">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                </svg>
+                <span className="text-lg text-slate-500 font-medium">{t('add_member_work_cover') || 'อัปโหลดรูปภาพปกผลงาน'}</span>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* ==================== Metadata Section (Authors, Links, Tags) ==================== */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-10 space-y-8 mb-20">
-          
+        {/* ==================== ก้อนที่ 2: Content (TinyMCE) ==================== */}
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-[#1e3a8a] mt-16 mb-4 flex items-center justify-center gap-2 pl-1">
+            {t('view')}
+          </h2>
+          <div className="editor-container shadow-sm rounded-2xl overflow-hidden">
+            <Editor
+              apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
+              value={content}
+              onEditorChange={(newContent) => setContent(newContent)}
+              init={{
+                height: 550,
+                menubar: true, 
+                plugins: [
+                  'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                  'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                  'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                ],
+                toolbar: 'undo redo | blocks | ' +
+                  'bold italic forecolor backcolor | alignleft aligncenter ' +
+                  'alignright alignjustify | bullist numlist outdent indent | ' +
+                  'table image link | removeformat | help', 
+                content_style: `
+                  body { font-family: "Sarabun", "Prompt", sans-serif; font-size: 1.125rem; color: #334155; } 
+                  table { border-collapse: collapse; width: 100%; } 
+                  td, th { border: 1px solid #cbd5e1; padding: 8px; }
+                `,
+                placeholder: 'อธิบายรายละเอียดผลงาน กรณีศึกษา หรือข้อค้นพบของคุณที่นี่... \n(คลิกที่เมนู Table ด้านบน หรือปุ่มตารางที่แถบเครื่องมือเพื่อสร้างตาราง)',
+                skin: 'oxide',
+                content_css: 'default',
+                branding: false,
+                elementpath: false,
+                // 💡 ซ่อนกรอบของ TinyMCE ให้กลายเป็น 0 เพราะเราคลุมด้วย shadow-sm และ rounded-2xl ไว้ด้านนอกแล้ว
+                setup: (editor: any) => {
+                  editor.on('init', () => {
+                    const container = editor.getContainer();
+                    if (container) {
+                      container.style.border = '1px solid #e2e8f0'; 
+                      container.style.borderRadius = '1rem'; 
+                      container.style.boxShadow = 'none'; 
+                    }
+                  });
+                }
+              }}
+            />
+          </div>
+        </div>
+
+        {/* ==================== ก้อนที่ 3: Metadata Section (Authors, School, Links, Tags) ==================== */}
+        <h2 className="text-3xl font-bold text-[#1e3a8a] mt-16 mb-4 flex items-center justify-center gap-2 pl-1">
+          {t('additinal_info')}
+        </h2>
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 sm:p-10 space-y-10 mb-20">
           {/* Authors */}
           <div className="relative">
-            <label className="block text-[#1e3a8a] text-2xl font-bold mb-3">{t('create_member_work_author') || 'ชื่อผู้สร้างผลงาน (Author)'}</label>
+            <label className="block text-slate-700 text-xl font-bold mb-3">{t('create_member_work_author') || 'ชื่อผู้สร้างผลงาน (Author)'}</label>
             <div className="w-full flex flex-wrap items-center gap-2 p-3 border border-slate-300 rounded-xl focus-within:ring-2 focus-within:ring-[#1e3a8a] transition-all bg-white min-h-[55px]">
               {authors.map((author, index) => (
                 <span key={index} className="flex items-center gap-1.5 bg-blue-100 text-[#1e3a8a] px-3 py-1.5 rounded-md text-lg font-medium shadow-sm">
@@ -582,7 +610,7 @@ const CreateMemberWorks = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex flex-col gap-3">
-              <label className="text-[#1e3a8a] text-2xl font-bold">{t('school_name') || 'ชื่อโรงเรียนต้นสังกัด'}</label>
+              <label className="text-slate-700 text-xl font-bold">{t('school_name') || 'ชื่อโรงเรียนต้นสังกัด'}</label>
               <input 
                 type="text" 
                 placeholder={t('school_name_placeholder') || 'เช่น โรงเรียนเตรียมอุดมศึกษา...'} 
@@ -593,7 +621,7 @@ const CreateMemberWorks = () => {
             </div>
             
             <div className="flex flex-col gap-3 relative">
-              <label className="text-[#1e3a8a] text-2xl font-bold">{t('province') || 'จังหวัด'}</label>
+              <label className="text-slate-700 text-xl font-bold">{t('province') || 'จังหวัด'}</label>
               <input
                 type="text"
                 placeholder={t('search_province') || '-- พิมพ์เพื่อค้นหาจังหวัด --'}
@@ -607,14 +635,14 @@ const CreateMemberWorks = () => {
                 onBlur={() => setTimeout(() => setIsProvinceOpen(false), 200)}
                 className="w-full p-3.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white outline-none text-xl text-slate-700"
               />
-              <div className="absolute right-4 top-[65px] pointer-events-none text-slate-400">
+              <div className="absolute right-4 top-[55px] pointer-events-none text-slate-400">
                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
                    <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                  </svg>
               </div>
 
               {isProvinceOpen && (
-                <div className="absolute top-[90px] z-20 w-full bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                <div className="absolute top-[80px] z-20 w-full bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
                   {THAI_PROVINCES.filter((p: { value: string; label: string }) => p.label.includes(provinceSearch)).length > 0 ? (
                     THAI_PROVINCES.filter((p: { value: string; label: string }) => p.label.includes(provinceSearch)).map((prov: { value: string; label: string }) => (
                       <div 
@@ -637,7 +665,7 @@ const CreateMemberWorks = () => {
             </div>
 
             <div className="flex flex-col gap-3">
-              <label className="text-[#1e3a8a] text-2xl font-bold">{t('year_created') || 'ปีที่สร้างผลงาน'}</label>
+              <label className="text-slate-700 text-xl font-bold">{t('year_created') || 'ปีที่สร้างผลงาน'}</label>
               <input 
                 type="text" 
                 placeholder={t('year_created_placeholder') || 'เช่น พ.ศ. 2567, 2024'} 
@@ -651,7 +679,7 @@ const CreateMemberWorks = () => {
           {/* Links */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <label className="flex items-baseline gap-2 text-[#1e3a8a] text-2xl font-bold">
+              <label className="flex items-baseline gap-2 text-slate-700 text-xl font-bold">
                 {t('link_to_work_member') || 'ลิงก์แนบผลงานเพิ่มเติม'}
               </label>
               <button 
@@ -706,7 +734,7 @@ const CreateMemberWorks = () => {
 
           {/* Tags */}
           <div className="relative">
-            <label className="block text-[#1e3a8a] text-2xl font-bold mb-3">{t('category_and_tags') || 'Tags'}</label>
+            <label className="block text-slate-700 text-xl font-bold mb-3">{t('category_and_tags') || 'Tags'}</label>
             <div className="w-full flex flex-wrap items-center gap-2 p-3 border border-slate-300 rounded-xl focus-within:ring-2 focus-within:ring-[#1e3a8a] transition-all bg-white min-h-[55px]">
               {tags.map((tag, index) => (
                 <span key={index} className="flex items-center gap-1.5 bg-[#EBF1FA] text-[#1e3a8a] px-3.5 py-1.5 rounded-md text-lg font-medium shadow-sm">

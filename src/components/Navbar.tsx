@@ -264,7 +264,8 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="z-50 font-sans w-full bg-white border-b border-slate-200 flex flex-col relative">
+      {/* 💡 เปลี่ยนจาก relative เป็น sticky top-0 z-[100] */}
+      <nav className="sticky top-0 z-[100] font-sans w-full bg-white border-b border-slate-200 flex flex-col shadow-sm">
         
         {/* ================= 1. Top Bar (Facebook & Language) ================= */}
         <div className="w-full bg-[#1e3a8a] border-b border-slate-100 py-1.5 px-4 lg:px-8 xl:px-12 flex justify-end items-center gap-4">
@@ -336,7 +337,6 @@ const Navbar = () => {
                           : 'opacity-0 invisible translate-y-2 lg:group-hover:opacity-100 lg:group-hover:visible lg:group-hover:translate-y-0'
                       }`}>
                         {menu.dropdown.map(sub => (
-                          // 💡 แก้ไข SubDropdown: กลับไปใช้รูปแบบกางออกด้านขวา และใช้ Invisible Bridge
                           <div key={sub.name} className="relative group/sub">
                             <Link 
                               to={sub.path} 
@@ -351,7 +351,7 @@ const Navbar = () => {
                               )}
                             </Link>
 
-                            {/* 💡 Invisible Bridge ป้องกันเมนูปิด */}
+                            {/* Invisible Bridge */}
                             {sub.subDropdown && (
                               <div className="hidden lg:block absolute top-0 -right-4 w-4 h-full z-40 bg-transparent pointer-events-auto"></div>
                             )}
@@ -390,17 +390,7 @@ const Navbar = () => {
                 <div className="w-[85px] lg:w-[95px] xl:w-[115px] h-[36px] bg-slate-100 animate-pulse rounded-lg"></div>
               ) : user && userData ? (
                 <div className="relative" ref={dropdownRef}>
-                  <button 
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="w-10 h-10 bg-primary hover:bg-secondary text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md transition-transform active:scale-95 flex-shrink-0 overflow-hidden cursor-pointer border-2 border-transparent hover:border-blue-200"
-                    title={userData.first_name}
-                  >
-                    {userData.profilepic ? (
-                      <img src={userData.profilepic} alt="Profile" className="w-full h-full object-cover" />
-                    ) : (
-                      userData.first_name?.[0]
-                    )}
-                  </button>
+                  
 
                   {isDropdownOpen && (
                     <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 transform transition-all">
@@ -430,13 +420,11 @@ const Navbar = () => {
                 </div>
               ) : (
                 <>
-                  {/* 💡 แสดงปุ่มเต็มใบเฉพาะจอใหญ่ (xl ขึ้นไป) */}
                   <button
                     onClick={() => setIsLoginModalOpen(true)}
                     className="hidden xl:flex bg-primary hover:bg-secondary text-white px-4 py-2 text-[0.95rem] font-bold transition-all active:scale-95 shadow-md shadow-primary/10 rounded-xl cursor-pointer">
                     {t('nav_register') || 'สมัครสมาชิก'}
                   </button>
-                  {/* 💡 แสดงปุ่มย่อรูปไอคอนในมือถือถึงจอ lg เพื่อประหยัดพื้นที่ */}
                   <button
                     onClick={() => setIsLoginModalOpen(true)}
                     className="xl:hidden bg-primary hover:bg-secondary text-white w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center font-bold transition-all active:scale-95 shadow-md shadow-primary/10 rounded-xl cursor-pointer">
