@@ -36,16 +36,12 @@ const NewsSection: React.FC<NewsSectionProps> = memo(({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
           
           {/* Card 1: Onsite Training */}
-          <div onClick={() => onOpenInfoModal('onsite')} className="bg-blue-100 p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-start group">
-            {/* 💡 ปรับสีพื้นหลังโลโก้เป็นสีฟ้าอ่อน ให้ดูกลมกลืนและสมดุลกับพื้นหลังการ์ด */}
-            <div className="w-16 h-16 bg-[#1e3a8a] text-white rounded-2xl flex items-center justify-center mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>
-            </div>
+          <div onClick={() => onOpenInfoModal('onsite')} className="bg-blue-200 p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-start group">
             <h3 className="text-2xl md:text-3xl font-bold text-[#1e3a8a] mb-4">{t('box_onsite_title') || 'รูปแบบการอบรม Onsite Training'}</h3>
             <p className="text-slate-800 text-lg md:text-xl font-light leading-relaxed mb-8 flex-1">
               {t('box_onsite_desc') || 'กระบวนการพัฒนาครูอย่างเป็นขั้นตอนตลอด 3 ระยะ เริ่มตั้งแต่ Workshop การทำวิจัย ลงมือปฏิบัติจริงในชั้นเรียน และนำเสนอผลงาน พร้อมโอบอุ้มด้วยระบบนิเวศการเรียนรู้'}
             </p>
-            <div className="w-full pt-6 border-t border-slate-200 flex justify-end">
+            <div className="w-full pt-6 flex justify-end">
               <span className="bg-[#1e3a8a] text-white px-6 py-3 rounded-xl font-bold text-lg flex items-center gap-2 hover:bg-blue-900 hover:shadow-md transition-all duration-300 group-hover:translate-x-1">
                 {t('read_more') || 'อ่านเพิ่มเติม'} <span aria-hidden="true">&rarr;</span>
               </span>
@@ -53,16 +49,12 @@ const NewsSection: React.FC<NewsSectionProps> = memo(({
           </div>
 
           {/* Card 2: Online Mentoring */}
-          <div onClick={() => onOpenInfoModal('online')} className="bg-blue-100 p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-start group">
-            {/* 💡 ปรับสีพื้นหลังโลโก้เป็นสีฟ้าอ่อน ให้ดูกลมกลืนและสมดุลกับพื้นหลังการ์ด */}
-            <div className="w-16 h-16 bg-[#1e3a8a] text-white rounded-2xl flex items-center justify-center mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" /></svg>
-            </div>
+          <div onClick={() => onOpenInfoModal('online')} className="bg-blue-200 p-8 md:p-10 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-start group">
             <h3 className="text-2xl md:text-3xl font-bold text-[#1e3a8a] mb-4">{t('box_online_title') || 'การให้คำปรึกษาออนไลน์ Online Mentoring'}</h3>
             <p className="text-slate-800 text-lg md:text-xl font-light leading-relaxed mb-8 flex-1">
               {t('box_online_desc') || 'การให้คำปรึกษาโดยครูพี่เลี้ยงผู้มีประสบการณ์ เน้นการสร้างพื้นที่ปลอดภัย รับฟังอย่างไม่ตัดสิน และใช้วิธีตั้งคำถามเชิงสะท้อนคิด เพื่อปลูกฝังให้ครูกลายเป็น Reflective Teacher'}
             </p>
-            <div className="w-full pt-6 border-t border-slate-200 flex justify-end">
+            <div className="w-full pt-6 flex justify-end">
               <span className="bg-[#1e3a8a] text-white px-6 py-3 rounded-xl font-bold text-lg flex items-center gap-2 hover:bg-blue-900 hover:shadow-md transition-all duration-300 group-hover:translate-x-1">
                 {t('read_more') || 'อ่านเพิ่มเติม'} <span aria-hidden="true">&rarr;</span>
               </span>
@@ -186,37 +178,57 @@ const NewsSection: React.FC<NewsSectionProps> = memo(({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {isLoading ? (
                Array(3).fill(0).map((_, i) => <div key={i} className="h-80 bg-slate-200 animate-pulse rounded-3xl"></div>)
-            ) : memberWorks && memberWorks.length > 0 ? (
-              memberWorks.map((work) => (
+            ) : (
+              <>
+                {/* 💡 ฮาร์ดโค้ดการ์ดบทความของครูศิรวิชญ์ ให้โชว์เป็นใบแรกเสมอ */}
                 <Link 
-                  key={work.id} 
-                  to={`/member-work/${work.id}`} 
+                  to="/member-work/sirawit" 
                   className="flex flex-col bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer group"
                 >
-                  {/* 💡 1. ส่วนเนื้อหา (ใช้โครงสร้างเดียวกับ Showcases เป๊ะๆ) */}
                   <div className="p-6 md:p-8 flex-1 flex flex-col bg-white relative z-10">
                     <h4 className="text-2xl font-bold text-[#1e3a8a] line-clamp-3 leading-snug group-hover:underline mb-4">
-                      {work.title}
+                      คำถามที่พาเราเดินไกลกว่าที่คิด
                     </h4>
                     <p className="text-base text-lg font-semibold text-slate-600 mt-auto px-1 pt-4 border-t border-slate-100 line-clamp-1">
-                      {t('by_author') || 'โดย'} <span className="text-[#1e3a8a]">{work.author_name || 'Unknown'}</span>
+                      {t('by_author') || 'โดย'} <span className="text-[#1e3a8a]">ครูศิรวิชญ์ ศรีเขียว</span>
                     </p>
                   </div>
-
-                  {/* 💡 2. ส่วนรูปภาพ (ย้ายมาไว้ด้านล่างเหมือน Showcases) */}
                   <div className="h-32 sm:h-40 bg-slate-50 overflow-hidden relative border-t border-slate-100">
-                    {work.thumbnail_url ? (
-                      <img src={work.thumbnail_url} loading="lazy" decoding="async" alt={work.title} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-300 text-sm bg-slate-50">No Image</div>
-                    )}
+                    <img 
+                      src="/Showcases/Sirawit.webp" // 💡 เช็ก Path รูปภาพให้ตรงกับที่ใช้จริงด้วยนะครับ
+                      loading="lazy" 
+                      decoding="async" 
+                      alt="คำถามที่พาเราเดินไกลกว่าที่คิด" 
+                      className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" 
+                    />
                   </div>
                 </Link>
-              ))
-            ) : (
-              <div className="col-span-full text-slate-400 text-lg text-center py-16 border border-dashed border-slate-200 rounded-3xl">
-                {t('no_member_works_found') || 'ยังไม่มีผลงานสมาชิกในขณะนี้'}
-              </div>
+
+                {/* 💡 วนลูปการ์ดอื่นๆ ที่ดึงมาจาก Database (ตัดเอาแค่ 2 อันแรกมาโชว์ เพื่อให้รวมกับใบฮาร์ดโค้ดแล้วเป็น 3 ใบพอดี) */}
+                {memberWorks && memberWorks.length > 0 && memberWorks.slice(0, 2).map((work) => (
+                  <Link 
+                    key={work.id} 
+                    to={`/member-work/${work.id}`} 
+                    className="flex flex-col bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer group"
+                  >
+                    <div className="p-6 md:p-8 flex-1 flex flex-col bg-white relative z-10">
+                      <h4 className="text-2xl font-bold text-[#1e3a8a] line-clamp-3 leading-snug group-hover:underline mb-4">
+                        {work.title}
+                      </h4>
+                      <p className="text-base text-lg font-semibold text-slate-600 mt-auto px-1 pt-4 border-t border-slate-100 line-clamp-1">
+                        {t('by_author') || 'โดย'} <span className="text-[#1e3a8a]">{work.author_name || 'Unknown'}</span>
+                      </p>
+                    </div>
+                    <div className="h-32 sm:h-40 bg-slate-50 overflow-hidden relative border-t border-slate-100">
+                      {work.thumbnail_url ? (
+                        <img src={work.thumbnail_url} loading="lazy" decoding="async" alt={work.title} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-slate-300 text-sm bg-slate-50">No Image</div>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+              </>
             )}
           </div>
         </div>

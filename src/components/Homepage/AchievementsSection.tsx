@@ -27,8 +27,8 @@ const AchievementsSection = () => {
             </div>
             
             {/* 💡 ปรับฟอนต์ให้ไซส์เดียวกันทั้งหมด รวมตัวเลขและข้อความเข้าด้วยกัน */}
-            <p className="text-lg md:text-xl text-slate-800 font-light leading-relaxed">
-              <strong className="font-bold text-[#1e3a8a]">{t('three_hundred_plus') || '300+'} {t('registered_teachers') || 'ครูผู้เข้าร่วมโครงการ'}</strong> {t('over_provinces') || 'ครอบคลุม'} <strong className='text-[#1e3a8a] font-bold'>{t('over_provinces2') || '50 จังหวัด'}</strong> {t('over_provinces3') || 'ทั่วประเทศ'}
+            <p className="text-lg md:text-xl text-slate-800 font-normal leading-relaxed">
+              <strong className="font-bold text-[#1e3a8a]">{t('registered_teachers') || 'ครูผู้เข้าร่วมโครงการ'} {t('three_hundred_plus') || '300+'} </strong> {t('over_provinces') || 'ครอบคลุม'} <strong className='text-[#1e3a8a] font-bold'>{t('over_provinces2') || '50 จังหวัด'}</strong> {t('over_provinces3') || 'ทั่วประเทศ'}
             </p>
           </div>
 
@@ -43,8 +43,8 @@ const AchievementsSection = () => {
             </div>
             
             {/* 💡 ปรับฟอนต์ให้ไซส์เดียวกันทั้งหมด รวมตัวเลขและข้อความเข้าด้วยกัน */}
-            <p className="text-lg md:text-xl text-slate-800 font-light leading-relaxed">
-              <strong className="font-bold text-[#1e3a8a]">{t('one_hundred_fifty_plus') || '150+'} {t('research_projects') || 'ผลงานวิจัยในชั้นเรียน'}</strong> {t('already_published') || 'ได้รับการตีพิมพ์เผยแพร่แล้วกว่า'} <strong className="text-[#1e3a8a] font-bold">{t('fifty_research_articles') || '50 เรื่อง'}</strong>
+            <p className="text-lg md:text-xl text-slate-800 font-normal leading-relaxed">
+              <strong className="font-bold text-[#1e3a8a]">{t('research_projects') || 'ผลงานวิจัยในชั้นเรียน'} {t('one_hundred_fifty_plus') || '150+'}</strong> {t('already_published') || 'ได้รับการตีพิมพ์เผยแพร่แล้วกว่า'} <strong className="text-[#1e3a8a] font-bold">{t('fifty_research_articles') || '50 เรื่อง'}</strong>
             </p>
           </div>
 
@@ -59,8 +59,8 @@ const AchievementsSection = () => {
             </div>
             
             {/* 💡 ปรับฟอนต์ให้ไซส์เดียวกันทั้งหมด รวมตัวเลขและข้อความเข้าด้วยกัน */}
-            <p className="text-lg md:text-xl text-slate-800 font-light leading-relaxed">
-              <strong className="font-bold text-[#1e3a8a]">{t('fifty_teachers') || '50'} {t('mentors') || 'ครูพี่เลี้ยงวิจัย (Mentor)'}</strong> {t('already_trained') || 'ที่ผ่านการพัฒนาศักยภาพและพร้อมทำหน้าที่หนุนเสริมเพื่อนครูในพื้นที่'}
+            <p className="text-lg md:text-xl text-slate-800 font-normal leading-relaxed">
+              <strong className="font-bold text-[#1e3a8a]">{t('mentors') || 'ครูพี่เลี้ยงวิจัย (Mentor)'} {t('fifty_teachers') || '50'}+ </strong> {t('already_trained') || 'ที่ผ่านการพัฒนาศักยภาพและพร้อมทำหน้าที่หนุนเสริมเพื่อนครูในพื้นที่'}
             </p>
           </div>
 

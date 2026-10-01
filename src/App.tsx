@@ -47,6 +47,7 @@ import ShowcaseDetail from './pages/ShowcaseDetail'
 import CreateMemberWorks from './pages/CreateMemberWorks'
 import MemberWorkDetail from './pages/MemberWorkDetail'
 import AllMemberWorks from './pages/AllMemberWorks'
+import SirawitArticle from './pages/training_details/Sirawit_ArticleDetail'
 
 function App() {
   return (
@@ -116,6 +117,7 @@ function App() {
               <Route path="/create/member-work" element={<CreateMemberWorks />}/>
               <Route path="/member-work/:id" element={<MemberWorkDetail />} />
               <Route path="/edit/member-work/:id" element={<CreateMemberWorks />} />
+              <Route path="/member-work/sirawit" element={<SirawitArticle />} />
               
               {/* Route สำหรับ Admin Dashboard */}
               <Route path="/admin-dashboard" element={<AdminLayout />}>

@@ -236,7 +236,22 @@ const AllMemberWorks = () => {
             .map(entry => entry[0]);
 
           setDynamicTags(['all', ...topTags]);
-          setMemberWorks(finalWorks);
+
+          // 💡 1. สร้าง Mock Data สำหรับบทความของครูศิรวิชญ์
+          const sirawitArticle: MemberWorkData = {
+            id: 'sirawit', // 💡 ID นี้จะทำให้ตอนคลิก ระบบวิ่งไปที่ /member-work/sirawit อัตโนมัติ!
+            title: 'คำถามที่พาเราเดินไกลกว่าที่คิด จาก EAR 2024 สู่ EAR 2026', // มีคำว่า EAR ระบบ Search จะหาเจอทันที
+            created_at: new Date(Date.now() + 100000).toISOString(), // บวกเวลาไปนิดนึงเพื่อให้โชว์เป็นลำดับแรกสุดเสมอ
+            thumbnail_url: '/Showcases/Sirawit.webp',
+            tag: 'ear', // จัดให้อยู่ในหมวด Article
+            author_id: 'mock-user-sirawit',
+            description: '',
+            author_name: 'ครูศิรวิชญ์ ศรีเขียว',
+          };
+
+          // 💡 2. เอาบทความครูศิรวิชญ์ไปต่อหน้าสุดของ Array 
+          setMemberWorks([sirawitArticle, ...finalWorks]);
+          
         }
       } catch (error) {
         console.error("Error fetching member works:", error);

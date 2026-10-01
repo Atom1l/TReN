@@ -125,7 +125,7 @@ const Knowledge = () => {
                   <p className="text-[#1e3a8a] font-medium text-xl md:text-2xl mb-3">
                     {t('knowledge_part1_subtitle') || 'สำรวจห้องเรียน ขับเคลื่อนการเรียนรู้ด้วยตัวของครูเอง'}
                   </p>
-                  <p className="text-slate-600 font-light leading-relaxed text-lg md:text-xl max-w-5xl">
+                  <p className="text-slate-600 font-light leading-relaxed text-xl md:text-2xl max-w-6xl">
                     {t('knowledge_part1_desc') || '"ห้องเรียนของคุณครู…ไม่มีใครรู้จักดีไปกว่าตัวคุณครูเอง" เปลี่ยนงานวิจัยจาก "เรื่องน่าปวดหัว" ให้กลายเป็น "เครื่องมือคู่ใจ" มาสำรวจ ค้นหา และขับเคลื่อนการเรียนรู้ของเด็กๆ ด้วยตัวคุณครูเองผ่าน Exploratory Action Research (EAR)'}
                   </p>
                 </div>
@@ -407,36 +407,6 @@ const Knowledge = () => {
                       <div className="w-full max-w-4xl mx-auto rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-white p-2">
                         <img src="../Knowledge/Ear_Diagram_2.webp" alt="EAR Example Timeline" className="w-full h-auto object-contain" />
                       </div>
-
-                      {/* เนื้อหา List เรียงจากซ้ายไปขวา */}
-                      <div className="my-6 space-y-6 text-xl md:text-2xl text-slate-800 font-light leading-relaxed pt-4">
-                        <ul className="space-y-6 pl-2">
-                          <li className="flex items-start gap-4">
-                            <div><strong className="font-bold text-[#1e3a8a]">1. Reflect:</strong> {t('knowledge_ear_ex_1') || 'นักเรียนขาดแรงจูงใจในการเรียน'}</div>
-                          </li>
-                          <li className="flex items-start gap-4">
-                            <div><strong className="font-bold text-[#1e3a8a]">2. Plan:</strong> {t('knowledge_ear_ex_2') || 'ฉันวางแผนหาวิธีเก็บข้อมูลเพื่อเข้าใจปัญหานี้'}</div>
-                          </li>
-                          <li className="flex items-start gap-4">
-                            <div><strong className="font-bold text-[#1e3a8a]">3. Observe:</strong> {t('knowledge_ear_ex_3') || 'ฉันสอบถามมุมมองความคิดเห็นของนักเรียน และขอให้เพื่อนครูเข้ามาช่วยสังเกตการสอนในห้องเรียน'}</div>
-                          </li>
-                          <li className="flex items-start gap-4">
-                            <div><strong className="font-bold text-[#1e3a8a]">4. Reflect:</strong> {t('knowledge_ear_ex_4') || 'ฉันวิเคราะห์ข้อมูลและสรุปผลได้ว่า: นักเรียนอยากมีโอกาสพูดสื่อสารในชั้นเรียนมากขึ้น'}</div>
-                          </li>
-                          <li className="flex items-start gap-4">
-                            <div><strong className="font-bold text-emerald-700">5. Plan:</strong> {t('knowledge_ear_ex_5') || 'ฉันวางแผนและออกแบบแผนการจัดการเรียนรู้ (Action Plan)'}</div>
-                          </li>
-                          <li className="flex items-start gap-4">
-                            <div><strong className="font-bold text-emerald-700">6. Act:</strong> {t('knowledge_ear_ex_6') || 'ฉันปรับการสอนโดยเน้นเน้นกิจกรรมการสนทนาแลกเปลี่ยนมากขึ้น'}</div>
-                          </li>
-                          <li className="flex items-start gap-4">
-                            <div><strong className="font-bold text-emerald-700">7. Observe:</strong> {t('knowledge_ear_ex_7') || 'ฉันสอบถามมุมมองความคิดเห็นของนักเรียนอีกครั้ง และขอให้เพื่อนครูเข้ามาช่วยสังเกตการสอน'}</div>
-                          </li>
-                          <li className="flex items-start gap-4">
-                            <div><strong className="font-bold text-emerald-700">8. Reflect:</strong> {t('knowledge_ear_ex_8') || 'ฉันวิเคราะห์ข้อมูลและสรุปผลได้ว่า: นักเรียนมีส่วนร่วมกับการเรียนมากขึ้น แต่ยังต้องการฝึกฝนเพิ่มเติมอีก'}</div>
-                          </li>
-                        </ul>
-                      </div>
                     </div>
 
                   </div>
@@ -549,7 +519,7 @@ const Knowledge = () => {
             <h2 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
               {t('knowledge_clip_title') || 'คลังคลิปเรียนรู้ EAR'}
             </h2>
-            <p className="text-2xl md:text-3xl text-slate-600 mt-3 font-normal tracking-wide leading-relaxed">
+            <p className="text-2xl md:text-3xl text-slate-500 mt-6 font-light tracking-wide leading-relaxed max-w-4xl"> 
               {t('knowledge_clip_title2')}
             </p>
           </div>
@@ -959,10 +929,10 @@ const Knowledge = () => {
           {/* --- 3. FAQ --- */}
             <div className="flex flex-col items-start py-12 md:py-16 border-t-4 border-slate-300 relative z-10 bg-[#F8FAFC]">
               <div className="mb-12 mt-16 flex flex-col items-center text-center max-w-5xl mx-auto">
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
+                <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
                   {t('knowledge_part3_title') || 'คำถามที่พบบ่อย (FAQ)'}
                 </h2>
-                <p className="text-lg md:text-xl text-slate-500 mt-6 font-light tracking-wide leading-relaxed max-w-3xl">
+                <p className="text-2xl md:text-3xl text-slate-500 mt-6 font-light tracking-wide leading-relaxed max-w-4xl">
                   {t('knowledge_faq_intro') || 'เรารวบรวมข้อสงสัยจริงจากประสบการณ์ของครูผู้ทำวิจัย โดยแบ่งออกตามขั้นตอนการทำงาน เพื่อให้คุณค้นหาคำตอบได้สะดวกรวดเร็วที่สุด'}
                 </p>
               </div>
@@ -972,31 +942,31 @@ const Knowledge = () => {
                 <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mb-16">
                   <button 
                     onClick={() => setOpenCol3s([])} // ใช้ state เดิมในการเก็บ Tab ที่กำลัง Active
-                    className={`px-6 py-3 rounded-full font-bold text-lg transition-all ${openCol3s.length === 0 ? 'bg-[#1e3a8a] text-white shadow-md' : 'bg-white text-slate-500 hover:bg-blue-50 border border-slate-200'}`}
+                    className={`px-6 py-3 rounded-full font-bold text-xl transition-all ${openCol3s.length === 0 ? 'bg-[#1e3a8a] text-white shadow-md' : 'bg-white text-slate-500 hover:bg-blue-50 border border-slate-200'}`}
                   >
                     {t('faq_tab_all') || 'ทั้งหมด (All)'}
                   </button>
                   <button 
                     onClick={() => setOpenCol3s(['general'])} 
-                    className={`px-6 py-3 rounded-full font-bold text-lg transition-all ${openCol3s.includes('general') ? 'bg-[#1e3a8a] text-white shadow-md' : 'bg-white text-slate-500 hover:bg-blue-50 border border-slate-200'}`}
+                    className={`px-6 py-3 rounded-full font-bold text-xl transition-all ${openCol3s.includes('general') ? 'bg-[#1e3a8a] text-white shadow-md' : 'bg-white text-slate-500 hover:bg-blue-50 border border-slate-200'}`}
                   >
                     {t('faq_tab_general') || 'ทั่วไป'}
                   </button>
                   <button 
                     onClick={() => setOpenCol3s(['explore'])} 
-                    className={`px-6 py-3 rounded-full font-bold text-lg transition-all ${openCol3s.includes('explore') ? 'bg-[#1e3a8a] text-white shadow-md' : 'bg-white text-slate-500 hover:bg-blue-50 border border-slate-200'}`}
+                    className={`px-6 py-3 rounded-full font-bold text-xl transition-all ${openCol3s.includes('explore') ? 'bg-[#1e3a8a] text-white shadow-md' : 'bg-white text-slate-500 hover:bg-blue-50 border border-slate-200'}`}
                   >
                     {t('faq_tab_explore') || 'ขั้นสำรวจ (Explore)'}
                   </button>
                   <button 
                     onClick={() => setOpenCol3s(['action'])} 
-                    className={`px-6 py-3 rounded-full font-bold text-lg transition-all ${openCol3s.includes('action') ? 'bg-[#1e3a8a] text-white shadow-md' : 'bg-white text-slate-500 hover:bg-blue-50 border border-slate-200'}`}
+                    className={`px-6 py-3 rounded-full font-bold text-xl transition-all ${openCol3s.includes('action') ? 'bg-[#1e3a8a] text-white shadow-md' : 'bg-white text-slate-500 hover:bg-blue-50 border border-slate-200'}`}
                   >
                     {t('faq_tab_action') || 'ขั้นวางแผนแก้ปัญหา (Action)'}
                   </button>
                   <button 
                     onClick={() => setOpenCol3s(['sharing'])} 
-                    className={`px-6 py-3 rounded-full font-bold text-lg transition-all ${openCol3s.includes('sharing') ? 'bg-[#1e3a8a] text-white shadow-md' : 'bg-white text-slate-500 hover:bg-blue-50 border border-slate-200'}`}
+                    className={`px-6 py-3 rounded-full font-bold text-xl transition-all ${openCol3s.includes('sharing') ? 'bg-[#1e3a8a] text-white shadow-md' : 'bg-white text-slate-500 hover:bg-blue-50 border border-slate-200'}`}
                   >
                     {t('faq_tab_sharing') || 'การเผยแพร่ผลงาน'}
                   </button>
@@ -1012,7 +982,7 @@ const Knowledge = () => {
                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-[#1e3a8a]">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
                          </div>
-                         <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('faq_tab_general') || 'หมวดคำถามทั่วไป'}</h3>
+                         <h3 className="text-3xl font-bold text-[#1e3a8a]">{t('faq_tab_general') || 'หมวดคำถามทั่วไป'}</h3>
                       </div>
                       
                       <AccordionItem title={t('faq_gen_q1') || 'ไม่มีเวลาทำวิจัยเลย จะแบ่งเวลามาทำ EAR ได้อย่างไร?'} isOpen={openClipSections.includes('faq.g.1')} onClick={() => toggleClipSection('faq.g.1')}>
@@ -1055,7 +1025,7 @@ const Knowledge = () => {
                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-[#1e3a8a]">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
                          </div>
-                         <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('faq_tab_explore') || 'หมวดคำถามขั้นสำรวจ (Exploratory Stage)'}</h3>
+                         <h3 className="text-3xl font-bold text-[#1e3a8a]">{t('faq_tab_explore') || 'หมวดคำถามขั้นสำรวจ (Exploratory Stage)'}</h3>
                       </div>
 
                       <AccordionItem title={t('faq_exp_q1') || 'มีปัญหาในห้องเรียนเยอะมาก จะเลือกปัญหาไหนมาทำ EAR ก่อนดี?'} isOpen={openClipSections.includes('faq.e.1')} onClick={() => toggleClipSection('faq.e.1')}>
@@ -1128,7 +1098,7 @@ const Knowledge = () => {
                          <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.829 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.487 1.509 1.333 1.509 2.316V18" /></svg>
                          </div>
-                         <h3 className="text-2xl font-bold text-emerald-700">{t('faq_tab_action') || 'หมวดขั้นวางแผนและดำเนินการแก้ไข (Action Stage)'}</h3>
+                         <h3 className="text-3xl font-bold text-emerald-700">{t('faq_tab_action') || 'หมวดขั้นวางแผนและดำเนินการแก้ไข (Action Stage)'}</h3>
                       </div>
 
                       <AccordionItem title={t('faq_act_q1') || 'จะเลือกวิธีแก้ปัญหา (Action) อย่างไรให้ตรงจุด และไม่สร้างภาระงานเพิ่ม?'} isOpen={openClipSections.includes('faq.a.1')} onClick={() => toggleClipSection('faq.a.1')}>
@@ -1171,7 +1141,7 @@ const Knowledge = () => {
                          <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" /></svg>
                          </div>
-                         <h3 className="text-2xl font-bold text-yellow-600">{t('faq_tab_sharing') || 'หมวดการเผยแพร่และแบ่งปันผลงาน'}</h3>
+                         <h3 className="text-3xl font-bold text-yellow-600">{t('faq_tab_sharing') || 'หมวดการเผยแพร่และแบ่งปันผลงาน'}</h3>
                       </div>
 
                       <AccordionItem title={t('faq_sha_q1') || 'ทำ EAR แล้วต้องเขียนรายงานเล่มหนา 5 บทหรือไม่?'} isOpen={openClipSections.includes('faq.s.1')} onClick={() => toggleClipSection('faq.s.1')}>
@@ -1234,97 +1204,92 @@ const Knowledge = () => {
         </section>
 
         {/* ================= SECTION D: Global Network ================= */}
-        <section className="pt-24 pb-16">
-          <div className="mb-12 flex flex-col items-center text-center max-w-5xl mx-auto px-4">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
+        <section className="pt-22 pb-16">
+          <div className="mb-12 flex flex-col items-center text-center mx-auto px-4 border-t-4 border-slate-300 relative z-10 bg-[#F8FAFC]">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight mt-30">
               {t('knowledge_global_title') || 'แหล่งเรียนรู้และเครือข่ายสากล'}
             </h2>
-            <p className="text-lg md:text-xl text-slate-500 mt-4 font-light tracking-wide">
-              (Global EAR Resources & Networks)
-            </p>
-            <p className="text-xl md:text-2xl text-slate-700 mt-6 font-medium leading-relaxed max-w-3xl">
-              {t('knowledge_global_desc') || '"เชื่อมโยงการเรียนรู้สู่นวัตกรรมการสอนระดับสากล" รวบรวมคลังความรู้ เครื่องมือ และเครือข่ายงานวิจัยครูจากองค์กรและผู้เชี่ยวชาญระดับโลก เพื่อการศึกษาค้นคว้าเพิ่มเติมและต่อยอดการทำวิจัยในชั้นเรียน'}
+            <p className="text-2xl md:text-3xl text-slate-500 mt-6 font-light tracking-wide leading-relaxed max-w-4xl">
+              {t('knowledge_global_desc') || 'เชื่อมโยงการเรียนรู้สู่นวัตกรรมการสอนระดับสากล" รวบรวมคลังความรู้ เครื่องมือ และเครือข่ายงานวิจัยครูจากองค์กรและผู้เชี่ยวชาญระดับโลก เพื่อการศึกษาค้นคว้าเพิ่มเติมและต่อยอดการทำวิจัยในชั้นเรียน'}
             </p>
           </div>
 
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 px-4">
+          <div className="max-w-5xl mx-auto px-4">
             
-            {/* กล่องที่ 1: Prof. Richard Smith */}
-            <div className="bg-white rounded-3xl p-8 md:p-10 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full group">
-              <div className="w-16 h-16 rounded-2xl bg-blue-50 text-[#1e3a8a] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" /></svg>
-              </div>
-              <h3 className="text-2xl font-bold text-[#1e3a8a] mb-4">
-                {t('global_net1_title') || 'Prof. Richard Smith & EAR Resources'}
-              </h3>
-              <p className="text-slate-500 font-medium mb-6">
-                (University of Warwick)
-              </p>
+            {/* 💡 รวมเป็นกล่องเดียว (Single Container) */}
+            <div className="bg-white rounded-3xl p-8 md:p-12 border border-slate-200 shadow-sm">
               
-              <div className="space-y-4 mb-8 flex-grow">
-                <div>
-                  <strong className="text-slate-800 block mb-1">{t('global_net_detail_label') || 'รายละเอียด:'}</strong>
-                  <p className="text-slate-600 font-light leading-relaxed">
-                    {t('global_net1_detail') || 'คลังข้อมูลและเอกสารคู่มือการทำวิจัยปฏิบัติการเชิงสำรวจ (Exploratory Action Research: EAR) โดย Prof. Richard Smith ผู้บุกเบิกและพัฒนากระบวนการ EAR สำหรับครูผู้สอนภาษาและนักการศึกษาร่วมกับ British Council'}
+              <div className="space-y-12">
+                {/* --- รายการที่ 1 --- */}
+                <div className="relative pl-4 md:pl-8 border-l-4 border-[#1e3a8a]">
+                  <h3 className="text-2xl md:text-3xl font-bold text-[#1e3a8a] mb-2">
+                    1. {t('global_net1_title') || 'Prof. Richard Smith & EAR Resources'}
+                  </h3>
+                  <p className="text-slate-500 text-lg md:text-xl italic mb-6">
+                    (University of Warwick)
                   </p>
+                  
+                  <ul className="space-y-4 text-xl md:text-2xl text-slate-700 font-light leading-relaxed pl-2 md:pl-6 list-disc list-inside marker:text-[#1e3a8a]">
+                    <li>
+                      <strong className="font-bold text-[#1e3a8a]">{t('global_net_detail_label') || 'รายละเอียด:'}</strong>{' '}
+                      {t('global_net1_detail') || 'คลังข้อมูลและเอกสารคู่มือการทำวิจัยปฏิบัติการเชิงสำรวจ (Exploratory Action Research: EAR) โดย Prof. Richard Smith ผู้บุกเบิกและพัฒนากระบวนการ EAR สำหรับครูผู้สอนภาษาและนักการศึกษาร่วมกับ British Council'}
+                    </li>
+                    <li>
+                      <strong className="font-bold text-[#1e3a8a]">{t('global_net_learn_label') || 'สิ่งที่จะได้เรียนรู้:'}</strong>{' '}
+                      {t('global_net1_learn') || 'คู่มือ EAR ฉบับสมบูรณ์, ตัวอย่างเคสงานวิจัยครูจากทั่วโลก และบทความวิชาการต้นฉบับ'}
+                    </li>
+                    <li className="flex items-start md:items-center gap-2 mt-4 list-none -ml-6 md:-ml-8 text-xl md:text-2xl">
+                      <strong className="font-bold text-[#1e3a8a] ml-6 md:ml-8 mt-1 md:mt-0">{t('global_net_link_label') || 'ลิงก์เข้าชม:'}</strong>
+                      <a 
+                        href="https://warwick.ac.uk/fac/soc/al/people/smith/"
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-[#EBF1FA] hover:bg-[#1e3a8a] text-[#1e3a8a] hover:text-white px-4 py-1.5 rounded-lg font-bold transition-colors text-base md:text-lg group"
+                      >
+                        {t('global_net1_btn') || 'เข้าสู่เว็บไซต์ Prof. Richard Smith'}
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+                      </a>
+                    </li>
+                  </ul>
                 </div>
-                <div>
-                  <strong className="text-emerald-700 block mb-1">{t('global_net_learn_label') || 'สิ่งที่จะได้เรียนรู้:'}</strong>
-                  <p className="text-slate-600 font-light leading-relaxed">
-                    {t('global_net1_learn') || 'คู่มือ EAR ฉบับสมบูรณ์, ตัวอย่างเคสงานวิจัยครูจากทั่วโลก และบทความวิชาการต้นฉบับ'}
+
+                <hr className="border-slate-100" />
+
+                {/* --- รายการที่ 2 --- */}
+                <div className="relative pl-4 md:pl-8 border-l-4 border-[#1e3a8a]">
+                  <h3 className="text-2xl md:text-3xl font-bold text-[#1e3a8a] mb-2">
+                    2. {t('global_net2_title') || 'MentorNet'}
+                  </h3>
+                  <p className="text-slate-500 text-lg md:text-xl italic mb-6">
+                    (International Mentoring Network for Teacher Research)
                   </p>
+                  
+                  <ul className="space-y-4 text-xl md:text-2xl text-slate-700 font-light leading-relaxed pl-2 md:pl-6 list-disc list-inside marker:text-[#1e3a8a]">
+                    <li>
+                      <strong className="font-bold text-[#1e3a8a]">{t('global_net_detail_label') || 'รายละเอียด:'}</strong>{' '}
+                      {t('global_net2_detail') || 'เครือข่ายสากลที่มุ่งเน้นการพัฒนาศักยภาพครูพี่เลี้ยง (Mentors) และการสร้างระบบสนับสนุนครูผู้ทำวิจัยในชั้นเรียน'}
+                    </li>
+                    <li>
+                      <strong className="font-bold text-[#1e3a8a]">{t('global_net_learn_label') || 'สิ่งที่จะได้เรียนรู้:'}</strong>{' '}
+                      {t('global_net2_learn') || 'แนวปฏิบัติที่ดี (Best Practices) ในการทำ Mentoring, เครื่องมือการตั้งคำถามเชิงสะท้อนคิด (Reflective Questions) และเครือข่ายความร่วมมือระดับนานาชาติ'}
+                    </li>
+                    <li className="flex items-start md:items-center gap-2 mt-4 list-none -ml-6 md:-ml-8">
+                      <strong className="font-bold text-[#1e3a8a] ml-6 md:ml-8 mt-1 md:mt-0">{t('global_net_link_label') || 'ลิงก์เข้าชม:'}</strong>
+                      <a 
+                        href="https://www.mentornet.org/" // 💡 ใส่ลิงก์จริง
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-[#EBF1FA] hover:bg-[#1e3a8a] text-[#1e3a8a] hover:text-white px-4 py-1.5 rounded-lg font-bold transition-colors text-base md:text-lg group"
+                      >
+                        {t('global_net2_btn') || 'เข้าสู่เว็บไซต์ MentorNet'}
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+                      </a>
+                    </li>
+                  </ul>
                 </div>
               </div>
 
-              <a 
-                href="#" // 💡 ใส่ลิงก์เว็บ Prof. Richard Smith ตรงนี้
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="mt-auto inline-flex items-center justify-between w-full bg-slate-50 hover:bg-[#1e3a8a] text-[#1e3a8a] hover:text-white px-6 py-4 rounded-xl font-bold transition-colors border border-slate-200 hover:border-transparent group/btn"
-              >
-                <span>{t('global_net1_btn') || 'เข้าสู่เว็บไซต์ Prof. Richard Smith'}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
-              </a>
             </div>
-
-            {/* กล่องที่ 2: MentorNet */}
-            <div className="bg-white rounded-3xl p-8 md:p-10 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full group">
-              <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" /></svg>
-              </div>
-              <h3 className="text-2xl font-bold text-[#1e3a8a] mb-4">
-                {t('global_net2_title') || 'MentorNet'}
-              </h3>
-              <p className="text-slate-500 font-medium mb-6">
-                (International Mentoring Network for Teacher Research)
-              </p>
-              
-              <div className="space-y-4 mb-8 flex-grow">
-                <div>
-                  <strong className="text-slate-800 block mb-1">{t('global_net_detail_label') || 'รายละเอียด:'}</strong>
-                  <p className="text-slate-600 font-light leading-relaxed">
-                    {t('global_net2_detail') || 'เครือข่ายสากลที่มุ่งเน้นการพัฒนาศักยภาพครูพี่เลี้ยง (Mentors) และการสร้างระบบสนับสนุนครูผู้ทำวิจัยในชั้นเรียน'}
-                  </p>
-                </div>
-                <div>
-                  <strong className="text-emerald-700 block mb-1">{t('global_net_learn_label') || 'สิ่งที่จะได้เรียนรู้:'}</strong>
-                  <p className="text-slate-600 font-light leading-relaxed">
-                    {t('global_net2_learn') || 'แนวปฏิบัติที่ดี (Best Practices) ในการทำ Mentoring, เครื่องมือการตั้งคำถามเชิงสะท้อนคิด (Reflective Questions) และเครือข่ายความร่วมมือระดับนานาชาติ'}
-                  </p>
-                </div>
-              </div>
-
-              <a 
-                href="#" // 💡 ใส่ลิงก์เว็บ MentorNet ตรงนี้
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="mt-auto inline-flex items-center justify-between w-full bg-slate-50 hover:bg-[#1e3a8a] text-[#1e3a8a] hover:text-white px-6 py-4 rounded-xl font-bold transition-colors border border-slate-200 hover:border-transparent group/btn"
-              >
-                <span>{t('global_net2_btn') || 'เข้าสู่เว็บไซต์ MentorNet'}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
-              </a>
-            </div>
-
           </div>
         </section>
 

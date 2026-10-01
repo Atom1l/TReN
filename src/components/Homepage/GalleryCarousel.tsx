@@ -4,10 +4,14 @@ import { useLanguage } from '../../contexts/LanguageContext';
 const galleryImages = [
   "/Training/Onsite_12.webp",
   "/Training/Onsite_10.webp",
+  "/Training/Onsite_25.webp",
   "/Homepage/cover_3.webp",
-  "/Homepage/cover_1.webp", 
+  "/Homepage/cover_1.webp",
+  "/Training/Onsite_24.webp",
+  "/Training/Onsite_26.webp", 
   "/Training/Onsite_16.webp",
   "/Training/Onsite_17.webp",
+  "/Training/Onsite_23.webp",
   "/Homepage/cover_4.webp",
   "/Homepage/cover_2.webp",
 ];

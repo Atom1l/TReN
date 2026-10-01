@@ -361,6 +361,7 @@ const MemberWorkDetail = () => {
   };
 
   // 🟢 วุ้นแปลภาษา (Shortcode Parser)
+  // 🟢 วุ้นแปลภาษา (Shortcode Parser)
   const parseShortcodes = (html: string) => {
     if (!html) return '';
     let parsed = html;
@@ -376,7 +377,6 @@ const MemberWorkDetail = () => {
     );
 
     // 2. แปลง [spoiler] ให้เป็นปุ่มกดซ่อน/ขยาย (Accordion)
-    // หมายเหตุ: ReactQuill มักแปลง " เป็น &quot;
     parsed = parsed.replace(
       /<p>\s*\[spoiler title=(?:&quot;|")([^\]]+)(?:&quot;|")\]\s*<\/p>([\s\S]*?)<p>\s*\[\/spoiler\]\s*<\/p>/gi,
       '<details class="group bg-slate-50 border border-slate-200 rounded-2xl my-8 overflow-hidden shadow-sm"><summary class="px-6 py-5 font-bold text-[#1e3a8a] text-lg md:text-xl cursor-pointer hover:bg-slate-100 transition-colors list-none flex justify-between items-center">$1 <svg class="w-6 h-6 text-slate-400 group-open:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></summary><div class="px-6 py-6 border-t border-slate-200 bg-white text-lg md:text-xl">$2</div></details>'
@@ -384,6 +384,13 @@ const MemberWorkDetail = () => {
     parsed = parsed.replace(
       /\[spoiler title=(?:&quot;|")([^\]]+)(?:&quot;|")\]([\s\S]*?)\[\/spoiler\]/gi,
       '<details class="group bg-slate-50 border border-slate-200 rounded-2xl my-8 overflow-hidden shadow-sm"><summary class="px-6 py-5 font-bold text-[#1e3a8a] text-lg md:text-xl cursor-pointer hover:bg-slate-100 transition-colors list-none flex justify-between items-center">$1 <svg class="w-6 h-6 text-slate-400 group-open:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></summary><div class="px-6 py-6 border-t border-slate-200 bg-white text-lg md:text-xl">$2</div></details>'
+    );
+
+    // 💡 3. เพิ่มการรองรับตาราง (Table Responsive)
+    // ครอบ <table> ด้วย div ที่อนุญาตให้เลื่อนซ้าย-ขวาได้ (overflow-x-auto)
+    parsed = parsed.replace(
+      /(<table[^>]*>[\s\S]*?<\/table>)/gi,
+      '<div class="overflow-x-auto w-full my-8 rounded-xl shadow-sm border border-slate-200 custom-scrollbar">$1</div>'
     );
 
     return parsed;
@@ -523,7 +530,7 @@ const MemberWorkDetail = () => {
         {/* เนื้อหาหลัก */}
         <div 
           className="article-content max-w-none text-slate-700 leading-relaxed mb-12 
-                     whitespace-pre-wrap break-words overflow-hidden
+                     whitespace-pre-wrap break-words
                      text-lg md:text-xl lg:text-[22px]
                      [&>p]:text-lg md:[&>p]:text-xl lg:[&>p]:text-[22px] [&>p]:mb-6
                      [&>h1]:text-3xl md:[&>h1]:text-4xl lg:[&>h1]:text-5xl [&>h1]:font-bold [&>h1]:text-[#1e3a8a] [&>h1]:mb-6 [&>h1]:mt-10
@@ -531,7 +538,10 @@ const MemberWorkDetail = () => {
                      [&>img]:rounded-xl [&>img]:shadow-md [&>img]:my-8 [&>img]:max-w-full [&>img]:h-auto [&>img]:cursor-zoom-in hover:[&>img]:opacity-95 transition-opacity
                      [&>ul]:text-lg md:[&>ul]:text-xl lg:[&>ul]:text-[22px] [&>ul]:list-disc [&>ul]:pl-8 [&>ul]:mb-6 [&>ul>li]:mb-3
                      [&>ol]:text-lg md:[&>ol]:text-xl lg:[&>ol]:text-[22px] [&>ol]:list-decimal [&>ol]:pl-8 [&>ol]:mb-6 [&>ol>li]:mb-3
-                     [&>pre]:overflow-x-auto [&>pre]:bg-slate-100 [&>pre]:p-5 [&>pre]:rounded-xl [&>pre]:text-base"
+                     [&>pre]:overflow-x-auto [&>pre]:bg-slate-100 [&>pre]:p-5 [&>pre]:rounded-xl [&>pre]:text-base
+                     [&_table]:w-full [&_table]:min-w-[600px] [&_table]:border-collapse [&_table]:text-base md:[&_table]:text-lg
+                     [&_th]:border [&_th]:border-slate-300 [&_th]:p-3 [&_th]:bg-slate-100
+                     [&_td]:border [&_td]:border-slate-300 [&_td]:p-3"
           dangerouslySetInnerHTML={{ __html: parseShortcodes(translatedContent || work.description || '') }}
         />
 

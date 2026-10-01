@@ -18,13 +18,22 @@ const HeroSection = () => {
         <p className="text-xl md:text-2xl lg:text-3xl text-slate-500 mt-6 font-light tracking-wide text-balance">
           {t('hero_tren_slogan') || 'เพราะปัญหานักเรียนในห้องเรียน ครูคือคนที่เข้าใจดีที่สุด!'}
         </p>
-        <div className="w-24 h-1.5 bg-[#1e3a8a] mx-auto mt-10 mb-12 rounded-full"></div>
+        {/* เส้นกั้นด้านบน */}
+            <div className="w-24 h-1.5 bg-[#1e3a8a] mx-auto mt-10 mb-12 rounded-full shadow-sm"></div>
+
+        {/* รูปภาพ */}
+        <div className="max-w-4xl mx-auto mb-12 rounded-3xl overflow-hidden shadow-md border-4 border-white">
+            <img src="/Homepage/Hero_3.webp" alt="Teachers Workshop" className="w-full h-auto object-cover" />
+        </div>
+
+        {/* เส้นกั้นด้านล่าง (ให้สมมาตรกับด้านบน) */}
+        <div className="w-24 h-1.5 bg-[#1e3a8a] mx-auto mb-16 rounded-full shadow-sm"></div>
       </div>
 
       <div className="w-full max-w-5xl flex flex-col gap-10 mx-auto">
         {/* 🟢 1. นำเนื้อหามาใส่ในกรอบพื้นหลังสีฟ้าอ่อน */}
-        <div className="bg-blue-100 p-8 md:p-12 rounded-[2rem] border border-blue-200 shadow-sm text-center">
-          <p className="text-2xl md:text-3xl text-slate-800 leading-relaxed font-light text-balance">
+        <div className="bg-blue-200 p-8 md:p-12 rounded-[2rem] border border-blue-200 shadow-sm text-center">
+          <p className="text-2xl md:text-3xl text-slate-800 leading-relaxed font-normal text-balance">
             <strong className="font-bold text-[#1e3a8a]">{t('hero_desc_bold_1') || 'เครือข่ายครูวิจัย TReN'}</strong>
             {' '}{t('hero_desc_text_1') || 'ชุมชนแห่งการเรียนรู้ทางวิชาชีพ (CoP) ที่พร้อมยืนเคียงข้างครูไทยใน 4 ภูมิภาคทั่วประเทศ'}<br/><br/>
             {' '}{t('hero_desc_text_1_1') || 'เราชวนเปลี่ยน'} <strong className="font-bold text-[#1e3a8a]">{t('hero_desc_bold_2') || '“การวิจัย”'}</strong>
@@ -53,13 +62,13 @@ const HeroSection = () => {
           {/* Quote 1 */}
           <div className="flex flex-col md:flex-row gap-10 md:gap-12 items-center justify-between">
             <div className="flex-1 max-w-2xl flex flex-col items-start">
-              <div className="mb-6 inline-flex flex-col md:flex-row md:items-center gap-2 md:gap-4 bg-blue-50/80 p-3 pr-6 rounded-2xl border border-blue-100">
+              <div className="mb-6 inline-flex flex-col md:flex-row md:items-center gap-2 md:gap-4 bg-blue-200 p-3 pr-6 rounded-2xl border border-blue-100">
                 <span className="flex items-center gap-2 font-bold text-[#1e3a8a] text-lg md:text-xl">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clipRule="evenodd" /></svg>
                   {t('hero_quote1_author') || 'ครูวิไล พันชนกุล'}
                 </span>
                 <span className="hidden md:block text-blue-200">|</span>
-                <span className="text-slate-600 text-base font-medium">{t('hero_quote1_school') || 'โรงเรียนบ้านดอนแสนสุข จ.อุดรธานี'}</span>
+                <span className="text-slate-800 text-base font-medium">{t('hero_quote1_school') || 'โรงเรียนบ้านดอนแสนสุข จ.อุดรธานี'}</span>
               </div>
               <h4 className="text-2xl font-bold text-slate-800 mb-4 leading-snug">
                 <span className="text-[#1e3a8a] font-bold mr-2">{t('research_topic') || 'หัวข้อวิจัย:'} </span>
@@ -68,6 +77,17 @@ const HeroSection = () => {
               <p className="text-[#1e3a8a] font-medium text-xl md:text-2xl leading-relaxed italic border-l-[5px] border-[#1e3a8a] pl-6 py-2 text-balance">
                 {t('hero_quote1_text') || '"จาก findings ทำให้เข้าใจว่า เราต้องรับฟังนักเรียนให้มากขึ้น และเมื่อนักเรียนให้ความไว้วางใจ พวกเขาจะพร้อมทำตามคำแนะนำของเราอย่างเต็มใจ"'}
               </p>
+              <div className="mt-8">
+                <a 
+                  href="https://www.britishcouncil.or.th/sites/default/files/stories_of_exploratory_action_research_in_thailand_low-resolution.pdf#page=36" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-[#1e3a8a] hover:bg-blue-900 text-white font-bold py-3 px-8 rounded-2xl transition-all shadow-md hover:-translate-y-1 hover:shadow-lg"
+                >
+                  <span>{t('read_full_research_p36') || 'อ่านวิจัยฉบับเต็ม หน้าที่ 36'}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                </a>
+              </div>
             </div>
             <a href="https://www.britishcouncil.or.th/en/stories-exploratory-action-research-thai-schools" target="_blank" rel="noopener noreferrer" className="w-full md:w-5/12 aspect-[4/3] border-2 border-dashed border-[#1e3a8a]/40 bg-blue-50/50 hover:bg-blue-100 hover:border-[#1e3a8a]/70 flex flex-col items-center justify-center text-[#1e3a8a] p-6 text-center rounded-3xl transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-sm hover:shadow-lg group">
                 <img src="/Homepage/Hero_1.webp" fetchPriority="high" alt="Exploratory Action Research by Kru Wilai" className="w-full h-full object-cover rounded-xl group-hover:opacity-90 transition-opacity duration-300"/>            
@@ -77,13 +97,13 @@ const HeroSection = () => {
           {/* Quote 2 */}
           <div className="flex flex-col md:flex-row-reverse gap-10 md:gap-12 items-center justify-between">
             <div className="flex-1 max-w-2xl flex flex-col items-start md:items-end md:text-right">
-              <div className="mb-6 inline-flex flex-col md:flex-row md:items-center gap-2 md:gap-4 bg-blue-50/80 p-3 md:pl-6 rounded-2xl border border-blue-100">
+              <div className="mb-6 inline-flex flex-col md:flex-row md:items-center gap-2 md:gap-4 bg-blue-200 p-3 md:pl-6 rounded-2xl border border-blue-100">
                 <span className="flex items-center gap-2 font-bold text-[#1e3a8a] text-lg md:text-xl">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clipRule="evenodd" /></svg>
                   {t('hero_quote2_author') || 'ครูฟัยซะ หวันตะหา'}
                 </span>
                 <span className="hidden md:block text-blue-200">|</span>
-                <span className="text-slate-600 text-base font-medium">{t('hero_quote2_school') || 'โรงเรียนวัดนางเหล้า จ.สงขลา'}</span>
+                <span className="text-slate-800 text-base font-medium">{t('hero_quote2_school') || 'โรงเรียนวัดนางเหล้า จ.สงขลา'}</span>
               </div>
               <h4 className="text-2xl font-bold text-slate-800 mb-4 leading-snug">
                 <span className="text-[#1e3a8a] font-bold md:ml-2 block md:inline md:order-2">{t('research_topic') || 'หัวข้อวิจัย:'} </span>
@@ -92,6 +112,17 @@ const HeroSection = () => {
               <p className="text-[#1e3a8a] font-medium text-xl md:text-2xl leading-relaxed italic border-l-[5px] md:border-l-0 md:border-r-[5px] border-[#1e3a8a] pl-6 md:pl-0 pr-0 md:pr-6 py-2 text-balance">
                 {t('hero_quote2_text') || '"บทเรียนสำคัญที่สุดจากการทำวิจัยครั้งนี้ คือการได้รู้ว่านักเรียนต้องการอะไรจริงๆ"'}
               </p>
+              <div className="mt-8">
+                <a 
+                  href="https://www.britishcouncil.or.th/sites/default/files/stories_of_exploratory_action_research_in_thailand_low-resolution.pdf#page=159" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-[#1e3a8a] hover:bg-blue-900 text-white font-bold py-3 px-8 rounded-2xl transition-all shadow-md hover:-translate-y-1 hover:shadow-lg"
+                >
+                  <span>{t('read_full_research_p159') || 'อ่านวิจัยฉบับเต็ม หน้าที่ 159'}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                </a>
+              </div>
             </div>
             <a href="https://www.britishcouncil.or.th/en/stories-exploratory-action-research-thai-schools" target="_blank" rel="noopener noreferrer" className="w-full md:w-5/12 aspect-[4/3] border-2 border-dashed border-[#1e3a8a]/40 bg-blue-50/50 hover:bg-blue-100 hover:border-[#1e3a8a]/70 flex flex-col items-center justify-center text-[#1e3a8a] p-6 text-center rounded-3xl transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-sm hover:shadow-lg group">
                 <img src="/Homepage/Hero_2.webp" fetchPriority="high" alt="Exploratory Action Research by Kru Faisa" className="w-full h-full object-cover rounded-xl group-hover:opacity-90 transition-opacity duration-300"/>            

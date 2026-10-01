@@ -50,7 +50,7 @@ const OnlineMentoring = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         
         <div className="text-[#555555] text-base md:text-xl font-medium mt-4 ">
-          <Link to="/" className="hover:text-[#1e3a8a] transition-colors">{t('nav_home') || 'หน้าหลัก'}</Link> / <span className="text-[#1e3a8a] font-bold">การให้คำปรึกษาออนไลน์</span>
+          <Link to="/member-work" className="hover:text-[#1e3a8a] transition-colors">{t('nav_home') || 'หน้าหลัก'}</Link> / <span className="text-[#1e3a8a] font-bold">การให้คำปรึกษาออนไลน์</span>
         </div>
 
         <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-[#1e3a8a] leading-tight mt-4 break-words">
@@ -59,7 +59,7 @@ const OnlineMentoring = () => {
 
         <div className="w-full h-[250px] sm:h-[400px] lg:h-[450px] rounded-xl overflow-hidden mb-10 shadow-sm border border-slate-100 mt-12 mb-16">
         <img 
-            src="/Homepage/cover_2.webp" 
+            src="/Training/Online_1.webp" 
             alt="Training Model" 
             className="w-full h-full object-cover"
         />
