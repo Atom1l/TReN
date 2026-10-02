@@ -86,6 +86,12 @@ const translations = {
     nav_about_4: 'ทีมงานศูนย์ขับเคลื่อนวิจัยครูระดับภูมิภาค',
     nav_about_5: 'องค์กรพันธมิตร',
 
+    knowledge_menu_1: 'ทำความรู้จักกับ EAR',
+    knowledge_menu_2: 'คลังบทเรียนออนไลน์',
+    knowledge_menu_3: 'คู่มือการทำวิจัย EAR Handbook',
+    knowledge_menu_4: 'คำถามที่พบบ่อย',
+    knowledge_menu_5: 'แหล่งเรียนรู้และเครือข่ายสากล',
+
     // Profile Page
     profile_title: 'โปรไฟล์ของฉัน',
     edit_profile: 'แก้ไขโปรไฟล์',
@@ -1702,6 +1708,12 @@ const translations = {
     nav_about_3: 'Network Management Team',
     nav_about_4: 'Regional EARC Teams',
     nav_about_5: 'Partners & Sponsors',
+
+    knowledge_menu_1: 'Get to Know EAR',
+    knowledge_menu_2: 'Learning Clips',
+    knowledge_menu_3: 'EAR Research Handbook',
+    knowledge_menu_4: 'FAQ',
+    knowledge_menu_5: 'Global EAR Resources & Networks',
 
     // Profile Page
     profile_title: 'My Profile',

@@ -48,6 +48,7 @@ const Navbar = () => {
         setUserData(data);
       }
     };
+    
 
     const handleProfileUpdate = () => {
       if (user?.id) refreshUserData(user.id);
@@ -179,6 +180,7 @@ const Navbar = () => {
       document.body.style.overflow = 'unset';
     }
   }, [isMobileMenuOpen]);
+  
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -247,7 +249,17 @@ const Navbar = () => {
         { name: t('nav_about_5') || '5. องค์กรพันธมิตร', path: '/about#supporters' },
       ]
     },
-    { name: t('nav_knowledge') || 'คลังความรู้', path: '/knowledge' },
+    { 
+      name: t('nav_knowledge') || 'คลังความรู้', 
+      path: '/knowledge',
+      dropdown: [
+        { name: t('knowledge_menu_1') || 'EAR Basic Knowledge', path: '/knowledge#ear-basic' },
+        { name: t('knowledge_menu_2') || 'คลังคลิปเรียนรู้ EAR', path: '/knowledge#ear-clips' },
+        { name: t('knowledge_menu_3') || 'คู่มือ EAR Handbook', path: '/knowledge#ear-handbook' },
+        { name: t('knowledge_menu_4') || 'คำถามที่พบบ่อย (FAQ)', path: '/knowledge#ear-faq' },
+        { name: t('knowledge_menu_5') || 'แหล่งเรียนรู้และเครือข่ายสากล', path: '/knowledge#ear-global' }
+      ]
+    },
     { 
       name: t('nav_events') || 'กิจกรรม TReN', 
       path: '#',
@@ -264,7 +276,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="z-50 font-sans w-full bg-white border-b border-slate-200 flex flex-col relative">
+      <nav className="sticky top-0 z-50 font-sans w-full bg-white border-b border-slate-200 flex flex-col">
         
         {/* ================= 1. Top Bar (Facebook & Language) ================= */}
         <div className="w-full bg-[#1e3a8a] border-b border-slate-100 py-1.5 px-4 lg:px-8 xl:px-12 flex justify-end items-center gap-4">

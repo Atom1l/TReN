@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+
 
 // --- คอมโพเนนต์ Accordion (รูปแบบ Row มาตรฐาน) ---
 const AccordionItem = ({ 
@@ -41,6 +43,7 @@ const AccordionItem = ({
 
 const Knowledge = () => {
   const { t } = useLanguage();
+  const location = useLocation();
   
   // 💡 เปลี่ยน State เป็น Array (string[]) เพื่อให้เปิดพร้อมกันได้หลายหัวข้อ (Manual Close)
   const [openSections, setOpenSections] = useState<string[]>([]);
@@ -78,12 +81,29 @@ const Knowledge = () => {
     return url;
   };
 
+  useEffect(() => {
+    const hash = location.hash;
+    if (hash) {
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          // เผื่อระยะ Navbar แบบ Sticky ไว้ 100px
+          const yOffset = -100; 
+          const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }, 100); 
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }
+  }, [location]);
+
   return (
     <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200 min-h-screen">
       <div className="max-w-[85rem] mx-auto px-6 lg:px-8 pt-16 md:pt-24 pb-24">
         
         {/* ================= SECTION A: EAR Basic Knowledge ================= */}
-        <section className="pb-24 border-b-4 border-slate-300">
+        <section  className="pb-24 border-b-4 border-slate-300">
           
           <div className="mb-16 md:mb-20 flex flex-col items-center text-center max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
@@ -94,28 +114,21 @@ const Knowledge = () => {
             </p>
           </div>
 
-          {/* Hero Image Grid */}
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 mb-16 ">
-             <div className="md:col-span-2 relative rounded-3xl overflow-hidden border-2 border-slate-200 group">
-                <img src="/Homepage/cover_1.webp" alt="EAR Workshop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-                <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/10 transition-colors"></div>
-             </div>
-             <div className="hidden md:flex flex-col gap-4">
-                <div className="flex-1 relative rounded-3xl overflow-hidden border-2 border-slate-200 group">
-                   <img src="/Homepage/cover_2.webp" alt="EAR Presentation" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-                   <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/10 transition-colors"></div>
-                </div>
-                <div className="flex-1 relative rounded-3xl overflow-hidden border-2 border-slate-200 group bg-blue-100 flex items-center justify-center">
-                   <img src="/Homepage/cover_3.webp" alt="EAR Presentation" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-                   <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/10 transition-colors"></div>
-                </div>
-             </div>
+          {/* Hero Image */}
+          <div className="w-full max-w-6xl mx-auto mb-16 relative rounded-[2rem] overflow-hidden border border-slate-200 shadow-md group">
+             <img 
+               src="/Knowledge/MockUp_2.jfif" // 💡 ตรวจสอบ Path โฟลเดอร์ให้ตรงกับที่เก็บไฟล์จริงด้วยนะครับ
+               alt="EAR Knowledge Hub Mockup" 
+               className="w-full h-[300px] md:h-[450px] lg:h-[550px] object-cover" 
+             />
+             {/* แผ่นฟิล์มบางๆ คลุมทับเพื่อให้ดูละมุนขึ้น */}
+             <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/5 transition-colors pointer-events-none"></div>
           </div>
 
           <div className="space-y-0 relative">
             
             {/* --- 1. ทำความรู้จัก EAR --- */}
-            <div className="flex flex-col items-start pt-16 pb-12 md:pb-16 md:pt-20 mt-10 relative z-10 bg-[#F8FAFC]">
+            <div id="ear-basic" className="flex flex-col items-start pt-16 pb-12 md:pb-16 md:pt-20 mt-10 relative z-10 bg-[#F8FAFC]">
               <div className="w-full mb-10 flex items-start md:items-center gap-6">
                 <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-[#1e3a8a] text-white font-bold text-2xl shadow-md shrink-0 mt-1 md:mt-0">1</div>
                 <div className="flex-1">
@@ -356,12 +369,14 @@ const Knowledge = () => {
                       </div>
 
                       {/* เนื้อหาอธิบาย */}
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
-                        <div className="space-y-4">
-                          <h4 className="font-bold text-[#1e3a8a] text-2xl md:text-3xl">{t('knowledge_ear_stage1_title')}</h4>
-                          <p className="text-slate-500 italic">{t('knowledge_ear_stage1_subtitle')}</p>
-                          <p className="text-slate-700">{t('knowledge_ear_stage1_desc')}</p>
-                          <ul className="space-y-3 pl-2 list-none text-slate-700">
+                      {/* เนื้อหาอธิบาย */}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+                        {/* กล่อง Stage 1 */}
+                        <div className="bg-blue-50 p-8 md:p-10 rounded-2xl border border-blue-100 shadow-sm flex flex-col h-full text-left">
+                          <h4 className="font-bold text-[#1e3a8a] text-2xl md:text-3xl mb-2">{t('knowledge_ear_stage1_title')}</h4>
+                          <p className="text-slate-500 italic mb-4">{t('knowledge_ear_stage1_subtitle')}</p>
+                          <p className="text-slate-700 mb-8">{t('knowledge_ear_stage1_desc')}</p>
+                          <ul className="space-y-4 pl-2 list-none text-slate-700">
                             <li className="flex items-start gap-3"><span className="font-bold text-[#1e3a8a] shrink-0">1. Reflect:</span> <span>{t('knowledge_ear_s1_p1')}</span></li>
                             <li className="flex items-start gap-3"><span className="font-bold text-[#1e3a8a] shrink-0">2. Plan:</span> <span>{t('knowledge_ear_s1_p2')}</span></li>
                             <li className="flex items-start gap-3"><span className="font-bold text-[#1e3a8a] shrink-0">3. Observe:</span> <span>{t('knowledge_ear_s1_p3')}</span></li>
@@ -369,11 +384,12 @@ const Knowledge = () => {
                           </ul>
                         </div>
                         
-                        <div className="space-y-4">
-                          <h4 className="font-bold text-emerald-700 text-2xl md:text-3xl">{t('knowledge_ear_stage2_title')}</h4>
-                          <p className="text-emerald-600/70 italic">{t('knowledge_ear_stage2_subtitle')}</p>
-                          <p className="text-slate-700">{t('knowledge_ear_stage2_desc')}</p>
-                          <ul className="space-y-3 pl-2 list-none text-slate-700">
+                        {/* กล่อง Stage 2 */}
+                        <div className="bg-emerald-50 p-8 md:p-10 rounded-2xl border border-emerald-100 shadow-sm flex flex-col h-full text-left">
+                          <h4 className="font-bold text-emerald-700 text-2xl md:text-3xl mb-2">{t('knowledge_ear_stage2_title')}</h4>
+                          <p className="text-emerald-600/70 italic mb-4">{t('knowledge_ear_stage2_subtitle')}</p>
+                          <p className="text-slate-700 mb-8">{t('knowledge_ear_stage2_desc')}</p>
+                          <ul className="space-y-4 pl-2 list-none text-slate-700">
                             <li className="flex items-start gap-3"><span className="font-bold text-emerald-700 shrink-0">5. Plan:</span> <span>{t('knowledge_ear_s2_p5')}</span></li>
                             <li className="flex items-start gap-3"><span className="font-bold text-emerald-700 shrink-0">6. Act:</span> <span>{t('knowledge_ear_s2_p6')}</span></li>
                             <li className="flex items-start gap-3"><span className="font-bold text-emerald-700 shrink-0">7. Observe:</span> <span>{t('knowledge_ear_s2_p7')}</span></li>
@@ -453,52 +469,52 @@ const Knowledge = () => {
                 <AccordionItem title={t('knowledge_ear_diff_title') || 'How EAR is different from other research (ไขข้อสงสัย: EAR ต่างจากการวิจัยอื่นอย่างไร)'} isOpen={openCol2s.includes('2.3')} onClick={() => toggleCol2('2.3')}>
                   <div className="my-6 space-y-6 text-xl md:text-2xl text-slate-800 font-light leading-relaxed">
                     <p>{t('knowledge_ear_diff_intro')}</p>
-                    <div className="overflow-x-auto mt-8 rounded-2xl border border-slate-200 shadow-sm">
+                    <div className="overflow-x-auto mt-8 rounded-2xl border border-slate-300 shadow-md">
                       <table className="w-full text-left border-collapse min-w-[1000px]">
                         <thead>
                           <tr className="bg-[#1e3a8a] text-white">
-                            <th className="p-5 font-bold border-r border-blue-800 w-1/5">{t('knowledge_ear_diff_col1')}</th>
-                            <th className="p-5 font-bold border-r border-blue-800 w-1/5">{t('knowledge_ear_diff_col2')}</th>
-                            <th className="p-5 font-bold border-r border-blue-800 w-1/5">{t('knowledge_ear_diff_col3')}</th>
-                            <th className="p-5 font-bold border-r border-blue-800 w-1/5">{t('knowledge_ear_diff_col4')}</th>
-                            <th className="p-5 font-bold text-yellow-300 w-1/5">{t('knowledge_ear_diff_col5')}</th>
+                            <th className="p-5 font-bold border-r border-slate-600 w-1/5">{t('knowledge_ear_diff_col1')}</th>
+                            <th className="p-5 font-bold border-r border-slate-600 w-1/5">{t('knowledge_ear_diff_col2')}</th>
+                            <th className="p-5 font-bold border-r border-slate-600 w-1/5">{t('knowledge_ear_diff_col3')}</th>
+                            <th className="p-5 font-bold border-r border-slate-600 w-1/5">{t('knowledge_ear_diff_col4')}</th>
+                            <th className="p-5 font-bold text-yellow-400 w-1/5">{t('knowledge_ear_diff_col5')}</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-200">
-                          <tr className="hover:bg-slate-50 transition-colors">
-                            <td className="p-5 font-bold text-[#1e3a8a] border-r border-slate-200 align-top">{t('knowledge_ear_diff_row1')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r1_c2')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r1_c3')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r1_c4')}</td>
-                            <td className="p-5 font-medium text-[#1e3a8a] bg-blue-50/50 align-top">{t('knowledge_ear_diff_r1_c5')}</td>
+                        <tbody className="divide-y divide-slate-300 bg-white">
+                          <tr className="hover:bg-slate-100 transition-colors">
+                            <td className="p-5 font-bold text-[#1e3a8a] border-r border-slate-300 align-top bg-slate-50">{t('knowledge_ear_diff_row1')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r1_c2')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r1_c3')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r1_c4')}</td>
+                            <td className="p-5 font-bold text-[#1e3a8a] bg-blue-100/50 align-top">{t('knowledge_ear_diff_r1_c5')}</td>
                           </tr>
-                          <tr className="hover:bg-slate-50 transition-colors">
-                            <td className="p-5 font-bold text-[#1e3a8a] border-r border-slate-200 align-top">{t('knowledge_ear_diff_row2')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r2_c2')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r2_c3')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r2_c4')}</td>
-                            <td className="p-5 font-medium text-[#1e3a8a] bg-blue-50/50 align-top">{t('knowledge_ear_diff_r2_c5')}</td>
+                          <tr className="hover:bg-slate-100 transition-colors">
+                            <td className="p-5 font-bold text-[#1e3a8a] border-r border-slate-300 align-top bg-slate-50">{t('knowledge_ear_diff_row2')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r2_c2')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r2_c3')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r2_c4')}</td>
+                            <td className="p-5 font-bold text-[#1e3a8a] bg-blue-100/50 align-top">{t('knowledge_ear_diff_r2_c5')}</td>
                           </tr>
-                          <tr className="hover:bg-slate-50 transition-colors">
-                            <td className="p-5 font-bold text-[#1e3a8a] border-r border-slate-200 align-top">{t('knowledge_ear_diff_row3')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r3_c2')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r3_c3')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r3_c4')}</td>
-                            <td className="p-5 font-medium text-[#1e3a8a] bg-blue-50/50 align-top">{t('knowledge_ear_diff_r3_c5')}</td>
+                          <tr className="hover:bg-slate-100 transition-colors">
+                            <td className="p-5 font-bold text-[#1e3a8a] border-r border-slate-300 align-top bg-slate-50">{t('knowledge_ear_diff_row3')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r3_c2')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r3_c3')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r3_c4')}</td>
+                            <td className="p-5 font-bold text-[#1e3a8a] bg-blue-100/50 align-top">{t('knowledge_ear_diff_r3_c5')}</td>
                           </tr>
-                          <tr className="hover:bg-slate-50 transition-colors">
-                            <td className="p-5 font-bold text-[#1e3a8a] border-r border-slate-200 align-top">{t('knowledge_ear_diff_row4')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r4_c2')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r4_c3')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r4_c4')}</td>
-                            <td className="p-5 font-medium text-[#1e3a8a] bg-blue-50/50 align-top">{t('knowledge_ear_diff_r4_c5')}</td>
+                          <tr className="hover:bg-slate-100 transition-colors">
+                            <td className="p-5 font-bold text-[#1e3a8a] border-r border-slate-300 align-top bg-slate-50">{t('knowledge_ear_diff_row4')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r4_c2')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r4_c3')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r4_c4')}</td>
+                            <td className="p-5 font-bold text-[#1e3a8a] bg-blue-100/50 align-top">{t('knowledge_ear_diff_r4_c5')}</td>
                           </tr>
-                          <tr className="hover:bg-slate-50 transition-colors">
-                            <td className="p-5 font-bold text-[#1e3a8a] border-r border-slate-200 align-top">{t('knowledge_ear_diff_row5')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r5_c2')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r5_c3')}</td>
-                            <td className="p-5 border-r border-slate-200 align-top">{t('knowledge_ear_diff_r5_c4')}</td>
-                            <td className="p-5 font-medium text-[#1e3a8a] bg-blue-50/50 align-top">{t('knowledge_ear_diff_r5_c5')}</td>
+                          <tr className="hover:bg-slate-100 transition-colors">
+                            <td className="p-5 font-bold text-[#1e3a8a] border-r border-slate-300 align-top bg-slate-50">{t('knowledge_ear_diff_row5')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r5_c2')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r5_c3')}</td>
+                            <td className="p-5 border-r border-slate-300 align-top text-slate-800">{t('knowledge_ear_diff_r5_c4')}</td>
+                            <td className="p-5 font-bold text-[#1e3a8a] bg-blue-100/50 align-top">{t('knowledge_ear_diff_r5_c5')}</td>
                           </tr>
                         </tbody>
                       </table>
@@ -513,7 +529,7 @@ const Knowledge = () => {
 
         <div id="ear-learning-clips"></div>
         {/* ================= SECTION B: EAR Learning Clips ================= */}
-        <section className="mt-16 pt-16 pb-30 border-b-4 border-slate-300">
+        <section id="ear-clips" className="mt-16 pt-16 pb-30 border-b-4 border-slate-300">
           
           <div className="mb-16 md:mb-20 flex flex-col items-center text-center max-w-4xl mx-auto">
             <h2 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
@@ -808,7 +824,7 @@ const Knowledge = () => {
         </section>
 
         {/* ================= SECTION C: EAR Handbook ================= */}
-        <section className="pt-30">
+        <section id="ear-handbook" className="pt-30">
           
           <div className="mb-12 md:mb-16 flex flex-col items-center text-center max-w-5xl mx-auto">
             <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
@@ -925,7 +941,7 @@ const Knowledge = () => {
           </div>
         </section>
 
-        <section className="pt-30 mt-12">
+        <section id="ear-faq"  className="pt-30 mt-12">
           {/* --- 3. FAQ --- */}
             <div className="flex flex-col items-start py-12 md:py-16 border-t-4 border-slate-300 relative z-10 bg-[#F8FAFC]">
               <div className="mb-12 mt-16 flex flex-col items-center text-center max-w-5xl mx-auto">
@@ -978,11 +994,12 @@ const Knowledge = () => {
                   {/* หมวดทั่วไป */}
                   {(openCol3s.length === 0 || openCol3s.includes('general')) && (
                     <div className="space-y-4 py-3">
-                      <div className="flex items-center gap-4 mb-4 mt-8 px-2">
-                         <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-[#1e3a8a]">
+                      {/* หมวดทั่วไป */}
+                      <div className="flex items-center gap-4 mb-6 mt-8 px-6 py-4 bg-[#1e3a8a] rounded-2xl shadow-md">
+                         <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white shrink-0">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
                          </div>
-                         <h3 className="text-3xl font-bold text-[#1e3a8a]">{t('faq_tab_general') || 'หมวดคำถามทั่วไป'}</h3>
+                         <h3 className="text-2xl md:text-3xl font-bold text-white">{t('faq_tab_general') || 'หมวดคำถามทั่วไป'}</h3>
                       </div>
                       
                       <AccordionItem title={t('faq_gen_q1') || 'ไม่มีเวลาทำวิจัยเลย จะแบ่งเวลามาทำ EAR ได้อย่างไร?'} isOpen={openClipSections.includes('faq.g.1')} onClick={() => toggleClipSection('faq.g.1')}>
@@ -1021,11 +1038,12 @@ const Knowledge = () => {
                   {/* หมวด Explore */}
                   {(openCol3s.length === 0 || openCol3s.includes('explore')) && (
                     <div className="space-y-4 py-3">
-                      <div className="flex items-center gap-4 mb-4 mt-12 px-2">
-                         <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-[#1e3a8a]">
+                      {/* หมวด Explore */}
+                      <div className="flex items-center gap-4 mb-6 mt-12 px-6 py-4 bg-[#1e3a8a] rounded-2xl shadow-md">
+                         <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white shrink-0">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
                          </div>
-                         <h3 className="text-3xl font-bold text-[#1e3a8a]">{t('faq_tab_explore') || 'หมวดคำถามขั้นสำรวจ (Exploratory Stage)'}</h3>
+                         <h3 className="text-2xl md:text-3xl font-bold text-white">{t('faq_tab_explore') || 'หมวดคำถามขั้นสำรวจ (Exploratory Stage)'}</h3>
                       </div>
 
                       <AccordionItem title={t('faq_exp_q1') || 'มีปัญหาในห้องเรียนเยอะมาก จะเลือกปัญหาไหนมาทำ EAR ก่อนดี?'} isOpen={openClipSections.includes('faq.e.1')} onClick={() => toggleClipSection('faq.e.1')}>
@@ -1094,11 +1112,12 @@ const Knowledge = () => {
                   {/* หมวด Action */}
                   {(openCol3s.length === 0 || openCol3s.includes('action')) && (
                     <div className="space-y-4 py-3">
-                      <div className="flex items-center gap-4 mb-4 mt-12 px-2">
-                         <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700">
+                      {/* หมวด Action */}
+                      <div className="flex items-center gap-4 mb-6 mt-12 px-6 py-4 bg-[#1e3a8a] rounded-2xl shadow-md">
+                         <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white shrink-0">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.829 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.487 1.509 1.333 1.509 2.316V18" /></svg>
                          </div>
-                         <h3 className="text-3xl font-bold text-emerald-700">{t('faq_tab_action') || 'หมวดขั้นวางแผนและดำเนินการแก้ไข (Action Stage)'}</h3>
+                         <h3 className="text-2xl md:text-3xl font-bold text-white">{t('faq_tab_action') || 'หมวดขั้นวางแผนและดำเนินการแก้ไข (Action Stage)'}</h3>
                       </div>
 
                       <AccordionItem title={t('faq_act_q1') || 'จะเลือกวิธีแก้ปัญหา (Action) อย่างไรให้ตรงจุด และไม่สร้างภาระงานเพิ่ม?'} isOpen={openClipSections.includes('faq.a.1')} onClick={() => toggleClipSection('faq.a.1')}>
@@ -1137,11 +1156,12 @@ const Knowledge = () => {
                   {/* หมวด Sharing */}
                   {(openCol3s.length === 0 || openCol3s.includes('sharing')) && (
                     <div className="space-y-4 py-3">
-                      <div className="flex items-center gap-4 mb-4 mt-12 px-2">
-                         <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
+                      {/* หมวด Sharing */}
+                      <div className="flex items-center gap-4 mb-6 mt-12 px-6 py-4 bg-[#1e3a8a] rounded-2xl shadow-md">
+                         <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white shrink-0">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" /></svg>
                          </div>
-                         <h3 className="text-3xl font-bold text-yellow-600">{t('faq_tab_sharing') || 'หมวดการเผยแพร่และแบ่งปันผลงาน'}</h3>
+                         <h3 className="text-2xl md:text-3xl font-bold text-white">{t('faq_tab_sharing') || 'หมวดการเผยแพร่และแบ่งปันผลงาน'}</h3>
                       </div>
 
                       <AccordionItem title={t('faq_sha_q1') || 'ทำ EAR แล้วต้องเขียนรายงานเล่มหนา 5 บทหรือไม่?'} isOpen={openClipSections.includes('faq.s.1')} onClick={() => toggleClipSection('faq.s.1')}>
@@ -1204,7 +1224,7 @@ const Knowledge = () => {
         </section>
 
         {/* ================= SECTION D: Global Network ================= */}
-        <section className="pt-22 pb-16">
+        <section id="ear-global" className="pt-22 pb-16">
           <div className="mb-12 flex flex-col items-center text-center mx-auto px-4 border-t-4 border-slate-300 relative z-10 bg-[#F8FAFC]">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight mt-30">
               {t('knowledge_global_title') || 'แหล่งเรียนรู้และเครือข่ายสากล'}
