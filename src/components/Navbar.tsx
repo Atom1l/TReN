@@ -27,6 +27,10 @@ const Navbar = () => {
   const [forceOpenDropdown, setForceOpenDropdown] = useState<string | null>(null);
   const [forceOpenSubDropdown, setForceOpenSubDropdown] = useState<string | null>(null);
   
+  // 💡 State สำหรับ Hover Delay
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [subHoverTimeout, setSubHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+  
   const dropdownRef = useRef<HTMLDivElement>(null);
   const desktopNavRef = useRef<HTMLDivElement>(null);
 
@@ -198,31 +202,30 @@ const Navbar = () => {
     );
   };
 
-  const handleDesktopMenuClick = (e: React.MouseEvent, menuName: string, hasDropdown: boolean) => {
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (hasDropdown && isTouchDevice) {
-      if (forceOpenDropdown !== menuName) {
-        e.preventDefault(); 
-        setForceOpenDropdown(menuName); 
-        setForceOpenSubDropdown(null); 
-      }
-    } else {
-      setForceOpenDropdown(null);
-      setForceOpenSubDropdown(null);
-    }
+  // 💡 Functions สำหรับ Hover Delay
+  const handleMouseEnter = (menuName: string) => {
+    if (hoverTimeout) clearTimeout(hoverTimeout);
+    setForceOpenDropdown(menuName);
   };
 
-  const handleDesktopSubMenuClick = (e: React.MouseEvent, subName: string, hasSubDropdown: boolean) => {
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (hasSubDropdown && isTouchDevice) {
-      if (forceOpenSubDropdown !== subName) {
-        e.preventDefault();
-        setForceOpenSubDropdown(subName);
-      }
-    } else {
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
       setForceOpenDropdown(null);
       setForceOpenSubDropdown(null);
-    }
+    }, 200);
+    setHoverTimeout(timeout);
+  };
+
+  const handleSubMouseEnter = (subName: string) => {
+    if (subHoverTimeout) clearTimeout(subHoverTimeout);
+    setForceOpenSubDropdown(subName);
+  };
+
+  const handleSubMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setForceOpenSubDropdown(null);
+    }, 150);
+    setSubHoverTimeout(timeout);
   };
 
   const menuItems = [
@@ -253,11 +256,25 @@ const Navbar = () => {
       name: t('nav_knowledge') || 'คลังความรู้', 
       path: '/knowledge',
       dropdown: [
-        { name: t('knowledge_menu_1') || 'EAR Basic Knowledge', path: '/knowledge#ear-basic' },
-        { name: t('knowledge_menu_2') || 'คลังคลิปเรียนรู้ EAR', path: '/knowledge#ear-clips' },
-        { name: t('knowledge_menu_3') || 'คู่มือ EAR Handbook', path: '/knowledge#ear-handbook' },
-        { name: t('knowledge_menu_4') || 'คำถามที่พบบ่อย (FAQ)', path: '/knowledge#ear-faq' },
-        { name: t('knowledge_menu_5') || 'แหล่งเรียนรู้และเครือข่ายสากล', path: '/knowledge#ear-global' }
+        { 
+          name: t('knowledge_menu_1') || '1. ความรู้พื้นฐาน EAR', 
+          path: '/knowledge#ear-basic',
+          subDropdown: [
+            { name: t('knowledge_menu_1_1') || '1.1 ทำความรู้จักกับ EAR', path: '/knowledge#ear-intro' },
+            { 
+              // 💡 ปรับให้ 1.2 รองรับ Sub-dropdown ชั้นที่ 3
+              name: t('knowledge_menu_1_2') || '1.2 หลักการ EAR', 
+              path: '/knowledge#ear-principles',
+              subDropdown: [
+                { name: t('knowledge_menu_1_2_1') || '2 ขั้นตอนของ EAR', path: '/knowledge#ear-stages' },
+                { name: t('knowledge_menu_1_2_2') || 'EAR ต่างจากวิจัยอื่นอย่างไร', path: '/knowledge#ear-diff' }
+              ]
+            }
+          ]
+        },
+        { name: t('knowledge_menu_2') || '2. คลังบทเรียนออนไลน์: ขั้นตอนการทำ EAR (วิดีโอ)', path: '/knowledge#ear-clips' },
+        { name: t('knowledge_menu_4') || '3. คำถามที่พบบ่อย (FAQ)', path: '/knowledge#ear-faq' },
+        { name: t('knowledge_menu_5') || '4. แหล่งเรียนรู้และเครือข่ายสากล (Global EAR Resources & Networks)', path: '/knowledge#ear-global' }
       ]
     },
     { 
@@ -320,14 +337,19 @@ const Navbar = () => {
             
             {/* Desktop Menu */}
             <div className="hidden lg:flex items-center justify-end" ref={desktopNavRef}>
-              {menuItems.map((menu) => {
+              {menuItems.map((menu, index) => {
                 const isActive = location.pathname === menu.path || (menu.path === '/showcases' && location.pathname.startsWith('/showcases'));
                 return (
-                  <div key={menu.name} className="relative group py-6 px-2 xl:px-4">
+                  <div 
+                    key={menu.name} 
+                    className="relative py-6 px-2 xl:px-4"
+                    onMouseEnter={() => menu.dropdown && handleMouseEnter(menu.name)}
+                    onMouseLeave={() => menu.dropdown && handleMouseLeave()}
+                  >
                     <Link 
                       to={menu.path}
                       title={menu.name}
-                      onClick={(e) => handleDesktopMenuClick(e, menu.name, !!menu.dropdown)}
+                      onClick={() => setForceOpenDropdown(null)}
                       className={`text-[0.9rem] xl:text-[1rem] 2xl:text-[1.1rem] transition-colors whitespace-nowrap flex items-center gap-1 ${
                         isActive ? 'text-primary font-bold' : 'text-dark font-medium hover:text-primary'
                       }`}
@@ -335,54 +357,90 @@ const Navbar = () => {
                       {menu.name}
 
                       {menu.dropdown && (
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 lg:w-4 lg:h-4 mt-0.5 transition-transform lg:group-hover:rotate-180">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={`w-3.5 h-3.5 lg:w-4 lg:h-4 mt-0.5 transition-transform ${forceOpenDropdown === menu.name ? 'rotate-180 text-primary' : ''}`}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                         </svg>
                       )}
                     </Link>
 
                     {menu.dropdown && (
-                      <div className={`absolute top-[80%] left-1/2 -translate-x-1/2 mt-2 w-[24rem] bg-white border border-slate-100 shadow-xl rounded-2xl transition-all duration-300 z-50 transform py-2 ${
-                        forceOpenDropdown === menu.name
-                          ? 'opacity-100 visible translate-y-0'
-                          : 'opacity-0 invisible translate-y-2 lg:group-hover:opacity-100 lg:group-hover:visible lg:group-hover:translate-y-0'
-                      }`}>
+                      <div className={`absolute top-[80%] mt-2 bg-white border border-slate-100 shadow-xl rounded-2xl transition-all duration-300 z-50 transform py-2 
+                        w-[15rem] lg:w-[17rem] xl:w-[19rem] 
+                        ${/* 💡 ดึงเมนูตั้งแต่ "คลังความรู้" ให้เยื้องซ้ายเพื่อเพิ่มพื้นที่กางขวา */ ''}
+                        ${index > 1 ? 'left-1/2 -translate-x-[75%]' : 'left-1/2 -translate-x-1/2'} 
+                        ${forceOpenDropdown === menu.name ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}
+                      `}>
+                        {/* Invisible Bridge ดักด้านบนกันเมาส์หลุด */}
+                        <div className="absolute -top-4 left-0 w-full h-4 bg-transparent pointer-events-auto"></div>
+
                         {menu.dropdown.map(sub => (
-                          // 💡 แก้ไข SubDropdown: กลับไปใช้รูปแบบกางออกด้านขวา และใช้ Invisible Bridge
-                          <div key={sub.name} className="relative group/sub">
+                          <div 
+                            key={sub.name} 
+                            className="relative group/sub"
+                            onMouseEnter={() => sub.subDropdown && handleSubMouseEnter(sub.name)}
+                            onMouseLeave={() => sub.subDropdown && handleSubMouseLeave()}
+                          >
                             <Link 
                               to={sub.path} 
-                              onClick={(e) => handleDesktopSubMenuClick(e, sub.name, !!sub.subDropdown)}
-                              className="w-full text-left flex items-center justify-between px-5 py-3.5 text-[1rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium border-b border-slate-50 last:border-0 whitespace-normal leading-relaxed"
+                              onClick={() => { setForceOpenDropdown(null); setForceOpenSubDropdown(null); }}
+                              className="w-full text-left flex items-center justify-between px-5 py-3 text-[0.95rem] lg:text-[1rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium border-b border-slate-50 last:border-0 whitespace-normal leading-relaxed"
                             >
                               <span>{sub.name}</span>
                               {sub.subDropdown && (
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-3 flex-shrink-0 text-slate-400 lg:group-hover/sub:text-[#1e3a8a] transition-transform -rotate-90" viewBox="0 0 20 20" fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className={`w-4 h-4 ml-2 flex-shrink-0 transition-transform ${forceOpenSubDropdown === sub.name ? 'text-[#1e3a8a]' : 'text-slate-400 -rotate-90'}`} viewBox="0 0 20 20" fill="currentColor">
                                   <path fillRule="evenodd" d="M19.5 8.25l-7.5 7.5-7.5-7.5" clipRule="evenodd" />
                                 </svg>
                               )}
                             </Link>
 
-                            {/* 💡 Invisible Bridge ป้องกันเมนูปิด */}
+                            {/* Invisible Bridge ต่อ SubDropdown */}
                             {sub.subDropdown && (
                               <div className="hidden lg:block absolute top-0 -right-4 w-4 h-full z-40 bg-transparent pointer-events-auto"></div>
                             )}
 
+                            {/* 💡 Sub-dropdown ชั้นที่ 3 (Layer 3) */}
                             {sub.subDropdown && (
-                              <div className={`absolute top-0 left-[100%] ml-2 w-[22rem] bg-white border border-slate-100 shadow-xl rounded-2xl transition-all duration-200 z-50 transform py-2 ${
+                              <div className={`absolute top-0 left-[100%] ml-1 w-[15rem] lg:w-[17rem] xl:w-[18rem] bg-white border border-slate-100 shadow-xl rounded-2xl transition-all duration-200 z-50 transform py-2 ${
                                 forceOpenSubDropdown === sub.name
                                   ? 'opacity-100 visible translate-x-0'
-                                  : 'opacity-0 invisible translate-x-2 lg:group-hover/sub:opacity-100 lg:group-hover/sub:visible lg:group-hover/sub:translate-x-0'
+                                  : 'opacity-0 invisible -translate-x-2'
                               }`}>
                                 {sub.subDropdown.map(nested => (
-                                  <Link 
-                                    key={nested.name} 
-                                    to={nested.path} 
-                                    onClick={() => { setForceOpenDropdown(null); setForceOpenSubDropdown(null); }}
-                                    className="block px-6 py-3 text-[0.95rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium whitespace-normal leading-relaxed border-b border-slate-50 last:border-0"
-                                  >
-                                    {nested.name}
-                                  </Link>
+                                  <div key={nested.name} className="relative group/nested">
+                                    <Link 
+                                      to={nested.path} 
+                                      onClick={() => { setForceOpenDropdown(null); setForceOpenSubDropdown(null); }}
+                                      className="block px-5 py-3 text-[0.9rem] lg:text-[0.95rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium whitespace-normal leading-relaxed border-b border-slate-50 last:border-0"
+                                    >
+                                      <div className="flex items-center justify-between">
+                                        <span>{nested.name}</span>
+                                        {nested.subDropdown && (
+                                          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 ml-2 flex-shrink-0 text-slate-400 group-hover/nested:text-[#1e3a8a] -rotate-90 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M19.5 8.25l-7.5 7.5-7.5-7.5" clipRule="evenodd" />
+                                          </svg>
+                                        )}
+                                      </div>
+                                    </Link>
+
+                                    {/* 💡 Sub-dropdown ชั้นที่ 4 (Layer 4) : ใช้ w-max ให้กว้างพอดีคำ ไม่เปลืองที่ */}
+                                    {nested.subDropdown && (
+                                      <>
+                                        <div className="hidden lg:block absolute top-0 -right-4 w-4 h-full z-40 bg-transparent pointer-events-auto"></div>
+                                        <div className="absolute top-0 left-[98%] w-max min-w-[12rem] bg-white border border-slate-100 shadow-xl rounded-2xl transition-all duration-200 z-50 transform py-2 opacity-0 invisible -translate-x-2 group-hover/nested:opacity-100 group-hover/nested:visible group-hover/nested:translate-x-0">
+                                          {nested.subDropdown.map(deepNested => (
+                                            <Link 
+                                              key={deepNested.name} 
+                                              to={deepNested.path} 
+                                              onClick={() => { setForceOpenDropdown(null); setForceOpenSubDropdown(null); }}
+                                              className="block px-5 py-2.5 text-[0.85rem] lg:text-[0.9rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium whitespace-nowrap border-b border-slate-50 last:border-0"
+                                            >
+                                              {deepNested.name}
+                                            </Link>
+                                          ))}
+                                        </div>
+                                      </>
+                                    )}
+                                  </div>
                                 ))}
                               </div>
                             )}
@@ -541,6 +599,7 @@ const Navbar = () => {
                       )}
                     </div>
 
+                    {/* 💡 Mobile Menu: รองรับซับซ้อนหลายชั้น (Nested Dropdown) */}
                     {menu.dropdown && isExpanded && (
                       <div className="bg-slate-50/70 flex flex-col border-y border-slate-100">
                         {menu.dropdown.map((sub, index) => {
@@ -566,11 +625,41 @@ const Navbar = () => {
 
                               {sub.subDropdown && isSubExpanded && (
                                 <div className="bg-slate-100/50 flex flex-col border-y border-slate-100">
-                                  {sub.subDropdown.map((nested, nIdx) => (
-                                    <Link key={nIdx} to={nested.path} onClick={() => setIsMobileMenuOpen(false)} className="pl-14 sm:pl-20 pr-6 sm:pr-8 py-2.5 sm:py-3 text-[0.85rem] sm:text-[0.95rem] text-slate-600 hover:text-[#1e3a8a] font-normal transition-colors cursor-pointer whitespace-normal">
-                                      {nested.name}
-                                    </Link>
-                                  ))}
+                                  {sub.subDropdown.map((nested, nIdx) => {
+                                    // 💡 เพิ่มการเช็กสำหรับเมนูชั้นที่ 4 ใน Mobile
+                                    const isNestedExpanded = expandedMobileMenus.includes(nested.name);
+                                    return (
+                                      <div key={nIdx} className="flex flex-col">
+                                        <div className="flex justify-between items-center pr-2 sm:pr-4">
+                                          {nested.subDropdown ? (
+                                            <button onClick={(e) => toggleMobileMenu(nested.name, e)} className="flex-1 text-left pl-14 sm:pl-20 pr-4 py-2.5 sm:py-3 text-[0.85rem] sm:text-[0.95rem] text-slate-600 hover:text-[#1e3a8a] font-normal transition-colors cursor-pointer whitespace-normal">
+                                              {nested.name}
+                                            </button>
+                                          ) : (
+                                            <Link to={nested.path} onClick={() => setIsMobileMenuOpen(false)} className="flex-1 pl-14 sm:pl-20 pr-6 sm:pr-8 py-2.5 sm:py-3 text-[0.85rem] sm:text-[0.95rem] text-slate-600 hover:text-[#1e3a8a] font-normal transition-colors cursor-pointer whitespace-normal">
+                                              {nested.name}
+                                            </Link>
+                                          )}
+                                          {nested.subDropdown && (
+                                            <button onClick={(e) => toggleMobileMenu(nested.name, e)} className="p-2 text-slate-400 hover:bg-slate-200 rounded-lg transition-colors z-10 cursor-pointer flex-shrink-0">
+                                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={`w-3 h-3 transition-transform ${isNestedExpanded ? 'rotate-180 text-[#1e3a8a]' : ''}`}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                                            </button>
+                                          )}
+                                        </div>
+
+                                        {/* เมนูชั้นที่ 4 (ถ้ามี) */}
+                                        {nested.subDropdown && isNestedExpanded && (
+                                          <div className="bg-slate-200/40 flex flex-col border-y border-slate-100">
+                                            {nested.subDropdown.map((deepNested, dIdx) => (
+                                              <Link key={dIdx} to={deepNested.path} onClick={() => setIsMobileMenuOpen(false)} className="pl-18 sm:pl-24 pr-6 sm:pr-8 py-2.5 sm:py-3 text-[0.8rem] sm:text-[0.9rem] text-slate-500 hover:text-[#1e3a8a] font-light transition-colors cursor-pointer whitespace-normal border-b border-slate-100/50 last:border-0">
+                                                {deepNested.name}
+                                              </Link>
+                                            ))}
+                                          </div>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               )}
                             </div>
