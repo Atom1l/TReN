@@ -28,8 +28,8 @@ const Navbar = () => {
   const [forceOpenSubDropdown, setForceOpenSubDropdown] = useState<string | null>(null);
   
   // 💡 State สำหรับ Hover Delay
-  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [subHoverTimeout, setSubHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [hoverTimeout, setHoverTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [subHoverTimeout, setSubHoverTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
   
   const dropdownRef = useRef<HTMLDivElement>(null);
   const desktopNavRef = useRef<HTMLDivElement>(null);
