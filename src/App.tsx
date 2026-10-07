@@ -48,6 +48,7 @@ import CreateMemberWorks from './pages/CreateMemberWorks'
 import MemberWorkDetail from './pages/MemberWorkDetail'
 import AllMemberWorks from './pages/AllMemberWorks'
 import SirawitArticle from './pages/training_details/Sirawit_ArticleDetail'
+import ResearchArchive from './pages/ResearchArchive'
 
 function App() {
   return (
@@ -98,6 +99,9 @@ function App() {
 
               <Route path="/knowledge" element={<Knowledge />} />
               <Route path="/knowledgecolumn" element={<KnowledgeColumn />} />
+
+              {/* Route สำหรับหน้า Research Archive */}
+              <Route path="/researcharchive" element={<ResearchArchive />} />
 
               {/* Route สำหรับหน้า About Us */}
               <Route path="/about/" element={<AboutPage/>}/>

@@ -129,6 +129,7 @@ const NewsSection: React.FC<NewsSectionProps> = memo(({
             {isLoading ? (
                Array(3).fill(0).map((_, i) => <div key={i} className="h-80 bg-slate-200 animate-pulse rounded-3xl"></div>)
             ) : showcases.length > 0 ? (
+              // 💡 3. นำโค้ด .filter().slice() ออก เปลี่ยนกลับมาเป็น .map ปกติ
               showcases.map((showcase, index) => (
                 <Link 
                   key={index} 

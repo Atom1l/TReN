@@ -14,6 +14,7 @@
     "@tailwindcss/postcss": "^4.2.2",
     "@tailwindcss/vite": "^4.2.2",
     "@tinymce/tinymce-react": "^6.3.0",
+    "quill-blot-formatter": "^1.0.5",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-quill-new": "^3.8.3",

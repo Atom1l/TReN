@@ -1,15 +1,20 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react'; // 💡 นำเข้า useMemo เพิ่ม
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useLanguage } from '../contexts/LanguageContext';
 
-import ReactQuill from 'react-quill-new';
+import ReactQuill, { Quill } from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 
-// 💡 นำเข้า Constants จังหวัด
+// @ts-ignore
+import BlotFormatter from 'quill-blot-formatter';
+Quill.register('modules/blotFormatter', (BlotFormatter as any).default || BlotFormatter);
+
+// นำเข้า Constants จังหวัด (โค้ดคุณเหมือนเดิม)
 import { THAI_PROVINCES } from '../constants/Province';
 
 interface AuthorTag {
@@ -36,6 +41,7 @@ const CreateShowcase = () => {
   const [alertInfo, setAlertInfo] = useState({ show: false, type: 'success', message: '' });
 
   const [title, setTitle] = useState('');
+  const [introInfo, setIntroInfo] = useState(''); 
   const [content, setContent] = useState('');
   const [links, setLinks] = useState([{ title: '', url: '' }]);
   
@@ -47,21 +53,28 @@ const CreateShowcase = () => {
   const [schoolName, setSchoolName] = useState('');
   const [yearCreated, setYearCreated] = useState('');
 
-  // 💡 State ใหม่สำหรับจัดการ Custom Province Dropdown
   const [schoolProvince, setSchoolProvince] = useState('');
   const [provinceSearch, setProvinceSearch] = useState('');
   const [isProvinceOpen, setIsProvinceOpen] = useState(false);
+
+  // 💡 State สำหรับจัดการ Dropdown หมวดหมู่ และ Collection Name
+  const [subjectGroup, setSubjectGroup] = useState('');
+  const [subjectSubgroup, setSubjectSubgroup] = useState('');
+  const [publicationType, setPublicationType] = useState('');
+  const [collectionName, setCollectionName] = useState(''); 
 
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
   const [tagSuggestions, setTagSuggestions] = useState<string[]>([]);
   const [isSearchingTag, setIsSearchingTag] = useState(false);
 
-  const modules = {
+  // 💡 ใช้ useMemo เพื่อป้องกันการ Re-render ของ Modules เวลามีการพิมพ์ข้อความ
+  const modules = useMemo(() => ({
     toolbar: [
       ['bold', 'italic', 'underline', 'strike', { 'color': [] },'link', 'image', 'video',{ 'list': 'ordered'}, { 'list': 'bullet' }],
     ],
-  };
+    blotFormatter: {}
+  }), []);
 
   const showCustomAlert = (type: 'success' | 'error', message: string, redirectPath?: string) => {
     setAlertInfo({ show: true, type, message });
@@ -81,6 +94,12 @@ const CreateShowcase = () => {
       }, 3000);
     }
   };
+
+  useEffect(() => {
+    if (subjectGroup !== 'กลุ่มวิชาภาษา') {
+      setSubjectSubgroup('');
+    }
+  }, [subjectGroup]);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -208,12 +227,18 @@ const CreateShowcase = () => {
             }
 
             setTitle(data.title || '');
+            setIntroInfo(data.intro_info || ''); 
             setContent(data.description || ''); 
             
+            // 💡 โหลดหมวดหมู่และ Collection
+            setSubjectGroup(data.subject_group || '');
+            setSubjectSubgroup(data.subject_subgroup || '');
+            setPublicationType(data.publication_type || '');
+            setCollectionName(data.collection_name || ''); // 💡 โหลด Collection Name
+
             setSchoolName(data.school_name || '');
             setYearCreated(data.year_created || '');
             
-            // 💡 โหลดข้อมูลจังหวัดเดิมมาแสดง
             setSchoolProvince(data.school_province || '');
             if (data.school_province) {
               const foundProv = THAI_PROVINCES.find(
@@ -348,6 +373,22 @@ const CreateShowcase = () => {
       return;
     }
 
+    if (!subjectGroup || !publicationType) {
+      showCustomAlert('error', "กรุณาเลือกกลุ่มวิชาและรูปแบบการตีพิมพ์ให้ครบถ้วน");
+      return;
+    }
+
+    if (subjectGroup === 'กลุ่มวิชาภาษา' && !subjectSubgroup) {
+      showCustomAlert('error', "กรุณาเลือกวิชาย่อย (เช่น ภาษาไทย, ภาษาอังกฤษ)");
+      return;
+    }
+
+    // 💡 เช็กว่าถ้ากรอกข้อมูลไม่ครบ
+    if (!collectionName.trim()) {
+      showCustomAlert('error', "กรุณาระบุชื่อกลุ่ม/ฉบับตีพิมพ์ (Collection Name)");
+      return;
+    }
+
     setIsLoading(true);
     setLoadingAction(isDraft ? 'draft' : 'publish');
 
@@ -379,8 +420,15 @@ const CreateShowcase = () => {
 
       const showcaseDataToSave: any = {
         title: title,
+        intro_info: introInfo.trim() || null, 
         description: content, 
         thumbnail_url: thumbnailUrl,
+        
+        subject_group: subjectGroup,           
+        subject_subgroup: subjectSubgroup || null,
+        publication_type: publicationType,
+        collection_name: collectionName.trim() || null, // 💡 บันทึก Collection Name เข้า Database
+
         tag: tags.join(', '), 
         status: targetStatus,
         post_type: 'showcase',
@@ -388,7 +436,7 @@ const CreateShowcase = () => {
         author_name: authors.map(a => a.name).join(', '), 
         author_data: authors,
         school_name: schoolName.trim() || null, 
-        school_province: schoolProvince || null, // 💡 บันทึก Province Value เข้า DB
+        school_province: schoolProvince || null, 
         year_created: yearCreated.trim() || null
       };
 
@@ -488,16 +536,112 @@ const CreateShowcase = () => {
           </p>
         </div>
 
+        {/* ==================== Classification Section (Category / Type) ==================== */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 sm:p-12 mb-6">
+          <h2 className="text-2xl font-bold text-[#1e3a8a] mb-6 pb-4 border-b border-slate-100 flex items-center gap-3">
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
+             หมวดหมู่และรูปแบบการเผยแพร่ (Classification)
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+             {/* 1. กลุ่มวิชา */}
+             <div className="flex flex-col gap-3">
+                <label className="text-slate-800 text-xl font-bold">กลุ่มวิชา <span className="text-red-500">*</span></label>
+                <div className="relative">
+                  <select 
+                    value={subjectGroup} 
+                    onChange={(e) => setSubjectGroup(e.target.value)} 
+                    className="w-full p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white outline-none text-xl text-slate-700 appearance-none cursor-pointer"
+                  >
+                    <option value="" disabled>-- เลือกกลุ่มวิชา --</option>
+                    <option value="กลุ่มวิชาภาษา">กลุ่มวิชาภาษา</option>
+                    <option value="กลุ่มวิชาวิทยาศาสตร์และคณิตศาสตร์">กลุ่มวิชาวิทยาศาสตร์และคณิตศาสตร์</option>
+                    <option value="กลุ่มวิชาสังคมศึกษาและอื่นๆ">กลุ่มวิชาสังคมศึกษาและอื่นๆ</option>
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#1e3a8a]">
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                  </div>
+                </div>
+             </div>
+
+             {/* 2. วิชาย่อย (จะกรอกได้เมื่อเลือกกลุ่มวิชาภาษา) */}
+             <div className="flex flex-col gap-3">
+                <label className={`text-xl font-bold transition-colors ${subjectGroup === 'กลุ่มวิชาภาษา' ? 'text-slate-800' : 'text-slate-400'}`}>
+                  วิชาย่อย {subjectGroup === 'กลุ่มวิชาภาษา' && <span className="text-red-500">*</span>}
+                </label>
+                <div className="relative">
+                  <select 
+                    value={subjectSubgroup} 
+                    onChange={(e) => setSubjectSubgroup(e.target.value)} 
+                    disabled={subjectGroup !== 'กลุ่มวิชาภาษา'}
+                    className={`w-full p-4 border rounded-xl outline-none text-xl appearance-none transition-colors ${subjectGroup === 'กลุ่มวิชาภาษา' ? 'border-slate-300 bg-white text-slate-700 focus:ring-2 focus:ring-[#1e3a8a] cursor-pointer' : 'border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed'}`}
+                  >
+                    <option value="" disabled>-- เลือกวิชาย่อย --</option>
+                    <option value="ภาษาไทย">ภาษาไทย</option>
+                    <option value="ภาษาอังกฤษ">ภาษาอังกฤษ</option>
+                    <option value="ภาษาอื่นๆ">ภาษาอื่นๆ</option>
+                  </select>
+                  <div className={`absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${subjectGroup === 'กลุ่มวิชาภาษา' ? 'text-[#1e3a8a]' : 'text-slate-300'}`}>
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                  </div>
+                </div>
+             </div>
+
+             {/* 3. รูปแบบการตีพิมพ์ */}
+             <div className="flex flex-col gap-3">
+                <label className="text-slate-800 text-xl font-bold">รูปแบบการตีพิมพ์ <span className="text-red-500">*</span></label>
+                <div className="relative">
+                  <select 
+                    value={publicationType} 
+                    onChange={(e) => setPublicationType(e.target.value)} 
+                    className="w-full p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white outline-none text-xl text-slate-700 appearance-none cursor-pointer"
+                  >
+                    <option value="" disabled>-- เลือกรูปแบบ --</option>
+                    <option value="เล่มรวมวิจัย">ฉบับเล่มรวมวิจัย (Anthology)</option>
+                    <option value="งานวิจัยรายเรื่อง">งานวิจัยรายเรื่อง (Individual)</option>
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#1e3a8a]">
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                  </div>
+                </div>
+             </div>
+          </div>
+
+          {/* 💡 4. Collection Name (แสดงเสมอเมื่อเลือกรูปแบบการตีพิมพ์แล้ว เพื่อรองรับทั้งแบบเล่มและรายเรื่อง) */}
+          {publicationType && (
+            <div className="flex flex-col gap-3 animate-fade-in border-t border-slate-100 pt-6">
+                <label className="text-slate-800 text-xl font-bold">ชื่อกลุ่ม/ฉบับตีพิมพ์ (Collection Name) <span className="text-red-500">*</span></label>
+                <input 
+                  type="text" 
+                  placeholder={publicationType === 'เล่มรวมวิจัย' ? 'เช่น ฉบับเล่มรวมวิจัยปี 2023, 2024–2025' : 'เช่น งานวิจัยรายเรื่องปี 2565 เป็นต้นไป'} 
+                  value={collectionName} 
+                  onChange={(e) => setCollectionName(e.target.value)} 
+                  className="w-full p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white outline-none text-xl text-slate-700 transition-colors"
+                />
+            </div>
+          )}
+        </div>
+
+        {/* ==================== Main Content Section ==================== */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
           <div className="p-8 sm:p-12">
             
             {/* Title Input */}
             <input
               type="text"
-              placeholder={t('require_title') || "Enter Showcase's Title..."}
+              placeholder={t('require_title') || "ชื่อผลงานหลัก / Title (เช่น บทนำสรุป...)"}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full h-auto text-3xl sm:text-4xl leading-[1.5] font-bold text-[#1e3a8a] placeholder-slate-300 border-b border-slate-200 pt-2 pb-4 mb-8 focus:outline-none focus:border-[#1e3a8a] transition-colors bg-transparent"
+              className="w-full h-auto text-3xl sm:text-4xl leading-[1.5] font-bold text-[#1e3a8a] placeholder-slate-300 border-b border-slate-200 pt-2 pb-4 mb-6 focus:outline-none focus:border-[#1e3a8a] transition-colors bg-transparent"
+            />
+
+            {/* Intro Info (ข้อความเกริ่นนำ) */}
+            <textarea
+              placeholder="ข้อความอธิบายย่อย (Intro Info) เช่น รวบรวมรายงานผลการวิจัยฉบับสมบูรณ์..."
+              value={introInfo}
+              onChange={(e) => setIntroInfo(e.target.value)}
+              rows={2}
+              className="w-full p-4 text-xl text-slate-600 bg-slate-50 border border-slate-200 rounded-xl mb-8 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 resize-none transition-all custom-scrollbar"
             />
 
             {/* Thumbnail Upload */}
@@ -526,7 +670,7 @@ const CreateShowcase = () => {
                 value={content} 
                 onChange={setContent} 
                 modules={modules}
-                placeholder={t('showcase_brief_description') || 'อธิบายรายละเอียดผลงาน กรณีศึกษา หรือข้อค้นพบของคุณที่นี่...'}
+                placeholder={t('showcase_brief_description') || 'เขียนเนื้อหาและรายละเอียดแบบสมบูรณ์ของผลงานชิ้นนี้...'}
                 className="min-h-[300px] text-xl text-slate-700"
               />
             </div>
@@ -538,7 +682,7 @@ const CreateShowcase = () => {
           
           {/* Authors */}
           <div className="relative">
-            <label className="block text-[#1e3a8a] text-2xl font-bold mb-3">{t('create_showcase_author') || 'Author(s)'}</label>
+            <label className="block text-[#1e3a8a] text-2xl font-bold mb-3">{t('create_showcase_author') || 'คณะผู้จัดทำ (Authors)'}</label>
             <div className="w-full flex flex-wrap items-center gap-2 p-3 border border-slate-300 rounded-xl focus-within:ring-2 focus-within:ring-[#1e3a8a] transition-all bg-white min-h-[55px]">
               {authors.map((author, index) => (
                 <span key={index} className="flex items-center gap-1.5 bg-blue-100 text-[#1e3a8a] px-3 py-1.5 rounded-md text-lg font-medium shadow-sm">
@@ -590,7 +734,6 @@ const CreateShowcase = () => {
             )}
           </div>
 
-          {/* 💡 Grid 3 คอลัมน์ สำหรับ School Name, Custom Province Dropdown และ Year Created */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex flex-col gap-3">
               <label className="text-[#1e3a8a] text-2xl font-bold">{t('school_name') || 'ชื่อโรงเรียนต้นสังกัด'}</label>
@@ -603,7 +746,6 @@ const CreateShowcase = () => {
               />
             </div>
             
-            {/* 💡 ช่องเลือกจังหวัดแบบ Searchable Custom Dropdown */}
             <div className="flex flex-col gap-3 relative">
               <label className="text-[#1e3a8a] text-2xl font-bold">{t('province') || 'จังหวัด'}</label>
               <input
@@ -612,14 +754,13 @@ const CreateShowcase = () => {
                 value={provinceSearch}
                 onChange={(e) => {
                   setProvinceSearch(e.target.value);
-                  setSchoolProvince(''); // เคลียร์ค่าตัวแปรหลักเมื่อมีการพิมพ์ใหม่
+                  setSchoolProvince(''); 
                   setIsProvinceOpen(true);
                 }}
                 onFocus={() => setIsProvinceOpen(true)}
                 onBlur={() => setTimeout(() => setIsProvinceOpen(false), 200)}
                 className="w-full p-3.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white outline-none text-xl text-slate-700"
               />
-              {/* ลูกศร Dropdown สวยๆ */}
               <div className="absolute right-4 top-[65px] pointer-events-none text-slate-400">
                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
                    <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -650,7 +791,7 @@ const CreateShowcase = () => {
             </div>
 
             <div className="flex flex-col gap-3">
-              <label className="text-[#1e3a8a] text-2xl font-bold">{t('year_created') || 'ปีที่สร้างผลงาน'}</label>
+              <label className="text-[#1e3a8a] text-2xl font-bold">{t('year_created') || 'ปีที่จัดทำผลงาน'}</label>
               <input 
                 type="text" 
                 placeholder={t('year_created_placeholder') || 'เช่น พ.ศ. 2567, 2024'} 
@@ -665,7 +806,7 @@ const CreateShowcase = () => {
           <div>
             <div className="flex items-center justify-between mb-3">
               <label className="flex items-baseline gap-2 text-[#1e3a8a] text-2xl font-bold">
-                {t('link_to_work') || 'Links to your work'}
+                {t('link_to_work') || 'แนบลิงก์เพิ่มเติม (Links)'}
               </label>
               <button 
                 type="button" 
@@ -680,7 +821,7 @@ const CreateShowcase = () => {
                 <div key={index} className="flex flex-col sm:flex-row gap-3 items-start sm:items-center relative">
                   <input 
                     type="text" 
-                    placeholder={t('link_title') || 'Link Title (เช่น YouTube, Google Drive)'} 
+                    placeholder={t('link_title') || 'ชื่อลิงก์ (เช่น PDF, Google Drive)'} 
                     value={link.title} 
                     onChange={(e) => {
                       const newLinks = [...links];
@@ -719,7 +860,7 @@ const CreateShowcase = () => {
 
           {/* Tags */}
           <div className="relative">
-            <label className="block text-[#1e3a8a] text-2xl font-bold mb-3">{t('category_and_tags') || 'Tags'}</label>
+            <label className="block text-[#1e3a8a] text-2xl font-bold mb-3">{t('category_and_tags') || 'Tags (คำค้นหา)'}</label>
             <div className="w-full flex flex-wrap items-center gap-2 p-3 border border-slate-300 rounded-xl focus-within:ring-2 focus-within:ring-[#1e3a8a] transition-all bg-white min-h-[55px]">
               {tags.map((tag, index) => (
                 <span key={index} className="flex items-center gap-1.5 bg-[#EBF1FA] text-[#1e3a8a] px-3.5 py-1.5 rounded-md text-lg font-medium shadow-sm">

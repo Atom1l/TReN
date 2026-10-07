@@ -523,7 +523,7 @@ const ShowcaseDetail = () => {
         />
 
         {/* ปุ่ม Link to Work (ถ้ามี) */}
-        {validLinks.length > 0 && (
+        {validLinks.length > 0 && (!showcase.tag || !showcase.tag.toLowerCase().includes('unshow')) && (
           <div className="mb-12 border-t border-slate-200 pt-8">
             <h3 className="text-xl font-bold text-[#1e3a8a] mb-4">{t('link_to_teacher_work') || 'ลิงก์ผลงานเพิ่มเติม'}</h3>
             <div className="flex flex-wrap gap-4">

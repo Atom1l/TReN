@@ -56,7 +56,7 @@ const Home = () => {
             .select('*')
             .eq('status', 'published') 
             .order('created_at', { ascending: false })
-            .limit(3),
+            .limit(10),
           // 💡 คิวรีใหม่สำหรับดึงข้อมูลตาราง member_works
           supabase
             .from('member_works')
@@ -70,7 +70,13 @@ const Home = () => {
         if (newsRes.data) setNewsItems(newsRes.data as NewsItem[]);
 
         if (!showcaseRes.error && showcaseRes.data) {
-          setShowcases(showcaseRes.data);
+          const filteredShowcases = showcaseRes.data.filter((showcase: any) => {
+            if (!showcase.tag) return true;
+            const tagList = showcase.tag.toLowerCase().split(',').map((t: string) => t.trim());
+            return !tagList.includes('unshow');
+          }).slice(0, 3);
+          
+          setShowcases(filteredShowcases);
         }
 
         // 💡 อัปเดต State ผลงานสมาชิก ถ้าดึงมาสำเร็จ

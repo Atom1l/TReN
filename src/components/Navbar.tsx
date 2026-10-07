@@ -27,9 +27,9 @@ const Navbar = () => {
   const [forceOpenDropdown, setForceOpenDropdown] = useState<string | null>(null);
   const [forceOpenSubDropdown, setForceOpenSubDropdown] = useState<string | null>(null);
   
-  // 💡 State สำหรับ Hover Delay
-  const [hoverTimeout, setHoverTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
-  const [subHoverTimeout, setSubHoverTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
+  // 💡 เปลี่ยนจาก useState เป็น useRef เพื่อให้ยกเลิก Timeout ได้ทันที ไม่เกิดบั๊ก Stale State
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const subHoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   const dropdownRef = useRef<HTMLDivElement>(null);
   const desktopNavRef = useRef<HTMLDivElement>(null);
@@ -202,30 +202,34 @@ const Navbar = () => {
     );
   };
 
-  // 💡 Functions สำหรับ Hover Delay
+  // 💡 ฟังก์ชันจัดการ Hover โดยใช้ useRef ช่วย
   const handleMouseEnter = (menuName: string) => {
-    if (hoverTimeout) clearTimeout(hoverTimeout);
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
     setForceOpenDropdown(menuName);
   };
 
   const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
+    hoverTimeoutRef.current = setTimeout(() => {
       setForceOpenDropdown(null);
       setForceOpenSubDropdown(null);
     }, 200);
-    setHoverTimeout(timeout);
   };
 
   const handleSubMouseEnter = (subName: string) => {
-    if (subHoverTimeout) clearTimeout(subHoverTimeout);
+    if (subHoverTimeoutRef.current) {
+      clearTimeout(subHoverTimeoutRef.current);
+      subHoverTimeoutRef.current = null;
+    }
     setForceOpenSubDropdown(subName);
   };
 
   const handleSubMouseLeave = () => {
-    const timeout = setTimeout(() => {
+    subHoverTimeoutRef.current = setTimeout(() => {
       setForceOpenSubDropdown(null);
     }, 150);
-    setSubHoverTimeout(timeout);
   };
 
   const menuItems = [
@@ -262,7 +266,6 @@ const Navbar = () => {
           subDropdown: [
             { name: t('knowledge_menu_1_1') || '1.1 ทำความรู้จักกับ EAR', path: '/knowledge#ear-intro' },
             { 
-              // 💡 ปรับให้ 1.2 รองรับ Sub-dropdown ชั้นที่ 3
               name: t('knowledge_menu_1_2') || '1.2 หลักการ EAR', 
               path: '/knowledge#ear-principles',
               subDropdown: [
@@ -274,7 +277,17 @@ const Navbar = () => {
         },
         { name: t('knowledge_menu_2') || '2. คลังบทเรียนออนไลน์: ขั้นตอนการทำ EAR (วิดีโอ)', path: '/knowledge#ear-clips' },
         { name: t('knowledge_menu_4') || '3. คำถามที่พบบ่อย (FAQ)', path: '/knowledge#ear-faq' },
-        { name: t('knowledge_menu_5') || '4. แหล่งเรียนรู้และเครือข่ายสากล (Global EAR Resources & Networks)', path: '/knowledge#ear-global' }
+        { 
+          name: t('knowledge_menu_5') || '4. แหล่งเรียนรู้และเครือข่ายสากล', 
+          path: '/knowledge#global-network',
+          subDropdown: [
+            { name: t('global_tab_resources') || '1. คลังงานวิจัย & คู่มือครู', path: '/knowledge?tab=resources#global-network' },
+            { name: t('global_tab_mentoring') || '2. คู่มือครูพี่เลี้ยง (Mentors)', path: '/knowledge?tab=mentoring#global-network' },
+            { name: t('global_tab_networks') || '3. เครือข่ายการเรียนรู้สากล', path: '/knowledge?tab=networks#global-network' },
+            { name: t('global_tab_articles') || '4. บทความวิชาการ & วารสาร', path: '/knowledge?tab=articles#global-network' },
+            { name: t('global_tab_tools') || '5. คลังเครื่องมือทำวิจัย', path: '/knowledge?tab=tools#global-network' }
+          ]
+        }
       ]
     },
     { 
@@ -286,7 +299,7 @@ const Navbar = () => {
         { name: t('past_events_navbar') || 'ผ่านมาแล้ว', path: '/events/all?filter=past' }
       ]
     },
-    { name: t('nav_research') || 'งานวิจัย', path: '/showcases' }, 
+    { name: t('nav_research') || 'งานวิจัย', path: '/researcharchive' }, 
     { name: t('nav_blogs') || 'บล็อกงานวิจัย', path: '/blogs' },
     { name: t('nav_contact') || 'ติดต่อเรา', path: '/contact' }
   ];
@@ -366,12 +379,11 @@ const Navbar = () => {
                     {menu.dropdown && (
                       <div className={`absolute top-[80%] mt-2 bg-white border border-slate-100 shadow-xl rounded-2xl transition-all duration-300 z-50 transform py-2 
                         w-[15rem] lg:w-[17rem] xl:w-[19rem] 
-                        ${/* 💡 ดึงเมนูตั้งแต่ "คลังความรู้" ให้เยื้องซ้ายเพื่อเพิ่มพื้นที่กางขวา */ ''}
                         ${index > 1 ? 'left-1/2 -translate-x-[75%]' : 'left-1/2 -translate-x-1/2'} 
                         ${forceOpenDropdown === menu.name ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}
                       `}>
-                        {/* Invisible Bridge ดักด้านบนกันเมาส์หลุด */}
                         <div className="absolute -top-4 left-0 w-full h-4 bg-transparent pointer-events-auto"></div>
+                        <div className="absolute -bottom-4 left-0 w-full h-4 bg-transparent pointer-events-auto"></div>
 
                         {menu.dropdown.map(sub => (
                           <div 
@@ -383,7 +395,7 @@ const Navbar = () => {
                             <Link 
                               to={sub.path} 
                               onClick={() => { setForceOpenDropdown(null); setForceOpenSubDropdown(null); }}
-                              className="w-full text-left flex items-center justify-between px-5 py-3 text-[0.95rem] lg:text-[1rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium border-b border-slate-50 last:border-0 whitespace-normal leading-relaxed"
+                              className="w-full text-left flex items-center justify-between px-5 py-3 text-[0.95rem] lg:text-[1rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium border-b border-slate-50 last:border-0 whitespace-normal leading-relaxed relative z-10"
                             >
                               <span>{sub.name}</span>
                               {sub.subDropdown && (
@@ -393,24 +405,24 @@ const Navbar = () => {
                               )}
                             </Link>
 
-                            {/* Invisible Bridge ต่อ SubDropdown */}
                             {sub.subDropdown && (
-                              <div className="hidden lg:block absolute top-0 -right-4 w-4 h-full z-40 bg-transparent pointer-events-auto"></div>
+                              <div className="hidden lg:block absolute top-0 -right-6 w-8 h-full z-40 bg-transparent pointer-events-auto"></div>
                             )}
 
-                            {/* 💡 Sub-dropdown ชั้นที่ 3 (Layer 3) */}
                             {sub.subDropdown && (
-                              <div className={`absolute top-0 left-[100%] ml-1 w-[15rem] lg:w-[17rem] xl:w-[18rem] bg-white border border-slate-100 shadow-xl rounded-2xl transition-all duration-200 z-50 transform py-2 ${
+                              <div className={`absolute top-0 left-[100%] ml-0.5 w-[15rem] lg:w-[17rem] xl:w-[18rem] bg-white border border-slate-100 shadow-xl rounded-2xl transition-all duration-200 z-50 transform py-2 ${
                                 forceOpenSubDropdown === sub.name
                                   ? 'opacity-100 visible translate-x-0'
                                   : 'opacity-0 invisible -translate-x-2'
                               }`}>
+                                <div className="absolute top-0 -left-4 w-4 h-full bg-transparent pointer-events-auto z-40"></div>
+
                                 {sub.subDropdown.map(nested => (
                                   <div key={nested.name} className="relative group/nested">
                                     <Link 
                                       to={nested.path} 
                                       onClick={() => { setForceOpenDropdown(null); setForceOpenSubDropdown(null); }}
-                                      className="block px-5 py-3 text-[0.9rem] lg:text-[0.95rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium whitespace-normal leading-relaxed border-b border-slate-50 last:border-0"
+                                      className="block px-5 py-3 text-[0.9rem] lg:text-[0.95rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium whitespace-normal leading-relaxed border-b border-slate-50 last:border-0 relative z-10"
                                     >
                                       <div className="flex items-center justify-between">
                                         <span>{nested.name}</span>
@@ -422,17 +434,23 @@ const Navbar = () => {
                                       </div>
                                     </Link>
 
-                                    {/* 💡 Sub-dropdown ชั้นที่ 4 (Layer 4) : ใช้ w-max ให้กว้างพอดีคำ ไม่เปลืองที่ */}
                                     {nested.subDropdown && (
                                       <>
-                                        <div className="hidden lg:block absolute top-0 -right-4 w-4 h-full z-40 bg-transparent pointer-events-auto"></div>
-                                        <div className="absolute top-0 left-[98%] w-max min-w-[12rem] bg-white border border-slate-100 shadow-xl rounded-2xl transition-all duration-200 z-50 transform py-2 opacity-0 invisible -translate-x-2 group-hover/nested:opacity-100 group-hover/nested:visible group-hover/nested:translate-x-0">
+                                        {/* เปลี่ยนสะพานจาก left เป็น right */}
+                                        <div className="hidden lg:block absolute top-0 -right-6 w-8 h-full z-40 bg-transparent pointer-events-auto"></div>
+                                        
+                                        {/* เปลี่ยนทิศทางการกางจาก right-[98%] เป็น left-[100%] และเปลี่ยนทิศอนิเมชั่นเป็น -translate-x-2 */}
+                                        <div className="absolute top-0 left-[100%] ml-0.5 w-max min-w-[12rem] bg-white border border-slate-100 shadow-xl rounded-2xl transition-all duration-200 z-50 transform py-2 opacity-0 invisible -translate-x-2 group-hover/nested:opacity-100 group-hover/nested:visible group-hover/nested:translate-x-0">
+                                          
+                                          {/* สะพานดักเมาส์ลากกลับ เปลี่ยนจาก right เป็น left */}
+                                          <div className="absolute top-0 -left-4 w-4 h-full bg-transparent pointer-events-auto z-40"></div>
+                                          
                                           {nested.subDropdown.map(deepNested => (
                                             <Link 
                                               key={deepNested.name} 
                                               to={deepNested.path} 
                                               onClick={() => { setForceOpenDropdown(null); setForceOpenSubDropdown(null); }}
-                                              className="block px-5 py-2.5 text-[0.85rem] lg:text-[0.9rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium whitespace-nowrap border-b border-slate-50 last:border-0"
+                                              className="block px-5 py-2.5 text-[0.85rem] lg:text-[0.9rem] text-slate-600 hover:bg-[#EBF1FA] hover:text-[#1e3a8a] transition-colors font-medium whitespace-nowrap border-b border-slate-50 last:border-0 relative z-10"
                                             >
                                               {deepNested.name}
                                             </Link>

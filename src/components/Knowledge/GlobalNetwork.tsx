@@ -1,13 +1,39 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useLocation } from 'react-router-dom';
 
 const GlobalNetwork = () => {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState('resources');
+  const location = useLocation();
+
+  const [activeTab, setActiveTab] = useState(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tabParam = searchParams.get('tab');
+    return tabParam || 'resources'; // ถ้าไม่มีให้ใช้ 'resources' เป็นค่าเริ่มต้น
+  });
   
   // 💡 State สำหรับควบคุม Pop-up (Modal)
   const [selectedResource, setSelectedResource] = useState<any | null>(null);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tabParam = searchParams.get('tab');
+    
+    if (tabParam) {
+      setActiveTab(tabParam);
+      
+      // หน่วงเวลาเล็กน้อยเพื่อให้ Layout อัปเดตก่อนเลื่อนจอ
+      setTimeout(() => {
+        const element = document.getElementById('global-network');
+        if (element) {
+          const y = element.getBoundingClientRect().top + window.scrollY - 100; // ลบ 100 เผื่อพื้นที่ Navbar
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, [location.search]);
 
   // ป้องกันการ Scroll หน้าเว็บหลักเวลาเปิด Pop-up
   useEffect(() => {
@@ -91,7 +117,7 @@ const GlobalNetwork = () => {
           {activeTab === 'resources' && (
             <div className="animate-fade-in space-y-16">
               <div className="text-center max-w-4xl mx-auto mb-12">
-                <h3 className="text-4xl md:text-5xl font-bold text-[#1e3a8a] mb-4 max-w-xl mx-auto leading-tight">
+                <h3 className="text-4xl md:text-5xl font-bold text-[#1e3a8a] mb-4 max-w-4xl mx-auto leading-tight">
                   {t('global_resources_title') || 'คลังงานวิจัยครูพี่เลี้ยงและคู่มือการทำวิจัยครู EAR'}
                 </h3>
                 <p className="text-xl md:text-2xl text-slate-800 leading-relaxed font-light max-w-2xl mx-auto">
@@ -155,103 +181,105 @@ const GlobalNetwork = () => {
               <hr className="border-slate-200" />
 
               {/* 1.2 Handbook */}
-              <div id="ear-handbook" className="max-w-6xl mx-auto overflow-hidden flex flex-col pt-8">     
-                <div className="text-center pb-10 mb-10 border-b border-slate-100">
-                    <h3 className="text-4xl md:text-5xl font-bold text-[#1e3a8a] mb-6 leading-tight">
-                        {t('knowledge_handbook_heading') || 'คู่มือการทำ Exploratory Action Research (EAR)'}
-                    </h3>
-                    <p className="text-xl md:text-2xl text-slate-700 font-light leading-relaxed max-w-4xl mx-auto">
+              <div id="ear-handbook" className="max-w-7xl mx-auto flex flex-col pt-8">     
+                
+                {/* 💡 1. ปรับหัวข้อและคำเปรยให้ชิดซ้าย และใส่เส้นขอบซ้ายเหมือน 1.1 */}
+                <div className="mb-10">
+                    <h4 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] border-l-4 border-[#1e3a8a] pl-4 mb-6 leading-tight">
+                        1.2 {t('knowledge_handbook_heading') || 'คู่มือการทำ Exploratory Action Research (EAR)'}
+                    </h4>
+                    <p className="text-xl md:text-2xl text-slate-700 font-light leading-relaxed max-w-4xl">
                         {t('knowledge_handbook_desc_1') || 'การอบรมและการทำวิจัย EAR ในเครือข่ายอ้างอิงจาก '}
                         <em className="font-medium text-[#1e3a8a] italic">
                         {t('knowledge_handbook_name') || 'A Handbook for Exploratory Action Research'}
                         </em>
-                        <span className='font-medium'>{t('knowledge_handbook_desc_1_1')}</span> {t('and')} <span className='font-medium'>{t('knowledge_handbook_desc_1_2')}</span>
+                        {' '}<span className='font-medium'>{t('knowledge_handbook_desc_1_1')}</span> {t('and')} <span className='font-medium'>{t('knowledge_handbook_desc_1_2')}</span>{' '}
                         {t('knowledge_handbook_desc_2') || 'สมาชิกและคุณครูที่สนใจสามารถใช้คู่มือเล่มนี้เพื่อฝึกปฏิบัติจริง หรือใช้เป็นเครื่องมือทบทวนความรู้ด้วยตนเองได้ตลอดเวลา'}
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-8 lg:gap-16">
-                    {/* ฉบับภาษาไทย */}
-                    <div className="flex flex-col items-center text-center bg-slate-50/50 p-6 md:p-8 rounded-3xl border border-slate-100">
-                        <h4 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] mb-8">
-                        {t('knowledge_handbook_th_version') || 'ฉบับภาษาไทย'}
-                        </h4>
-                        
-                        <div className="w-full max-w-[240px] aspect-[3/4] bg-slate-100 rounded-xl border-2 border-dashed border-slate-300 flex flex-col items-center justify-center mb-6 shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-16 h-16 text-slate-300 mb-4">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
-                        </svg>
-                        <span className="text-slate-400 font-medium text-2xl">
-                            {t('knowledge_handbook_coming_soon') || 'Coming Soon'}
-                        </span>
+                {/* 💡 2. ปรับ Layout หนังสือเป็น Horizontal Card (รูปซ้าย เนื้อหาขวา) */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    {/* ฉบับภาษาไทย (Coming Soon) */}
+                    <div className="flex flex-col sm:flex-row bg-slate-50/50 p-6 md:p-8 rounded-3xl border border-slate-200 gap-6 lg:gap-8 items-start">
+                        {/* ปกหนังสือ */}
+                        <div className="w-full sm:w-2/5 max-w-[180px] mx-auto sm:mx-0 aspect-[3/4] bg-slate-100 rounded-xl border-2 border-dashed border-slate-300 flex flex-col items-center justify-center shrink-0 shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-slate-300 mb-3">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+                            </svg>
+                            <span className="text-slate-400 font-medium text-lg">Coming Soon</span>
                         </div>
                         
-                        <p className="text-lg md:text-xl text-slate-500 italic mb-8 min-h-[60px] flex items-center justify-center text-center">
-                        <span>
-                            {t('knowledge_handbook_th_desc_1') || 'คู่มือทำวิจัย EAR ฉบับภาษาไทย อยู่ระหว่าง'}<br />{t('knowledge_handbook_th_desc_2') || 'การแปลและจัดทำ เตรียมพบกันเร็วๆ นี้'}
-                        </span>
-                        </p>
-                        
-                        <button disabled className="inline-flex justify-center items-center w-full max-w-[240px] gap-2 bg-slate-200 text-slate-400 px-6 py-4 rounded-xl font-bold text-xl cursor-not-allowed">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
-                        </svg>
-                        {t('knowledge_handbook_btn_read') || 'คลิกเพื่ออ่าน'}
-                        </button>
+                        {/* รายละเอียด */}
+                        <div className="flex flex-col flex-1 h-full text-center sm:text-left">
+                            <h5 className="text-2xl md:text-3xl font-bold text-[#1e3a8a] mb-4">
+                                {t('knowledge_handbook_th_version') || 'ฉบับภาษาไทย'}
+                            </h5>
+                            <p className="text-lg md:text-xl text-slate-500 italic mb-6 leading-relaxed flex-grow">
+                                {t('knowledge_handbook_th_desc_1') || 'คู่มือทำวิจัย EAR ฉบับภาษาไทย อยู่ระหว่าง'} {t('knowledge_handbook_th_desc_2') || 'การแปลและจัดทำ เตรียมพบกันเร็วๆ นี้'}
+                            </p>
+                            
+                            <button disabled className="mt-auto inline-flex justify-center sm:justify-start items-center w-full sm:w-fit gap-2 bg-slate-200 text-slate-400 px-6 py-3.5 rounded-xl font-bold text-lg cursor-not-allowed">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                </svg>
+                                {t('knowledge_handbook_btn_read') || 'คลิกเพื่ออ่าน'}
+                            </button>
+                        </div>
                     </div>
 
                     {/* ฉบับภาษาอังกฤษ */}
-                    <div className="flex flex-col items-center text-center bg-blue-50/30 p-6 md:p-8 rounded-3xl border border-blue-50">
-                        <h4 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] mb-8">
-                        {t('knowledge_handbook_en_version') || 'ฉบับภาษาอังกฤษ'}
-                        </h4>
-                        
+                    <div className="flex flex-col sm:flex-row bg-blue-50/40 p-6 md:p-8 rounded-3xl border border-blue-100 gap-6 lg:gap-8 items-start hover:shadow-md transition-shadow">
+                        {/* ปกหนังสือ */}
                         <a 
-                        href="https://www.teachingenglish.org.uk/sites/teacheng/files/pub_30510_BC%20Explore%20Actions%20Handbook%20ONLINE%20AW.pdf" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="block relative w-full max-w-[240px] transition-transform duration-500 hover:scale-105 mb-6"
+                            href="https://www.teachingenglish.org.uk/sites/teacheng/files/pub_30510_BC%20Explore%20Actions%20Handbook%20ONLINE%20AW.pdf" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-full sm:w-2/5 max-w-[180px] mx-auto sm:mx-0 shrink-0 block relative transition-transform duration-500 hover:scale-105"
                         >
-                        <img 
-                            src="Ear_learning_clips/Handbook.JPG" 
-                            alt="EAR Handbook Cover" 
-                            className="w-full h-auto aspect-[3/4] object-cover rounded-xl shadow-lg border border-slate-200"
-                            onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                            e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                            }}
-                        />
-                        {/* Fallback ถ้าโหลดรูปไม่ขึ้น */}
-                        <div className="hidden w-full aspect-[3/4] bg-[#1e3a8a] rounded-xl shadow-lg border border-slate-200 flex flex-col items-center justify-center p-6 text-white text-center">
-                            <div className="w-16 h-16 mb-4 opacity-50">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
-                            </svg>
+                            <img 
+                                src="Ear_learning_clips/Handbook.JPG" 
+                                alt="EAR Handbook Cover" 
+                                className="w-full h-auto aspect-[3/4] object-cover rounded-xl shadow-md border border-slate-200"
+                                onError={(e) => {
+                                    e.currentTarget.style.display = 'none';
+                                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                                }}
+                            />
+                            <div className="hidden w-full aspect-[3/4] bg-[#1e3a8a] rounded-xl shadow-md border border-slate-200 flex flex-col items-center justify-center p-4 text-white text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 mb-3 opacity-50">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+                                </svg>
+                                <span className="font-bold text-lg leading-tight">A Handbook for EAR</span>
                             </div>
-                            <span className="font-bold text-2xl">
-                            {t('knowledge_handbook_fallback') || 'A Handbook for EAR'}
-                            </span>
+                        </a>
+                        
+                        {/* รายละเอียด */}
+                        <div className="flex flex-col flex-1 h-full text-center sm:text-left">
+                            <h5 className="text-2xl md:text-3xl font-bold text-[#1e3a8a] mb-4">
+                                {t('knowledge_handbook_en_version') || 'ฉบับภาษาอังกฤษ'}
+                            </h5>
+                            <p className="text-lg md:text-xl text-slate-600 mb-6 leading-relaxed font-light flex-grow">
+                                {t('knowledge_handbook_en_desc') || '(A Handbook for Exploratory Action Research)'}
+                            </p>
+                            
+                            <a 
+                                href="https://www.teachingenglish.org.uk/sites/teacheng/files/pub_30510_BC%20Explore%20Actions%20Handbook%20ONLINE%20AW.pdf" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="mt-auto inline-flex justify-center sm:justify-start items-center w-full sm:w-fit gap-3 bg-[#1e3a8a] text-white px-6 py-3.5 rounded-xl font-bold text-lg shadow-sm hover:bg-blue-900 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                </svg>
+                                {t('knowledge_handbook_btn_read') || 'คลิกเพื่ออ่าน'}
+                            </a>
                         </div>
-                        </a>
-                        
-                        <p className="text-lg md:text-xl text-slate-500 mb-8 min-h-[60px] flex items-center justify-center text-center font-light">
-                        {t('knowledge_handbook_en_desc') || '(A Handbook for Exploratory Action Research)'}
-                        </p>
-                        
-                        <a 
-                        href="https://www.teachingenglish.org.uk/sites/teacheng/files/pub_30510_BC%20Explore%20Actions%20Handbook%20ONLINE%20AW.pdf" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="inline-flex justify-center items-center w-full max-w-[240px] gap-3 bg-[#1e3a8a] text-white px-6 py-4 rounded-xl font-bold text-xl shadow-md hover:bg-blue-800 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
-                        >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                        </svg>
-                        {t('knowledge_handbook_btn_read') || 'คลิกเพื่ออ่าน'}
-                        </a>
                     </div>
-                    </div>
+
                 </div>
+              </div>
             </div>
           )}
 

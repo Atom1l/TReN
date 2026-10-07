@@ -205,10 +205,18 @@ const AllShowcases = () => {
 
         if (showcasesData && showcasesData.length > 0) {
           
+          // 💡 1. สกัดเอาเฉพาะผลงานที่ "ไม่มีแท็ก Unshow" ก่อนเป็นอันดับแรก
+          const filteredData = showcasesData.filter((sc: any) => {
+            if (!sc.tag) return true;
+            const tagList = sc.tag.toLowerCase().split(',').map((t: string) => t.trim());
+            return !tagList.includes('unshow');
+          });
+
           const tagFrequency: Record<string, number> = {};
 
+          // 💡 2. ใช้ filteredData แทน showcasesData เดิม ในการหาความถี่ของ Tag
           const enrichedShowcases = await Promise.all(
-            showcasesData.map(async (sc) => {
+            filteredData.map(async (sc) => {
               if (sc.tag) {
                 sc.tag.split(',').forEach((t: string) => {
                   const standardTag = normalizeTag(t);
@@ -221,7 +229,8 @@ const AllShowcases = () => {
             })
           );
 
-          const authorIds = [...new Set(showcasesData.map(s => s.author_id).filter(Boolean))];
+          // 💡 3. ใช้ filteredData ในการดึงข้อมูลผู้เขียนเช่นกัน
+          const authorIds = [...new Set(filteredData.map(s => s.author_id).filter(Boolean))];
           let usersData: any[] = [];
           if (authorIds.length > 0) {
             const { data: uData } = await supabase.from('user').select('id, first_name, last_name').in('id', authorIds);
@@ -237,12 +246,14 @@ const AllShowcases = () => {
             };
           });
 
+          // ดึง Top 4 Tags จากความถี่ที่เหลืออยู่
           const topTags = Object.entries(tagFrequency)
             .sort((a, b) => b[1] - a[1])
             .slice(0, 4)
             .map(entry => entry[0]);
 
           setDynamicTags(['all', ...topTags]);
+          // 💡 4. เก็บข้อมูลที่กรองแล้วและผ่านกระบวนการแล้วลง State
           setShowcases(finalShowcases);
         }
       } catch (error) {
