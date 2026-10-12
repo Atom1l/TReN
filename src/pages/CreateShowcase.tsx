@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useRef, useEffect, useMemo } from 'react'; // 💡 นำเข้า useMemo เพิ่ม
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -14,7 +14,6 @@ import 'react-quill-new/dist/quill.snow.css';
 import BlotFormatter from 'quill-blot-formatter';
 Quill.register('modules/blotFormatter', (BlotFormatter as any).default || BlotFormatter);
 
-// นำเข้า Constants จังหวัด (โค้ดคุณเหมือนเดิม)
 import { THAI_PROVINCES } from '../constants/Province';
 
 interface AuthorTag {
@@ -57,7 +56,6 @@ const CreateShowcase = () => {
   const [provinceSearch, setProvinceSearch] = useState('');
   const [isProvinceOpen, setIsProvinceOpen] = useState(false);
 
-  // 💡 State สำหรับจัดการ Dropdown หมวดหมู่ และ Collection Name
   const [subjectGroup, setSubjectGroup] = useState('');
   const [subjectSubgroup, setSubjectSubgroup] = useState('');
   const [publicationType, setPublicationType] = useState('');
@@ -68,7 +66,6 @@ const CreateShowcase = () => {
   const [tagSuggestions, setTagSuggestions] = useState<string[]>([]);
   const [isSearchingTag, setIsSearchingTag] = useState(false);
 
-  // 💡 ใช้ useMemo เพื่อป้องกันการ Re-render ของ Modules เวลามีการพิมพ์ข้อความ
   const modules = useMemo(() => ({
     toolbar: [
       ['bold', 'italic', 'underline', 'strike', { 'color': [] },'link', 'image', 'video',{ 'list': 'ordered'}, { 'list': 'bullet' }],
@@ -230,11 +227,10 @@ const CreateShowcase = () => {
             setIntroInfo(data.intro_info || ''); 
             setContent(data.description || ''); 
             
-            // 💡 โหลดหมวดหมู่และ Collection
             setSubjectGroup(data.subject_group || '');
             setSubjectSubgroup(data.subject_subgroup || '');
             setPublicationType(data.publication_type || '');
-            setCollectionName(data.collection_name || ''); // 💡 โหลด Collection Name
+            setCollectionName(data.collection_name || ''); 
 
             setSchoolName(data.school_name || '');
             setYearCreated(data.year_created || '');
@@ -383,7 +379,6 @@ const CreateShowcase = () => {
       return;
     }
 
-    // 💡 เช็กว่าถ้ากรอกข้อมูลไม่ครบ
     if (!collectionName.trim()) {
       showCustomAlert('error', "กรุณาระบุชื่อกลุ่ม/ฉบับตีพิมพ์ (Collection Name)");
       return;
@@ -427,7 +422,7 @@ const CreateShowcase = () => {
         subject_group: subjectGroup,           
         subject_subgroup: subjectSubgroup || null,
         publication_type: publicationType,
-        collection_name: collectionName.trim() || null, // 💡 บันทึก Collection Name เข้า Database
+        collection_name: collectionName.trim() || null,
 
         tag: tags.join(', '), 
         status: targetStatus,
@@ -492,21 +487,20 @@ const CreateShowcase = () => {
       )}
 
       {/* Navbar แถบบน */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-40">
-        <div className="max-w-full mx-auto px-4 sm:px-8 lg:px-16 py-3 sm:py-4 h-auto sm:h-20 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
-          
+      <div className="bg-white border-b border-slate-200 fixed top-28 left-0 right-0 z-49 shadow-sm">
+        <div className="max-w-full mx-auto px-4 sm:px-16 py-3 h-16 flex items-center justify-between">
           <button 
             onClick={() => navigate('/profile')}
-            className="text-slate-500 hover:text-slate-700 font-medium flex items-center gap-2 cursor-pointer text-sm sm:text-base self-start sm:self-auto"
+            className="text-slate-500 hover:text-slate-700 font-medium flex items-center gap-2 cursor-pointer"
           >
             &lt; {t('back_to_dashboard') || 'ย้อนกลับไปยังแดชบอร์ด'}
           </button>
           
-          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end">
+          <div className="flex items-center gap-3">
             <button 
               onClick={() => handleSave(true)}
               disabled={isLoading}
-              className="flex-1 sm:flex-initial px-4 sm:px-6 py-2 bg-white border border-[#1e3a8a] text-[#1e3a8a] rounded-lg font-medium hover:bg-slate-50 disabled:opacity-50 cursor-pointer transition-colors text-sm sm:text-base"
+              className="px-6 py-2 bg-white border border-[#1e3a8a] text-[#1e3a8a] rounded-md font-medium hover:bg-slate-50 disabled:opacity-50 cursor-pointer transition-colors"
             >
               {loadingAction === 'draft' ? (t('processing') || 'กำลังดำเนินการ...') : (t('save_draft') || 'บันทึกแบบร่าง')}
             </button>
@@ -514,20 +508,19 @@ const CreateShowcase = () => {
             <button 
               onClick={() => handleSave(false)}
               disabled={isLoading}
-              className="flex-1 sm:flex-initial px-4 sm:px-6 py-2 bg-[#1e3a8a] text-white rounded-lg font-medium hover:bg-blue-900 disabled:opacity-50 cursor-pointer transition-colors text-sm sm:text-base shadow-sm"
+              className="px-6 py-2 bg-[#1e3a8a] text-white rounded-md font-medium hover:bg-blue-900 disabled:opacity-50 cursor-pointer transition-colors"
             >
               {loadingAction === 'publish' 
                 ? (t('processing') || 'กำลังดำเนินการ...') 
                 : (isEditMode ? t('publish') || 'เผยแพร่' : t('publish') || 'เผยแพร่')}
             </button>
           </div>
-
         </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         
-        <div className="text-center mb-10 mt-14">
+        <div className="text-center mb-10 mt-34">
           <h1 className="text-5xl lg:text-7xl font-bold text-[#1e3a8a] mb-2">
             {isEditMode ? (t('edit_showcase_title') || 'Edit a Showcase') : (t('create_showcase_title') || 'Create a Showcase')}
           </h1>
@@ -544,7 +537,6 @@ const CreateShowcase = () => {
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-             {/* 1. กลุ่มวิชา */}
              <div className="flex flex-col gap-3">
                 <label className="text-slate-800 text-xl font-bold">กลุ่มวิชา <span className="text-red-500">*</span></label>
                 <div className="relative">
@@ -564,7 +556,6 @@ const CreateShowcase = () => {
                 </div>
              </div>
 
-             {/* 2. วิชาย่อย (จะกรอกได้เมื่อเลือกกลุ่มวิชาภาษา) */}
              <div className="flex flex-col gap-3">
                 <label className={`text-xl font-bold transition-colors ${subjectGroup === 'กลุ่มวิชาภาษา' ? 'text-slate-800' : 'text-slate-400'}`}>
                   วิชาย่อย {subjectGroup === 'กลุ่มวิชาภาษา' && <span className="text-red-500">*</span>}
@@ -587,7 +578,6 @@ const CreateShowcase = () => {
                 </div>
              </div>
 
-             {/* 3. รูปแบบการตีพิมพ์ */}
              <div className="flex flex-col gap-3">
                 <label className="text-slate-800 text-xl font-bold">รูปแบบการตีพิมพ์ <span className="text-red-500">*</span></label>
                 <div className="relative">
@@ -607,7 +597,6 @@ const CreateShowcase = () => {
              </div>
           </div>
 
-          {/* 💡 4. Collection Name (แสดงเสมอเมื่อเลือกรูปแบบการตีพิมพ์แล้ว เพื่อรองรับทั้งแบบเล่มและรายเรื่อง) */}
           {publicationType && (
             <div className="flex flex-col gap-3 animate-fade-in border-t border-slate-100 pt-6">
                 <label className="text-slate-800 text-xl font-bold">ชื่อกลุ่ม/ฉบับตีพิมพ์ (Collection Name) <span className="text-red-500">*</span></label>
@@ -623,10 +612,9 @@ const CreateShowcase = () => {
         </div>
 
         {/* ==================== Main Content Section ==================== */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-visible mb-6">
           <div className="p-8 sm:p-12">
             
-            {/* Title Input */}
             <input
               type="text"
               placeholder={t('require_title') || "ชื่อผลงานหลัก / Title (เช่น บทนำสรุป...)"}
@@ -635,7 +623,6 @@ const CreateShowcase = () => {
               className="w-full h-auto text-3xl sm:text-4xl leading-[1.5] font-bold text-[#1e3a8a] placeholder-slate-300 border-b border-slate-200 pt-2 pb-4 mb-6 focus:outline-none focus:border-[#1e3a8a] transition-colors bg-transparent"
             />
 
-            {/* Intro Info (ข้อความเกริ่นนำ) */}
             <textarea
               placeholder="ข้อความอธิบายย่อย (Intro Info) เช่น รวบรวมรายงานผลการวิจัยฉบับสมบูรณ์..."
               value={introInfo}
@@ -644,7 +631,6 @@ const CreateShowcase = () => {
               className="w-full p-4 text-xl text-slate-600 bg-slate-50 border border-slate-200 rounded-xl mb-8 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 resize-none transition-all custom-scrollbar"
             />
 
-            {/* Thumbnail Upload */}
             <div 
               onClick={() => fileInputRef.current?.click()}
               className={`w-full h-48 sm:h-64 mb-8 bg-slate-200 rounded-lg border-2 border-dashed border-slate-300 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition-colors relative overflow-hidden group`}
@@ -680,7 +666,6 @@ const CreateShowcase = () => {
         {/* ==================== Metadata Section (Authors, Links, Tags) ==================== */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-10 space-y-8">
           
-          {/* Authors */}
           <div className="relative">
             <label className="block text-[#1e3a8a] text-2xl font-bold mb-3">{t('create_showcase_author') || 'คณะผู้จัดทำ (Authors)'}</label>
             <div className="w-full flex flex-wrap items-center gap-2 p-3 border border-slate-300 rounded-xl focus-within:ring-2 focus-within:ring-[#1e3a8a] transition-all bg-white min-h-[55px]">
@@ -802,7 +787,6 @@ const CreateShowcase = () => {
             </div>
           </div>
 
-          {/* Links */}
           <div>
             <div className="flex items-center justify-between mb-3">
               <label className="flex items-baseline gap-2 text-[#1e3a8a] text-2xl font-bold">
@@ -858,7 +842,6 @@ const CreateShowcase = () => {
             </div>
           </div>
 
-          {/* Tags */}
           <div className="relative">
             <label className="block text-[#1e3a8a] text-2xl font-bold mb-3">{t('category_and_tags') || 'Tags (คำค้นหา)'}</label>
             <div className="w-full flex flex-wrap items-center gap-2 p-3 border border-slate-300 rounded-xl focus-within:ring-2 focus-within:ring-[#1e3a8a] transition-all bg-white min-h-[55px]">
@@ -917,31 +900,104 @@ const CreateShowcase = () => {
 
       </div>
 
-      {/* 💡 Style สำหรับจัดการหน้าตาของ ReactQuill ให้เข้ากับ TReN */}
+      {/* 💡 Style พร้อม Active / Toggle State ให้เห็นชัดเจนว่ากำลังใช้งานเครื่องมือไหนอยู่ */}
       <style>{`
+        .editor-container {
+          position: relative;
+        }
+        
         .editor-container .ql-container {
           font-family: inherit;
           font-size: 1.125rem;
-          border: none !important;
-        }
-        .editor-container .ql-toolbar {
-          position: sticky;
-          top: 80px; 
-          z-index: 40;
+          border: 1px solid #e2e8f0 !important;
+          border-top: none !important;
+          border-radius: 0 0 12px 12px !important;
           background-color: white;
+        }
+        
+        /* ตรึง Toolbar ไว้ด้านบน Fixed ยืดเต็มจอ และจัดไอคอนกึ่งกลางกระจายสวยงาม */
+        .editor-container .ql-toolbar {
+          position: fixed !important;
+          top: 176px !important;
+          left: 0 !important;
+          right: 0 !important;
+          width: 100% !important;
+          z-index: 48 !important;
+          background-color: #1e3a8a !important;
           border: none !important;
-          border-bottom: 1px solid #e2e8f0 !important;
-          margin-bottom: 1rem;
-          padding: 10px 0;
+          border-bottom: 1px solid #172554 !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+          padding: 10px 1rem !important;
+          border-radius: 0 !important;
+          
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          flex-wrap: wrap !important;
+          gap: 16px !important;
         }
+
+        .editor-container .ql-toolbar .ql-formats {
+          margin-right: 0 !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 4px !important;
+        }
+
+        /* 💡 เพิ่มสไตล์ Hover และ Active / Toggle State ให้รู้ว่ากำลังเปิดใช้งานเครื่องมืออยู่ */
+        .editor-container .ql-toolbar button {
+          border-radius: 6px !important;
+          transition: background-color 0.2s ease;
+        }
+
+        .editor-container .ql-toolbar button:hover {
+          background-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        /* เมื่อเครื่องมือถูกกดใช้งาน (Active) จะเปลี่ยนเป็นสีฟ้าสว่างเด่นชัด */
+        .editor-container .ql-toolbar button.ql-active,
+        .editor-container .ql-toolbar .ql-picker-label.ql-active {
+          background-color: #3b82f6 !important;
+          border-radius: 6px !important;
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ปรับแต่งช่องเขียนข้อความข้างใน */
         .editor-container .ql-editor {
-          padding: 0;
-          min-height: 300px;
+          padding: 16px;
+          min-height: 400px;
         }
+
+        /* ปรับไอคอนและปุ่มใน Toolbar เป็นสีขาว */
+        .editor-container .ql-toolbar .ql-stroke {
+          stroke: #ffffff !important;
+        }
+        .editor-container .ql-toolbar .ql-fill {
+          fill: #ffffff !important;
+        }
+        .editor-container .ql-toolbar button {
+          color: #ffffff !important;
+        }
+        .editor-container .ql-toolbar .ql-picker-label {
+          color: #ffffff !important;
+        }
+        .editor-container .ql-toolbar .ql-picker-label .ql-stroke {
+          stroke: #ffffff !important;
+        }
+
+        /* เมนูดรอปดาวน์ภายใน Toolbar ยังคงพื้นหลังขาวให้อ่านง่าย */
+        .editor-container .ql-toolbar .ql-picker-options {
+          background-color: #ffffff !important;
+          color: #1e293b !important;
+        }
+        .editor-container .ql-toolbar .ql-picker-options .ql-picker-item {
+          color: #1e293b !important;
+        }
+
         .editor-container .ql-editor.ql-blank::before {
           font-style: italic;
           color: #94a3b8;
-          left: 0;
+          left: 16px;
         }
       `}</style>
     </div>

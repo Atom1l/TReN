@@ -1,14 +1,19 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useLanguage } from '../contexts/LanguageContext';
 
-// 💡 1. นำเข้า ReactQuill แทน TinyMCE
-import ReactQuill from 'react-quill-new';
+// นำเข้า ReactQuill, Quill และ BlotFormatter สำหรับปรับขนาดและจัดตำแหน่งรูปภาพ
+import ReactQuill, { Quill } from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
+
+// @ts-ignore
+import BlotFormatter from 'quill-blot-formatter';
+Quill.register('modules/blotFormatter', (BlotFormatter as any).default || BlotFormatter);
 
 import { THAI_PROVINCES } from '../constants/Province';
 
@@ -55,12 +60,13 @@ const CreateMemberWorks = () => {
   const [tagSuggestions, setTagSuggestions] = useState<string[]>([]);
   const [isSearchingTag, setIsSearchingTag] = useState(false);
 
-  // 💡 2. กำหนด Modules ให้ ReactQuill
-  const modules = {
+  // กำหนด Modules พร้อมเปิดใช้งาน blotFormatter และเครื่องมือรูปภาพ/วิดีโอ
+  const modules = useMemo(() => ({
     toolbar: [
-      ['bold', 'italic', 'underline', 'strike', { 'color': [] },'link', 'image', 'video',{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['bold', 'italic', 'underline', 'strike', { 'color': [] }, 'link', 'image', 'video', { 'list': 'ordered'}, { 'list': 'bullet' }],
     ],
-  };
+    blotFormatter: {}
+  }), []);
 
   const showCustomAlert = (type: 'success' | 'error', message: string, redirectPath?: string) => {
     setAlertInfo({ show: true, type, message });
@@ -429,21 +435,20 @@ const CreateMemberWorks = () => {
       )}
 
       {/* Navbar แถบบน */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-40">
-        <div className="max-w-full mx-auto px-4 sm:px-8 lg:px-16 py-3 sm:py-4 h-auto sm:h-20 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
-          
+      <div className="bg-white border-b border-slate-200 fixed top-28 left-0 right-0 z-49 shadow-sm">
+        <div className="max-w-full mx-auto px-4 sm:px-16 py-3 h-16 flex items-center justify-between">
           <button 
             onClick={() => navigate('/profile')}
-            className="text-slate-500 hover:text-slate-700 font-medium flex items-center gap-2 cursor-pointer text-sm sm:text-base self-start sm:self-auto"
+            className="text-slate-500 hover:text-slate-700 font-medium flex items-center gap-2 cursor-pointer"
           >
             &lt; {t('back_to_dashboard') || 'ย้อนกลับไปยังแดชบอร์ด'}
           </button>
           
-          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end">
+          <div className="flex items-center gap-3">
             <button 
               onClick={() => handleSave(true)}
               disabled={isLoading}
-              className="flex-1 sm:flex-initial px-4 sm:px-6 py-2 bg-white border border-[#1e3a8a] text-[#1e3a8a] rounded-lg font-medium hover:bg-slate-50 disabled:opacity-50 cursor-pointer transition-colors text-sm sm:text-base"
+              className="px-6 py-2 bg-white border border-[#1e3a8a] text-[#1e3a8a] rounded-md font-medium hover:bg-slate-50 disabled:opacity-50 cursor-pointer transition-colors"
             >
               {loadingAction === 'draft' ? (t('processing') || 'กำลังดำเนินการ...') : (t('save_draft') || 'บันทึกแบบร่าง')}
             </button>
@@ -451,20 +456,19 @@ const CreateMemberWorks = () => {
             <button 
               onClick={() => handleSave(false)}
               disabled={isLoading}
-              className="flex-1 sm:flex-initial px-4 sm:px-6 py-2 bg-[#1e3a8a] text-white rounded-lg font-medium hover:bg-blue-900 disabled:opacity-50 cursor-pointer transition-colors text-sm sm:text-base shadow-sm"
+              className="px-6 py-2 bg-[#1e3a8a] text-white rounded-md font-medium hover:bg-blue-900 disabled:opacity-50 cursor-pointer transition-colors"
             >
               {loadingAction === 'publish' 
                 ? (t('processing') || 'กำลังดำเนินการ...') 
                 : (isEditMode ? t('publish') || 'เผยแพร่' : t('publish') || 'เผยแพร่')}
             </button>
           </div>
-
         </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         
-        <div className="text-center mb-10 mt-14">
+        <div className="text-center mb-10 mt-35">
           <h1 className="text-5xl lg:text-7xl font-bold text-[#1e3a8a] mb-2">
             {isEditMode ? (t('edit_member_work_title') || 'แก้ไขผลงานสมาชิก') : (t('create_member_work') || 'เพิ่มผลงานสมาชิก')}
           </h1>
@@ -473,8 +477,8 @@ const CreateMemberWorks = () => {
           </p>
         </div>
 
-        {/* ==================== ก้อนที่ 1: เนื้อหาหลัก (รวมกันเป็นก้อนเดียว) ==================== */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+        {/* ก้อนที่ 1: เนื้อหาหลัก */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-visible mb-6">
           <div className="p-8 sm:p-12">
             
             {/* Title Input */}
@@ -505,7 +509,7 @@ const CreateMemberWorks = () => {
               )}
             </div>
 
-            {/* Rich Text Editor (ReactQuill) */}
+            {/* Rich Text Editor (ReactQuill with BlotFormatter) */}
             <div className="editor-container">
               <ReactQuill 
                 theme="snow" 
@@ -519,7 +523,7 @@ const CreateMemberWorks = () => {
           </div>
         </div>
 
-        {/* ==================== ก้อนที่ 2: Metadata Section (Authors, School, Links, Tags) ==================== */}
+        {/* ก้อนที่ 2: Metadata Section (Authors, School, Links, Tags) */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-10 space-y-8">
           
           {/* Authors */}
@@ -759,31 +763,101 @@ const CreateMemberWorks = () => {
 
       </div>
 
-      {/* 💡 Style สำหรับจัดการหน้าตาของ ReactQuill ให้เข้ากับ TReN */}
+      {/* Style สำหรับขยาย Toolbar เต็มจอ, ตรึง Fixed, จัดไอคอนกึ่งกลาง และมี Active/Toggle State ชัดเจน */}
       <style>{`
+        .editor-container {
+          position: relative;
+        }
+        
         .editor-container .ql-container {
           font-family: inherit;
           font-size: 1.125rem;
-          border: none !important;
-        }
-        .editor-container .ql-toolbar {
-          position: sticky;
-          top: 80px; 
-          z-index: 40;
+          border: 1px solid #e2e8f0 !important;
+          border-top: none !important;
+          border-radius: 0 0 12px 12px !important;
           background-color: white;
+        }
+        
+        /* ตรึง Toolbar ไว้ด้านบน Fixed ยืดเต็มจอ และจัดไอคอนกึ่งกลางกระจายสวยงาม */
+        .editor-container .ql-toolbar {
+          position: fixed !important;
+          top: 176px !important;
+          left: 0 !important;
+          right: 0 !important;
+          width: 100% !important;
+          z-index: 48 !important;
+          background-color: #1e3a8a !important;
           border: none !important;
-          border-bottom: 1px solid #e2e8f0 !important;
-          margin-bottom: 1rem;
-          padding: 10px 0;
+          border-bottom: 1px solid #172554 !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+          padding: 10px 1rem !important;
+          border-radius: 0 !important;
+          
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          flex-wrap: wrap !important;
+          gap: 16px !important;
         }
+
+        .editor-container .ql-toolbar .ql-formats {
+          margin-right: 0 !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 4px !important;
+        }
+
+        /* สไตล์ Hover และ Active / Toggle State ให้รู้ว่ากำลังเปิดใช้งานเครื่องมืออยู่ */
+        .editor-container .ql-toolbar button {
+          border-radius: 6px !important;
+          transition: background-color 0.2s ease;
+        }
+
+        .editor-container .ql-toolbar button:hover {
+          background-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        /* เมื่อเครื่องมือถูกกดใช้งาน (Active) จะเปลี่ยนเป็นสีฟ้าสว่างเด่นชัด */
+        .editor-container .ql-toolbar button.ql-active,
+        .editor-container .ql-toolbar .ql-picker-label.ql-active {
+          background-color: #3b82f6 !important;
+          border-radius: 6px !important;
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
         .editor-container .ql-editor {
-          padding: 0;
-          min-height: 300px;
+          padding: 16px;
+          min-height: 400px;
         }
+
+        .editor-container .ql-toolbar .ql-stroke {
+          stroke: #ffffff !important;
+        }
+        .editor-container .ql-toolbar .ql-fill {
+          fill: #ffffff !important;
+        }
+        .editor-container .ql-toolbar button {
+          color: #ffffff !important;
+        }
+        .editor-container .ql-toolbar .ql-picker-label {
+          color: #ffffff !important;
+        }
+        .editor-container .ql-toolbar .ql-picker-label .ql-stroke {
+          stroke: #ffffff !important;
+        }
+
+        .editor-container .ql-toolbar .ql-picker-options {
+          background-color: #ffffff !important;
+          color: #1e293b !important;
+        }
+        .editor-container .ql-toolbar .ql-picker-options .ql-picker-item {
+          color: #1e293b !important;
+        }
+
         .editor-container .ql-editor.ql-blank::before {
           font-style: italic;
           color: #94a3b8;
-          left: 0;
+          left: 16px;
         }
       `}</style>
     </div>

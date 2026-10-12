@@ -1,10 +1,19 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useLanguage } from '../contexts/LanguageContext';
+
+// 💡 1. นำเข้า ReactQuill, Quill และ BlotFormatter สำหรับปรับขนาดและจัดตำแหน่งรูปภาพ
+import ReactQuill, { Quill } from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
+
+// @ts-ignore
+import BlotFormatter from 'quill-blot-formatter';
+Quill.register('modules/blotFormatter', (BlotFormatter as any).default || BlotFormatter);
 
 const CreateResource = () => {
   const { t } = useLanguage();
@@ -27,8 +36,16 @@ const CreateResource = () => {
     resource_type: 'document', // ค่าเริ่มต้น
   });
 
-  // 🟢 1. State สำหรับจัดการลิงก์ผลงานแบบหลายลิงก์ (JSONB)
+  // 💡 2. State สำหรับจัดการลิงก์ผลงานแบบหลายลิงก์ (JSONB)
   const [links, setLinks] = useState([{ title: '', url: '' }]);
+
+  // 💡 3. ใช้ useMemo กำหนด Modules พร้อมเปิดใช้งาน blotFormatter และปุ่มรูปภาพ/วิดีโอ
+  const modules = useMemo(() => ({
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike', { 'color': [] }, 'link', 'image', 'video', { 'list': 'ordered'}, { 'list': 'bullet' }],
+    ],
+    blotFormatter: {}
+  }), []);
 
   const showCustomAlert = (type: 'success' | 'error', message: string, redirectPath?: string) => {
     setAlertInfo({ show: true, type, message });
@@ -79,16 +96,12 @@ const CreateResource = () => {
             });
             if (data.thumbnail_url) setPreviewUrl(data.thumbnail_url);
 
-            // 🟢 2. ดึงข้อมูลลิงก์เก่ามาใส่ใน State
             if (data.url) {
               let parsedLinks = [{ title: '', url: '' }];
               try {
-                // ถ้าเป็น Array (JSONB ที่ถูกต้อง)
                 if (Array.isArray(data.url)) {
                   parsedLinks = data.url;
-                } 
-                // ถ้าหลงเหลือข้อมูลเก่าที่เป็น String ธรรมดา
-                else if (typeof data.url === 'string') {
+                } else if (typeof data.url === 'string') {
                   if (data.url.startsWith('http')) {
                     parsedLinks = [{ title: 'Main Link', url: data.url }];
                   } else {
@@ -143,7 +156,6 @@ const CreateResource = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // 🟢 3. ตรวจสอบว่ามีลิงก์อย่างน้อย 1 ลิงก์ที่ถูกกรอกจริงๆ
     const validLinks = links.filter(link => link.url.trim() !== '');
 
     if (!formData.title.trim() || validLinks.length === 0) {
@@ -178,7 +190,7 @@ const CreateResource = () => {
         title: formData.title,
         description: formData.description,
         resource_type: formData.resource_type,
-        url: validLinks, // 🟢 บันทึกเป็น Array (JSONB)
+        url: validLinks, 
         thumbnail_url: thumbnailUrl,
       };
 
@@ -291,7 +303,7 @@ const CreateResource = () => {
             </div>
           </div>
 
-          {/* 🟢 4. UI สำหรับจัดการลิงก์หลายอัน (อิงดีไซน์จาก Showcase) */}
+          {/* UI สำหรับจัดการลิงก์หลายอัน */}
           <div className="pt-2 border-t border-slate-200 mt-4">
             <div className="flex items-center justify-between mb-3 mt-4">
               <label className="flex items-baseline gap-2 text-slate-600 font-semibold text-lg">
@@ -330,7 +342,7 @@ const CreateResource = () => {
                         newLinks[index].url = e.target.value;
                         setLinks(newLinks);
                       }} 
-                      required={index === 0} // บังคับให้ช่องแรกต้องกรอกเสมอ
+                      required={index === 0}
                       className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white outline-none" 
                     />
                     {links.length > 1 && (
@@ -351,18 +363,21 @@ const CreateResource = () => {
             </div>
           </div>
 
+          {/* 💡 4. เปลี่ยน textarea เป็น ReactQuill สำหรับคำอธิบายข้อมูล */}
           <div>
             <label className="block text-slate-600 font-semibold mb-2 text-lg">
               {t('resource_description') || 'คำอธิบายข้อมูล'}
             </label>
-            <textarea 
-              name="description"
-              value={formData.description} 
-              onChange={handleChange} 
-              rows={4} 
-              placeholder={t('resource_description_placeholder') || 'คำอธิบายสั้น ๆ เกี่ยวกับข้อมูลนี้...'}
-              className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1e3a8a] bg-white outline-none resize-none"
-            ></textarea>
+            <div className="editor-container bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <ReactQuill 
+                theme="snow" 
+                value={formData.description} 
+                onChange={(value) => setFormData({ ...formData, description: value })}
+                modules={modules}
+                placeholder={t('resource_description_placeholder') || 'คำอธิบายสั้น ๆ เกี่ยวกับข้อมูลนี้...'}
+                className="min-h-[250px] text-lg text-slate-700"
+              />
+            </div>
           </div>
 
           <div>
@@ -377,7 +392,6 @@ const CreateResource = () => {
                 className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg text-slate-600 font-medium hover:bg-slate-50 shadow-sm transition-colors"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13" /></svg>
-                {/* {isEditMode && previewUrl ? 'เปลี่ยนรูปหน้าปก' : 'อัปโหลดรูปหน้าปก'} */}
                 {t('attach_media') || 'อัปโหลดรูปหน้าปก'}
               </button>
               {previewUrl && (
@@ -402,6 +416,34 @@ const CreateResource = () => {
 
         </form>
       </div>
+
+      {/* Style สำหรับจัดการหน้าตาของ ReactQuill */}
+      <style>{`
+        .editor-container .ql-container {
+          font-family: inherit;
+          font-size: 1.125rem;
+          border: none !important;
+        }
+        .editor-container .ql-toolbar {
+          position: sticky;
+          top: 80px; 
+          z-index: 40;
+          background-color: white;
+          border: none !important;
+          border-bottom: 1px solid #e2e8f0 !important;
+          margin-bottom: 0.5rem;
+          padding: 10px;
+        }
+        .editor-container .ql-editor {
+          padding: 12px;
+          min-height: 250px;
+        }
+        .editor-container .ql-editor.ql-blank::before {
+          font-style: italic;
+          color: #94a3b8;
+          left: 12px;
+        }
+      `}</style>
     </div>
   );
 };

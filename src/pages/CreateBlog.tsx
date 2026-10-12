@@ -1,11 +1,19 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
-import ReactQuill from 'react-quill-new';
+
+// 💡 นำเข้า ReactQuill, Quill และ BlotFormatter สำหรับปรับขนาดและจัดตำแหน่งรูปภาพ
+import ReactQuill, { Quill } from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
+
+// @ts-ignore
+import BlotFormatter from 'quill-blot-formatter';
+Quill.register('modules/blotFormatter', (BlotFormatter as any).default || BlotFormatter);
+
 import { supabase } from '../lib/supabaseClient';
 
 const CreateBlog = () => {
@@ -51,11 +59,13 @@ const CreateBlog = () => {
     }, type === 'success' ? 1500 : 3000);
   };
 
-  const modules = {
+  // 💡 กำหนด Modules พร้อมเปิดใช้งาน blotFormatter และ Toolbar
+  const modules = useMemo(() => ({
     toolbar: [
-      ['bold', 'italic', 'underline', 'strike', { 'color': [] }, 'link', { 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['bold', 'italic', 'underline', 'strike', { 'color': [] }, 'link', 'image', 'video', { 'list': 'ordered'}, { 'list': 'bullet' }],
     ],
-  };
+    blotFormatter: {}
+  }), []);
 
   useEffect(() => {
     const fetchTagSuggestions = async () => {
@@ -112,18 +122,15 @@ const CreateBlog = () => {
       const fetchBlogData = async () => {
         setIsLoading(true);
         try {
-          // 🟢 1. ตรวจสอบสถานะการล็อกอิน
           const { data: { user }, error: authError } = await supabase.auth.getUser();
           if (authError || !user) {
             showAlert('error', t('require_login') || 'กรุณาเข้าสู่ระบบก่อน', () => navigate('/'));
             return;
           }
 
-          // 🟢 2. ดึงข้อมูล Role ของ User เพื่อนำมาเช็คสิทธิ์ (Co-admin, Admin, Developer)
           const { data: userData } = await supabase.from('user').select('role').eq('id', user.id).single();
           const userRole = userData?.role?.toLowerCase() || 'user';
 
-          // 🟢 3. ดึงข้อมูล Blog เพื่อนำมาเช็คว่าใครเป็นเจ้าของ (author_id)
           const { data, error } = await supabase
             .from('blogs')
             .select('*')
@@ -133,17 +140,14 @@ const CreateBlog = () => {
           if (error) throw error;
           
           if (data) {
-            // 🟢 4. ตรวจสอบสิทธิ์แบบ 2 เงื่อนไข (Ownership + RBAC)
-            const isOwner = data.author_id === user.id; // เงื่อนไข 1: เป็นคนสร้างบทความนี้เอง
-            const isPrivileged = ['admin', 'co_admin', 'developer'].includes(userRole); // เงื่อนไข 2: เป็นทีมงาน
+            const isOwner = data.author_id === user.id; 
+            const isPrivileged = ['admin', 'co_admin', 'developer'].includes(userRole); 
 
-            // ถ้าไม่ใช่ทั้งคนสร้าง และ ไม่ใช่ทีมงาน -> เตะออกทันที
             if (!isOwner && !isPrivileged) {
               showAlert('error', t('no_permission') || 'คุณไม่มีสิทธิ์เข้าถึงหรือแก้ไขบล็อกนี้', () => navigate('/blogs'));
               return;
             }
 
-            // ถ้ามีสิทธิ์ ให้ดึงข้อมูลมาแสดงผลในฟอร์มตามปกติ
             setTitle(data.title || '');
             setContent(data.content || '');
             if (data.tag) {
@@ -163,7 +167,6 @@ const CreateBlog = () => {
 
       fetchBlogData();
     } else {
-      // 🟢 5. กรณีโหมดสร้างบล็อกใหม่ (Create) ก็เช็คแค่ว่าล็อกอินหรือยัง
       const checkLogin = async () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
@@ -312,11 +315,12 @@ const CreateBlog = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F4F6F9]">
+    <div className="min-h-screen bg-[#F4F6F9] relative">
       {renderAlertModal()}
       
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-40">
-        <div className="max-w-full mx-auto px-4 sm:px-16 py-10 h-16 flex items-center justify-between">
+      {/* Top Navbar แบบ Fixed ตรึงติดขอบบนถาวร */}
+      <div className="bg-white border-b border-slate-200 fixed top-28 left-0 right-0 z-49 shadow-sm">
+        <div className="max-w-full mx-auto px-4 sm:px-16 py-3 h-16 flex items-center justify-between">
           <button 
             onClick={() => navigate('/profile')}
             className="text-slate-500 hover:text-slate-700 font-medium flex items-center gap-2 cursor-pointer"
@@ -346,7 +350,7 @@ const CreateBlog = () => {
         </div>
       </div>
 
-      <div className="text-center mb-2 mt-22">
+      <div className="text-center mb-10 mt-43">
         <h1 className="text-5xl lg:text-7xl font-bold text-[#1e3a8a] mb-2">
           {isEditMode ? (t('edit_blog_title') || 'Edit a Blog') : (t('create_blog_title') || 'Create a Blog')}
         </h1>
@@ -356,7 +360,7 @@ const CreateBlog = () => {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-visible mb-6">
           
           <div className="p-8 sm:p-12">
             <input
@@ -398,7 +402,7 @@ const CreateBlog = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 mt-6 p-6 mb-20">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-10 mb-20">
           <h3 className="text-[#1e3a8a] text-2xl font-bold mb-3">{t('category_and_tags') || 'Category & Tags'}</h3>
           
           <div className="relative w-full sm:w-3/4">
@@ -460,30 +464,101 @@ const CreateBlog = () => {
 
       </div>
 
+      {/* 💡 Style สำหรับขยาย Toolbar เต็มจอ, ตรึง Fixed, จัดไอคอนกึ่งกลาง และมี Active/Toggle State ชัดเจน */}
       <style>{`
+        .editor-container {
+          position: relative;
+        }
+        
         .editor-container .ql-container {
           font-family: inherit;
           font-size: 1.125rem;
-          border: none !important;
-        }
-        .editor-container .ql-toolbar {
-          position: sticky;
-          top: 80px; 
-          z-index: 40;
+          border: 1px solid #e2e8f0 !important;
+          border-top: none !important;
+          border-radius: 0 0 12px 12px !important;
           background-color: white;
+        }
+        
+        /* ตรึง Toolbar ไว้ด้านบน Fixed ยืดเต็มจอ และจัดไอคอนกึ่งกลางกระจายสวยงาม */
+        .editor-container .ql-toolbar {
+          position: fixed !important;
+          top: 176px !important;
+          left: 0 !important;
+          right: 0 !important;
+          width: 100% !important;
+          z-index: 48 !important;
+          background-color: #1e3a8a !important;
           border: none !important;
-          border-bottom: 1px solid #e2e8f0 !important;
-          margin-bottom: 1rem;
-          padding: 10px 0;
+          border-bottom: 1px solid #172554 !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+          padding: 10px 1rem !important;
+          border-radius: 0 !important;
+          
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          flex-wrap: wrap !important;
+          gap: 16px !important;
         }
+
+        .editor-container .ql-toolbar .ql-formats {
+          margin-right: 0 !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 4px !important;
+        }
+
+        /* 💡 สไตล์ Hover และ Active / Toggle State ให้รู้ว่ากำลังเปิดใช้งานเครื่องมืออยู่ */
+        .editor-container .ql-toolbar button {
+          border-radius: 6px !important;
+          transition: background-color 0.2s ease;
+        }
+
+        .editor-container .ql-toolbar button:hover {
+          background-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        /* เมื่อเครื่องมือถูกกดใช้งาน (Active) จะเปลี่ยนเป็นสีฟ้าสว่างเด่นชัด */
+        .editor-container .ql-toolbar button.ql-active,
+        .editor-container .ql-toolbar .ql-picker-label.ql-active {
+          background-color: #3b82f6 !important;
+          border-radius: 6px !important;
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
         .editor-container .ql-editor {
-          padding: 0;
-          min-height: 300px;
+          padding: 16px;
+          min-height: 400px;
         }
+
+        .editor-container .ql-toolbar .ql-stroke {
+          stroke: #ffffff !important;
+        }
+        .editor-container .ql-toolbar .ql-fill {
+          fill: #ffffff !important;
+        }
+        .editor-container .ql-toolbar button {
+          color: #ffffff !important;
+        }
+        .editor-container .ql-toolbar .ql-picker-label {
+          color: #ffffff !important;
+        }
+        .editor-container .ql-toolbar .ql-picker-label .ql-stroke {
+          stroke: #ffffff !important;
+        }
+
+        .editor-container .ql-toolbar .ql-picker-options {
+          background-color: #ffffff !important;
+          color: #1e293b !important;
+        }
+        .editor-container .ql-toolbar .ql-picker-options .ql-picker-item {
+          color: #1e293b !important;
+        }
+
         .editor-container .ql-editor.ql-blank::before {
           font-style: italic;
           color: #94a3b8;
-          left: 0;
+          left: 16px;
         }
       `}</style>
     </div>
