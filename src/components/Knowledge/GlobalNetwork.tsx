@@ -118,7 +118,7 @@ const GlobalNetwork = () => {
             <div className="animate-fade-in space-y-16">
               <div className="text-center max-w-4xl mx-auto mb-12">
                 <h3 className="text-4xl md:text-5xl font-bold text-[#1e3a8a] mb-4 max-w-4xl mx-auto leading-tight">
-                  {t('global_resources_title') || 'คลังงานวิจัยครูพี่เลี้ยงและคู่มือการทำวิจัยครู EAR'}
+                  1. {t('global_resources_title') || 'คลังงานวิจัยครูพี่เลี้ยงและคู่มือการทำวิจัยครู EAR'}
                 </h3>
                 <p className="text-xl md:text-2xl text-slate-800 leading-relaxed font-light max-w-2xl mx-auto">
                   {t('global_resources_desc') || 'แหล่งรวบรวมงานวิจัยในชั้นเรียน (Classroom Action Research)...'}
@@ -287,7 +287,7 @@ const GlobalNetwork = () => {
           {activeTab === 'mentoring' && (
             <div className="animate-fade-in space-y-16">
                <div className="text-center max-w-4xl mx-auto mb-12">
-                <h3 className="text-4xl md:text-5xl font-bold text-[#1e3a8a] mb-6">{t('global_mentoring_title')}</h3>
+                <h3 className="text-4xl md:text-5xl font-bold text-[#1e3a8a] mb-6">2. {t('global_mentoring_title')}</h3>
                 <p className="text-xl md:text-2xl text-slate-800 leading-relaxed font-light">{t('global_mentoring_desc')}</p>
               </div>
 
@@ -399,7 +399,7 @@ const GlobalNetwork = () => {
           {activeTab === 'networks' && (
              <div className="animate-fade-in space-y-12">
                <div className="text-center max-w-4xl mx-auto mb-12">
-                <h3 className="text-4xl md:text-5xl font-bold text-[#1e3a8a] mb-4">{t('global_networks_title')}</h3>
+                <h3 className="text-4xl md:text-5xl font-bold text-[#1e3a8a] mb-4">3. {t('global_networks_title')}</h3>
                 <p className="text-xl md:text-2xl text-slate-800 leading-relaxed font-light">{t('global_networks_desc')}</p>
               </div>
 
@@ -441,7 +441,7 @@ const GlobalNetwork = () => {
           {activeTab === 'articles' && (
             <div className="animate-fade-in space-y-12">
                <div className="text-center max-w-4xl mx-auto mb-12">
-                <h3 className="text-4xl md:text-5xl font-bold text-[#1e3a8a] mb-4 max-w-xl mx-auto">{t('global_articles_title')}</h3>
+                <h3 className="text-4xl md:text-5xl font-bold text-[#1e3a8a] mb-4 max-w-xl mx-auto">4. {t('global_articles_title')}</h3>
                 <p className="text-xl md:text-2xl text-slate-800 leading-relaxed font-light max-w-2xl mx-auto">{t('global_articles_desc')}</p>
               </div>
 
@@ -486,7 +486,7 @@ const GlobalNetwork = () => {
           {activeTab === 'tools' && (
             <div className="animate-fade-in space-y-12">
                <div className="text-center max-w-4xl mx-auto mb-12">
-                <h3 className="text-4xl md:text-5xl font-bold text-[#1e3a8a] mb-4">{t('global_tools_title')}</h3>
+                <h3 className="text-4xl md:text-5xl font-bold text-[#1e3a8a] mb-4">5. {t('global_tools_title')}</h3>
                 <p className="text-xl md:text-2xl text-slate-800 leading-relaxed font-light">{t('global_tools_desc')}</p>
               </div>
 
