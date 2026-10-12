@@ -334,7 +334,7 @@ const GlobalNetwork = () => {
                         </div>
 
                         <div className="mt-4 pt-6 border-t border-slate-100">
-                          <a href="https://mentrnet.net/wp-content/uploads/2026/05/Smith-Eraldemir-Tuyan-Serra-Bekes-2024-published-version.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-[#1e3a8a] text-white px-8 py-4 rounded-xl font-bold text-xl hover:bg-blue-800 hover:-translate-y-1 transition-all shadow-md">
+                          <a href="https://mentrnet.net/wp-content/uploads/2026/05/Smith-Eraldemir-Tuyan-Serra-Bekes-2024-published-version.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-[#1e3a8a] text-white px-8 py-4 rounded-xl font-bold text-xl shadow-md">
                             {t('global_men_2_1_btn')}
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
                           </a>
@@ -384,7 +384,7 @@ const GlobalNetwork = () => {
                         </div>
 
                         <div className="mt-4 pt-6 border-t border-slate-100">
-                          <a href="https://www.britishcouncil.in/sites/default/files/mentoring_teachers_to_research_their_classrooms_a_practical_handbook.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-[#1e3a8a] text-white px-8 py-4 rounded-xl font-bold text-xl hover:bg-blue-800 hover:-translate-y-1 transition-all shadow-md">
+                          <a href="https://www.britishcouncil.in/sites/default/files/mentoring_teachers_to_research_their_classrooms_a_practical_handbook.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-[#1e3a8a] text-white px-8 py-4 rounded-xl font-bold text-xl shadow-md">
                             {t('global_men_2_2_btn')}
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
                           </a>
@@ -414,7 +414,7 @@ const GlobalNetwork = () => {
                        <p className="py-4 text-xl md:text-2xl text-slate-800 font-light"><strong className="text-[#1e3a8a] font-bold">{t('global_detail_label')}</strong> {t('global_net_3_1_detail')}</p>
                        <p className="text-xl md:text-2xl text-slate-800 font-light"><strong className="text-[#1e3a8a] font-bold">{t('global_benefit_label')}</strong> {t('global_net_3_1_benefit')}</p>
                        <div className="pt-4">
-                         <a href="https://x.com/IATEFLResig" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1e3a8a] text-white px-8 py-4 rounded-full font-bold text-xl">{t('global_net_3_1_btn')}</a>
+                         <a href="https://x.com/IATEFLResig" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1e3a8a] text-white px-8 py-4 rounded-2xl font-bold text-xl">{t('global_net_3_1_btn')}</a>
                        </div>
                     </div>
                  </div>
@@ -429,7 +429,7 @@ const GlobalNetwork = () => {
                        <p className="py-4 text-xl md:text-2xl text-slate-800 font-light"><strong className="text-[#1e3a8a] font-bold">{t('global_detail_label')}</strong> {t('global_net_3_2_detail')}</p>
                        <p className="text-xl md:text-2xl text-slate-800 font-light"><strong className="text-[#1e3a8a] font-bold">{t('global_benefit_label')}</strong> {t('global_net_3_2_benefit')}</p>
                        <div className="pt-4">
-                         <a href="https://mentrnet.net" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1e3a8a] text-white px-8 py-4 rounded-full font-bold text-xl">{t('global_net_3_2_btn')}</a>
+                         <a href="https://mentrnet.net" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1e3a8a] text-white px-8 py-4 rounded-2xl font-bold text-xl">{t('global_net_3_2_btn')}</a>
                        </div>
                     </div>
                  </div>
@@ -452,13 +452,13 @@ const GlobalNetwork = () => {
                        <h5 className="text-2xl font-bold text-[#1e3a8a] mb-2">{t('global_art_book1_title')}</h5>
                        <p className="text-base text-lg text-slate-800 mb-4">(Burns, 2023)</p>
                        <p className="text-lg md:text-xl text-slate-800 font-normal mb-6 flex-grow">{t('global_art_book1_detail')}</p>
-                       <a href="https://www.teachingenglish.org.uk/sites/teacheng/files/2023-10/Pub_Exploratory_action_research_in_thai_schools.pdf" target="_blank" rel="noopener noreferrer" className="text-[#1e3a8a] font-bold text-xl underline mt-auto">{t('global_art_book1_btn')} &rarr;</a>
+                       <a href="https://www.teachingenglish.org.uk/sites/teacheng/files/2023-10/Pub_Exploratory_action_research_in_thai_schools.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1e3a8a] text-white px-8 py-4 rounded-2xl font-bold text-xl self-start mt-auto">{t('global_art_book1_btn')} &rarr;</a>
                     </div>
                     <div className="bg-blue-100 p-8 rounded-2xl border border-slate-200 hover:border-blue-300 transition-colors flex flex-col h-full">
                        <h5 className="text-2xl font-bold text-[#1e3a8a] mb-2">{t('global_art_book2_title')}</h5>
                        <p className="text-base text-lg text-slate-800 mb-4">(Dersingh & Vuong, 2024)</p>
                        <p className="text-lg md:text-xl text-slate-800 font-normal mb-6 flex-grow">{t('global_art_book2_detail')}</p>
-                       <a href="https://so07.tci-thaijo.org/index.php/PasaaParitat/article/view/5466/3928" target="_blank" rel="noopener noreferrer" className="text-[#1e3a8a] font-bold text-xl underline mt-auto">{t('global_art_book2_btn')} &rarr;</a>
+                       <a href="https://so07.tci-thaijo.org/index.php/PasaaParitat/article/view/5466/3928" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1e3a8a] text-white px-8 py-4 rounded-2xl font-bold text-xl self-start mt-auto">{t('global_art_book2_btn')} &rarr;</a>
                     </div>
                  </div>
 
@@ -474,7 +474,7 @@ const GlobalNetwork = () => {
                         <p className="py-4 text-xl md:text-2xl text-slate-800 font-light"><strong className="text-[#1e3a8a] font-bold">{t('global_detail_label')}</strong> {t('global_art_j1_detail')}</p>
                         <p className="text-xl md:text-2xl text-slate-800 font-light rounded-xl"><strong className="text-[#1e3a8a] font-bold">{t('global_benefit_label')}</strong> {t('global_art_j1_benefit')}</p>
                         <div className="pt-4">
-                           <a href="https://eltcrj.com/v2-i1-htut/" target="_blank" rel="noopener noreferrer" className="text-[#1e3a8a] font-bold text-2xl underline">{t('global_art_j1_btn')} &rarr;</a>
+                           <a href="https://eltcrj.com/v2-i1-htut/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1e3a8a] text-white px-8 py-4 rounded-2xl font-bold text-xl">{t('global_art_j1_btn')} &rarr;</a>
                         </div>
                      </div>
                  </div>
