@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 const galleryImages = [
@@ -14,11 +14,70 @@ const galleryImages = [
   "/Training/Onsite_23.webp",
   "/Homepage/cover_4.webp",
   "/Homepage/cover_2.webp",
+
+  "/Homepage/Carousel/Day1/8274.JPG",
+  "/Homepage/Carousel/Day1/8283.JPG",
+  "/Homepage/Carousel/Day1/8284.JPG",
+  "/Homepage/Carousel/Day1/8377.JPG",
+  "/Homepage/Carousel/Day1/8392.JPG",
+  "/Homepage/Carousel/Day1/8462.JPG",
+
+  "/Homepage/Carousel/Day3/8949.JPG",
+  "/Homepage/Carousel/Day3/8982.JPG",
+  "/Homepage/Carousel/Day3/9031.JPG",
+  "/Homepage/Carousel/Day3/9108.JPG",
+  "/Homepage/Carousel/Day3/9118.JPG",
+
+  "/Homepage/Carousel/Day4/9326.JPG",
+  "/Homepage/Carousel/Day4/9343.JPG",
+  "/Homepage/Carousel/Day4/9394.JPG",
+  "/Homepage/Carousel/Day4/9398.JPG",
+  "/Homepage/Carousel/Day4/09418.JPG",
+  "/Homepage/Carousel/Day4/9423.JPG",
+  "/Homepage/Carousel/Day4/9427.JPG",
+  "/Homepage/Carousel/Day4/9440.JPG",
+  "/Homepage/Carousel/Day4/09442.JPG",
+  "/Homepage/Carousel/Day4/9451.JPG",
+  "/Homepage/Carousel/Day4/09465.JPG",
+
+  "/Homepage/Carousel/Day5/0006.JPG",
+  "/Homepage/Carousel/Day5/0057.JPG",
+  "/Homepage/Carousel/Day5/0072.JPG",
+  "/Homepage/Carousel/Day5/9812.JPG",
+  "/Homepage/Carousel/Day5/0125.JPG",
+  "/Homepage/Carousel/Day5/9527.JPG",
+  "/Homepage/Carousel/Day5/9577.JPG",
+  "/Homepage/Carousel/Day5/09662.JPG",
+  
+  "/Homepage/Carousel/Day6/0336.JPG",
+  "/Homepage/Carousel/Day6/0606.JPG",
+  "/Homepage/Carousel/Day6/0610.JPG",
+  "/Homepage/Carousel/Day6/0616.JPG",
+  "/Homepage/Carousel/Day6/0620.JPG",
+  "/Homepage/Carousel/Day6/0681.JPG",
+  "/Homepage/Carousel/Day6/0742.JPG",
+  "/Homepage/Carousel/Day6/0755.JPG",
+  "/Homepage/Carousel/Day6/0757.JPG",
+  "/Homepage/Carousel/Day6/0759.JPG",
+  "/Homepage/Carousel/Day6/0761.JPG",
+  "/Homepage/Carousel/Day6/0763.JPG",
+  "/Homepage/Carousel/Day6/0769.JPG",
+  "/Homepage/Carousel/Day6/0774.JPG",
+  "/Homepage/Carousel/Day6/0777.JPG",
+  "/Homepage/Carousel/Day6/09834.JPG",
+  "/Homepage/Carousel/Day6/09863.JPG",
+  "/Homepage/Carousel/Day6/09866.JPG",
+  "/Homepage/Carousel/Day6/09892.JPG",
 ];
 
 const GalleryCarousel = () => {
   const { t } = useLanguage();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // 💡 States สำหรับจัดการการ Swipe บนมือถือ
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [touchEndX, setTouchEndX] = useState<number | null>(null);
 
   const prevImage = () => {
     setCurrentImageIndex((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1));
@@ -26,6 +85,71 @@ const GalleryCarousel = () => {
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1));
+  };
+
+  // 💡 ระบบ Auto Slideshow (หยุดชั่วคราวเมื่อ Hover หรือกำลัง Touch อยู่)
+  useEffect(() => {
+    if (isHovered || touchStartX !== null) return; 
+    const timer = setInterval(() => {
+      nextImage();
+    }, 4000);
+
+    return () => clearInterval(timer);
+  }, [currentImageIndex, isHovered, touchStartX]);
+
+  // 💡 ฟังก์ชันจับพิกัดการปัดหน้าจอ (Swipe Handlers)
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.targetTouches[0].clientX);
+    setTouchEndX(null);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX || !touchEndX) return;
+    
+    const distance = touchStartX - touchEndX;
+    const minSwipeDistance = 50; // ระยะทางขั้นต่ำในการปัด (pixels)
+
+    if (distance > minSwipeDistance) {
+      // ปัดไปทางซ้าย -> ไปรูปถัดไป
+      nextImage();
+    } else if (distance < -minSwipeDistance) {
+      // ปัดไปทางขวา -> กลับรูปก่อนหน้า
+      prevImage();
+    }
+
+    setTouchStartX(null);
+    setTouchEndX(null);
+  };
+
+  // 💡 คำนวณขอบเขตจุด Dot Indicators ไม่ให้ล้นหน้าจอ (แสดงผลสูงสุดไม่เกิน 7 จุด)
+  const getVisibleDots = () => {
+    const total = galleryImages.length;
+    const maxDots = 7;
+    
+    if (total <= maxDots) {
+      return Array.from({ length: total }, (_, i) => i);
+    }
+
+    let start = currentImageIndex - Math.floor(maxDots / 2);
+    let end = currentImageIndex + Math.floor(maxDots / 2);
+
+    if (start < 0) {
+      start = 0;
+      end = maxDots - 1;
+    } else if (end >= total) {
+      end = total - 1;
+      start = total - maxDots;
+    }
+
+    const dots = [];
+    for (let i = start; i <= end; i++) {
+      dots.push(i);
+    }
+    return dots;
   };
 
   return (
@@ -41,15 +165,22 @@ const GalleryCarousel = () => {
         </div>
       </div>
 
-      <div className="relative w-full max-w-5xl mx-auto h-[300px] sm:h-[450px] lg:h-[550px] rounded-3xl overflow-hidden shadow-lg group bg-slate-900">
+      <div 
+        className="relative w-full max-w-5xl mx-auto h-[300px] sm:h-[450px] lg:h-[550px] rounded-3xl overflow-hidden shadow-lg group bg-slate-900 select-none touch-pan-y"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         
         {galleryImages.map((imgUrl, index) => (
           <img 
             key={index}
             src={imgUrl} 
             alt={`Gallery image ${index + 1}`} 
-            loading="lazy" /* เพิ่ม Lazy Loading */
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${
+            loading="lazy"
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out pointer-events-none ${
               index === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
             }`}
           />
@@ -57,9 +188,15 @@ const GalleryCarousel = () => {
 
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-900/70 to-transparent pointer-events-none z-20"></div>
 
+        {/* ตัวบอกลำดับภาพ (Image Counter) ด้านขวาบน */}
+        <div className="absolute top-4 right-4 bg-slate-900/60 backdrop-blur-md text-white text-sm font-semibold px-3 py-1.5 rounded-full z-30 pointer-events-none">
+          {currentImageIndex + 1} / {galleryImages.length}
+        </div>
+
+        {/* ปุ่มย้อนกลับ */}
         <button 
           onClick={prevImage}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 p-3 rounded-full shadow-md backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 z-30"
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 p-3 rounded-full shadow-md backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 z-30 cursor-pointer"
           aria-label="Previous image"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
@@ -67,9 +204,10 @@ const GalleryCarousel = () => {
           </svg>
         </button>
 
+        {/* ปุ่มถัดไป */}
         <button 
           onClick={nextImage}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 p-3 rounded-full shadow-md backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 z-30"
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 p-3 rounded-full shadow-md backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 z-30 cursor-pointer"
           aria-label="Next image"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
@@ -77,15 +215,16 @@ const GalleryCarousel = () => {
           </svg>
         </button>
 
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 z-30">
-          {galleryImages.map((_, index) => (
+        {/* แสดงเฉพาะจุดรอบๆ ภาพปัจจุบัน ป้องกันจุดล้นขอบ */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-30 bg-slate-900/40 backdrop-blur-md px-4 py-2 rounded-full">
+          {getVisibleDots().map((index) => (
             <button
               key={index}
               onClick={() => setCurrentImageIndex(index)}
-              className={`transition-all duration-500 rounded-full ${
+              className={`transition-all duration-300 rounded-full cursor-pointer ${
                 index === currentImageIndex 
-                  ? 'w-10 h-3 bg-white shadow-sm' 
-                  : 'w-3 h-3 bg-white/50 hover:bg-white/90'
+                  ? 'w-8 h-2.5 bg-white shadow-sm' 
+                  : 'w-2.5 h-2.5 bg-white/50 hover:bg-white/90'
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

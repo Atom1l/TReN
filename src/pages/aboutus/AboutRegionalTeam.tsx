@@ -15,45 +15,45 @@ const AboutRegionalTeams: React.FC = () => {
     </div>
   );
 
-  // 💡 อัปเดตข้อมูลทีมภูมิภาคให้ครบ 6 ภาค ตามข้อมูลล่าสุด
+  // 💡 อัปเดตโครงสร้างตำแหน่งเหลือเฉพาะ: ผู้ประสานงาน (Coordinator) และ คณะกรรมการ (Committee) ทุกภาค
   const regionalTeams = [
     {
       region: t('team_reg_north') || '1. ภาคเหนือ (EARC North)',
       zones: [
-        { name: t('team_zone_upper') || 'ตอนบน', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> },
-        { name: t('team_zone_lower') || 'ตอนล่าง', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
+        { name: t('team_zone_upper') || 'ตอนบน', coordinator: <TbaBadge />, committee: <TbaBadge /> },
+        { name: t('team_zone_lower') || 'ตอนล่าง', coordinator: <TbaBadge />, committee: <TbaBadge /> }
       ]
     },
     {
       region: t('team_reg_northeast') || '2. ภาคตะวันออกเฉียงเหนือ (EARC Northeast)',
       zones: [
-        { name: t('team_zone_upper') || 'ตอนบน', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> },
-        { name: t('team_zone_lower') || 'ตอนล่าง', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
+        { name: t('team_zone_upper') || 'ตอนบน', coordinator: <TbaBadge />, committee: <TbaBadge /> },
+        { name: t('team_zone_lower') || 'ตอนล่าง', coordinator: <TbaBadge />, committee: <TbaBadge /> }
       ]
     },
     {
       region: t('team_reg_central') || '3. ภาคกลาง (EARC Central)',
       zones: [
-        { name: '', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
+        { name: '', coordinator: <TbaBadge />, committee: <TbaBadge /> }
       ]
     },
     {
       region: t('team_reg_east') || '4. ภาคตะวันออก (EARC East)',
       zones: [
-        { name: '', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
+        { name: '', coordinator: <TbaBadge />, committee: <TbaBadge /> }
       ]
     },
     {
       region: t('team_reg_south') || '5. ภาคใต้ (EARC South)',
       zones: [
-        { name: t('team_zone_upper') || 'ตอนบน', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> },
-        { name: t('team_zone_lower') || 'ตอนล่าง', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
+        { name: t('team_zone_upper') || 'ตอนบน', coordinator: <TbaBadge />, committee: <TbaBadge /> },
+        { name: t('team_zone_lower') || 'ตอนล่าง', coordinator: <TbaBadge />, committee: <TbaBadge /> }
       ]
     },
     {
       region: t('team_reg_bkk') || '6. กรุงเทพมหานครและปริมณฑล (EARC Bangkok & Vicinity)',
       zones: [
-        { name: '', head: <TbaBadge />, deputy: <TbaBadge />, committee: <TbaBadge /> }
+        { name: '', coordinator: <TbaBadge />, committee: <TbaBadge /> }
       ]
     }
   ];
@@ -63,11 +63,10 @@ const AboutRegionalTeams: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-10 pb-10 mt-14">
         
         {/* =========================================
-            Section 4: Regional EARC Teams
+            Section: Regional EARC Teams
         ========================================= */}
         <section>
           <div className="mb-12">
-            {/* 💡 ปรับขนาดฟอนต์หัวข้อใหญ่ให้โดดเด่นขึ้น (text-4xl md:text-5xl lg:text-6xl) */}
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
               {t('team_sec3_title') || 'ทีมงานศูนย์ขับเคลื่อนวิจัยครูระดับภูมิภาค'}
             </h2>
@@ -93,21 +92,21 @@ const AboutRegionalTeams: React.FC = () => {
                         </h4>
                       )}
                       
-                      {/* รายชื่อในโซน */}
+                      {/* รายชื่อตำแหน่งในโซน */}
                       <div className="space-y-5 pl-4 md:pl-8">
-                        {/* หัวหน้า */}
+                        {/* ผู้ประสานงาน */}
                         <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 items-start sm:items-center">
-                          <span className="w-28 shrink-0 text-xl font-medium text-[#1e3a8a]">{t('team_role_head') || 'หัวหน้า:'}</span>
-                          <div>{zone.head}</div>
+                          <span className="w-48 shrink-0 text-xl font-bold text-[#1e3a8a]">
+                            {t('team_role_contact') || 'ผู้ประสานงาน:'}
+                          </span>
+                          <div>{zone.coordinator}</div>
                         </div>
-                        {/* รองหัวหน้า */}
+
+                        {/* คณะกรรมการ */}
                         <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 items-start sm:items-center">
-                          <span className="w-28 shrink-0 text-xl font-medium text-[#1e3a8a]">{t('team_role_deputy') || 'รองหัวหน้า:'}</span>
-                          <div>{zone.deputy}</div>
-                        </div>
-                        {/* กรรมการ */}
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 items-start sm:items-center">
-                          <span className="w-28 shrink-0 text-xl font-medium text-[#1e3a8a]">{t('team_role_committee') || 'กรรมการ:'}</span>
+                          <span className="w-48 shrink-0 text-xl font-bold text-[#1e3a8a]">
+                            {t('team_role_committee_member') || 'คณะกรรมการ:'}
+                          </span>
                           <div>{zone.committee}</div>
                         </div>
                       </div>

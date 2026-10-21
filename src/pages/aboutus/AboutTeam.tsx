@@ -76,19 +76,14 @@ const AboutTeam: React.FC = () => {
               </div>
             </div>
 
-            {/* ผู้แทนองค์กรภาคี */}
-            <div className="flex flex-col md:flex-row gap-4 md:gap-8 lg:gap-16 py-8 border-b border-slate-200">
+            {/* องค์กรภาคีเครือข่าย */}
+            <div className="flex flex-col md:flex-row gap-4 md:gap-8 lg:gap-16 py-8 border-b border-slate-200 items-center">
               <div className="md:w-4/12 shrink-0">
-                <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('team_role_partner') || 'ผู้แทนองค์กรภาคี'}</h3>
-                <span className="text-lg text-slate-500 font-medium">(Partner Representatives)</span>
+                <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('team_role_partner') || 'องค์กรภาคีเครือข่าย'}</h3>
+                <span className="text-lg text-slate-500 font-medium">(Partner Organizations)</span>
               </div>
               <div className="md:w-8/12">
-                <ul className="space-y-3">
-                  <li className="flex items-center gap-3 text-2xl text-slate-800 font-light"><span className="w-1.5 h-1.5 rounded-full bg-[#1e3a8a]"></span> {t('team_partner_1') || 'ผู้แทนจาก British Council Thailand'}</li>
-                  <li className="flex items-center gap-3 text-2xl text-slate-800 font-light"><span className="w-1.5 h-1.5 rounded-full bg-[#1e3a8a]"></span> {t('team_partner_2') || 'ผู้แทนจาก RELO'}</li>
-                  <li className="flex items-center gap-3 text-2xl text-slate-800 font-light"><span className="w-1.5 h-1.5 rounded-full bg-[#1e3a8a]"></span> {t('team_partner_3') || 'ผู้แทนจาก HCEC'}</li>
-                  <li className="flex items-center gap-3 text-2xl text-slate-800 font-light"><span className="w-1.5 h-1.5 rounded-full bg-[#1e3a8a]"></span> {t('team_partner_4') || 'ผู้แทนจาก...'}</li>
-                </ul>
+                <p className="text-2xl text-slate-400 font-light">-</p>
               </div>
             </div>
 

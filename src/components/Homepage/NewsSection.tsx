@@ -186,7 +186,7 @@ const NewsSection: React.FC<NewsSectionProps> = memo(({
                   to="/member-work/sirawit" 
                   className="flex flex-col bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer group"
                 >
-                  <div className="p-6 md:p-8 flex-1 flex flex-col bg-white relative z-10">
+                  <div className="p-6 md:p-7 flex-1 flex flex-col bg-white relative z-10">
                     <h4 className="text-2xl font-bold text-[#1e3a8a] line-clamp-3 leading-snug group-hover:underline mb-4">
                       คำถามที่พาเราเดินไกลกว่าที่คิด
                     </h4>

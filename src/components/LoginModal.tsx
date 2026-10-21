@@ -16,7 +16,6 @@ interface LoginModalProps {
 const LoginModal = ({ isOpen, onClose, defaultTab = 'login' }: LoginModalProps) => {
   const { t, language } = useLanguage();
 
-  // 🟢 เพิ่มสถานะ 'forgot_password' เข้ามาใน Tab
   const [activeTab, setActiveTab] = useState<'login' | 'register' | 'forgot_password'>(defaultTab);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -24,6 +23,14 @@ const LoginModal = ({ isOpen, onClose, defaultTab = 'login' }: LoginModalProps) 
   const [loading, setLoading] = useState(false);
   
   const [alertInfo, setAlertInfo] = useState({ show: false, type: 'success', message: '' });
+
+  // 💡 สถานะสำหรับการพิมพ์ค้นหาและเปิด/ปิดดรอปดาวน์จังหวัด
+  const [provinceSearch, setProvinceSearch] = useState('');
+  const [isProvinceOpen, setIsProvinceOpen] = useState(false);
+
+  // 💡 สถานะสำหรับการพิมพ์ค้นหาและเปิด/ปิดดรอปดาวน์ตำแหน่งทางวิชาการ (วิทยฐานะ)
+  const [rankSearch, setRankSearch] = useState('');
+  const [isRankOpen, setIsRankOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -158,7 +165,6 @@ const LoginModal = ({ isOpen, onClose, defaultTab = 'login' }: LoginModalProps) 
     }
   };
 
-  // 🟢 ฟังก์ชันสำหรับส่งอีเมลรีเซ็ตรหัสผ่าน
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.email.trim()) {
@@ -169,14 +175,12 @@ const LoginModal = ({ isOpen, onClose, defaultTab = 'login' }: LoginModalProps) 
     setLoading(true);
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(formData.email, {
-        // ให้ redirect กลับไปที่หน้าสร้างรหัสผ่านใหม่ (หน้านี้เดี๋ยวเราค่อยสร้าง)
         redirectTo: `${window.location.origin}/update-password`,
       });
 
       if (error) throw error;
       
       showCustomAlert('success', 'ส่งลิงก์รีเซ็ตรหัสผ่านไปยังอีเมลของคุณเรียบร้อยแล้ว!');
-      // หน่วงเวลาให้คนใช้อ่าน Alert ทัน แล้วพากลับไปหน้า Login
       setTimeout(() => {
         setActiveTab('login');
       }, 2500);
@@ -216,7 +220,6 @@ const LoginModal = ({ isOpen, onClose, defaultTab = 'login' }: LoginModalProps) 
           </svg>
         </button>
 
-        {/* 🟢 ซ่อนปุ่มสลับ Login/Register ถ้าย้ายมาอยู่หน้า Forgot Password */}
         {activeTab !== 'forgot_password' && (
           <div className="flex border-b border-slate-100 mt-6 mb-8">
             <button 
@@ -237,7 +240,6 @@ const LoginModal = ({ isOpen, onClose, defaultTab = 'login' }: LoginModalProps) 
         )}
 
         <div className="space-y-6">
-          {/* 🟢 แยกฟอร์มแสดงผลตาม activeTab */}
           {activeTab === 'forgot_password' ? (
             <form onSubmit={handleResetPassword} className="space-y-5 mt-6 animate-fade-in">
               <div className="mb-6 text-center">
@@ -379,30 +381,66 @@ const LoginModal = ({ isOpen, onClose, defaultTab = 'login' }: LoginModalProps) 
                         className="w-full px-4 py-2.5 border border-slate-200 rounded-xl bg-input-bg text-md md:text-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" 
                       />
                     </div>
-                    <div>
+
+                    {/* ช่องเลือกจังหวัด */}
+                    <div className="relative">
                       <label className="block text-md md:text-lg font-medium text-slate-700 mb-1.5">{t('province') || 'จังหวัด'}</label>
-                      <select 
-                          name="province"
-                          value={formData.province}
-                          onChange={handleChange}
-                          required 
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl bg-white 
-                          transition-all outline-none focus:outline-none focus-visible:outline-none
-                          focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer
-                          appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%2364748b%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%20d%3D%22m19%209-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] 
-                          bg-[length:1.25rem] bg-no-repeat 
-                          bg-[right_0.6rem_center]"
-                      >
-                          <option value="" disabled>{t('school_province_placeholder') || 'จังหวัดของโรงเรียน'}</option>
-                          {THAI_PROVINCES.map((province) => (
-                          <option key={province.value} value={province.value}>
-                              {/* 🟢 ใช้เงื่อนไขให้แปลง key ของจังหวัดเป็นภาษาอังกฤษ (เช่น chiang_mai -> Chiang Mai) */}
-                              {language === 'en' 
-                                ? province.value.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') 
-                                : province.label}
-                          </option>
-                          ))}
-                      </select>
+                      <input
+                        type="text"
+                        placeholder={t('school_province_placeholder') || 'จังหวัดของโรงเรียน'}
+                        value={provinceSearch}
+                        onChange={(e) => {
+                          setProvinceSearch(e.target.value);
+                          setFormData({ ...formData, province: '' });
+                          setIsProvinceOpen(true);
+                        }}
+                        onFocus={() => setIsProvinceOpen(true)}
+                        onBlur={() => setTimeout(() => setIsProvinceOpen(false), 200)}
+                        required
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-xl bg-white text-md md:text-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none pr-10"
+                      />
+                      <div className="absolute right-4 top-[50px] pointer-events-none text-slate-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                      </div>
+
+                      {isProvinceOpen && (
+                        <div className="absolute top-[80px] z-35 w-full bg-white border border-slate-200 rounded-xl shadow-xl max-h-60 overflow-y-auto custom-scrollbar">
+                          {THAI_PROVINCES.filter((p: any) => {
+                            const provinceName = language === 'en' 
+                              ? p.value.split('_').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') 
+                              : p.label;
+                            return provinceName.toLowerCase().includes(provinceSearch.toLowerCase());
+                          }).length > 0 ? (
+                            THAI_PROVINCES.filter((p: any) => {
+                              const provinceName = language === 'en' 
+                                ? p.value.split('_').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') 
+                                : p.label;
+                              return provinceName.toLowerCase().includes(provinceSearch.toLowerCase());
+                            }).map((prov: any) => {
+                              const displayName = language === 'en' 
+                                ? prov.value.split('_').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') 
+                                : prov.label;
+                              return (
+                                <div 
+                                  key={prov.value} 
+                                  onClick={() => {
+                                    setFormData({ ...formData, province: prov.value });
+                                    setProvinceSearch(displayName);
+                                    setIsProvinceOpen(false);
+                                  }}
+                                  className="p-3 hover:bg-slate-50 cursor-pointer text-slate-700 text-md md:text-lg border-b border-slate-100 last:border-0 transition-colors truncate"
+                                >
+                                  {displayName}
+                                </div>
+                              );
+                            })
+                          ) : (
+                            <div className="p-4 text-center text-slate-500 text-sm">{t('no_province_found') || 'ไม่พบจังหวัดที่ค้นหา'}</div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -415,7 +453,6 @@ const LoginModal = ({ isOpen, onClose, defaultTab = 'login' }: LoginModalProps) 
                           <div className="flex items-center gap-3">
                             <input type="radio" name="position" value={pos.value} checked={formData.position === pos.value} onChange={handleChange} className="w-5 h-5 accent-primary cursor-pointer" />
                             <span className="font-semibold">
-                              {/* 🟢 แสดงภาษาอังกฤษถ้าถูกกำหนดไว้ */}
                               {language === 'en' && pos.labelEn ? pos.labelEn : pos.label}
                             </span>
                           </div>
@@ -424,28 +461,59 @@ const LoginModal = ({ isOpen, onClose, defaultTab = 'login' }: LoginModalProps) 
                       ))}
                     </div>
                     </div>
-                    <div>
+
+                    <div className="relative">
                       <label className="block text-md md:text-lg font-medium text-slate-700 mb-1.5">{t('academic_rank') || 'วิทยฐานะ'}</label>
-                      <select 
-                          required 
-                          name="rank" 
-                          value={formData.rank} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl bg-white 
-                          transition-all outline-none focus:outline-none focus-visible:outline-none
-                          focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer
-                          appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%2364748b%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%20d%3D%22m19%209-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] 
-                          bg-[length:1.25rem] bg-no-repeat 
-                          bg-[right_0.6rem_center]"
-                      >
-                        <option value="" disabled>{t('teacher_rank_placeholder') || 'วิทยฐานะของคุณครู'}</option>
-                          {TEACHER_RANKS.map((rank: any) => (
-                              <option key={rank.value} value={rank.value}>
-                                {/* 🟢 แสดงภาษาอังกฤษถ้าถูกกำหนดไว้ */}
-                                {language === 'en' && rank.labelEn ? rank.labelEn : rank.label}
-                              </option>
-                          ))}
-                      </select>
+                      <input
+                        type="text"
+                        placeholder={t('teacher_rank_placeholder') || 'วิทยฐานะของคุณครู'}
+                        value={rankSearch}
+                        onChange={(e) => {
+                          setRankSearch(e.target.value);
+                          setFormData({ ...formData, rank: '' });
+                          setIsRankOpen(true);
+                        }}
+                        onFocus={() => setIsRankOpen(true)}
+                        onBlur={() => setTimeout(() => setIsRankOpen(false), 200)}
+                        required
+                        className="w-full px-4 py-2.5 border border-slate-200 rounded-xl bg-white text-md md:text-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none pr-10"
+                      />
+                      <div className="absolute right-4 top-[50px] pointer-events-none text-slate-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                      </div>
+
+                      {isRankOpen && (
+                        <div className="absolute top-[80px] z-35 w-full bg-white border border-slate-200 rounded-xl shadow-xl max-h-60 overflow-y-auto custom-scrollbar">
+                          {TEACHER_RANKS.filter((r: any) => {
+                            const rankName = language === 'en' && r.labelEn ? r.labelEn : r.label;
+                            return rankName.toLowerCase().includes(rankSearch.toLowerCase());
+                          }).length > 0 ? (
+                            TEACHER_RANKS.filter((r: any) => {
+                              const rankName = language === 'en' && r.labelEn ? r.labelEn : r.label;
+                              return rankName.toLowerCase().includes(rankSearch.toLowerCase());
+                            }).map((rankItem: any) => {
+                              const displayRankName = language === 'en' && rankItem.labelEn ? rankItem.labelEn : rankItem.label;
+                              return (
+                                <div 
+                                  key={rankItem.value} 
+                                  onClick={() => {
+                                    setFormData({ ...formData, rank: rankItem.value });
+                                    setRankSearch(displayRankName);
+                                    setIsRankOpen(false);
+                                  }}
+                                  className="p-3 hover:bg-slate-50 cursor-pointer text-slate-700 text-md md:text-lg border-b border-slate-100 last:border-0 transition-colors truncate"
+                                >
+                                  {displayRankName}
+                                </div>
+                              );
+                            })
+                          ) : (
+                            <div className="p-4 text-center text-slate-500 text-sm">{t('no_rank_found') || 'ไม่พบวิทยฐานะที่ค้นหา'}</div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -498,4 +566,4 @@ const LoginModal = ({ isOpen, onClose, defaultTab = 'login' }: LoginModalProps) 
   )
 }
 
-export default LoginModal
+export default LoginModal;
