@@ -59,21 +59,21 @@ const AboutRegionalTeams: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200">
+    <div className="w-full bg-white pt-20 pb-16 font-sans selection:bg-blue-200">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-10 pb-10 mt-14">
         
         {/* =========================================
             Section: Regional EARC Teams
         ========================================= */}
         <section>
-          <div className="mb-12">
+          <div className="mb-12 text-center">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
               {t('team_sec3_title') || 'ทีมงานศูนย์ขับเคลื่อนวิจัยครูระดับภูมิภาค'}
             </h2>
             <p className="text-xl md:text-2xl text-slate-500 font-medium tracking-wide mt-4 uppercase">
               {t('team_sec3_en') || 'Regional EARC Teams'}
             </p>
-            <div className="w-20 h-1.5 bg-[#1e3a8a] mt-6 rounded-full"></div>
+            <div className="w-full h-1.5 bg-[#1e3a8a] mt-18 mb-20 rounded-full"></div>
           </div>
 
           <div className="space-y-16 border-t-[2px] border-[#1e3a8a] border-b border-slate-200 pb-18 pt-12">

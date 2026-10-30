@@ -299,7 +299,7 @@ const Navbar = () => {
         { name: t('past_events_navbar') || 'ผ่านมาแล้ว', path: '/events/all?filter=past' }
       ]
     },
-    { name: t('nav_research') || 'งานวิจัย', path: '/researcharchive' }, 
+    { name: t('nav_research') || 'งานวิจัยครู', path: '/researcharchive' }, 
     { name: t('nav_blogs') || 'บล็อกงานวิจัย', path: '/blogs' },
     { name: t('nav_contact') || 'ติดต่อเรา', path: '/contact' }
   ];

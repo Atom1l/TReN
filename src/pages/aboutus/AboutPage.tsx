@@ -72,7 +72,7 @@ const AboutPage: React.FC = () => {
       </section>
       
       {/* 1. กรอบการทำงานของเครือข่าย (Constitution) */}
-      <div id="constitution" className="scroll-mt-32">
+      <div id="constitution" className="scroll-mt-32 bg-white">
         <section id="general-info"><AboutVisionMission /><AboutCorePrinciples /></section>
         <section id="membership"><AboutMembership /></section>
         <section id="operations"><AboutOperations /></section>

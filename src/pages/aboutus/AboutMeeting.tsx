@@ -95,6 +95,17 @@ const AboutMeetings: React.FC = () => {
         </div>
 
         </div>
+
+        {/* 💡 เส้นกั้นปิดจบหมวดที่ 2 เพื่อเปลี่ยนเข้าสู่หมวดที่ 3 */}
+        <div className="pt-24 flex items-center justify-center gap-6">
+          <div className="h-[2px] flex-1 bg-[#1e3a8a]"></div>
+          <div className="flex items-center gap-3 px-6 py-2.5 rounded-full bg-slate-100 border border-slate-300 text-[#1e3a8a] text-sm md:text-base font-bold tracking-wider uppercase">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#1e3a8a]"></span>
+            <span>{t('end_of_section') || 'END OF SECTION'}: 5</span>
+          </div>
+          <div className="h-[2px] flex-1 bg-[#1e3a8a]"></div>
+        </div>
+
       </div>
     </div>
   );

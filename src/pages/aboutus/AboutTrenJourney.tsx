@@ -102,25 +102,25 @@ const AboutTrenJourney: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24 mt-14">
+    <div className="w-full bg-slate-100 pb-20 font-sans selection:bg-blue-200">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24 mt-30">
         
         {/* Intro Section */}
-        <section className="max-w-4xl mb-10 relative mx-auto md:mx-0">
+        <section className="relative text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
             {t('journey_main_title') || 'เส้นทางการเติบโต'}
             <span className="block text-3xl md:text-4xl lg:text-5xl text-slate-400 mt-3 font-medium tracking-normal">
               {t('journey_subtitle') || 'TReN Journey'}
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-slate-800 mt-6 font-light leading-relaxed max-w-3xl">
+          <p className="text-xl md:text-2xl text-slate-800 mt-6 font-light leading-relaxed max-w-3xl text-center mx-auto whitespace-pre-line">
             {t('journey_intro_desc_new') || 'จากจุดเริ่มต้นสู่เครือข่ายวิจัยระดับประเทศ (พ.ศ. 2565 - ปัจจุบัน)'}
           </p>
-          <div className="w-20 h-1.5 bg-[#1e3a8a] mt-8 rounded-full"></div>
+          <div className="w-full h-1.5 bg-[#1e3a8a] mt-14 rounded-full mx-auto"></div>
         </section>
 
         {/* Editorial Chapter Section */}
-        <div className="space-y-0">
+        <div className="space-y-0 border-b border-slate-300">
           {journeyData.map((item, index) => (
             <div 
               key={index} 
@@ -148,7 +148,7 @@ const AboutTrenJourney: React.FC = () => {
         </div>
 
         {/* --- ตารางสรุปตัวเลขการเติบโต (Table Section) --- */}
-        <section className="pt-24 border-t border-slate-300">
+        <section className="pt-20 pb-20 my-20 px-6 lg:px-12 bg-blue-200/60 rounded-3xl border border-blue-300 shadow-sm">
           <h2 className="text-4xl font-bold text-[#1e3a8a] mb-12 tracking-tight">
             {t('journey_table_main_title') || 'สรุปตัวเลขการเติบโตของเครือข่าย'}
           </h2>
@@ -164,24 +164,24 @@ const AboutTrenJourney: React.FC = () => {
                   <th className="py-5 px-4 text-2xl md:text-3xl font-bold text-slate-800 w-5/12">{t('journey_table_col3') || 'รายละเอียดการขยายผล'}</th>
                 </tr>
               </thead>
-              <tbody className="text-2xl text-slate-700 font-light">
-                <tr className="border-b border-slate-200 hover:bg-slate-50 transition-colors duration-200">
-                  <td className="py-8 px-4 font-medium text-slate-800">{t('journey_stat_1_name') || 'ครูประจำการที่ได้รับการพัฒนา'}</td>
+              <tbody className="text-2xl text-slate-800 font-medium">
+                <tr className="border-b border-blue-200 hover:bg-blue-100/50 transition-colors duration-200">
+                  <td className="py-8 px-4 font-bold text-slate-800">{t('journey_stat_1_name') || 'ครูประจำการที่ได้รับการพัฒนา'}</td>
                   <td className="py-8 px-4 text-3xl font-extrabold text-[#1e3a8a]">{t('journey_stat_1_val') || '280 คน'}</td>
                   <td className="py-8 px-4 leading-relaxed">{t('journey_stat_1_desc') || 'จากรุ่นนำร่อง 21 คน สู่การแก้ปัญหาในชั้นเรียนด้วย EAR ทั่วประเทศ'}</td>
                 </tr>
-                <tr className="border-b border-slate-200 hover:bg-slate-50 transition-colors duration-200">
-                  <td className="py-8 px-4 font-medium text-slate-800">{t('journey_stat_2_name') || 'ครูพี่เลี้ยงวิจัย'} <span className="text-slate-500 text-xl font-light">{t('journey_stat_2_en') || '(Mentors)'}</span></td>
+                <tr className="border-b border-blue-200 hover:bg-blue-100/50 transition-colors duration-200">
+                  <td className="py-8 px-4 font-bold text-slate-800">{t('journey_stat_2_name') || 'ครูพี่เลี้ยงวิจัย'} <span className="text-slate-600 text-xl font-medium">{t('journey_stat_2_en') || '(Mentors)'}</span></td>
                   <td className="py-8 px-4 text-3xl font-extrabold text-[#1e3a8a]">{t('journey_stat_2_val') || '50 คน'}</td>
                   <td className="py-8 px-4 leading-relaxed">{t('journey_stat_2_desc') || 'บ่มเพาะจากครูแกนนำรุ่นแรก สู่ผู้เชี่ยวชาญที่คอยหนุนเสริมเพื่อนครู'}</td>
                 </tr>
-                <tr className="border-b border-slate-200 hover:bg-slate-50 transition-colors duration-200">
-                  <td className="py-8 px-4 font-medium text-slate-800">{t('journey_stat_3_name') || 'พื้นที่การทำงาน'}</td>
+                <tr className="border-b border-blue-200 hover:bg-blue-100/50 transition-colors duration-200">
+                  <td className="py-8 px-4 font-bold text-slate-800">{t('journey_stat_3_name') || 'พื้นที่การทำงาน'}</td>
                   <td className="py-8 px-4 text-3xl font-extrabold text-[#1e3a8a]">{t('journey_stat_3_val') || '40 จังหวัด'}</td>
                   <td className="py-8 px-4 leading-relaxed">{t('journey_stat_3_desc') || 'กระจายเครือข่ายการเรียนรู้และการดูแลอย่างทั่วถึงทุกภูมิภาค'}</td>
                 </tr>
-                <tr className="border-b border-slate-200 hover:bg-slate-50 transition-colors duration-200">
-                  <td className="py-8 px-4 font-medium text-slate-800">{t('journey_stat_4_name') || 'ชุมชนนักปฏิบัติ'} <span className="text-slate-500 text-xl font-light">{t('journey_stat_4_en') || '(EARCs)'}</span></td>
+                <tr className="border-b border-blue-200 hover:bg-blue-100/50 transition-colors duration-200">
+                  <td className="py-8 px-4 font-bold text-slate-800">{t('journey_stat_4_name') || 'ชุมชนนักปฏิบัติ'} <span className="text-slate-600 text-xl font-medium">{t('journey_stat_4_en') || '(EARCs)'}</span></td>
                   <td className="py-8 px-4 text-3xl font-extrabold text-[#1e3a8a]">{t('journey_stat_4_val') || '8 โซน'}</td>
                   <td className="py-8 px-4 leading-relaxed">{t('journey_stat_4_desc') || 'ยกระดับเครือข่ายเชิงพื้นที่ให้พึ่งพาตนเองได้อย่างยั่งยืน'}</td>
                 </tr>
@@ -194,6 +194,7 @@ const AboutTrenJourney: React.FC = () => {
             {t('journey_ref_author') || '* สุวิมล ว่องวาณิช. (2550).'} <span className="italic">{t('journey_ref_book') || 'การวิจัยปฏิบัติการในชั้นเรียน'}</span> {t('journey_ref_pub') || '(พิมพ์ครั้งที่ X). สำนักพิมพ์แห่งจุฬาลงกรณ์มหาวิทยาลัย.'}
           </div> */}
         </section>
+        
 
       </div>
     </div>

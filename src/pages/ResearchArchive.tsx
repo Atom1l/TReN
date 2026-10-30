@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { Link } from 'react-router-dom';
-import { useLanguage } from '../contexts/LanguageContext'; // 💡 1. นำเข้า useLanguage
+import { useLanguage } from '../contexts/LanguageContext';
 
 const ResearchArchive = () => {
-  const { t } = useLanguage(); // 💡 2. เรียกใช้ t function
+  const { t } = useLanguage();
 
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [selectedSubgroup, setSelectedSubgroup] = useState<string | null>(null);
@@ -13,26 +14,8 @@ const ResearchArchive = () => {
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // 💡 ฟังก์ชันแปลงลิงก์ Google Drive ให้เป็นลิงก์บังคับดาวน์โหลด (Force Download)
-  const getDirectDownloadUrl = (url: string) => {
-    if (!url) return '#';
-    const gDriveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-    if (gDriveMatch && gDriveMatch[1]) {
-      return `https://drive.google.com/uc?export=download&id=${gDriveMatch[1]}`;
-    }
-    return url; 
-  };
-
-  // 💡 ฟังก์ชันจำลองการคลิกดาวน์โหลดเพื่อเลี่ยงข้อจำกัด Cross-origin
-  const handleForceDownload = (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
-    e.preventDefault();
-    const downloadUrl = getDirectDownloadUrl(url);
-    const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    iframe.src = downloadUrl;
-    document.body.appendChild(iframe);
-    setTimeout(() => { document.body.removeChild(iframe); }, 2000);
-  };
+  // 💡 State สำหรับจัดการสถานะรูปภาพพัง/โหลดไม่ขึ้น (Fallback)
+  const [imgErrorState, setImgErrorState] = useState<{ [key: string]: boolean }>({});
 
   useEffect(() => {
     if (!selectedGroup || !selectedSubgroup) return;
@@ -77,19 +60,8 @@ const ResearchArchive = () => {
     return { highlightItem, normalItems };
   };
 
-  const { highlightItem: anthologyHighlight, normalItems: anthologyItems } = filterData('เล่มรวมวิจัย');
-  const { highlightItem: individualHighlight, normalItems: individualItems } = filterData('งานวิจัยรายเรื่อง');
-
-  const parseLinks = (linkData: any) => {
-    if (!linkData) return [];
-    try {
-      if (Array.isArray(linkData)) return linkData;
-      if (typeof linkData === 'string' && linkData.startsWith('http')) return [{ title: t('main_link') || 'Main Link', url: linkData }];
-      return JSON.parse(linkData);
-    } catch {
-      return [{ title: t('main_link') || 'Main Link', url: String(linkData) }];
-    }
-  };
+  const { highlightItem: anthologyHighlight } = filterData('เล่มรวมวิจัย');
+  const { highlightItem: individualHighlight } = filterData('งานวิจัยรายเรื่อง');
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] pb-24 font-sans selection:bg-blue-200 border-t border-slate-200 overflow-hidden flex flex-col items-center">
@@ -184,7 +156,7 @@ const ResearchArchive = () => {
       )}
 
       {/* หน้าว่าง (Coming Soon) */}
-      {(selectedGroup === 'กลุ่มวิชาวิทยาศาสตร์และคณิตศาสตร์' || selectedGroup === 'กลุ่มวิชาสังคมศึกษาและอื่นๆ') && (
+      {(selectedGroup === 'กลุ่มวิชาวิทยาศาสตร์และคณิตศาสตร์' || selectedGroup === 'กลุ่มวิชาสังคมศึกษาและอื่นๆ' || (selectedGroup === 'กลุ่มวิชาภาษา' && selectedSubgroup && selectedSubgroup !== 'ภาษาอังกฤษ')) && (
         <section className="w-full max-w-4xl px-4 mt-8 animate-fade-up">
           <div className="bg-white border border-dashed border-slate-300 rounded-3xl p-16 flex flex-col items-center text-center">
             <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
@@ -200,8 +172,8 @@ const ResearchArchive = () => {
         </section>
       )}
 
-      {/* ================= LEVEL 3: แสดงข้อมูลผลงาน (ตีคู่ขนาน) ================= */}
-      {selectedGroup === 'กลุ่มวิชาภาษา' && selectedSubgroup && (
+      {/* ================= LEVEL 3: แสดงข้อมูลผลงาน (เฉพาะภาษาอังกฤษ) ================= */}
+      {selectedGroup === 'กลุ่มวิชาภาษา' && selectedSubgroup === 'ภาษาอังกฤษ' && (
         <section className="w-full max-w-7xl px-4 mt-12 animate-fade-up" style={{ animationDelay: '0.1s' }}>
           
           {isLoading ? (
@@ -209,101 +181,133 @@ const ResearchArchive = () => {
               <div className="w-10 h-10 border-4 border-slate-200 border-t-[#1e3a8a] rounded-full animate-spin"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               
               {/* 💡 การ์ดที่ 1: เล่มรวมวิจัย (Anthology) */}
-              <div className="bg-blue-200 rounded-[2rem] shadow-[0_8px_30px_-10px_rgba(0,0,0,0.08)] border border-slate-100 flex flex-col overflow-hidden group hover:border-blue-200 hover:shadow-[0_12px_40px_-10px_rgba(25,58,138,0.15)] ">
-                <div className="p-8 md:p-10 flex-grow flex flex-col">
-                  
-                  <h3 className="text-3xl font-extrabold text-[#1e3a8a] mb-4 leading-tight">
-                    {anthologyHighlight?.collection_name || t('anthology_title') || 'ฉบับเล่มรวมวิจัยปี 2023, 2024–2025'}
+              <div className="bg-white rounded-[2rem] shadow-[0_8px_30px_-10px_rgba(0,0,0,0.08)] border border-slate-100 flex flex-col overflow-hidden group hover:border-blue-200 hover:shadow-[0_12px_40px_-10px_rgba(25,58,138,0.15)]">
+                
+                {/* 💡 ปรับความสูงรูปภาพเพิ่มขึ้นเล็กน้อย (h-44 sm:h-52) */}
+                <div className="w-full h-44 sm:h-52 bg-slate-100 relative overflow-hidden">
+                  {anthologyHighlight?.thumbnail_url && !imgErrorState['anthology'] ? (
+                    <img 
+                      src={anthologyHighlight.thumbnail_url} 
+                      alt={anthologyHighlight?.collection_name || 'Anthology'}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={() => setImgErrorState(prev => ({ ...prev, 'anthology': true }))}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-[#1e3a8a] flex items-center justify-center">
+                      <span className="text-3xl font-extrabold tracking-widest text-white">TReN</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-6 md:p-8 flex-grow flex flex-col">
+                  <h3 className="text-2xl font-extrabold text-[#1e3a8a] mb-3 leading-tight">
+                    {anthologyHighlight?.collection_name || t('anthology_title') || 'ฉบับเล่มรวมวิจัยปี 2023'}
                   </h3>
                   
-                  <p className="text-lg text-slate-800 font-normal leading-relaxed mb-8 flex-grow">
+                  <p className="text-base text-slate-600 font-normal leading-relaxed mb-6 flex-grow">
                     {anthologyHighlight?.intro_info || t('anthology_desc') || 'รวบรวมรายงานผลการวิจัยฉบับสมบูรณ์ที่จัดทำเป็นเล่มตีพิมพ์ เหมาะสำหรับผู้ที่ต้องการดาวน์โหลดเล่มรวมวิจัยย้อนหลัง อ่านบทนำบรรณาธิการ หรือดูภาพรวมงานวิจัยทั้งเล่ม'}
                   </p>
 
-                  <div className="w-full h-px bg-[#1e3a8a] mb-6"></div>
+                  <div className="w-full h-px bg-slate-100 mb-6"></div>
 
-                  <div className="flex flex-col gap-6">
-                    <p className="text-lg font-bold text-slate-800 text-center">
+                  <div className="flex flex-col gap-4">
+                    <p className="text-base font-bold text-slate-700 text-center">
                       {t('total_papers_1') || 'รวมผลงานวิจัยฉบับเต็ม'} <span className="text-[#1e3a8a]">12</span> {t('total_papers_2') || 'บทความ'}
                     </p>
                     
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <Link 
-                        to={anthologyHighlight ? `/showcase/${anthologyHighlight.id}` : '#'}
-                        className={`flex-1 flex justify-center items-center px-4 py-3 rounded-xl font-bold text-base transition-all duration-300 shadow-md ${
-                          anthologyHighlight 
-                            ? 'bg-[#1e3a8a] text-white hover:bg-[#152860] hover:scale-105' 
-                            : 'bg-slate-300 text-white cursor-not-allowed'
-                        }`}
-                      >
-                        {t('btn_read_summary') || 'ดูสารบัญ / อ่านบทนำสรุป'}
-                      </Link>
-                      
-                      {anthologyHighlight && parseLinks(anthologyHighlight['Link to work']).map((link: any, idx: number) => (
-                        <a 
-                          key={idx}
-                          href="#"
-                          onClick={(e) => handleForceDownload(e, link.url)}
-                          className="flex-1 flex justify-center items-center gap-2 bg-[#1e3a8a] text-white px-4 py-3 rounded-xl font-bold text-base transition-all duration-300 shadow-md hover:bg-[#152860] hover:scale-105"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
-                          {t('btn_download_pdf') || 'Download PDF ทั้งเล่ม'}
-                        </a>
-                      )).slice(0, 1)}
-                    </div>
+                    <Link 
+                      to={anthologyHighlight ? `/showcase/${anthologyHighlight.id}` : '#'}
+                      className={`w-full flex justify-center items-center px-5 py-3 rounded-xl font-bold text-base transition-all duration-300 shadow-md ${
+                        anthologyHighlight 
+                          ? 'bg-[#1e3a8a] text-white hover:bg-[#152860] hover:scale-[1.02]' 
+                          : 'bg-slate-300 text-white cursor-not-allowed'
+                      }`}
+                    >
+                      {t('btn_read_summary') || 'ดูสารบัญ / อ่านบทนำสรุป'}
+                    </Link>
                   </div>
-
                 </div>
               </div>
 
-              {/* 💡 การ์ดที่ 2: งานวิจัยรายเรื่อง (Individual) */}
-              <div className="bg-blue-200 rounded-[2rem] shadow-[0_8px_30px_-10px_rgba(0,0,0,0.08)] border border-slate-100 flex flex-col overflow-hidden group hover:border-blue-200 hover:shadow-[0_12px_40px_-10px_rgba(25,58,138,0.15)] transition-all duration-300">
-                <div className="p-8 md:p-10 flex-grow flex flex-col">
-                  
-                  <h3 className="text-3xl font-extrabold text-[#1e3a8a] mb-4 leading-tight">
-                    {individualHighlight?.collection_name || t('individual_title') || 'งานวิจัยรายเรื่องปี 2565 เป็นต้นไป'}
+              {/* 💡 การ์ดที่ 2: งานวิจัยรายเรื่องปี 2565–2567 (Individual 2022-2024) */}
+              <div className="bg-white rounded-[2rem] shadow-[0_8px_30px_-10px_rgba(0,0,0,0.08)] border border-slate-100 flex flex-col overflow-hidden group hover:border-blue-200 hover:shadow-[0_12px_40px_-10px_rgba(25,58,138,0.15)] transition-all duration-300">
+                
+                {/* 💡 ปรับความสูงรูปภาพเพิ่มขึ้นเล็กน้อย (h-44 sm:h-52) */}
+                <div className="w-full h-44 sm:h-52 bg-slate-100 relative overflow-hidden">
+                  {individualHighlight?.thumbnail_url && !imgErrorState['individual'] ? (
+                    <img 
+                      src={individualHighlight.thumbnail_url} 
+                      alt={individualHighlight?.collection_name || 'Individual Research'}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={() => setImgErrorState(prev => ({ ...prev, 'individual': true }))}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-[#1e3a8a] flex items-center justify-center">
+                      <span className="text-3xl font-extrabold tracking-widest text-white">TReN</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-6 md:p-8 flex-grow flex flex-col">
+                  <h3 className="text-2xl font-extrabold text-[#1e3a8a] mb-3 leading-tight">
+                    {individualHighlight?.collection_name || t('individual_title') || 'งานวิจัยรายเรื่องปี 2565–2567'}
                   </h3>
                   
-                  <p className="text-lg text-slate-800 font-normal leading-relaxed mb-8 flex-grow">
-                    {individualHighlight?.intro_info || t('individual_desc') || 'รวบรวมรายงานวิจัยฉบับเดี่ยว (ปี 2565 เป็นต้นไป) ค้นหาง่ายตามประเด็นปัญหา เหมาะสำหรับผู้ที่ต้องการพุ่งเป้าอ่านเฉพาะหัวข้อการสอนที่สนใจโดยเฉพาะ'}
+                  <p className="text-base text-slate-600 font-normal leading-relaxed mb-6 flex-grow">
+                    {individualHighlight?.intro_info || t('individual_desc') || 'รวบรวมรายงานวิจัยฉบับเดี่ยว (ปี 2565–2567) ค้นหาง่ายตามประเด็นปัญหา เหมาะสำหรับผู้ที่ต้องการพุ่งเป้าอ่านเฉพาะหัวข้อการสอนที่สนใจโดยเฉพาะ'}
                   </p>
 
-                  <div className="w-full h-px bg-[#1e3a8a] mb-6"></div>
+                  <div className="w-full h-px bg-slate-100 mb-6"></div>
 
-                  <div className="flex flex-col gap-6">
-                    <p className="text-lg font-bold text-slate-800 text-center">
+                  <div className="flex flex-col gap-4">
+                    <p className="text-base font-bold text-slate-700 text-center">
                       {t('total_papers_1') || 'รวมผลงานวิจัยฉบับเต็ม'} <span className="text-[#1e3a8a]">29</span> {t('total_papers_2') || 'บทความ'}
                     </p>
                     
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <Link 
-                        to={individualHighlight ? `/showcase/${individualHighlight.id}` : '#'}
-                        className={`flex-1 flex justify-center items-center px-4 py-3 rounded-xl font-bold text-base transition-all duration-300 shadow-md ${
-                          individualHighlight 
-                            ? 'bg-[#1e3a8a] text-white hover:bg-[#152860] hover:scale-105' 
-                            : 'bg-slate-300 text-white cursor-not-allowed'
-                        }`}
-                      >
-                        {t('btn_read_summary') || 'ดูสารบัญ / อ่านบทนำสรุป'}
-                      </Link>
-                      
-                      {individualHighlight && parseLinks(individualHighlight['Link to work']).map((link: any, idx: number) => (
-                        <a 
-                          key={idx}
-                          href="#"
-                          onClick={(e) => handleForceDownload(e, link.url)}
-                          className="flex-1 flex justify-center items-center gap-2 bg-[#1e3a8a] text-white px-4 py-3 rounded-xl font-bold text-base transition-all duration-300 shadow-md hover:bg-[#152860] hover:scale-105"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
-                          {t('btn_download_pdf') || 'Download PDF ทั้งเล่ม'}
-                        </a>
-                      )).slice(0, 1)}
-                    </div>
+                    <Link 
+                      to={individualHighlight ? `/showcase/${individualHighlight.id}` : '#'}
+                      className={`w-full flex justify-center items-center px-5 py-3 rounded-xl font-bold text-base transition-all duration-300 shadow-md ${
+                        individualHighlight 
+                          ? 'bg-[#1e3a8a] text-white hover:bg-[#152860] hover:scale-[1.02]' 
+                          : 'bg-slate-300 text-white cursor-not-allowed'
+                      }`}
+                    >
+                      {t('btn_read_summary') || 'ดูสารบัญ / อ่านบทนำสรุป'}
+                    </Link>
                   </div>
+                </div>
+              </div>
 
+              {/* 💡 การ์ดที่ 3: งานวิจัยรายเรื่อง 2025 เป็นต้นไป (Blank / Coming Soon Card) */}
+              <div className="bg-white/80 rounded-[2rem] border border-dashed border-slate-300 flex flex-col overflow-hidden transition-all duration-300">
+                
+                {/* 💡 ปรับความสูงรูปภาพเพิ่มขึ้นเล็กน้อย (h-44 sm:h-52) */}
+                <div className="w-full h-44 sm:h-52 bg-[#1e3a8a] flex items-center justify-center relative">
+                  <span className="text-3xl font-extrabold tracking-widest text-white">TReN</span>
+                </div>
+
+                <div className="p-6 md:p-8 flex-grow flex flex-col">
+                  <h3 className="text-2xl font-extrabold text-slate-400 mb-3 leading-tight">
+                    {t('card_2025_title') || 'งานวิจัยรายเรื่อง 2025 เป็นต้นไป'}
+                  </h3>
+                  
+                  <p className="text-base text-slate-400 font-light leading-relaxed mb-6 flex-grow">
+                    {t('card_2025_desc') || 'รวบรวมรายงานผลการวิจัยฉบับเดี่ยวของครูผู้สอนตั้งแต่ปี พ.ศ. 2568 (2025) เป็นต้นไป ระบบกำลังเตรียมรวบรวมและจะเปิดให้บริการในเร็วๆ นี้'}
+                  </p>
+
+                  <div className="w-full h-px bg-slate-100 mb-6"></div>
+
+                  <div className="flex flex-col gap-4">
+                    <button 
+                      disabled
+                      className="w-full flex justify-center items-center px-5 py-3 rounded-xl font-bold text-base bg-slate-200 text-slate-400 cursor-not-allowed select-none"
+                    >
+                      {t('btn_coming_soon') || 'เร็วๆ นี้'}
+                    </button>
+                  </div>
                 </div>
               </div>
 

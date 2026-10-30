@@ -52,7 +52,7 @@ const galleryImages = [
   "/Homepage/Carousel/Day6/0336.JPG",
   "/Homepage/Carousel/Day6/0606.JPG",
   "/Homepage/Carousel/Day6/0610.JPG",
-  "/Homepage/Carousel/Day6/0616.JPG",
+  "/Homepage/Carousel/Day6/0619.JPG",
   "/Homepage/Carousel/Day6/0620.JPG",
   "/Homepage/Carousel/Day6/0681.JPG",
   "/Homepage/Carousel/Day6/0742.JPG",
@@ -75,7 +75,6 @@ const GalleryCarousel = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  // 💡 States สำหรับจัดการการ Swipe บนมือถือ
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchEndX, setTouchEndX] = useState<number | null>(null);
 
@@ -87,7 +86,6 @@ const GalleryCarousel = () => {
     setCurrentImageIndex((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1));
   };
 
-  // 💡 ระบบ Auto Slideshow (หยุดชั่วคราวเมื่อ Hover หรือกำลัง Touch อยู่)
   useEffect(() => {
     if (isHovered || touchStartX !== null) return; 
     const timer = setInterval(() => {
@@ -97,7 +95,6 @@ const GalleryCarousel = () => {
     return () => clearInterval(timer);
   }, [currentImageIndex, isHovered, touchStartX]);
 
-  // 💡 ฟังก์ชันจับพิกัดการปัดหน้าจอ (Swipe Handlers)
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStartX(e.targetTouches[0].clientX);
     setTouchEndX(null);
@@ -111,13 +108,11 @@ const GalleryCarousel = () => {
     if (!touchStartX || !touchEndX) return;
     
     const distance = touchStartX - touchEndX;
-    const minSwipeDistance = 50; // ระยะทางขั้นต่ำในการปัด (pixels)
+    const minSwipeDistance = 50;
 
     if (distance > minSwipeDistance) {
-      // ปัดไปทางซ้าย -> ไปรูปถัดไป
       nextImage();
     } else if (distance < -minSwipeDistance) {
-      // ปัดไปทางขวา -> กลับรูปก่อนหน้า
       prevImage();
     }
 
@@ -125,7 +120,6 @@ const GalleryCarousel = () => {
     setTouchEndX(null);
   };
 
-  // 💡 คำนวณขอบเขตจุด Dot Indicators ไม่ให้ล้นหน้าจอ (แสดงผลสูงสุดไม่เกิน 7 จุด)
   const getVisibleDots = () => {
     const total = galleryImages.length;
     const maxDots = 7;
@@ -166,7 +160,7 @@ const GalleryCarousel = () => {
       </div>
 
       <div 
-        className="relative w-full max-w-5xl mx-auto h-[300px] sm:h-[450px] lg:h-[550px] rounded-3xl overflow-hidden shadow-lg group bg-slate-900 select-none touch-pan-y"
+        className="relative w-full max-w-5xl mx-auto h-[300px] sm:h-[450px] lg:h-[550px] rounded-3xl overflow-hidden shadow-lg group bg-slate-950 select-none touch-pan-y"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onTouchStart={handleTouchStart}
@@ -175,18 +169,29 @@ const GalleryCarousel = () => {
       >
         
         {galleryImages.map((imgUrl, index) => (
-          <img 
+          <div 
             key={index}
-            src={imgUrl} 
-            alt={`Gallery image ${index + 1}`} 
-            loading="lazy"
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out pointer-events-none ${
+            className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${
               index === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
             }`}
-          />
+          >
+            {/* 💡 1. ภาพพื้นหลังแบบเบลอเติมเต็มขอบ (ป้องกันช่องว่างและดูพรีเมียม) */}
+            <img 
+              src={imgUrl} 
+              alt="" 
+              className="absolute inset-0 w-full h-full object-cover filter blur-2xl scale-110 opacity-40 pointer-events-none"
+            />
+            {/* 💡 2. ภาพหลักแสดงเต็มใบแบบสัดส่วนจริง (ไม่โดนตัดหัวหรือล้นขอบ) */}
+            <img 
+              src={imgUrl} 
+              alt={`Gallery image ${index + 1}`} 
+              loading="lazy"
+              className="relative w-full h-full object-contain pointer-events-none"
+            />
+          </div>
         ))}
 
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-900/70 to-transparent pointer-events-none z-20"></div>
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-950/70 to-transparent pointer-events-none z-20"></div>
 
         {/* ตัวบอกลำดับภาพ (Image Counter) ด้านขวาบน */}
         <div className="absolute top-4 right-4 bg-slate-900/60 backdrop-blur-md text-white text-sm font-semibold px-3 py-1.5 rounded-full z-30 pointer-events-none">

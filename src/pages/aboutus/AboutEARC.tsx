@@ -6,19 +6,20 @@ const AboutEARC: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200">
+    <div className="w-full bg-white pt-6 pb-16 font-sans selection:bg-blue-200">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24 pb-12 mt-14">
         
         {/* Header Section */}
-        <section className="mb-12 md:mb-16">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
-            {t('earc_title') || 'ชุมชนวิจัยครู EAR Community'} 
-          </h2>
-          <p className="text-xl md:text-2xl text-slate-500 font-medium tracking-wide mt-4 uppercase">
-            {t('earc_en_title') || 'EARC'}
-          </p>
-          <div className="w-20 h-1.5 bg-[#1e3a8a] mt-6 rounded-full"></div>
-          
+        <section className="mb-12 md:mb-16 ">
+          <div className="text-center">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
+              {t('earc_title') || 'ชุมชนวิจัยครู EAR Community'} 
+            </h2>
+            {/* <p className="text-xl md:text-2xl text-slate-500 font-medium tracking-wide mt-4 uppercase">
+              {t('earc_en_title') || 'EARC'}
+            </p> */}
+            <div className="w-full h-1.5 bg-[#1e3a8a] mt-16 rounded-full"></div>
+          </div>
           <p className="mt-8 text-2xl text-slate-800 font-light leading-relaxed max-w-6xl whitespace-pre-line">
             {t('earc_intro_1') || 'จากจุดเริ่มต้นของการบ่มเพาะครูและครูพี่เลี้ยงครอบคลุมกว่า 50 จังหวัดทั่วประเทศตั้งแต่ปี พ.ศ. 2565 เรามุ่งมั่นยกระดับการทำวิจัยปฏิบัติการเชิงสำรวจ (EAR) ให้กลายเป็น '}
             <strong className="font-bold text-[#1e3a8a]">"{t('earc_intro_highlight') || 'วิถีการทำงานและวัฒนธรรมการเรียนรู้ที่ยั่งยืนของครูไทย'}"</strong> 

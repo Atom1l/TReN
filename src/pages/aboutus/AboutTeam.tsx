@@ -16,18 +16,18 @@ const AboutTeam: React.FC = () => {
   );
 
   return (
-    <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200">
+    <div className="w-full bg-slate-100 font-sans selection:bg-blue-200">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24 pb-12 mt-14">
         
         {/* Header Section */}
-        <section className="mb-16">
+        <section className="mb-16 text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
             {t('team_main_title') || 'ทีมบริหารเครือข่าย'} 
           </h1>
           <p className="text-xl md:text-2xl text-slate-500 font-medium tracking-widest mt-4 uppercase">
             {t('team_main_en_title') || 'Network Management Team'}
           </p>
-          <div className="w-20 h-1.5 bg-[#1e3a8a] mt-8 rounded-full"></div>
+          <div className="w-full h-1.5 bg-[#1e3a8a] mt-18 mb-20 rounded-full"></div>
         </section>
 
         {/* =========================================
@@ -44,7 +44,7 @@ const AboutTeam: React.FC = () => {
             <div className="flex flex-col md:flex-row gap-4 md:gap-8 lg:gap-16 py-8 border-b border-slate-200">
               <div className="md:w-4/12 shrink-0">
                 <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('team_role_honorary') || 'ที่ปรึกษากิตติมศักดิ์'}</h3>
-                <span className="text-lg text-slate-500 font-medium">(Honorary Advisors)</span>
+                <span className="text-lg text-slate-500 font-medium">(Honorary Advisor)</span>
               </div>
               <div className="md:w-8/12">
                 <p className="text-2xl text-slate-800 font-medium">{t('team_p1_name') || 'ดร. รัชนี เดอร์ซิงห์'}</p>
@@ -56,7 +56,7 @@ const AboutTeam: React.FC = () => {
             <div className="flex flex-col md:flex-row gap-4 md:gap-8 lg:gap-16 py-8 border-b border-slate-200">
               <div className="md:w-4/12 shrink-0">
                 <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('team_role_inter') || 'ที่ปรึกษาต่างประเทศ'}</h3>
-                <span className="text-lg text-slate-500 font-medium">(International Advisors)</span>
+                <span className="text-lg text-slate-500 font-medium">(International Advisor)</span>
               </div>
               <div className="md:w-8/12">
                 <p className="text-2xl text-slate-800 font-medium">{t('team_p2_name') || 'Professor Richard Smith'}</p>
@@ -70,9 +70,27 @@ const AboutTeam: React.FC = () => {
                 <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('team_role_expert') || 'ผู้ทรงคุณวุฒิวิชาการ'}</h3>
                 <span className="text-lg text-slate-500 font-medium">(Experts)</span>
               </div>
-              <div className="md:w-8/12">
-                <p className="text-2xl text-slate-800 font-medium">{t('team_p3_name') || 'รศ. สนธิดา เกยูรวงศ์'}</p>
-                <p className="text-xl text-slate-500 mt-1 font-light leading-relaxed">{t('team_p3_desc') || 'ผู้เชี่ยวชาญอิสระด้านการพัฒนาครู / อดีตอาจารย์ประจำคณะศิลปศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี'}</p>
+              <div className="md:w-8/12 space-y-6">
+                <div>
+                  <p className="text-2xl text-slate-800 font-medium">{t('team_p3_name') || 'รศ. สนธิดา เกยูรวงศ์'}</p>
+                  <p className="text-xl text-slate-500 mt-1 font-light leading-relaxed">{t('team_p3_desc') || 'ผู้เชี่ยวชาญอิสระด้านการพัฒนาครู / อดีตอาจารย์ประจำคณะศิลปศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี'}</p>
+                </div>
+                <div>
+                  <p className="text-2xl text-slate-800 font-medium">{t('team_p4_name') || 'ผศ.ดร. ศศิพร พงศ์เพลินพิศ'}</p>
+                  <p className="text-xl text-slate-500 mt-1 font-light leading-relaxed">{t('team_p4_desc') || 'คณะครุศาสตร์ มหาวิทยาลัยราชภัฏสวนสุนันทา'}</p>
+                </div>
+                <div>
+                  <p className="text-2xl text-slate-800 font-medium">{t('team_p5_name') || 'ผศ.ดร. อังค์วรา เหลืองนภา'}</p>
+                  <p className="text-xl text-slate-500 mt-1 font-light leading-relaxed">{t('team_p5_desc') || 'คณะมนุษยศาสตร์และสังคมศาสตร์ มหาวิทยาลัยราชภัฏสวนสุนันทา'}</p>
+                </div>
+                <div>
+                  <p className="text-2xl text-slate-800 font-medium">{t('team_p6_name') || 'ดร. ปรินดา จันโทริ'}</p>
+                  <p className="text-xl text-slate-500 mt-1 font-light leading-relaxed">{t('team_p6_desc') || 'คณะมนุษยศาสตร์ มหาวิทยาลัยเกษตรศาสตร์'}</p>
+                </div>
+                <div>
+                  <p className="text-2xl text-slate-800 font-medium">{t('team_p7_name') || 'Khoi Tan Minh Vuong'}</p>
+                  <p className="text-xl text-slate-500 mt-1 font-light leading-relaxed">{t('team_p1_desc') || 'คณะมนุษยศาสตร์ มหาวิทยาลัยเกษตรศาสตร์'}</p>
+                </div>
               </div>
             </div>
 
@@ -83,7 +101,25 @@ const AboutTeam: React.FC = () => {
                 <span className="text-lg text-slate-500 font-medium">(Partner Organizations)</span>
               </div>
               <div className="md:w-8/12">
-                <p className="text-2xl text-slate-400 font-light">-</p>
+                <p className="text-2xl text-slate-800 font-medium">{t('team_partner_rep') || 'ตัวแทนจากองค์กรภาคีเครือข่าย'}</p>
+              </div>
+            </div>
+
+            {/* ผู้แทนจากโรงเรียน (ต่อจากองค์กรภาคีเครือข่าย) */}
+            <div className="flex flex-col md:flex-row gap-4 md:gap-8 lg:gap-16 py-8 border-b border-slate-200">
+              <div className="md:w-4/12 shrink-0">
+                <h3 className="text-2xl font-bold text-[#1e3a8a]">{t('team_role_school_rep') || 'ผู้แทนจากโรงเรียน'}</h3>
+                <span className="text-lg text-slate-500 font-medium">(School Representatives)</span>
+              </div>
+              <div className="md:w-8/12 space-y-6">
+                <div>
+                  <p className="text-2xl text-slate-800 font-medium">{t('team_role_pres1') || 'ครูจิติมา ดวงมณี'}</p>
+                  <p className="text-xl text-slate-500 mt-1 font-light">{t('team_role_pres1_desc') || 'โรงเรียนสุรธรรมพิทักษ์ นครราชสีมา'}</p>
+                </div>
+                <div>
+                  <p className="text-2xl text-slate-800 font-medium">{t('team_role_vp1') || 'ครูพัชรินทร์ กุลณา'}</p>
+                  <p className="text-xl text-slate-500 mt-1 font-light">{t('team_role_vp1_desc') || 'โรงเรียนดำรงราษฎร์สงเคราะห์ เชียงราย'}</p>
+                </div>
               </div>
             </div>
 
@@ -134,7 +170,7 @@ const AboutTeam: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-2xl text-slate-800 font-medium">{t('team_role_vp1') || 'ครูพัชรินทร์ กุลณา'}</p>
-                  <p className="text-xl text-slate-500 mt-1 font-light">{t('team_role_vp1_desc') || 'โรงเรียนดำรงราษฏร์สงเคราะห์ เชียงราย'}</p>
+                  <p className="text-xl text-slate-500 mt-1 font-light">{t('team_role_vp1_desc') || 'โรงเรียนดำรงราษฎร์สงเคราะห์ เชียงราย'}</p>
                 </div>
               </div>
             </div>

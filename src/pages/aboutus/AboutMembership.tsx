@@ -25,7 +25,7 @@ const AboutMembership: React.FC = () => {
 
   return (
     <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-14">
         
         {/* Header Section */}
         <section className="mb-12 md:mb-16">
@@ -80,6 +80,16 @@ const AboutMembership: React.FC = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* 💡 เส้นกั้นปิดจบหมวดที่ 2 เพื่อเปลี่ยนเข้าสู่หมวดที่ 3 */}
+        <div className="pt-24 flex items-center justify-center gap-6">
+          <div className="h-[2px] flex-1 bg-[#1e3a8a]"></div>
+          <div className="flex items-center gap-3 px-6 py-2.5 rounded-full bg-slate-100 border border-slate-300 text-[#1e3a8a] text-sm md:text-base font-bold tracking-wider uppercase">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#1e3a8a]"></span>
+            <span>{t('end_of_section') || 'END OF SECTION'}: 2</span>
+          </div>
+          <div className="h-[2px] flex-1 bg-[#1e3a8a]"></div>
         </div>
 
       </div>

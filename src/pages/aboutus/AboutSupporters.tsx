@@ -36,18 +36,18 @@ const AboutSupporter: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-[#F8FAFC] font-sans selection:bg-blue-200">
+    <div className="w-full bg-slate-100 font-sans selection:bg-blue-200">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 md:pt-24 pb-24 mt-14">
         
         {/* Header Section */}
-        <section className="max-w-4xl mb-12 md:mb-16 relative text-center md:text-left mx-auto md:mx-0">
+        <section className="mb-12 md:mb-16 relative text-center mx-auto md:mx-0">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a8a] tracking-tight leading-tight">
             {t('sponsors_main_title') || 'องค์กรพันธมิตรและผู้สนับสนุน'}
             <span className="block text-3xl md:text-4xl lg:text-5xl text-slate-400 mt-3 font-medium tracking-normal">
               {t('sponsors_subtitle') || 'Our Partners & Sponsors'}
             </span>
           </h1>
-          <div className="w-20 h-1.5 bg-[#1e3a8a] mt-8 rounded-full mx-auto md:mx-0"></div>
+          <div className="w-full h-1.5 bg-[#1e3a8a] mt-18 rounded-full"></div>
         </section>
 
         {/* Intro Section */}

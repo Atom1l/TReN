@@ -45,7 +45,7 @@ const translations = {
     nav_about: 'เกี่ยวกับ TReN',
     nav_knowledge: 'คลังความรู้',
     nav_events: 'กิจกรรม TReN',
-    nav_research: 'งานวิจัย',
+    nav_research: 'งานวิจัยครู',
     nav_blogs: 'บล็อกงานวิจัย',
     nav_contact: 'ติดต่อเรา',
     nav_register: 'สมัครสมาชิก',
@@ -1088,6 +1088,7 @@ const translations = {
     view_details_btn: 'ดูรายละเอียด',
 
     // Vision Mission Objectives Page //
+    end_of_section: 'จบหมวดที่',
     vision_about_tren_title: 'TReN',
     vision_about_tren_subtitle:'เครือข่ายวิจัยครู',
     vision_about_tren_en_title: 'Teacher-research Network',
@@ -1122,10 +1123,16 @@ const translations = {
     vision_about_obj3_th: 'ขับเคลื่อนความยั่งยืนและการนำไปใช้',
     vision_about_obj3_desc: 'จัดทำคลังความรู้จาก Best Practices และผลักดันให้เกิดวัฒนธรรมวิจัยในสถานศึกษาอย่างแท้จริง',
 
+    vision_about_name_headline: 'ชื่อ',
     vision_about_vision_headline: 'วิสัยทัศน์',
     vision_about_mission_headline: 'พันธกิจ',
     vision_about_core_objectives_headline: 'ภารกิจหลัก',
     vision_sub_text: 'Vision and Mission',
+
+    vision_about_name_title: 'ชื่อเครือข่าย',
+    vision_about_name_subhead: 'Network Name',
+    vision_about_network_name_th: 'เครือข่ายวิจัยครู',
+    vision_about_network_name_en: 'Teacher-Research Network (TReN)',
 
     vision_about_tren_desc_1: 'คือ เครือข่ายวิจัยที่ขับเคลื่อนโดยพลังของครู มุ่งมั่นยกระดับศักยภาพครูไทยให้สามารถแก้ปัญหาในชั้นเรียนได้ด้วยตัวเองอย่างตรงจุด ผ่านการทำวิจัยในชั้นเรียนที่เรียกว่า Exploratory Action Research (EAR) หรือการวิจัยเชิงปฏิบัติการเชิงสำรวจ ที่เน้นการนำข้อมูลและหลักฐานจริงจากห้องเรียนมาใช้พัฒนาการเรียนการสอน',
     vision_about_channels_title: 'ช่องทางการเรียนรู้และการเข้าร่วม',
@@ -1486,7 +1493,7 @@ const translations = {
     team_main_title: 'ทีมบริหารเครือข่าย',
     team_main_en_title: 'Network Management Team',
     
-    // Section 1
+    // Section 1: Advisory & Network Representatives
     team_sec1_title: 'ทีมที่ปรึกษาและผู้แทนองค์กรเครือข่าย',
     team_sec1_en: 'Advisory & Network Representatives',
     team_role_honorary: 'ที่ปรึกษากิตติมศักดิ์',
@@ -1494,18 +1501,28 @@ const translations = {
     team_role_partner: 'องค์กรภาคีเครือข่าย',
     team_role_expert: 'ผู้ทรงคุณวุฒิวิชาการ',
     team_role_past_pres: 'อดีตประธานเครือข่าย',
-    
+
     team_p1_name: 'ดร. รัชนี เดอร์ซิงห์',
     team_p1_desc: 'คณะศิลปศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี',
     team_p2_name: 'Professor Richard Smith',
     team_p2_desc: 'Warwick University, UK',
+
+    // ผู้ทรงคุณวุฒิวิชาการ (Experts)
     team_p3_name: 'รศ. สนธิดา เกยูรวงศ์',
     team_p3_desc: 'ผู้เชี่ยวชาญอิสระด้านการพัฒนาครู / อดีตอาจารย์ประจำคณะศิลปศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี',
-    
-    team_partner_1: 'ผู้แทนจาก British Council Thailand',
-    team_partner_2: 'ผู้แทนจาก RELO',
-    team_partner_3: 'ผู้แทนจาก HCEC',
-    team_partner_4: 'ผู้แทนจาก...',
+    team_p4_name: 'ผศ.ดร. ศศิพร พงศ์เพลินพิศ',
+    team_p4_desc: 'คณะครุศาสตร์ มหาวิทยาลัยราชภัฏสวนสุนันทา',
+    team_p5_name: 'ผศ.ดร. อังค์วรา เหลืองนภา',
+    team_p5_desc: 'คณะมนุษยศาสตร์และสังคมศาสตร์ มหาวิทยาลัยราชภัฏสวนสุนันทา',
+    team_p6_name: 'ดร. ปรินดา จันโทริ',
+    team_p6_desc: 'คณะมนุษยศาสตร์ มหาวิทยาลัยเกษตรศาสตร์',
+    team_p7_name: 'Khoi Tan Minh Vuong',
+
+    // องค์กรภาคีเครือข่าย (Partner Organizations)
+    team_partner_rep: 'ตัวแทนจากองค์กรภาคีเครือข่าย',
+
+    // ผู้แทนจากโรงเรียน (School Representatives)
+    team_role_school_rep: 'ผู้แทนจากโรงเรียน',
 
     // Section 2
     team_sec2_title: 'ทีมบริหารเครือข่ายส่วนกลาง',
@@ -1719,15 +1736,19 @@ const translations = {
   sub_lang_other: 'ภาษาอื่นๆ',
   coming_soon_title: 'หน้าเปล่าก่อน (Coming Soon)',
   coming_soon_desc: 'ระบบกำลังรวบรวมผลงานวิจัยในหมวดหมู่นี้ เตรียมเปิดให้เข้าอ่านและดาวน์โหลดได้เร็วๆ นี้ครับ',
-  anthology_title: 'ฉบับเล่มรวมวิจัยปี 2023, 2024–2025',
+  anthology_title: 'ฉบับเล่มรวมวิจัยปี 2023',
   anthology_desc: 'รวบรวมรายงานผลการวิจัยฉบับสมบูรณ์ที่จัดทำเป็นเล่มตีพิมพ์ เหมาะสำหรับผู้ที่ต้องการดาวน์โหลดเล่มรวมวิจัยย้อนหลัง อ่านบทนำบรรณาธิการ หรือดูภาพรวมงานวิจัยทั้งเล่ม',
-  individual_title: 'งานวิจัยรายเรื่องปี 2565 เป็นต้นไป',
-  individual_desc: 'รวบรวมรายงานวิจัยฉบับเดี่ยว (ปี 2565 เป็นต้นไป) ค้นหาง่ายตามประเด็นปัญหา เหมาะสำหรับผู้ที่ต้องการพุ่งเป้าอ่านเฉพาะหัวข้อการสอนที่สนใจโดยเฉพาะ',
+  individual_title: 'งานวิจัยปี 2024-2025',
+  individual_desc: 'รวบรวมรายงานวิจัยฉบับเดี่ยว (ปี 2024-2025) ค้นหาง่ายตามประเด็นปัญหา เหมาะสำหรับผู้ที่ต้องการพุ่งเป้าอ่านเฉพาะหัวข้อการสอนที่สนใจโดยเฉพาะ',
   total_papers_1: 'รวมผลงานวิจัยฉบับเต็ม',
   total_papers_2: 'บทความ',
   btn_read_summary: 'ดูสารบัญ / อ่านบทนำสรุป',
   btn_download_pdf: 'Download PDF ทั้งเล่ม',
   main_link: 'ลิงก์ผลงาน',
+
+  card_2025_title:'งานวิจัยรายปี 2025 เป็นต้นไป',
+  card_2025_desc:'เอกสารกำลังอยู่ระหว่างการรวบรวม',
+  btn_coming_soon:'เร็ว ๆ นี้',
 
   },
   en: {
@@ -1786,7 +1807,7 @@ const translations = {
     nav_about: 'About TReN',
     nav_knowledge: 'Knowledge',
     nav_events: 'TReN Events',
-    nav_research: 'Research',
+    nav_research: 'Teacher Research',
     nav_blogs: 'Research Blogs',
     nav_contact: 'Contact Us',
     nav_register: 'Join TReN',
@@ -2836,10 +2857,16 @@ const translations = {
     vision_about_obj3_th: 'Drive Sustainability and Implementation',
     vision_about_obj3_desc: 'Create a knowledge repository from Best Practices and push for a genuine research culture in educational institutions.',
 
+    vision_about_name_headline: 'Name',
     vision_about_vision_headline: 'Vision',
     vision_about_mission_headline: 'Mission',
     vision_about_core_objectives_headline: 'Core Objectives',
     vision_sub_text: 'Vision and Mission',
+
+    vision_about_name_title: 'Name',
+    vision_about_name_subhead: ' ',
+    vision_about_network_name_th: 'Teacher-Research Network (TReN)',
+    vision_about_network_name_en: ' ',
 
     vision_about_tren_desc_1: 'is a research network driven by the power of teachers. We are committed to elevating the potential of Thai teachers to solve classroom problems directly and independently through classroom research called Exploratory Action Research (EAR), which emphasizes using actual data and evidence from the classroom to improve teaching and learning.',
     vision_about_channels_title: 'Learning Channels and Participation',
@@ -3191,31 +3218,47 @@ const translations = {
     const_cat_5:'Section 5',
     const_cat_6:'Section 6',
     const_cat_7:'Section 7',
+    const_main_en_title: ' ',
+    const_main_title: 'TReN Constitution',
 
     // Team Page (EN)
     team_main_title: 'Network Management Team',
     team_main_en_title: 'Network Management Team',
     
-    // Section 1
-    team_sec1_title: 'Advisory & Strategic Partners',
-    team_sec1_en: ' ',
+    // Section 1: Advisory & Network Representatives
+    team_sec1_title: 'Advisory & Network Representatives',
+    team_sec1_en: 'Advisory & Network Representatives',
     team_role_honorary: 'Honorary Advisors',
     team_role_inter: 'International Advisors',
     team_role_partner: 'Partner Organizations',
-    team_role_expert: 'Experts',
-    team_role_past_pres: 'Immediate-Past President',
-    
-    team_p1_name: 'Dr. Ratchanee Dersingh',
+    team_role_expert: 'Academic Experts',
+    team_role_past_pres: 'Past Presidents',
+
+    team_p1_name: 'Dr. Rachanee Dersingh',
     team_p1_desc: 'School of Liberal Arts, King Mongkut\'s University of Technology Thonburi',
     team_p2_name: 'Professor Richard Smith',
     team_p2_desc: 'Warwick University, UK',
+
+    // Academic Experts
     team_p3_name: 'Assoc. Prof. Sontida Keyuravong',
-    team_p3_desc: 'Independent Teacher Development Expert / Former Lecturer, School of Liberal Arts, KMUTT',
-    
-    team_partner_1: 'Representative from British Council Thailand',
-    team_partner_2: 'Representative from RELO',
-    team_partner_3: 'Representative from HCEC',
-    team_partner_4: 'Representative from...',
+    team_p3_desc: 'Independent Teacher Development Expert / Former Faculty Member, School of Liberal Arts, KMUTT',
+    team_p4_name: 'Asst. Prof. Dr. Sasiporn Phongploenpis',
+    team_p4_desc: 'Faculty of Education, Suan Sunandha Rajabhat University',
+    team_p5_name: 'Asst. Prof. Dr. Angwara Luangnapa',
+    team_p5_desc: 'Faculty of Humanities and Social Sciences, Suan Sunandha Rajabhat University',
+    team_p6_name: 'Dr. Parinda Chantori',
+    team_p6_desc: 'Faculty of Humanities, Kasetsart University',
+    team_p7_name: 'Khoi Tan Minh Vuong',
+
+    // Partner Organizations
+    team_partner_rep: 'Representatives from Partner Organizations',
+
+    // School Representatives
+    team_role_school_rep: 'Representatives from Schools',
+    team_role_pres1: 'Jitima Doungmanee',
+    team_role_pres1_desc: 'Suratham Pitak School, Nakhon Ratchasima',
+    team_role_vp1: 'Patcharin Kulna',
+    team_role_vp1_desc: 'Damrongratsongkroh School, Chiang Rai',
 
     // Section 2
     team_sec2_title: 'Core Executive Team',
@@ -3425,16 +3468,19 @@ const translations = {
   sub_lang_other: 'Other Languages',
   coming_soon_title: 'Coming Soon',
   coming_soon_desc: 'We are currently gathering research papers for this category. They will be available for reading and download soon.',
-  anthology_title: 'Research Anthology 2023, 2024–2025',
+  anthology_title: 'Research Anthology 2023',
   anthology_desc: 'A comprehensive collection of fully published research reports. Ideal for downloading past anthologies, reading editorial introductions, or viewing the overall research landscape.',
-  individual_title: 'Individual Research Papers (2022 onwards)',
-  individual_desc: 'A collection of individual research papers (from 2022 onwards) easily searchable by issue. Perfect for those who want to focus directly on specific teaching topics of interest.',
+  individual_title: 'Individual Research Papers (2024-2025)',
+  individual_desc: 'A collection of individual research papers (from 2024-2025) easily searchable by issue. Perfect for those who want to focus directly on specific teaching topics of interest.',
   total_papers_1: 'Total of',
   total_papers_2: 'Full Papers',
   btn_read_summary: 'View Index / Read Summary',
   btn_download_pdf: 'Download Full PDF',
   main_link: 'Main Link',
 
+  card_2025_title:'Individual Research Papers (2025 onwards)',
+  card_2025_desc:'The documents are currently being gathered.',
+  btn_coming_soon:'Coming Soon',
   }
 };
 
